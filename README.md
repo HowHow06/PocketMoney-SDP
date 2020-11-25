@@ -36,5 +36,9 @@ Financial Management System (Website)
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
 ```
+- These one is for scroll effect
+```
+<script src="./jquery.nicescroll-3.7.4/jquery.nicescroll.min.js"></script>
+```
 ## License 
 This project is only editable for contributors.
