@@ -44,3 +44,61 @@
         padding: 20px 40px;
     }
 }
+
+.section1 {
+    background-color: white;
+    padding: 25px 120px 25px 120px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: bold;
+    letter-spacing: 1px;
+    > h1 {
+        padding-bottom: 40px;
+        font-weight: 700;
+    }
+    > div {
+        padding-top: 20px;
+        > .card {
+            width: 360px;
+            height: 346px;
+            margin: 0 32px 0 20px;
+            > .card-body {
+                padding: 48px 70px 20px 32px;
+                color: white;
+                > .card-title {
+                    font-size: 24px;
+                    font-weight: 700;
+                }
+                > .card-text {
+                    letter-spacing: 0px;
+                    padding-top: 30px;
+                    font-size: 18px;
+                }
+            }
+        }
+    }
+}
+
+#card1 {
+    background-color: rgba($color: #FF6C00, $alpha: 0.7);
+}
+#card2 {
+    background-color: rgba($color: #F2BF5E, $alpha: 1.0);
+}
+#card3 {
+    background-color: rgba($color: #AB803F, $alpha: 0.7);
+}
+#card4 {
+    background-color: rgba($color: #AB803F, $alpha: 1.0);
+}
+
+.section2 {
+    background-color: white;
+    padding: 50px 120px 25px 120px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: bold;
+    letter-spacing: 1px;
+    > h1 {
+        padding-bottom: 40px;
+        font-weight: 700;
+    }
+}

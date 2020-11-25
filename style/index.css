@@ -51,3 +51,71 @@
   font-size: 22px;
   padding: 20px 40px;
 }
+
+.section1 {
+  background-color: white;
+  padding: 25px 120px 25px 120px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.section1 > h1 {
+  padding-bottom: 40px;
+  font-weight: 700;
+}
+
+.section1 > div {
+  padding-top: 20px;
+}
+
+.section1 > div > .card {
+  width: 360px;
+  height: 346px;
+  margin: 0 32px 0 20px;
+}
+
+.section1 > div > .card > .card-body {
+  padding: 48px 70px 20px 32px;
+  color: white;
+}
+
+.section1 > div > .card > .card-body > .card-title {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.section1 > div > .card > .card-body > .card-text {
+  letter-spacing: 0px;
+  padding-top: 30px;
+  font-size: 18px;
+}
+
+#card1 {
+  background-color: rgba(255, 108, 0, 0.7);
+}
+
+#card2 {
+  background-color: #f2bf5e;
+}
+
+#card3 {
+  background-color: rgba(171, 128, 63, 0.7);
+}
+
+#card4 {
+  background-color: #ab803f;
+}
+
+.section2 {
+  background-color: white;
+  padding: 50px 120px 25px 120px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.section2 > h1 {
+  padding-bottom: 40px;
+  font-weight: 700;
+}
