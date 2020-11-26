@@ -10,6 +10,13 @@ Financial Management System (Website)
 - Howard Lim          TP055278
 
 ## Work Progress
+
+### 2020-11-26
+> Li Yaw's Part
+- Update ```index.html```
+
+> Moses' Part
+- Update ```index.html```
 ### 2020-11-25
 > Moses' Part
 - Initialize ```index.html``` for customer
@@ -38,7 +45,7 @@ Financial Management System (Website)
 ```
 - These one is for scroll effect
 ```
-<script src="./jquery.nicescroll-3.7.4/jquery.nicescroll.min.js"></script>
+<script src="./jquery_src/jquery.nicescroll-3.7.4/jquery.nicescroll.min.js"></script>
 ```
 ## License 
 This project is only editable for contributors.

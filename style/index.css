@@ -162,7 +162,7 @@
 }
 
 .section2 > .row > .text > p {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: lighter;
   line-height: 1.8;
   letter-spacing: 0.05;
@@ -211,7 +211,7 @@
 }
 
 .section3 > .row > .card > .card-body {
-  padding: 64px 68px 22px 68px;
+  padding: 60px 68px 22px 68px;
 }
 
 .section3 > .row > .card > .card-body > .card-title {
@@ -225,6 +225,7 @@
 .section3 > .row > .card .card-text {
   font-weight: 100;
   line-height: 1.6;
+  font-size: 16px;
 }
 
 .section3 > .row > .card:hover {
@@ -237,7 +238,7 @@
 #tp_num {
   font-size: 20px;
   letter-spacing: 2px;
-  padding-bottom: 32px;
+  padding-bottom: 14px;
   font-weight: bold;
 }
 
