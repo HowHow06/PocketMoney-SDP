@@ -11,6 +11,16 @@
             > a {
                 font-size: 18px;
             }
+            > .dropdown-menu {
+                width: 100%;
+                > .dropdown-item {
+                    padding: 15px 0 15px 20px;
+                    font-size: 110%;
+                }
+                > .dropdown-item:hover {
+                    background-color: rgba($color: #EDE9E1, $alpha: 0.6);
+                }
+            }
         }
         > .active {
             background-color: #EDE9E1
