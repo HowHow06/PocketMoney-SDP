@@ -11,6 +11,12 @@ Financial Management System (Website)
 
 ## Work Progress
 
+### 2020-12-05
+> Moses's Part
+- Update ```index.html```
+### 2020-11-27
+> Mash's Part
+- Update ```index.html```
 ### 2020-11-26
 > Li Yaw's Part
 - Update ```index.html```
