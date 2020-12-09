@@ -1,0 +1,43 @@
+@import './login.scss';
+
+@mixin input-wrap {
+    padding: 10px 10px;
+    width: 400px;
+    font-size: 14px;
+}
+
+@mixin button-wrap {
+    > button {
+        width: 400px;
+        font-size: 16px;
+        padding: 12px 0 12px 0;
+        background-color: #FF6C00;
+        color: white;
+    }
+    > button:hover {
+        background-color: rgba($color: #FF6C00, $alpha: 0.6);
+    }
+}
+
+@mixin checkbox-wrap {
+    font-size: 14px;
+    padding-left: 0;
+    padding-bottom: 15px;
+}
+
+.container {
+    @include container-preset;
+    > .left {
+        @include left-side;
+    }
+    > .right {
+        @include right-side;
+        padding-top: 50px;
+    }
+}
+
+.step1 {
+    > h5 {
+        padding-top: 10px;
+    }
+}
