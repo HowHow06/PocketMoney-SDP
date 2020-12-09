@@ -11,9 +11,14 @@ Financial Management System (Website)
 
 ## Work Progress
 
+### 2020-12-09
+> Moses's Part
+- Create ```login.php```
+- Create ```register.php```
 ### 2020-12-05
 > Moses's Part
 - Update ```index.html```
+- Create logo
 ### 2020-11-27
 > Mash's Part
 - Update ```index.html```
