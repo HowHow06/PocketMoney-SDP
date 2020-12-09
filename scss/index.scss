@@ -1,9 +1,12 @@
 .navbar {
-    padding: 10px 25px 10px 25px;
+    padding: 10px 25px 10px 15px;
     > a {
         font-size: 35px;
         font-family: 'Nerko One', cursive;
         letter-spacing: 7px;
+        > img {
+            margin-top: -14px;
+        }
     }
     > ul {
         > li {

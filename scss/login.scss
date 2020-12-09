@@ -1,0 +1,85 @@
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(white, 0.05);
+}
+
+.container {
+    box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
+    margin: 0;
+    padding: 0;
+    background-color: white;
+    > .left {
+        img {
+            width: 442px;
+            height: 656px;   
+        }
+    }
+    > .right {
+        font-family: 'Open Sans', sans-serif;
+        padding-left: 50px;
+        padding-top: 75px;
+        // font-weight: bold;
+        // letter-spacing: 1px;
+        > .logo {
+            text-decoration: none;
+            color: black;
+            font-size: 35px;
+            font-family: 'Nerko One', cursive;
+            letter-spacing: 7px;
+            > img {
+                margin-top: -14px;
+            }
+        }
+        > .logo:hover {
+            text-decoration: none;
+            cursor: default;
+        }
+        > h5 {
+            padding-top: 25px;
+            // padding-bottom: 15px;
+        }
+        > form {
+            padding: 15px 0 25px 0;
+            > .form-group {
+                padding-top: 10px;
+                margin-bottom: 10px;
+                > input {
+                    padding: 10px 10px;
+                    width: 400px;
+                    font-size: 14px;
+                }
+            }
+            > .form-check {
+                font-size: 14px;
+                padding-left: 0;
+                padding-bottom: 15px;
+            }
+            > button {
+                width: 400px;
+                font-size: 16px;
+                padding: 12px 0 12px 0;
+                background-color: #FF6C00;
+                color: white;
+            }
+            > button:hover {
+                background-color: rgba($color: #FF6C00, $alpha: 0.6);
+            }
+        }
+        > .forgot {
+            color: black;
+            font-size: 12px;
+        }
+        > .register {
+            color: #FF6C00;
+            font-size: 14px;
+        }
+        .terms {
+            position: absolute;
+            padding-top: 100px;
+            font-size: 10px;
+        }
+    }
+}
