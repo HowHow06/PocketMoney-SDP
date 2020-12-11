@@ -1,0 +1,223 @@
+@import "lib";
+
+
+body {
+    @include body-preset;
+}
+
+.container {
+    @include container-preset;
+    > .left {
+        @include left-side;
+    }
+    > .right {
+        @include right-side;
+        padding-top: 50px;
+        width: 698px;
+    }
+}
+
+.progress {
+    position: absolute;
+    width: 698px;
+    margin-left: 442px;
+    height: 6px;
+    border-radius: 0 !important;
+    > .progress-bar {
+        width: 0%; 
+        background-color: #FF6C00 !important;
+    }
+}
+
+.step1 {
+    display: block;
+    > h5 {
+        padding-top: 20px;
+    }
+    > form {
+        @include button-a-wrap;
+        padding-top: 10px;
+        > .form-group {
+            padding-top: 10px;
+            margin-bottom: 10px;
+            > input {
+                @include input-wrap;
+            }
+        }
+        > .form-check {
+            @include checkbox-wrap;
+            margin-bottom: 20px;
+        }
+    }
+}
+
+.step2 {
+    display: none;
+    > .back {
+        @include links(-40px, #FF6C00);
+    }
+    > .skip {
+        @include links(568px, black);
+    }
+    > h5 {
+        padding-top: 20px;
+    }
+    > form {
+        @include button-a-wrap;
+        padding-top: 10px;
+        > h5 {
+            margin-bottom: 0;
+        }
+        > .form-group {
+            padding-top: 5px;
+            // margin-bottom: 10px;
+            > input {
+                @include input-wrap;
+            }
+        }
+        > .form-check {
+            @include checkbox-wrap;
+            padding-top: 10px;
+            margin-bottom: 20px;
+        }
+        > .form-row {
+            > .col-5 {
+                > select {
+                    padding: 5px 10px;
+                    font-size: 14px;
+                } 
+            }
+            > .col-3 {
+                > input {
+                    padding: 5px 20px 5px 5px;
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+}
+
+.step3 {
+    display: none;
+    > .back {
+        @include links(-40px, #FF6C00);
+    }
+    > .skip {
+        @include links(568px, black);
+    }
+    > h5 {
+        padding-top: 20px;
+        margin-bottom: 0;
+    }
+    > form {
+        @include button-a-wrap;
+        padding-top: 10px;
+        > .form-group {
+            padding-top: 5px;
+            > input {
+                @include input-wrap;
+            }
+        }
+        > .form-row {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            > .col-5, .col-3 {
+                > select {
+                    padding: 5px 10px;
+                    font-size: 14px;
+                } 
+            }
+            > .col-3 {
+                > input {
+                    padding: 5px 20px 5px 5px;
+                    font-size: 14px;
+                }
+            }
+        }
+        > button {
+            margin-top: 50px;
+        }
+    }
+}
+
+.step4 {
+    display: none;
+    > .back {
+        @include links(-40px, #FF6C00);
+    }
+    > .skip {
+        @include links(568px, black);
+    }
+    > h5 {
+        padding-top: 20px;
+        margin-bottom: 0;
+    }
+    > form {
+        @include button-a-wrap;
+        padding-top: 10px;
+        > .form-group {
+            padding-top: 5px;
+            margin-bottom: 10px;
+            > input {
+                @include input-wrap;
+            }
+            > select {
+                width: 400px;
+                font-size: 14px;
+            }
+        }
+        > .form-short {
+            display: block;
+            > .form-group {
+                > input {
+                    @include input-wrap;
+                }
+                > select {
+                    width: 400px;
+                    padding: 5px 10px;
+                    font-size: 14px;
+                } 
+            }
+            > .form-row {
+                padding-bottom: 1rem;
+                > .col-4 {
+                    > select {
+                        padding: 5px 10px;
+                        font-size: 14px;
+                    } 
+                }
+            }
+        }
+        > .form-middle {
+            display: none;
+            > .form-group {
+                > input {
+                    @include input-wrap;
+                }
+            }
+            > .form-row {
+                padding-bottom: 1rem;
+                > .col-4 {
+                    > select {
+                        padding: 5px 10px;
+                        font-size: 14px;
+                    } 
+                }
+            }
+        }
+        > .form-long {
+            display: none;
+            > .form-group {
+                > input {
+                    @include input-wrap;
+                }
+                > select {
+                    width: 400px;
+                    padding: 5px 10px;
+                    font-size: 14px;
+                } 
+            }
+        }
+    }
+}
+

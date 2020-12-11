@@ -11,6 +11,10 @@ Financial Management System (Website)
 
 ## Work Progress
 
+### 2020-12-11
+> Moses's Part
+- Update ```register.php```
+- Create ```lib.scss```, storing all ```@mixin``` and variables for certain same scss files.
 ### 2020-12-09
 > Moses's Part
 - Create ```login.php```

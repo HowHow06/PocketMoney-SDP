@@ -1,0 +1,364 @@
+body {
+  min-height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.container {
+  -webkit-box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
+          box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
+  margin: 0;
+  padding: 0;
+  background-color: white;
+}
+
+.container > .left img {
+  width: 442px;
+  height: 656px;
+}
+
+.container > .right {
+  font-family: 'Open Sans', sans-serif;
+  padding-left: 50px;
+  padding-top: 50px;
+  width: 698px;
+}
+
+.container > .right > .logo {
+  text-decoration: none;
+  color: black;
+  font-size: 35px;
+  font-family: 'Nerko One', cursive;
+  letter-spacing: 7px;
+}
+
+.container > .right > .logo > img {
+  margin-top: -14px;
+}
+
+.container > .right > .logo:hover {
+  text-decoration: none;
+  cursor: default;
+}
+
+.progress {
+  position: absolute;
+  width: 698px;
+  margin-left: 442px;
+  height: 6px;
+  border-radius: 0 !important;
+}
+
+.progress > .progress-bar {
+  width: 0%;
+  background-color: #FF6C00 !important;
+}
+
+.step1 {
+  display: block;
+}
+
+.step1 > h5 {
+  padding-top: 20px;
+}
+
+.step1 > form {
+  padding-top: 10px;
+}
+
+.step1 > form > .btn {
+  width: 400px;
+  font-size: 16px;
+  padding: 12px 0 12px 0;
+  background-color: #FF6C00;
+  color: white;
+}
+
+.step1 > form > .btn:hover {
+  background-color: rgba(255, 108, 0, 0.6);
+}
+
+.step1 > form > .form-group {
+  padding-top: 10px;
+  margin-bottom: 10px;
+}
+
+.step1 > form > .form-group > input {
+  padding: 10px 10px;
+  width: 400px;
+  font-size: 14px;
+}
+
+.step1 > form > .form-check {
+  font-size: 14px;
+  padding-left: 0;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.step2 {
+  display: none;
+}
+
+.step2 > .back {
+  position: absolute;
+  margin: -35px 0px 0 -40px;
+  font-size: 14px;
+  color: #FF6C00;
+  font-weight: bold;
+}
+
+.step2 > .skip {
+  position: absolute;
+  margin: -35px 0px 0 568px;
+  font-size: 14px;
+  color: black;
+  font-weight: bold;
+}
+
+.step2 > h5 {
+  padding-top: 20px;
+}
+
+.step2 > form {
+  padding-top: 10px;
+}
+
+.step2 > form > .btn {
+  width: 400px;
+  font-size: 16px;
+  padding: 12px 0 12px 0;
+  background-color: #FF6C00;
+  color: white;
+}
+
+.step2 > form > .btn:hover {
+  background-color: rgba(255, 108, 0, 0.6);
+}
+
+.step2 > form > h5 {
+  margin-bottom: 0;
+}
+
+.step2 > form > .form-group {
+  padding-top: 5px;
+}
+
+.step2 > form > .form-group > input {
+  padding: 10px 10px;
+  width: 400px;
+  font-size: 14px;
+}
+
+.step2 > form > .form-check {
+  font-size: 14px;
+  padding-left: 0;
+  padding-bottom: 15px;
+  padding-top: 10px;
+  margin-bottom: 20px;
+}
+
+.step2 > form > .form-row > .col-5 > select {
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+.step2 > form > .form-row > .col-3 > input {
+  padding: 5px 20px 5px 5px;
+  font-size: 14px;
+}
+
+.step3 {
+  display: none;
+}
+
+.step3 > .back {
+  position: absolute;
+  margin: -35px 0px 0 -40px;
+  font-size: 14px;
+  color: #FF6C00;
+  font-weight: bold;
+}
+
+.step3 > .skip {
+  position: absolute;
+  margin: -35px 0px 0 568px;
+  font-size: 14px;
+  color: black;
+  font-weight: bold;
+}
+
+.step3 > h5 {
+  padding-top: 20px;
+  margin-bottom: 0;
+}
+
+.step3 > form {
+  padding-top: 10px;
+}
+
+.step3 > form > .btn {
+  width: 400px;
+  font-size: 16px;
+  padding: 12px 0 12px 0;
+  background-color: #FF6C00;
+  color: white;
+}
+
+.step3 > form > .btn:hover {
+  background-color: rgba(255, 108, 0, 0.6);
+}
+
+.step3 > form > .form-group {
+  padding-top: 5px;
+}
+
+.step3 > form > .form-group > input {
+  padding: 10px 10px;
+  width: 400px;
+  font-size: 14px;
+}
+
+.step3 > form > .form-row {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.step3 > form > .form-row > .col-5 > select, .step3 > form > .form-row .col-3 > select {
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+.step3 > form > .form-row > .col-3 > input {
+  padding: 5px 20px 5px 5px;
+  font-size: 14px;
+}
+
+.step3 > form > button {
+  margin-top: 50px;
+}
+
+.step4 {
+  display: none;
+}
+
+.step4 > .back {
+  position: absolute;
+  margin: -35px 0px 0 -40px;
+  font-size: 14px;
+  color: #FF6C00;
+  font-weight: bold;
+}
+
+.step4 > .skip {
+  position: absolute;
+  margin: -35px 0px 0 568px;
+  font-size: 14px;
+  color: black;
+  font-weight: bold;
+}
+
+.step4 > h5 {
+  padding-top: 20px;
+  margin-bottom: 0;
+}
+
+.step4 > form {
+  padding-top: 10px;
+}
+
+.step4 > form > .btn {
+  width: 400px;
+  font-size: 16px;
+  padding: 12px 0 12px 0;
+  background-color: #FF6C00;
+  color: white;
+}
+
+.step4 > form > .btn:hover {
+  background-color: rgba(255, 108, 0, 0.6);
+}
+
+.step4 > form > .form-group {
+  padding-top: 5px;
+  margin-bottom: 10px;
+}
+
+.step4 > form > .form-group > input {
+  padding: 10px 10px;
+  width: 400px;
+  font-size: 14px;
+}
+
+.step4 > form > .form-group > select {
+  width: 400px;
+  font-size: 14px;
+}
+
+.step4 > form > .form-short {
+  display: block;
+}
+
+.step4 > form > .form-short > .form-group > input {
+  padding: 10px 10px;
+  width: 400px;
+  font-size: 14px;
+}
+
+.step4 > form > .form-short > .form-group > select {
+  width: 400px;
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+.step4 > form > .form-short > .form-row {
+  padding-bottom: 1rem;
+}
+
+.step4 > form > .form-short > .form-row > .col-4 > select {
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+.step4 > form > .form-middle {
+  display: none;
+}
+
+.step4 > form > .form-middle > .form-group > input {
+  padding: 10px 10px;
+  width: 400px;
+  font-size: 14px;
+}
+
+.step4 > form > .form-middle > .form-row {
+  padding-bottom: 1rem;
+}
+
+.step4 > form > .form-middle > .form-row > .col-4 > select {
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+.step4 > form > .form-long {
+  display: none;
+}
+
+.step4 > form > .form-long > .form-group > input {
+  padding: 10px 10px;
+  width: 400px;
+  font-size: 14px;
+}
+
+.step4 > form > .form-long > .form-group > select {
+  width: 400px;
+  padding: 5px 10px;
+  font-size: 14px;
+}

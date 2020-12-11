@@ -1,0 +1,87 @@
+// Used by login.scss, share by register.scss
+@mixin body-preset {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(white, 0.05);
+}
+
+@mixin container-preset {
+    box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
+    margin: 0;
+    padding: 0;
+    background-color: white;
+}
+
+@mixin left-side {
+    img {
+        width: 442px;
+        height: 656px;   
+    }
+}
+
+@mixin right-side {
+    font-family: 'Open Sans', sans-serif;
+    padding-left: 50px;
+    > .logo {
+        text-decoration: none;
+        color: black;
+        font-size: 35px;
+        font-family: 'Nerko One', cursive;
+        letter-spacing: 7px;
+        > img {
+            margin-top: -14px;
+        }
+    }
+    > .logo:hover {
+        text-decoration: none;
+        cursor: default;
+    }
+}
+
+@mixin input-wrap {
+    padding: 10px 10px;
+    width: 400px;
+    font-size: 14px;
+}
+
+@mixin button-wrap {
+    > button {
+        width: 400px;
+        font-size: 16px;
+        padding: 12px 0 12px 0;
+        background-color: #FF6C00;
+        color: white;
+    }
+    > button:hover {
+        background-color: rgba($color: #FF6C00, $alpha: 0.6);
+    }
+}
+
+@mixin button-a-wrap {
+    > .btn {
+        width: 400px;
+        font-size: 16px;
+        padding: 12px 0 12px 0;
+        background-color: #FF6C00;
+        color: white;
+    }
+    > .btn:hover {
+        background-color: rgba($color: #FF6C00, $alpha: 0.6);
+    }
+}
+
+@mixin checkbox-wrap {
+    font-size: 14px;
+    padding-left: 0;
+    padding-bottom: 15px;
+}
+
+@mixin links($ml,$col) {
+    position: absolute;
+    margin: -35px 0px 0 $ml;
+    font-size: 14px;
+    color: $col;
+    font-weight: bold;
+}
