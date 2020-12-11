@@ -23,6 +23,10 @@ body {
     margin-left: 442px;
     height: 6px;
     border-radius: 0 !important;
+    > .progress-bar {
+        width: 0%; 
+        background-color: #FF6C00 !important;
+    }
 }
 
 .step1 {

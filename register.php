@@ -14,13 +14,13 @@
     <link rel="stylesheet" href="./style/register.css">
     <title>PocketMoney | Register</title>
 </head>
-<body>
+<body onload="showProgress(15);">
     <div class="container row">
         <div class="left">
             <img src="./img/login.png">
         </div>
         <div class="progress">
-            <div class="progress-bar progress-bar-striped bg-warning progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%; background-color: #FF6C00 !important;"></div>
+            <div class="progress-bar progress-bar-striped bg-warning progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="progress-bar"></div>
         </div>
         <!-- First page -->
         <div class="right step1" id="step1">
@@ -43,14 +43,14 @@
                     <input type="checkbox" name="showPass" id="showPass">
                     <label for="showPass" class="form-check-label">Show Password</label>
                 </div>
-                <a class="btn" href="javascript:showNextSection('step1','step2')">Next</a>
+                <a class="btn" href="javascript:showNextSection('step1','step2');showProgress(25)">Next</a>
             </form>
         </div>
 
         <!-- Second page -->
         <div class="right step2" id="step2">
-            <a href="javascript:showPreviousSection('step2','step1')" class="back">Back</a>
-            <a href="javascript:showNextSection('step2','step3')" class="skip">Skip this</a>
+            <a href="javascript:showPreviousSection('step2','step1');showProgress(15)" class="back">Back</a>
+            <a href="javascript:showNextSection('step2','step3');showProgress(50)" class="skip">Skip this</a>
             <a href="#" class="logo"><img src="./img/logo.png" width="50px" height="50px"> POCKETMONEY</a>
             <h5>Step 2: Set up your asset information</h5>
             <form action="" method="">
@@ -86,14 +86,14 @@
                     <input type="checkbox" name="automate" id="autoIncome">
                     <label for="autoIncome" class="form-check-label">Auto-Record</label>
                 </div>
-                <a class="btn" href="javascript:showNextSection('step2','step3')">Next</a>
+                <a class="btn" href="javascript:showNextSection('step2','step3');showProgress(50)">Next</a>
             </form>
         </div>
 
         <!-- Third page -->
         <div class="right step3" id="step3">
-            <a href="javascript:showPreviousSection('step3','step2')" class="back">Back</a>
-            <a href="javascript:showNextSection('step3','step4')" class="skip">Skip this</a>
+            <a href="javascript:showPreviousSection('step3','step2');showProgress(25)" class="back">Back</a>
+            <a href="javascript:showNextSection('step3','step4');showProgress(75)" class="skip">Skip this</a>
             <a href="#" class="logo"><img src="./img/logo.png" width="50px" height="50px"> POCKETMONEY</a>
             <h5>Step 3: Set up your debt information</h5>
             <small>You can record more than one upon successful registration.</small>
@@ -154,13 +154,13 @@
                         </select>
                     </div>
                 </div>
-                <a class="btn" href="javascript:showNextSection('step3','step4')">Next</a>
+                <a class="btn" href="javascript:showNextSection('step3','step4');showProgress(75)">Next</a>
             </form>
         </div>
 
         <!-- Last page -->
         <div class="right step4" id="step4">
-            <a href="javascript:showPreviousSection('step4','step3')" class="back">Back</a>
+            <a href="javascript:showPreviousSection('step4','step3');showProgress(50)" class="back">Back</a>
             <a href="#" class="skip">Skip this</a>
             <a href="#" class="logo"><img src="./img/logo.png" width="50px" height="50px"> POCKETMONEY</a>
             <h5>Step 4: Set up your financial goal</h5>
@@ -362,6 +362,9 @@
     </div>
 </body>
 <script language="JavaScript" type="text/javascript">
+    function showProgress(percentage) {
+        $('#progress-bar').css('width', percentage + "%");
+    }
     function showGoalDescription() {
         var goal = document.getElementById('goalType');
         if (goal.value == 'short' || goal.value == '') {

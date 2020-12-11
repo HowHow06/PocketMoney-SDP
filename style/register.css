@@ -57,6 +57,11 @@ body {
   border-radius: 0 !important;
 }
 
+.progress > .progress-bar {
+  width: 0%;
+  background-color: #FF6C00 !important;
+}
+
 .step1 {
   display: block;
 }
