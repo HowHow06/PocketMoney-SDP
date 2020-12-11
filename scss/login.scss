@@ -1,43 +1,4 @@
-@mixin body-preset {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(white, 0.05);
-}
-
-@mixin container-preset {
-    box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
-    margin: 0;
-    padding: 0;
-    background-color: white;
-}
-
-@mixin left-side {
-    img {
-        width: 442px;
-        height: 656px;   
-    }
-}
-
-@mixin right-side {
-    font-family: 'Open Sans', sans-serif;
-    padding-left: 50px;
-    > .logo {
-        text-decoration: none;
-        color: black;
-        font-size: 35px;
-        font-family: 'Nerko One', cursive;
-        letter-spacing: 7px;
-        > img {
-            margin-top: -14px;
-        }
-    }
-    > .logo:hover {
-        text-decoration: none;
-        cursor: default;
-    }
-}
+@import "lib";
 
 body {
     @include body-preset;

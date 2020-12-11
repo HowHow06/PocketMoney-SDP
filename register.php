@@ -19,8 +19,11 @@
         <div class="left">
             <img src="./img/login.png">
         </div>
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped bg-warning progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%; background-color: #FF6C00 !important;"></div>
+        </div>
         <!-- First page -->
-        <div class="right step1" >
+        <div class="right step1" hidden>
             <a href="#" class="logo"><img src="./img/logo.png" width="50px" height="50px"> POCKETMONEY</a>
             <h5>Step 1: Create your personal account</h5>
             <form action="" method="post">
@@ -46,6 +49,8 @@
 
         <!-- Second page -->
         <div class="right step2" hidden>
+            <a href="#" class="back">Back</a>
+            <a href="#" class="skip">Skip this</a>
             <a href="#" class="logo"><img src="./img/logo.png" width="50px" height="50px"> POCKETMONEY</a>
             <h5>Step 2: Set up your asset information</h5>
             <form action="" method="post">
@@ -64,7 +69,7 @@
                     <input type="number" name="" id="" placeholder="Monthly Income Amount">
                 </div>
                 <div class="form-row">
-                    <div class="col-6">
+                    <div class="col-5">
                         <select name="" id="" class="custom-select">
                             <option value="">Select income category</option>
                             <option value="">Salary</option>
@@ -73,8 +78,8 @@
                             <option value="">Others</option>
                         </select>
                     </div>
-                    <div class="col-6">
-                        <input type="date" name="" id="" class="custom-select" placeholder="Received Date">
+                    <div class="col-3">
+                        <input type="date" name="" id="" class="custom-select">
                     </div>
                 </div>
                 <div class="form-check">
@@ -87,6 +92,8 @@
 
         <!-- Third page -->
         <div class="right step3" hidden>
+            <a href="#" class="back">Back</a>
+            <a href="#" class="skip">Skip this</a>
             <a href="#" class="logo"><img src="./img/logo.png" width="50px" height="50px"> POCKETMONEY</a>
             <h5>Step 3: Set up your debt information</h5>
             <small>You can record more than one upon successful registration.</small>
@@ -101,19 +108,19 @@
                     <input type="number" name="savingAmount" placeholder="Enter Debt Amount">
                 </div>
                 <div class="form-row">
-                    <div class="col-6">
+                    <div class="col-5">
                         <select name="" class="custom-select" id="">
                             <option value="">Payment type</option>
                             <option value="">Month</option>
                             <option value="">Year</option>
                         </select>
                     </div>
-                    <div class="col-6">
+                    <div class="col-3">
                         <input type="date" name="" id="" class="custom-select" placeholder="Payment Date">
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="col-6">
+                    <div class="col-5">
                         <select name="month" class="custom-select">
                             <option selected>Select End Month</option>
                             <option value="1">January</option>
@@ -130,7 +137,7 @@
                             <option value="12">December</option>
                         </select>
                     </div>
-                    <div class="col-6">
+                    <div class="col-3">
                         <select name="year" class="custom-select">
                             <option selected>Select End Year</option>
                             <option value="2020">2020</option>
@@ -152,16 +159,18 @@
         </div>
 
         <!-- Last page -->
-        <div class="right step4" hidden>
+        <div class="right step4" >
+            <a href="#" class="back">Back</a>
+            <a href="#" class="skip">Skip this</a>
             <a href="#" class="logo"><img src="./img/logo.png" width="50px" height="50px"> POCKETMONEY</a>
             <h5>Step 4: Set up your financial goal</h5>
             <small>You can record more than one upon successful registration.</small>
             <form action="" method="post">
                 <div class="form-group">
-                    <input type="text" name="goalName" placeholder="Financial Goal Name" required>
+                    <input type="text" name="goalName" placeholder="Financial Goal Name">
                 </div>
                 <div class="form-group">
-                    <input type="text" name="goalDes" placeholder="Financial Goal Description" required>
+                    <input type="text" name="goalDes" placeholder="Financial Goal Description">
                 </div>
                 <div class="form-group">
                     <select name="" id="" class="custom-select">
@@ -172,12 +181,12 @@
                     </select>
                 </div>
                 <!-- For Short -->
-                <div class="" >
+                <div class="form-short" hidden>
                     <div class="form-group">
                         <input type="number" name="goalAmount" placeholder="Goal Amount">
                     </div>
                     <div class="form-row">
-                        <div class="col-6">
+                        <div class="col-4">
                             <select name="month" class="custom-select">
                                 <option selected>Select Start Month</option>
                                 <option value="1">January</option>
@@ -194,7 +203,7 @@
                                 <option value="12">December</option>
                             </select>
                         </div>
-                        <div class="col-6">
+                        <div class="col-4">
                             <select name="year" class="custom-select">
                                 <option selected>Select Start Year</option>
                                 <option value="2020">2020</option>
@@ -243,12 +252,12 @@
                 </div>
                 
                 <!-- For Middle -->
-                <div class="" hidden>
+                <div class="form-middle" hidden>
                     <div class="form-group">
                         <input type="number" name="goalAmount" placeholder="Goal Amount">
                     </div>
                     <div class="form-row">
-                        <div class="col-6">
+                        <div class="col-4">
                             <select name="month" class="custom-select">
                                 <option selected>Select Start Month</option>
                                 <option value="1">January</option>
@@ -265,7 +274,7 @@
                                 <option value="12">December</option>
                             </select>
                         </div>
-                        <div class="col-6">
+                        <div class="col-4">
                             <select name="year" class="custom-select">
                                 <option selected>Select Start Year</option>
                                 <option value="2020">2020</option>
@@ -283,7 +292,7 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="col-6">
+                        <div class="col-4">
                             <select name="month" class="custom-select">
                                 <option selected>Select End Month</option>
                                 <option value="1">January</option>
@@ -300,7 +309,7 @@
                                 <option value="12">December</option>
                             </select>
                         </div>
-                        <div class="col-6">
+                        <div class="col-4">
                             <select name="year" class="custom-select">
                                 <option selected>Select End Year</option>
                                 <option value="2020">2020</option>
@@ -320,7 +329,7 @@
                 </div>
 
                 <!-- For Long -->
-                <div hidden>
+                <div class="form-long">
                     <div class="form-group">
                         <input type="number" name="goalAmount" placeholder="Goal Amount Invested per Year">
                     </div>
