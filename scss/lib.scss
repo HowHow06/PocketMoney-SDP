@@ -59,6 +59,19 @@
     }
 }
 
+@mixin button-a-wrap {
+    > .btn {
+        width: 400px;
+        font-size: 16px;
+        padding: 12px 0 12px 0;
+        background-color: #FF6C00;
+        color: white;
+    }
+    > .btn:hover {
+        background-color: rgba($color: #FF6C00, $alpha: 0.6);
+    }
+}
+
 @mixin checkbox-wrap {
     font-size: 14px;
     padding-left: 0;

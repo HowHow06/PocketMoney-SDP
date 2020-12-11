@@ -23,10 +23,10 @@
             <div class="progress-bar progress-bar-striped bg-warning progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%; background-color: #FF6C00 !important;"></div>
         </div>
         <!-- First page -->
-        <div class="right step1" hidden>
+        <div class="right step1" id="step1">
             <a href="#" class="logo"><img src="./img/logo.png" width="50px" height="50px"> POCKETMONEY</a>
             <h5>Step 1: Create your personal account</h5>
-            <form action="" method="post">
+            <form action="" method="">
                 <div class="form-group">
                     <input type="text" name="name" placeholder="Enter real full name" required>
                 </div>
@@ -43,17 +43,17 @@
                     <input type="checkbox" name="showPass" id="showPass">
                     <label for="showPass" class="form-check-label">Show Password</label>
                 </div>
-                <button type="submit" class="btn">Next</button>
+                <a class="btn" href="javascript:showNextSection('step1','step2')">Next</a>
             </form>
         </div>
 
         <!-- Second page -->
-        <div class="right step2" hidden>
-            <a href="#" class="back">Back</a>
-            <a href="#" class="skip">Skip this</a>
+        <div class="right step2" id="step2">
+            <a href="javascript:showPreviousSection('step2','step1')" class="back">Back</a>
+            <a href="javascript:showNextSection('step2','step3')" class="skip">Skip this</a>
             <a href="#" class="logo"><img src="./img/logo.png" width="50px" height="50px"> POCKETMONEY</a>
             <h5>Step 2: Set up your asset information</h5>
-            <form action="" method="post">
+            <form action="" method="">
                 <div class="form-group">
                     <input type="number" name="cashAmount" placeholder="Enter Total Cash in Hand">
                 </div>
@@ -63,14 +63,14 @@
                 <h5>Income Information</h5>
                 <small>You can record more than one upon successful registration.</small>
                 <div class="form-group">
-                    <input type="number" name="income" placeholder="Enter Income Name">
+                    <input type="number" name="incomeName" placeholder="Enter Income Name">
                 </div>
                 <div class="form-group">
-                    <input type="number" name="" id="" placeholder="Monthly Income Amount">
+                    <input type="number" name="incomeAmount" placeholder="Monthly Income Amount">
                 </div>
                 <div class="form-row">
                     <div class="col-5">
-                        <select name="" id="" class="custom-select">
+                        <select name="IncomeCategory" class="custom-select">
                             <option value="">Select income category</option>
                             <option value="">Salary</option>
                             <option value="">Sales</option>
@@ -79,49 +79,49 @@
                         </select>
                     </div>
                     <div class="col-3">
-                        <input type="date" name="" id="" class="custom-select">
+                        <input type="date" name="incomeDate" class="custom-select">
                     </div>
                 </div>
                 <div class="form-check">
                     <input type="checkbox" name="automate" id="autoIncome">
                     <label for="autoIncome" class="form-check-label">Auto-Record</label>
                 </div>
-                <button type="submit" class="btn">Next</button>
+                <a class="btn" href="javascript:showNextSection('step2','step3')">Next</a>
             </form>
         </div>
 
         <!-- Third page -->
-        <div class="right step3" hidden>
-            <a href="#" class="back">Back</a>
-            <a href="#" class="skip">Skip this</a>
+        <div class="right step3" id="step3">
+            <a href="javascript:showPreviousSection('step3','step2')" class="back">Back</a>
+            <a href="javascript:showNextSection('step3','step4')" class="skip">Skip this</a>
             <a href="#" class="logo"><img src="./img/logo.png" width="50px" height="50px"> POCKETMONEY</a>
             <h5>Step 3: Set up your debt information</h5>
             <small>You can record more than one upon successful registration.</small>
-            <form action="" method="post">
+            <form action="" method="">
                 <div class="form-group">
-                    <input type="name" name="debtAmount" placeholder="Enter Debt Name">
+                    <input type="name" name="debtName" placeholder="Enter Debt Name">
                 </div>
                 <div class="form-group">
-                    <input type="name" name="debtAmount" placeholder="Enter Debt Description">
+                    <input type="name" name="debtDescription" placeholder="Enter Debt Description">
                 </div>
                 <div class="form-group">
-                    <input type="number" name="savingAmount" placeholder="Enter Debt Amount">
+                    <input type="number" name="debtAmount" placeholder="Enter Debt Amount">
                 </div>
                 <div class="form-row">
                     <div class="col-5">
-                        <select name="" class="custom-select" id="">
+                        <select name="paymentType" class="custom-select">
                             <option value="">Payment type</option>
                             <option value="">Month</option>
                             <option value="">Year</option>
                         </select>
                     </div>
                     <div class="col-3">
-                        <input type="date" name="" id="" class="custom-select" placeholder="Payment Date">
+                        <input type="date" name="paymentDate" class="custom-select" placeholder="Payment Date">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="col-5">
-                        <select name="month" class="custom-select">
+                        <select name="debtEndMonth" class="custom-select">
                             <option selected>Select End Month</option>
                             <option value="1">January</option>
                             <option value="2">Febuary</option>
@@ -138,7 +138,7 @@
                         </select>
                     </div>
                     <div class="col-3">
-                        <select name="year" class="custom-select">
+                        <select name="debtEndYear" class="custom-select">
                             <option selected>Select End Year</option>
                             <option value="2020">2020</option>
                             <option value="2021">2021</option>
@@ -154,40 +154,40 @@
                         </select>
                     </div>
                 </div>
-                <button type="submit" class="btn">Next</button>
+                <a class="btn" href="javascript:showNextSection('step3','step4')">Next</a>
             </form>
         </div>
 
         <!-- Last page -->
-        <div class="right step4" >
-            <a href="#" class="back">Back</a>
+        <div class="right step4" id="step4">
+            <a href="javascript:showPreviousSection('step4','step3')" class="back">Back</a>
             <a href="#" class="skip">Skip this</a>
             <a href="#" class="logo"><img src="./img/logo.png" width="50px" height="50px"> POCKETMONEY</a>
             <h5>Step 4: Set up your financial goal</h5>
             <small>You can record more than one upon successful registration.</small>
-            <form action="" method="post">
+            <form action="" method="">
                 <div class="form-group">
                     <input type="text" name="goalName" placeholder="Financial Goal Name">
                 </div>
                 <div class="form-group">
-                    <input type="text" name="goalDes" placeholder="Financial Goal Description">
+                    <input type="text" name="goalDescription" placeholder="Financial Goal Description">
                 </div>
                 <div class="form-group">
-                    <select name="" id="" class="custom-select">
+                    <select name="goalType" class="custom-select" id="goalType" onclick="showGoalDescription();">
                         <option value="">Goal Type</option>
-                        <option value="">Short-Term Goals</option>
-                        <option value="">Middle-Term Goals</option>
-                        <option value="">Long-Term Goals</option>
+                        <option value="short">Short-Term Goals</option>
+                        <option value="middle">Middle-Term Goals</option>
+                        <option value="long">Long-Term Goals</option>
                     </select>
                 </div>
                 <!-- For Short -->
-                <div class="form-short" hidden>
+                <div class="form-short" id="goalShort">
                     <div class="form-group">
-                        <input type="number" name="goalAmount" placeholder="Goal Amount">
+                        <input type="number" name="goalAmountShort" placeholder="Goal Amount">
                     </div>
                     <div class="form-row">
                         <div class="col-4">
-                            <select name="month" class="custom-select">
+                            <select name="goalStartMonth" class="custom-select">
                                 <option selected>Select Start Month</option>
                                 <option value="1">January</option>
                                 <option value="2">Febuary</option>
@@ -204,7 +204,7 @@
                             </select>
                         </div>
                         <div class="col-4">
-                            <select name="year" class="custom-select">
+                            <select name="goalStartYear" class="custom-select">
                                 <option selected>Select Start Year</option>
                                 <option value="2020">2020</option>
                                 <option value="2021">2021</option>
@@ -221,7 +221,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <select name="month" class="custom-select">
+                        <select name="goalTenure" class="custom-select">
                             <option selected>Select Tenure (Months)</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -252,13 +252,13 @@
                 </div>
                 
                 <!-- For Middle -->
-                <div class="form-middle" hidden>
+                <div class="form-middle" id="goalMiddle">
                     <div class="form-group">
-                        <input type="number" name="goalAmount" placeholder="Goal Amount">
+                        <input type="number" name="goalAmountMiddle" placeholder="Goal Amount">
                     </div>
                     <div class="form-row">
                         <div class="col-4">
-                            <select name="month" class="custom-select">
+                            <select name="goalStartMonth" class="custom-select">
                                 <option selected>Select Start Month</option>
                                 <option value="1">January</option>
                                 <option value="2">Febuary</option>
@@ -275,7 +275,7 @@
                             </select>
                         </div>
                         <div class="col-4">
-                            <select name="year" class="custom-select">
+                            <select name="goalStartYear" class="custom-select">
                                 <option selected>Select Start Year</option>
                                 <option value="2020">2020</option>
                                 <option value="2021">2021</option>
@@ -293,7 +293,7 @@
                     </div>
                     <div class="form-row">
                         <div class="col-4">
-                            <select name="month" class="custom-select">
+                            <select name="goalEndMonth" class="custom-select">
                                 <option selected>Select End Month</option>
                                 <option value="1">January</option>
                                 <option value="2">Febuary</option>
@@ -310,7 +310,7 @@
                             </select>
                         </div>
                         <div class="col-4">
-                            <select name="year" class="custom-select">
+                            <select name="goalEndYear" class="custom-select">
                                 <option selected>Select End Year</option>
                                 <option value="2020">2020</option>
                                 <option value="2021">2021</option>
@@ -329,12 +329,12 @@
                 </div>
 
                 <!-- For Long -->
-                <div class="form-long">
+                <div class="form-long" id="goalLong">
                     <div class="form-group">
-                        <input type="number" name="goalAmount" placeholder="Goal Amount Invested per Year">
+                        <input type="number" name="goalAmountLong" placeholder="Goal Amount Invested per Year">
                     </div>
                     <div class="form-group">
-                        <select name="year" class="custom-select">
+                        <select name="goalEndYear" class="custom-select">
                             <option selected>Select End Year</option>
                             <option value="2020">2020</option>
                             <option value="2021">2021</option>
@@ -352,7 +352,7 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="showPass" class="form-check-label">Monthly Deposit</label>
+                    <label>Monthly Deposit</label>
                     <br>
                     <sup>MYR</sup><strong class="amountBefore"> 0.<sup class="amountAfter">00</sup></strong>
                 </div>
@@ -361,4 +361,32 @@
         </div>
     </div>
 </body>
+<script language="JavaScript" type="text/javascript">
+    function showGoalDescription() {
+        var goal = document.getElementById('goalType');
+        if (goal.value == 'short' || goal.value == '') {
+            document.getElementById('goalShort').style.display = 'block';
+            document.getElementById('goalMiddle').style.display = 'none';
+            document.getElementById('goalLong').style.display = 'none';
+        } 
+        else if (goal.value == 'middle') {
+            document.getElementById('goalShort').style.display = 'none';
+            document.getElementById('goalMiddle').style.display = 'block';
+            document.getElementById('goalLong').style.display = 'none';
+        }
+        else if (goal.value == 'long') {
+            document.getElementById('goalShort').style.display = 'none';
+            document.getElementById('goalMiddle').style.display = 'none';
+            document.getElementById('goalLong').style.display = 'block';
+        }
+    }
+    function showNextSection(currentSectionId, nextSectionId) {
+        document.getElementById(currentSectionId).style.display = 'none';
+        document.getElementById(nextSectionId).style.display = 'block';
+    }
+    function showPreviousSection(currentSectionId, previousSectionId) {
+        document.getElementById(currentSectionId).style.display = 'none';
+        document.getElementById(previousSectionId).style.display = 'block';
+    }
+</script>
 </html>

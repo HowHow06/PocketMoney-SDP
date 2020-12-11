@@ -26,11 +26,12 @@ body {
 }
 
 .step1 {
+    display: block;
     > h5 {
         padding-top: 20px;
     }
     > form {
-        @include button-wrap;
+        @include button-a-wrap;
         padding-top: 10px;
         > .form-group {
             padding-top: 10px;
@@ -47,6 +48,7 @@ body {
 }
 
 .step2 {
+    display: none;
     > .back {
         @include links(-40px, #FF6C00);
     }
@@ -57,7 +59,7 @@ body {
         padding-top: 20px;
     }
     > form {
-        @include button-wrap;
+        @include button-a-wrap;
         padding-top: 10px;
         > h5 {
             margin-bottom: 0;
@@ -92,6 +94,7 @@ body {
 }
 
 .step3 {
+    display: none;
     > .back {
         @include links(-40px, #FF6C00);
     }
@@ -103,7 +106,7 @@ body {
         margin-bottom: 0;
     }
     > form {
-        @include button-wrap;
+        @include button-a-wrap;
         padding-top: 10px;
         > .form-group {
             padding-top: 5px;
@@ -134,6 +137,7 @@ body {
 }
 
 .step4 {
+    display: none;
     > .back {
         @include links(-40px, #FF6C00);
     }
@@ -145,7 +149,7 @@ body {
         margin-bottom: 0;
     }
     > form {
-        @include button-wrap;
+        @include button-a-wrap;
         padding-top: 10px;
         > .form-group {
             padding-top: 5px;
@@ -159,6 +163,7 @@ body {
             }
         }
         > .form-short {
+            display: block;
             > .form-group {
                 > input {
                     @include input-wrap;
@@ -180,6 +185,7 @@ body {
             }
         }
         > .form-middle {
+            display: none;
             > .form-group {
                 > input {
                     @include input-wrap;
@@ -196,6 +202,7 @@ body {
             }
         }
         > .form-long {
+            display: none;
             > .form-group {
                 > input {
                     @include input-wrap;

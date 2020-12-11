@@ -57,6 +57,10 @@ body {
   border-radius: 0 !important;
 }
 
+.step1 {
+  display: block;
+}
+
 .step1 > h5 {
   padding-top: 20px;
 }
@@ -65,7 +69,7 @@ body {
   padding-top: 10px;
 }
 
-.step1 > form > button {
+.step1 > form > .btn {
   width: 400px;
   font-size: 16px;
   padding: 12px 0 12px 0;
@@ -73,7 +77,7 @@ body {
   color: white;
 }
 
-.step1 > form > button:hover {
+.step1 > form > .btn:hover {
   background-color: rgba(255, 108, 0, 0.6);
 }
 
@@ -93,6 +97,10 @@ body {
   padding-left: 0;
   padding-bottom: 15px;
   margin-bottom: 20px;
+}
+
+.step2 {
+  display: none;
 }
 
 .step2 > .back {
@@ -119,7 +127,7 @@ body {
   padding-top: 10px;
 }
 
-.step2 > form > button {
+.step2 > form > .btn {
   width: 400px;
   font-size: 16px;
   padding: 12px 0 12px 0;
@@ -127,7 +135,7 @@ body {
   color: white;
 }
 
-.step2 > form > button:hover {
+.step2 > form > .btn:hover {
   background-color: rgba(255, 108, 0, 0.6);
 }
 
@@ -163,6 +171,10 @@ body {
   font-size: 14px;
 }
 
+.step3 {
+  display: none;
+}
+
 .step3 > .back {
   position: absolute;
   margin: -35px 0px 0 -40px;
@@ -188,7 +200,7 @@ body {
   padding-top: 10px;
 }
 
-.step3 > form > button {
+.step3 > form > .btn {
   width: 400px;
   font-size: 16px;
   padding: 12px 0 12px 0;
@@ -196,7 +208,7 @@ body {
   color: white;
 }
 
-.step3 > form > button:hover {
+.step3 > form > .btn:hover {
   background-color: rgba(255, 108, 0, 0.6);
 }
 
@@ -229,6 +241,10 @@ body {
   margin-top: 50px;
 }
 
+.step4 {
+  display: none;
+}
+
 .step4 > .back {
   position: absolute;
   margin: -35px 0px 0 -40px;
@@ -254,7 +270,7 @@ body {
   padding-top: 10px;
 }
 
-.step4 > form > button {
+.step4 > form > .btn {
   width: 400px;
   font-size: 16px;
   padding: 12px 0 12px 0;
@@ -262,7 +278,7 @@ body {
   color: white;
 }
 
-.step4 > form > button:hover {
+.step4 > form > .btn:hover {
   background-color: rgba(255, 108, 0, 0.6);
 }
 
@@ -280,6 +296,10 @@ body {
 .step4 > form > .form-group > select {
   width: 400px;
   font-size: 14px;
+}
+
+.step4 > form > .form-short {
+  display: block;
 }
 
 .step4 > form > .form-short > .form-group > input {
@@ -303,6 +323,10 @@ body {
   font-size: 14px;
 }
 
+.step4 > form > .form-middle {
+  display: none;
+}
+
 .step4 > form > .form-middle > .form-group > input {
   padding: 10px 10px;
   width: 400px;
@@ -316,6 +340,10 @@ body {
 .step4 > form > .form-middle > .form-row > .col-4 > select {
   padding: 5px 10px;
   font-size: 14px;
+}
+
+.step4 > form > .form-long {
+  display: none;
 }
 
 .step4 > form > .form-long > .form-group > input {
