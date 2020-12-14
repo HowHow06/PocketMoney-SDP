@@ -11,6 +11,13 @@ Financial Management System (Website)
 
 ## Work Progress
 
+### 2020-12-14
+> Moses's Part
+- Create ```investment.php```
+- This is the reference used for apexchart (making charts)
+```
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+```
 ### 2020-12-11
 > Moses's Part
 - Update ```register.php```
