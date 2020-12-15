@@ -81,24 +81,172 @@
             </div>
     
             <!-- table -->
-            <table class="table table-bordered table-hover institution-table">
+            <div class="container-fluid row head">
+                <h4 class="col-6">INVESTMENT SUMMARY</h5>
+                <div class="col-6">
+                    <a href="#" class="btn delete" data-toggle="modal" data-target="#delete">DELETE</a>
+                    <a href="#" class="btn edit" data-toggle="modal" data-target="#edit">EDIT</a>
+                    <a href="#" class="btn add" data-toggle="modal" data-target="#add">ADD</a>
+                </div>
+
+                <!-- delete modal -->
+                <div class="modal fade edit-modal" id="delete" tabindex="-1" role="dialog" aria-labelledby="delete-title" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="edit-title">Delete Institution</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Pick an institution and click Delete.</p>
+                                <form action="" method="post">
+                                    <div class="form-group row">
+                                        <label class="col-4" for="">Institution:</label>
+                                        <select class="col-6" class="custom-select" id="category">
+                                            <option value="">Company ABC</option>
+                                            <option value="">Apple</option>
+                                            <option value="">Samsung</option>
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary">Delete</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- edit modal -->
+                <div class="modal fade edit-modal" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="edit-title">Edit Institution</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="" method="post">
+                                    <div class="form-group row">
+                                        <label class="col-4" for="">Institution:</label>
+                                        <select class="col-6" class="custom-select" id="institution">
+                                            <option value="">Company ABC</option>
+                                            <option value="">Apple</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-4" for="">Description:</label>
+                                        <input class="col-6" type="text">
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-4" for="">Type:</label>
+                                        <select class="col-6" class="custom-select" id="type">
+                                            <option value="">Holding</option>
+                                            <option value="">Diposed</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-4" for="">Price:</label>
+                                        <input class="col-6" type="number">
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-4" for="">Rate per Annum:</label>
+                                        <input class="col-6" type="number">
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-4" for="">Profit:</label>
+                                        <input class="col-6" type="number" value="0.00" disabled>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-4" for="">Current Value:</label>
+                                        <input class="col-6" type="number" value="1300.00" disabled>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- add modal -->
+                <div class="modal fade edit-modal" id="add" tabindex="-1" role="dialog" aria-labelledby="add-title" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="edit-title">Add Institution</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="" method="post">
+                                    <div class="form-group row">
+                                        <label class="col-4" for="">Institution:</label>
+                                        <input class="col-6" type="text">
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-4" for="">Description:</label>
+                                        <input class="col-6" type="text">
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-4" for="">Type:</label>
+                                        <select class="col-6" class="custom-select" id="type">
+                                            <option value="">Holding</option>
+                                            <option value="">Diposed</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-4" for="">Price:</label>
+                                        <input class="col-6" type="number">
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-4" for="">Rate per Annum:</label>
+                                        <input class="col-6" type="number">
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-4" for="">Profit:</label>
+                                        <input class="col-6" type="number" value="0.00" disabled>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-4" for="">Current Value:</label>
+                                        <input class="col-6" type="number" value="1300.00" disabled>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary">Add</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+            </div>
+            <table class="table table-bordered table-hover institution-table"> 
                 <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">AS OF</th>
-                    <th scope="col">INSTITUTION</th>
-                    <th scope="col">DESCRIPTION</th>
-                    <th scope="col">TYPE</th>
-                    <th scope="col">PRICE</th>
-                    <th scope="col">RATE PER ANNUM</th>
-                    <th scope="col">PROFIT</th>
-                    <th scope="col">CURRENT VALUE</th>
-                  </tr>
-                </thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">INSTITUTION</th>
+                      <th scope="col">DESCRIPTION</th>
+                      <th scope="col">TYPE</th>
+                      <th scope="col">PRICE</th>
+                      <th scope="col">RATE PER ANNUM</th>
+                      <th scope="col">PROFIT</th>
+                      <th scope="col">CURRENT VALUE</th>
+                    </tr>
+                  </thead>
                 <tbody>
                   <tr>
                     <th scope="row">1</th>
-                    <td>2020-12-12</td>
                     <td>Company ABC</td>
                     <td>Self-Developed Company</td>
                     <td>Holding</td>
@@ -109,7 +257,6 @@
                   </tr>
                   <tr>
                     <th scope="row">2</th>
-                    <td>2020-12-12</td>
                     <td>Apple</td>
                     <td>Phone Electronic Company</td>
                     <td>Holding</td>
@@ -120,7 +267,6 @@
                   </tr>
                   <tr>
                     <th scope="row">3</th>
-                    <td>2020-12-12</td>
                     <td>Samsung</td>
                     <td>Phone Electronic Company</td>
                     <td>Holding</td>
