@@ -83,8 +83,39 @@
         justify-content: center;
         align-items: center;
     }
+    > .head {
+        margin: 0 auto;
+        margin-top: 25px;
+        width: 95%;
+        padding-left: 0;
+        padding-right: 0;
+        > h4 { 
+            margin-top: 5px;
+            padding-left: 5px;
+        }
+        > div {
+            padding-right: 0;
+            > a {
+                float: right;
+                color: white;
+                padding: 5px 15px;
+                background-color: #fc9a55;
+                border-color: #fc9a55;
+                margin: 5px;
+                margin-top: 0;
+            }
+            > a:hover {
+                background-color: rgba($color: #fc9a55, $alpha: 0.65);
+                border-color: rgba($color: #fc9a55, $alpha: 0.65);
+            }
+            > a::-moz-focus-inner, a::-moz-focus-outer {
+                background-color: rgba($color: #fc9a55, $alpha: 0.65);
+                border-color: rgba($color: #fc9a55, $alpha: 0.65);
+            }
+        }
+    }
     > .institution-table {
-        margin: 35px auto;
+        margin: 0 auto;
         width: 95%;
         text-align: center;
         > thead {
