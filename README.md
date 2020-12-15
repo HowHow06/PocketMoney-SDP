@@ -11,6 +11,9 @@ Financial Management System (Website)
 
 ## Work Progress
 
+### 2020-12-15
+> Moses's Part
+- Update ```investment.php```
 ### 2020-12-14
 > Moses's Part
 - Create ```investment.php```
@@ -67,7 +70,7 @@ Financial Management System (Website)
 ```
 - These one is for scroll effect
 ```
-<script src="./jquery_src/jquery.nicescroll-3.7.4/jquery.nicescroll.min.js"></script>
+<script src="./jquery/jquery.nicescroll-3.7.4/jquery.nicescroll.js"></script>
 ```
 ## License 
 This project is only editable for contributors.

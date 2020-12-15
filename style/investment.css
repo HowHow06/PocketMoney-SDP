@@ -1,6 +1,6 @@
 .navbar {
   padding: 10px 25px 10px 15px;
-  background-color: #FF6C00;
+  background-color: #f7802b;
 }
 
 .navbar > a {
@@ -60,7 +60,7 @@
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: #f7e0b5;
   padding: 70px 135px;
 }
 
@@ -118,7 +118,7 @@
 
 .body > .institution-table {
   margin: 35px auto;
-  width: 90%;
+  width: 95%;
   text-align: center;
 }
 
@@ -138,4 +138,122 @@
   height: 3px;
   background-color: #E1E1E1;
   border: 0s;
+}
+
+.body > .filter {
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.body > .filter > div {
+  padding: 50px 100px;
+}
+
+.body > .filter > div > select {
+  width: 200px;
+}
+
+.body > .filter2 > .show {
+  padding-left: 50px;
+}
+
+.body > .filter2 > .show > h6, .body > .filter2 > .show select {
+  float: left;
+}
+
+.body > .filter2 > .show > h6 {
+  padding: 5px 10px 0 10px;
+  margin: 0;
+  font-size: 110%;
+  letter-spacing: 1px;
+}
+
+.body > .filter2 > .show > select {
+  border-radius: 12px;
+  width: 75px;
+}
+
+.body > .filter2 > .show > select > option {
+  font-size: 12px;
+}
+
+.body > .filter2 > .search {
+  padding-right: 0;
+  margin-right: 15px;
+}
+
+.body > .filter2 > .search > h6, .body > .filter2 > .search input {
+  float: right;
+}
+
+.body > .filter2 > .search > h6 {
+  padding: 5px 10px 0 10px;
+  margin: 0;
+  font-size: 110%;
+  letter-spacing: 1px;
+}
+
+.body > .filter2 > .search > input {
+  border-radius: 25px;
+}
+
+.body > .transaction-table {
+  margin: 15px auto;
+  width: 95%;
+  text-align: center;
+}
+
+.body > .transaction-table > thead {
+  background-color: #fc9a55;
+  color: white;
+}
+
+.body > .transaction-table > tbody .action {
+  width: 130px;
+}
+
+.body > .transaction-table > tbody .action > a {
+  color: #FF6C00;
+}
+
+.body > .filter3 {
+  padding-top: 20px;
+}
+
+.body > .filter3 > .show {
+  font-size: 110%;
+  letter-spacing: 1px;
+  padding-left: 42px;
+}
+
+.body > .filter3 > nav > ul {
+  float: right;
+  margin-top: -10px;
+}
+
+.body > .filter3 > nav > ul > li > a {
+  color: black;
+}
+
+.body > .filter3 > nav > ul > .active .page-link {
+  background-color: #fc9a55;
+  border-color: #fc9a55;
+  color: white;
+}
+
+.edit-modal > .modal-dialog > .modal-content > .modal-header {
+  background-color: #fc9a55;
+}
+
+.edit-modal > .modal-dialog > .modal-content > .modal-header > .modal-title, .edit-modal > .modal-dialog > .modal-content > .modal-header .close {
+  color: white;
+}
+
+.edit-modal > .modal-dialog > .modal-content > .modal-footer > .btn-primary {
+  background-color: #fc9a55;
+  border-color: #fc9a55;
 }

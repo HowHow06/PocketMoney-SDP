@@ -7,7 +7,7 @@
 	<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    <!-- <script src="./jquery_src/jquery.nicescroll-3.7.4/jquery.nicescroll.min.js"></script> -->
+    <script src="./jquery/jquery.nicescroll-3.7.4/jquery.nicescroll.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Nerko+One&display=swap" rel="stylesheet">
@@ -17,42 +17,40 @@
     <title>PocketMoney | Investment</title>
 </head>
 <body>
-    <div class="sticky-top">
-        <nav class="navbar navbar-expand-lg navbar-light">
-            <a href="#" class="navbar-brand"><img src="./img/logo_i.png" width="50px" height="50px"> POCKETMONEY</a>
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a href="#" class="nav-link">Dashboard</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">Transactions</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">Budgets</a>
-                </li>
-                <li class="nav-item active">
-                    <a href="#" class="nav-link">Investments</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">Debts</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">Financial Goals</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">Reports</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown">Setting</a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a href="#" class="dropdown-item">Profile</a>
-                        <a href="#" class="dropdown-item">Enquiry</a>
-                        <a href="#" class="dropdown-item">Logout</a>
-                    </div>
-                </li>
-            </ul>
-        </nav>
-    </div>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a href="#" class="navbar-brand"><img src="./img/logo_i.png" width="50px" height="50px"> POCKETMONEY</a>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a href="#" class="nav-link">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">Transactions</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">Budgets</a>
+            </li>
+            <li class="nav-item active">
+                <a href="investment.php" class="nav-link">Investments</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">Debts</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">Financial Goals</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">Reports</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown">Setting</a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a href="#" class="dropdown-item">Profile</a>
+                    <a href="#" class="dropdown-item">Enquiry</a>
+                    <a href="#" class="dropdown-item">Logout</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
 
     <div class="container-fluid background">
         <div class="container-fluid body">
@@ -134,10 +132,10 @@
                 </tbody>
             </table>
     
-            <h4>INVESTMENT TRANSACTIONS</h2>
+            <h4>INVESTMENT TRANSACTIONS</h4>
             <hr>
     
-            <div class="container-fluid row">
+            <div class="container-fluid row filter">
                 <div>
                     <h5>INSTITUTION:</h5>
                     <select name="" id="" class="custom-select">
@@ -155,30 +153,301 @@
                 </div>
             </div>
     
-            <div class="container-fluid row">
-                <div>
-                    <h5>Show:</h5>
+            <div class="container-fluid row filter2">
+                <div class="col-6 row show">
+                    <h6>Show:</h6>
                     <select name="" id="" class="custom-select">
                         <option value="">50</option>
                         <option value=""></option>
                     </select>
-                    <h5>entries</h5>
+                    <h6>entries</h6>
                 </div>
     
-                <div>
-                    <h5>Search:</h5>
+                <div class="col-6 search">
                     <input type="text" name="" id="">
+                    <h6>Search:</h6>
                 </div>
             </div>
     
             <!-- table -->
+            <table class="table table-bordered table-hover transaction-table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">DATE</th>
+                    <th scope="col">AMOUNT</th>
+                    <th scope="col">DESCRIPTION</th>
+                    <th scope="col">CATEGORY</th>
+                    <th scope="col">INSTITUTION</th>
+                    <th scope="col">TYPE</th>
+                    <th scope="col">ACTION</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>2020-12-12</td>
+                    <td>350.00</td>
+                    <td>Service Tax</td>
+                    <td>Tax</td>
+                    <td>Company ABC</td>
+                    <td>Crefit</td>
+                    <td class="action">
+                        <a href="#" class="edit" data-toggle="modal" data-target="#edit-row1">Edit</a>
+                        <a href="#" class="delete" data-toggle="modal" data-target="#delete-row1">Delete</a>
+                    </td>
+
+                    <!-- edit-row1 modal -->
+                    <div class="modal fade edit-modal" id="edit-row1" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="edit-title">Edit Transaction</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="" method="post">
+                                        <div class="form-group row">
+                                            <label class="col-4" for="">Date:</label>
+                                            <input class="col-6" type="date" value="2020-12-12">
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-4" for="">Insititution:</label>
+                                            <input class="col-6" type="text" value="Company ABC" disabled>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-4" for="">Amount:</label>
+                                            <input class="col-6" type="text" value="350.00">
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-4" for="">Description:</label>
+                                            <input class="col-6" type="text" value="Service Tax">
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-4" for="">Category:</label>
+                                            <select class="col-6" class="custom-select" id="category">
+                                                <option value="">Tax</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-4" for="">Type:</label>
+                                            <select class="col-6" class="custom-select" id="type">
+                                                <option value="">Credit</option>
+                                                <option value="">Debit</option>
+                                            </select>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- delete-row1 modal -->
+                    <div class="modal fade edit-modal" id="delete-row1" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <p>Are you sure want to Delete this transaction?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary">Delete</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  </tr>
+                  <tr>
+                    <th scope="row">2</th>
+                    <td>2020-12-02</td>
+                    <td>410.30</td>
+                    <td>Dividence</td>
+                    <td>Bonus</td>
+                    <td>Company ABC</td>
+                    <td>Debit</td>
+                    <td class="action">
+                        <a href="#" class="edit" data-toggle="modal" data-target="#edit-row2">Edit</a>
+                        <a href="#" class="delete" data-toggle="modal" data-target="#delete-row2">Delete</a>
+                    </td>
+
+                    <!-- edit-row2 modal -->
+                    <div class="modal fade edit-modal" id="edit-row2" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="edit-title">Edit Transaction</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="" method="post">
+                                        <div class="form-group row">
+                                            <label class="col-4" for="">Date:</label>
+                                            <input class="col-6" type="date" value="2020-12-12">
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-4" for="">Insititution:</label>
+                                            <input class="col-6" type="text" value="Company ABC" disabled>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-4" for="">Amount:</label>
+                                            <input class="col-6" type="text" value="350.00">
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-4" for="">Description:</label>
+                                            <input class="col-6" type="text" value="Service Tax">
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-4" for="">Category:</label>
+                                            <select class="col-6" class="custom-select" id="category">
+                                                <option value="">Tax</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-4" for="">Type:</label>
+                                            <select class="col-6" class="custom-select" id="type">
+                                                <option value="">Credit</option>
+                                                <option value="">Debit</option>
+                                            </select>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- delete-row2 modal -->
+                    <div class="modal fade edit-modal" id="delete-row2" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <p>Are you sure want to Delete this transaction?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary">Delete</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  </tr>
+                  <tr>
+                    <th scope="row">3</th>
+                    <td>2020-11-30</td>
+                    <td>10.10</td>
+                    <td>Stock Price</td>
+                    <td>Investment</td>
+                    <td>Samsung</td>
+                    <td>Debit</td>
+                    <td class="action">
+                        <a href="#" class="edit" data-toggle="modal" data-target="#edit-row3">Edit</a>
+                        <a href="#" class="delete" data-toggle="modal" data-target="#delete-row3">Delete</a>
+                    </td>
+
+                    <!-- edit-row2 modal -->
+                    <div class="modal fade edit-modal" id="edit-row3" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="edit-title">Edit Transaction</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="" method="post">
+                                        <div class="form-group row">
+                                            <label class="col-4" for="">Date:</label>
+                                            <input class="col-6" type="date" value="2020-12-12">
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-4" for="">Insititution:</label>
+                                            <input class="col-6" type="text" value="Company ABC" disabled>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-4" for="">Amount:</label>
+                                            <input class="col-6" type="text" value="350.00">
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-4" for="">Description:</label>
+                                            <input class="col-6" type="text" value="Service Tax">
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-4" for="">Category:</label>
+                                            <select class="col-6" class="custom-select" id="category">
+                                                <option value="">Tax</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-4" for="">Type:</label>
+                                            <select class="col-6" class="custom-select" id="type">
+                                                <option value="">Credit</option>
+                                                <option value="">Debit</option>
+                                            </select>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- delete-row2 modal -->
+                    <div class="modal fade edit-modal" id="delete-row3" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <p>Are you sure want to Delete this transaction?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary">Delete</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  </tr>
+                </tbody>
+            </table>
     
-            <div class="container-fluid row">
-                <div>
-                    <h5>Showing 1 to 7 of 7 entries</h5>
+            <div class="container-fluid row filter3">
+                <div class="show col-6">
+                    <h6>Showing 1 to 3 of 3 entries</h6>
                 </div>
     
-                <!-- popigation -->
+                <!-- Pagination -->
+                <nav class="col-6">
+                    <ul class="pagination">
+                        <li class="page-item disabled">
+                            <span class="page-link">Previous</span>
+                        </li>
+                        <li class="page-item active">
+                            <span class="page-link">
+                                1
+                                <span class="sr-only">(current)</span>
+                            </span>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
             </div>    
         </div>
     </div>
@@ -263,5 +532,9 @@
 
     var donutChart = new ApexCharts(document.querySelector("#donut-chart"), donutOptions);
     donutChart.render();
+
+    $(document).ready(function() {
+        $("body").niceScroll();
+    });
 </script>
 </html>
