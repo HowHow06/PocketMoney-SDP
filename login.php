@@ -41,7 +41,7 @@
                     <input type="checkbox" name="showPass" id="showPass">
                     <label for="showPass" class="form-check-label">Show Password</label>
                 </div>
-                <button type="submit" class="btn">Login</button>
+                <button type="submit" class="btn" onclick="location.href='dashboard.php';">Login</button>
             </form>
 
             <?php
