@@ -21,10 +21,14 @@
         <a href="#" class="navbar-brand"><img src="./img/logo_i.png" width="50px" height="50px"> POCKETMONEY</a>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a href="#" class="nav-link">Dashboard</a>
+                <a href="dashboard.php" class="nav-link">Dashboard</a>
             </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">Transactions</a>
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown">Transactions</a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a href="income_trans.php" class="dropdown-item">Income Summary</a>
+                    <a href="#" class="dropdown-item">Expenses Summary</a>
+                </div>
             </li>
             <li class="nav-item">
                 <a href="#" class="nav-link">Budgets</a>
@@ -46,7 +50,7 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <a href="#" class="dropdown-item">Profile</a>
                     <a href="#" class="dropdown-item">Enquiry</a>
-                    <a href="#" class="dropdown-item">Logout</a>
+                    <a href="index.html" class="dropdown-item">Logout</a>
                 </div>
             </li>
         </ul>

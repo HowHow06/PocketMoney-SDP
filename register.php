@@ -356,7 +356,7 @@
                     <br>
                     <sup>MYR</sup><strong class="amountBefore"> 0.<sup class="amountAfter">00</sup></strong>
                 </div>
-                <button type="submit" class="btn">Sign Up</button>
+                <a href="login.php?role=customer" type="" class="btn" >Sign Up</a>
             </form>
         </div>
     </div>
