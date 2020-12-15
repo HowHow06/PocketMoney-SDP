@@ -61,7 +61,76 @@
             <nav class="navbar navbar-expand-lg">
                 <a href="#" class="navbar-brand">INCOME TRANSACTIONS</a>
             </nav>
+            <div class="container-fluid row">
+                <div clsas="col-6 row">
+                    <button class="btn">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </button>
+                    <h6>Dec</h6>
+                    <button class="btn">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </button>
+                </div>
+                <div class="col-6 row">
+                    <h6>Show:</h6>
+                    <select name="" id="" class="custom-select">
+                        <option value="">Monthly</option>
+                        <option value="">Year</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="container-fluid row">
+                <div class="container col-4 pie-chart" id="pie-chart">
+
+                </div>
+                <div class="container col-8 chart-explain">
+                    <div class="container-fluid row category">
+                        <div class="col-1">
+                            <p>50%</p>
+                        </div>
+                        <div class="col-4">
+                            <h5>Category 1</h5>
+                        </div>
+                        <div class="col-4">
+                            <h5>RM 349.90</h5>
+                        </div>
+                        <div class="col-1">
+                        <button class="btn">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
+<script>
+    var pieOptions = {
+          series: [44, 55, 13, 43, 22],
+          chart: {
+          width: 380,
+          type: 'pie',
+        },
+        labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
+        responsive: [{
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200
+            },
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }]
+        };
+
+    var pieChart = new ApexCharts(document.querySelector("#pie-chart"), pieOptions);
+    pieChart.render();
+</script>
 </html>
