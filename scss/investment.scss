@@ -1,12 +1,8 @@
+@import "navbar";
+@import "body";
 @import 'lib.scss';
 
-.navbar {
-    @include cus-navbar;  
-}
-
 .background {
-    @include cus-background;
-    padding: 70px 135px;
     align-items: center;
     justify-content: center;
 }

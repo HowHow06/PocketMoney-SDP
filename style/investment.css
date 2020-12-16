@@ -1,5 +1,5 @@
 .navbar {
-  padding: 10px 25px 10px 15px;
+  padding: 0px 25px 0px 15px;
   background-color: #f7802b;
 }
 
@@ -41,7 +41,6 @@
 
 .navbar > ul > li:hover, .navbar > ul .active {
   background-color: rgba(255, 255, 255, 0.6);
-  -webkit-transition: 0.2s ease-in;
   transition: 0.2s ease-in;
 }
 
@@ -49,48 +48,20 @@
   color: rgba(0, 0, 0, 0.699) !important;
 }
 
-.background {
-  min-height: 100vh;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  background-color: #f7e0b5;
-  padding: 70px 135px;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-}
 
 .body {
-  -webkit-box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
-          box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
   padding: 0;
+  margin-bottom: 40px;
   background-color: white;
   border-radius: 12px;
   font-family: 'Open Sans', sans-serif;
 }
 
-.body > nav {
-  border-radius: 12px 12px 0 0;
-  height: 45px;
-}
-
-.body > nav > a {
-  font-size: 24px;
-  letter-spacing: 2px;
-  cursor: default;
-}
 
 .body > .overall {
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .body > .overall > div {
@@ -109,12 +80,8 @@
 }
 
 .body > .chart {
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .body > .head {
@@ -179,12 +146,8 @@
 }
 
 .body > .filter {
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .body > .filter > div {

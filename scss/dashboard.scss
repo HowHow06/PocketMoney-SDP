@@ -1,21 +1,7 @@
+
+@import "navbar";
+@import "body";
 @import 'lib.scss';
-
-.navbar {
-    @include cus-navbar;    
-}
-
-.background {
-    @include cus-background;
-    padding: 80px 0;
-}
-
-.left-body {
-    padding-left: 100px;
-}
-
-.right-body {
-    padding-right: 100px;
-}
 
 .body {
     @include cus-body;
