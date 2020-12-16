@@ -1,5 +1,5 @@
 .navbar {
-  padding: 10px 25px 10px 15px;
+  padding: 0px 25px 0px 15px;
   background-color: #f7802b;
 }
 
@@ -48,19 +48,16 @@
   color: rgba(0, 0, 0, 0.699) !important;
 }
 
-.background {
-  min-height: 100vh;
-  display: flex;
-  background-color: #f7e0b5;
-  padding: 80px 0;
+.body > nav {
+  border-radius: 12px 12px 0 0;
+  height: 45px;
+  margin-bottom: 10px;
 }
 
-.left-body {
-  padding-left: 100px;
-}
-
-.right-body {
-  padding-right: 100px;
+.body > nav > a {
+  font-size: 24px;
+  letter-spacing: 2px;
+  cursor: default;
 }
 
 .body {
@@ -72,16 +69,11 @@
   font-family: 'Open Sans', sans-serif;
 }
 
-.body > nav {
-  border-radius: 12px 12px 0 0;
-  height: 45px;
-  margin-bottom: 10px;
-}
-
-.body > nav > a {
-  font-size: 24px;
-  letter-spacing: 2px;
-  cursor: default;
+.background {
+  min-height: 100vh;
+  display: flex;
+  background-color: #f7e0b5;
+  padding: 70px 100px;
 }
 
 .snapshot > .row {
