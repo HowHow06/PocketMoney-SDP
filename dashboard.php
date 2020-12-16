@@ -27,7 +27,7 @@
                 <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown">Transactions</a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <a href="income_trans.php" class="dropdown-item">Income Summary</a>
-                    <a href="#" class="dropdown-item">Expenses Summary</a>
+                    <a href="expense_trans.php" class="dropdown-item">Expenses Summary</a>
                 </div>
             </li>
             <li class="nav-item">

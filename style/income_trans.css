@@ -64,6 +64,11 @@
           justify-content: center;
 }
 
+.row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
 .body {
   -webkit-box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
           box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
@@ -84,85 +89,133 @@
   cursor: default;
 }
 
-.body > .overall {
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+.body > div > .left > form {
+  padding-left: 20px;
+  padding-top: 20px;
+}
+
+.body > div > .left > form > div {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
 }
 
-.body > .overall > div {
-  background-color: #fc9a55;
-  width: 200px;
-  height: 75px;
-  border-radius: 25px;
-  color: white;
-  margin: 50px auto;
-  text-align: center;
-  padding: 14px;
+.body > div > .left > form > div > button {
+  width: 50px;
+  height: 65px;
 }
 
-.body > .overall > div > h5 {
+.body > div > .left > form > div > button > i {
+  color: #FF6C00;
+  font-size: 24px;
+}
+
+.body > div > .left > form > div > h6 {
+  font-size: 20px;
   margin-bottom: 0;
 }
 
-.body > .chart {
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+.body > div > .right > form {
+  float: right;
+  padding-right: 20px;
+  padding-top: 20px;
+}
+
+.body > div > .right > form > div {
+  -ms-flex-wrap: inherit;
+      flex-wrap: inherit;
+  padding-top: 10px;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
 }
 
-.body > .head {
-  margin: 0 auto;
-  margin-top: 25px;
-  width: 95%;
-  padding-left: 0;
-  padding-right: 0;
+.body > div > .right > form > div > h6 {
+  margin-bottom: 0;
+  padding-right: 10px;
+  font-size: 20px;
 }
 
-.body > .head > h4 {
-  margin-top: 5px;
+.body > div > .pie-chart {
+  padding: 10px 20px 10px 100px;
+}
+
+.body > div > .pie-chart > div {
+  width: 600px;
+  height: 380px;
+  margin: 0 auto;
+  border-width: 4px !important;
+}
+
+.body > div > .chart-explain {
+  padding: 10px 100px 10px 20px;
+}
+
+.body > div > .chart-explain > div {
+  width: 760px;
+  height: 416px;
+  margin: 0 auto;
+  border-width: 4px !important;
+}
+
+.body > div > .chart-explain > div > div {
+  background-color: white;
+  cursor: default;
+  padding-top: 14px;
+}
+
+.body > div > .chart-explain > div > div > .col-1 {
+  text-align: center;
   padding-left: 5px;
 }
 
-.body > .head > div {
-  padding-right: 0;
-}
-
-.body > .head > div > a {
-  float: right;
+.body > div > .chart-explain > div > div > .col-1 > p {
+  width: 50px !important;
+  height: 30px;
+  border-radius: 8px;
+  background-color: #FF6C00;
   color: white;
-  padding: 5px 15px;
-  background-color: #fc9a55;
-  border-color: #fc9a55;
-  margin: 5px;
-  margin-top: 0;
+  padding-top: 2px;
+  font-weight: bold;
 }
 
-.body > .head > div > a:hover {
-  background-color: rgba(252, 154, 85, 0.65);
-  border-color: rgba(252, 154, 85, 0.65);
+.body > div > .chart-explain > div > div > .col-5 {
+  text-align: left;
+  padding-top: 2px;
 }
 
-.body > .head > div > a::-moz-focus-inner, .body > .head > div a::-moz-focus-outer {
-  background-color: rgba(252, 154, 85, 0.65);
-  border-color: rgba(252, 154, 85, 0.65);
+.body > div > .chart-explain > div > div > .value {
+  text-align: right;
 }
 
-.body > .institution-table {
-  margin: 0 auto;
-  width: 95%;
+.body > div > .chart-explain > div > div > .show {
   text-align: center;
+  margin-top: -6px;
 }
 
-.body > .institution-table > thead {
-  background-color: #fc9a55;
-  color: white;
+.body > div > .chart-explain > div > div:hover {
+  background-color: #ececec;
+  cursor: pointer;
+  -webkit-transition: 0.5s ease-in;
+  transition: 0.5s ease-in;
+}
+
+.body > .category {
+  padding: 20px 100px;
+}
+
+.body > .category > div {
+  margin: 0 auto;
+  border-width: 4px !important;
+}
+
+.body > .category > div > .title > h2 {
+  padding-top: 10px;
+}
+
+.body > .category > div > .title > h5 {
+  margin-bottom: 0;
+  color: grey;
 }
 
 .body > h4 {
@@ -195,10 +248,6 @@
   width: 200px;
 }
 
-.body > .filter2 > .show {
-  padding-left: 50px;
-}
-
 .body > .filter2 > .show > h6, .body > .filter2 > .show select {
   float: left;
 }
@@ -225,7 +274,7 @@
 }
 
 .body > .filter2 > .search > h6, .body > .filter2 > .search input {
-  float: right;
+  float: right !important;
 }
 
 .body > .filter2 > .search > h6 {
@@ -294,4 +343,51 @@
 .edit-modal > .modal-dialog > .modal-content > .modal-footer > .btn-primary {
   background-color: #fc9a55;
   border-color: #fc9a55;
+}
+
+.btn-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 120px;
+  text-align: center;
+  font-size: 20px;
+  line-height: 1.42857;
+  position: fixed;
+  bottom: 5%;
+  right: 2%;
+  background-color: #fc9a55;
+  -webkit-box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
+          box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
+}
+
+#category1 {
+  background-color: #FF6C00;
+}
+
+#category2 {
+  background-color: #DC8600;
+}
+
+#category3 {
+  background-color: #A1756C;
+}
+
+#category4 {
+  background-color: #54433A;
+}
+
+#category5 {
+  background-color: #BCA79D;
+}
+
+#category6 {
+  background-color: #AD7267;
+}
+
+#category7 {
+  background-color: #754C44;
+}
+
+#category8 {
+  background-color: #FF6C00;
 }
