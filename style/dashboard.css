@@ -32,7 +32,7 @@
 }
 
 .navbar > ul > li > .dropdown-menu > .dropdown-item {
-  padding: 10px 0 10px 20px;
+  padding: 10px 20px 10px 20px;
 }
 
 .navbar > ul > li > .dropdown-menu > .dropdown-item:hover {
@@ -63,17 +63,14 @@
 .body {
   box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
   padding: 0;
-  margin-bottom: 40px;
   background-color: white;
   border-radius: 12px;
   font-family: 'Open Sans', sans-serif;
+  margin-bottom: 40px;
 }
 
-.background {
-  min-height: 100vh;
-  display: flex;
-  background-color: #f7e0b5;
-  padding: 70px 100px;
+.body > nav {
+  margin-bottom: 10px;
 }
 
 .snapshot > .row {

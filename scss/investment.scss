@@ -1,8 +1,14 @@
 @import "navbar";
 @import "body";
+@import 'lib.scss';
 
+.background {
+    align-items: center;
+    justify-content: center;
+}
 
 .body {
+    @include cus-body;
     > .overall {
         justify-content: center;
         align-items: center;

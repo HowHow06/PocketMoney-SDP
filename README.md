@@ -11,6 +11,15 @@ Financial Management System (Website)
 
 ## Work Progress
 
+### 2020-12-16
+> Moses's Part
+- **Update navbar of for customer site** Important if u guys has pulled, might have conflict
+- Update ```income_trans.php```
+- Create ```expense_trans.php```
+- This is the reference used for fontawesome (some icons)
+```
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+```
 ### 2020-12-15
 > Moses's Part
 - Update ```investment.php```

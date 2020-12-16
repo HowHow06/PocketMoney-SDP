@@ -1,6 +1,15 @@
+
 @import "navbar";
 @import "body";
+@import 'lib.scss';
 
+.body {
+    @include cus-body;
+    margin-bottom: 40px;
+    > nav {
+        margin-bottom: 10px;
+    }
+}
 
 .snapshot {
     > .row {
