@@ -1,67 +1,18 @@
+@import 'lib.scss';
+
 .navbar {
-    padding: 10px 25px 10px 15px;
-    background-color: #f7802b;
-    > a {
-        font-size: 35px;
-        font-family: 'Nerko One', cursive;
-        color: white !important;
-        letter-spacing: 7px;
-        > img {
-            margin-top: -14px;
-        }
-    }
-    > ul {
-        padding-right: 50px;
-        > li {
-            padding: 0 10px 0 10px;
-            > a {
-                font-size: 16px;
-                color: white !important;
-            }
-            > .dropdown-menu {
-                padding: 0;
-                > .dropdown-item {
-                    padding: 10px 0 10px 20px;
-                }
-                > .dropdown-item:hover {
-                    background-color: rgba($color: #EDE9E1, $alpha: 0.6);
-                }
-            }
-        }
-        > li:hover, .active {
-            background-color: rgba($color: #ffffff, $alpha: 0.6);
-            transition: 0.2s ease-in;
-            > a {
-                color: rgba(0, 0, 0, 0.699) !important;
-            }
-        }
-    }    
+    @include cus-navbar;  
 }
 
 .background {
-    min-height: 100vh;
-    display: flex;
+    @include cus-background;
+    padding: 70px 135px;
     align-items: center;
     justify-content: center;
-    // background-color: rgba(white, 0.05);
-    background-color: #f7e0b5;
-    padding: 70px 135px;
 }
 
 .body {
-    box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
-    padding: 0;
-    background-color: white;
-    border-radius: 12px;
-    font-family: 'Open Sans', sans-serif;
-    > nav {
-        border-radius: 12px 12px 0 0;
-        height: 45px;
-        > a {
-            font-size: 24px;
-            letter-spacing: 2px;
-        }
-    }
+    @include cus-body;
     > .overall {
         justify-content: center;
         align-items: center;
