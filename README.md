@@ -12,6 +12,10 @@ Financial Management System (Website)
 ## Work Progress
 
 ### 2020-12-16
+> Howard's Part
+- Create ```_background.scss``` and ```_navbar.scss```
+- Change structure of the scss code.
+
 > Moses's Part
 - **Update navbar of for customer site** Important if u guys has pulled, might have conflict
 - Update ```income_trans.php```
