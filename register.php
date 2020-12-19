@@ -1,19 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-	<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Nerko+One&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <?php include(".head.php"); ?>
     <link rel="stylesheet" href="./style/register.css">
     <title>PocketMoney | Register</title>
 </head>
+
 <body onload="showProgress(15);">
     <div class="container row">
         <div class="left">
@@ -250,7 +243,7 @@
                         </select>
                     </div>
                 </div>
-                
+
                 <!-- For Middle -->
                 <div class="form-middle" id="goalMiddle">
                     <div class="form-group">
@@ -350,13 +343,13 @@
                         </select>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <label>Monthly Deposit</label>
                     <br>
                     <sup>MYR</sup><strong class="amountBefore"> 0.<sup class="amountAfter">00</sup></strong>
                 </div>
-                <a href="login.php?role=customer" type="" class="btn" >Sign Up</a>
+                <a href="login.php?role=customer" type="" class="btn">Sign Up</a>
             </form>
         </div>
     </div>
@@ -365,31 +358,33 @@
     function showProgress(percentage) {
         $('#progress-bar').css('width', percentage + "%");
     }
+
     function showGoalDescription() {
         var goal = document.getElementById('goalType');
         if (goal.value == 'short' || goal.value == '') {
             document.getElementById('goalShort').style.display = 'block';
             document.getElementById('goalMiddle').style.display = 'none';
             document.getElementById('goalLong').style.display = 'none';
-        } 
-        else if (goal.value == 'middle') {
+        } else if (goal.value == 'middle') {
             document.getElementById('goalShort').style.display = 'none';
             document.getElementById('goalMiddle').style.display = 'block';
             document.getElementById('goalLong').style.display = 'none';
-        }
-        else if (goal.value == 'long') {
+        } else if (goal.value == 'long') {
             document.getElementById('goalShort').style.display = 'none';
             document.getElementById('goalMiddle').style.display = 'none';
             document.getElementById('goalLong').style.display = 'block';
         }
     }
+
     function showNextSection(currentSectionId, nextSectionId) {
         document.getElementById(currentSectionId).style.display = 'none';
         document.getElementById(nextSectionId).style.display = 'block';
     }
+
     function showPreviousSection(currentSectionId, previousSectionId) {
         document.getElementById(currentSectionId).style.display = 'none';
         document.getElementById(previousSectionId).style.display = 'block';
     }
 </script>
+
 </html>
