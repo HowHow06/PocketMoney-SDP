@@ -1,37 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-	<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    <script src="./jquery/jquery.nicescroll-3.7.4/jquery.nicescroll.js"></script>
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Nerko+One&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <?php include(".head.php"); ?>
     <link rel="stylesheet" href="./style/index.css">
     <title>PocketMoney | Homepage</title>
 </head>
+
 <body>
     <div class="sticky-top">
         <nav class="navbar navbar-expand-lg navbar-light bg-white">
-        <a href="#" class="navbar-brand"><img src="./img/logo.png" width="50px" height="50px"> POCKETMONEY</a>
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
-                <a href="index.html" class="nav-link">Home</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown">Login / Sign Up</a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <a href="login.php?role=customer" class="dropdown-item">Customer</a>
-                    <a href="login.php?role=advisor" class="dropdown-item">Advisor</a>
-                    <a href="login.php?role=admin" class="dropdown-item">Admin</a>
-                </div>
-            </li>
-        </ul>
+            <a href="#" class="navbar-brand"><img src="./img/logo.png" width="50px" height="50px"> POCKETMONEY</a>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown">Login / Sign Up</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a href="login.php?role=customer" class="dropdown-item">Customer</a>
+                        <a href="login.php?role=advisor" class="dropdown-item">Advisor</a>
+                        <a href="login.php?role=admin" class="dropdown-item">Admin</a>
+                    </div>
+                </li>
+            </ul>
         </nav>
         <div class="progress-container">
             <div class="progress-bar" id="myBar"></div>
@@ -101,7 +93,7 @@
                     This is the place where user can do their daily records for both expenses and incomes.
                     If the user wants to do records for expenses, click the expense button and input the details.
                     If the user wants to do records for incomes, click the income button and input the details.
-		    Once everything is entered, click save and the records are available for viewing and edit anytime.
+                    Once everything is entered, click save and the records are available for viewing and edit anytime.
                     With this function, user could view all the expenses and incomes in the simplest way.
                 </p>
             </div>
@@ -132,10 +124,10 @@
                     <hr>
                     <p class="card-text" id="tp_num">TP054834</p>
                     <p class="card-text">
-                        Hello world. Tired of record using record book? 
-                        Then PocketMoney is perfectly designed for you. 
-                        It’s free, ease of use, and more! 
-                        We hope you can enjoy using this webapp.                    
+                        Hello world. Tired of record using record book?
+                        Then PocketMoney is perfectly designed for you.
+                        It’s free, ease of use, and more!
+                        We hope you can enjoy using this webapp.
                     </p>
                 </div>
             </div>
@@ -173,9 +165,9 @@
 			            Nowadays, majority of people have the habit to record their expenses and incomes, which is a good habit.
                         Therefore, PocketMoney is developed for these user to manage their financial status while using this web app. 
                         We hope all the users will be benefited from this web app, and enjoying using PocketMoney. -->
-                        Hi, I'm Law Li Yaw. 
-                        PocketMoney is developed for those have the habit to record their expenses and incomes to manage their financial status. 
-                        We hope all the users will be benefited from this web app and enjoying using PocketMoney.                    
+                        Hi, I'm Law Li Yaw.
+                        PocketMoney is developed for those have the habit to record their expenses and incomes to manage their financial status.
+                        We hope all the users will be benefited from this web app and enjoying using PocketMoney.
                     </p>
                 </div>
             </div>
@@ -187,17 +179,20 @@
     </footer>
 </body>
 <script>
-window.onscroll = function() {myFunction()};
+    window.onscroll = function() {
+        myFunction()
+    };
 
-function myFunction() {
-  var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-  var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-  var scrolled = (winScroll / height) * 100;
-  document.getElementById("myBar").style.width = scrolled + "%";
-}
+    function myFunction() {
+        var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        var scrolled = (winScroll / height) * 100;
+        document.getElementById("myBar").style.width = scrolled + "%";
+    }
 
-$(document).ready(function() {
-    $("html").niceScroll();
-});
+    $(document).ready(function() {
+        $("html").niceScroll();
+    });
 </script>
+
 </html>
