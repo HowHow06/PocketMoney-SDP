@@ -10,6 +10,49 @@ Financial Management System (Website)
 - Howard Lim          TP055278
 
 ## Work Progress
+
+### 2020-12-16
+> Moses's Part
+- **Update navbar of for customer site** Important if u guys has pulled, might have conflict
+- Update ```income_trans.php```
+- Create ```expense_trans.php```
+- This is the reference used for fontawesome (some icons)
+```
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+```
+### 2020-12-15
+> Moses's Part
+- Update ```investment.php```
+- Create ```dashboard.php```
+- Create ```income_trans.php```
+### 2020-12-14
+> Moses's Part
+- Create ```investment.php```
+- This is the reference used for apexchart (making charts)
+```
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+```
+### 2020-12-11
+> Moses's Part
+- Update ```register.php```
+- Create ```lib.scss```, storing all ```@mixin``` and variables for certain same scss files.
+### 2020-12-09
+> Moses's Part
+- Create ```login.php```
+- Create ```register.php```
+### 2020-12-05
+> Moses's Part
+- Update ```index.html```
+- Create logo
+### 2020-11-27
+> Mash's Part
+- Update ```index.html```
+### 2020-11-26
+> Li Yaw's Part
+- Update ```index.html```
+
+> Moses' Part
+- Update ```index.html```
 ### 2020-11-25
 > Moses' Part
 - Initialize ```index.html``` for customer
@@ -38,7 +81,7 @@ Financial Management System (Website)
 ```
 - These one is for scroll effect
 ```
-<script src="./jquery.nicescroll-3.7.4/jquery.nicescroll.min.js"></script>
+<script src="./jquery/jquery.nicescroll-3.7.4/jquery.nicescroll.js"></script>
 ```
 ## License 
 This project is only editable for contributors.

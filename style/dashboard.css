@@ -1,0 +1,142 @@
+.navbar {
+  padding: 0px 25px 0px 15px;
+  background-color: #f7802b;
+}
+
+.navbar > a {
+  font-size: 35px;
+  font-family: 'Nerko One', cursive;
+  color: white !important;
+  letter-spacing: 7px;
+}
+
+.navbar > a > img {
+  margin-top: -14px;
+}
+
+.navbar > ul {
+  padding-right: 50px;
+}
+
+.navbar > ul > li {
+  padding: 0 10px 0 10px;
+}
+
+.navbar > ul > li > a {
+  font-size: 16px;
+  color: white !important;
+}
+
+.navbar > ul > li > .dropdown-menu {
+  padding: 0;
+}
+
+.navbar > ul > li > .dropdown-menu > .dropdown-item {
+  padding: 10px 0 10px 20px;
+}
+
+.navbar > ul > li > .dropdown-menu > .dropdown-item:hover {
+  background-color: rgba(237, 233, 225, 0.6);
+}
+
+.navbar > ul > li:hover, .navbar > ul .active {
+  background-color: rgba(255, 255, 255, 0.6);
+  transition: 0.2s ease-in;
+}
+
+.navbar > ul > li:hover > a, .navbar > ul .active > a {
+  color: rgba(0, 0, 0, 0.699) !important;
+}
+
+.body > nav {
+  border-radius: 12px 12px 0 0;
+  height: 45px;
+  margin-bottom: 10px;
+}
+
+.body > nav > a {
+  font-size: 24px;
+  letter-spacing: 2px;
+  cursor: default;
+}
+
+.background {
+  min-height: 100vh;
+  display: flex;
+  background-color: #f7e0b5;
+  padding: 70px 100px;
+}
+
+.body {
+  box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
+  padding: 0;
+  background-color: white;
+  border-radius: 12px;
+  font-family: 'Open Sans', sans-serif;
+  margin-bottom: 40px;
+}
+
+.body > nav {
+  border-radius: 12px 12px 0 0;
+  height: 45px;
+}
+
+.body > nav > a {
+  font-size: 24px;
+  letter-spacing: 2px;
+  cursor: default;
+}
+
+.body > nav {
+  margin-bottom: 10px;
+}
+
+.snapshot > .row {
+  padding-bottom: 10px;
+  margin: 0;
+  justify-content: center;
+  align-items: center;
+}
+
+.snapshot > .row > div {
+  background-color: #fc9a55;
+  text-align: center;
+  margin: 0 10px;
+  width: 180px;
+  height: 75px;
+  border-radius: 15px;
+  color: white;
+  padding-top: 8px;
+}
+
+.snapshot > .row > div > h5 {
+  margin-bottom: 2px;
+}
+
+.snapshot > .row > div:hover {
+  background-color: #c47a46;
+  transition: 0.5s ease-in-out;
+  cursor: default;
+}
+
+.snapshot > .row > div:hover > p {
+  font-size: 20px;
+  transition: 0.7s ease-in-out;
+}
+
+.investment > .chart {
+  justify-content: center;
+  align-items: center;
+}
+
+.investment > .institution-table {
+  margin: 0 auto;
+  width: 95%;
+  text-align: center;
+  font-size: 12px;
+}
+
+.investment > .institution-table > thead {
+  background-color: #fc9a55;
+  color: white;
+}

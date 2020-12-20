@@ -1,15 +1,28 @@
 .navbar {
-    padding: 10px 25px 10px 25px;
+    padding: 10px 25px 10px 15px;
     > a {
         font-size: 35px;
         font-family: 'Nerko One', cursive;
         letter-spacing: 7px;
+        > img {
+            margin-top: -14px;
+        }
     }
     > ul {
         > li {
             padding: 0 60px 0 60px;
             > a {
                 font-size: 18px;
+            }
+            > .dropdown-menu {
+                width: 100%;
+                > .dropdown-item {
+                    padding: 15px 0 15px 20px;
+                    font-size: 110%;
+                }
+                > .dropdown-item:hover {
+                    background-color: rgba($color: #EDE9E1, $alpha: 0.6);
+                }
             }
         }
         > .active {
@@ -131,7 +144,7 @@
                 letter-spacing: 2px;
             }
             > p {
-                font-size: 20px;
+                font-size: 16px;
                 font-weight: lighter;
                 line-height: 1.8;
                 letter-spacing: 0.05;
@@ -175,7 +188,7 @@
             border-radius: 0;
             transition: 0.3s ease-in;
             > .card-body {
-                padding: 64px 68px 22px 68px;
+                padding: 60px 68px 22px 68px;
                 > .card-title {
                     text-align: center;
                     font-weight: 600;
@@ -187,6 +200,7 @@
             .card-text {
                 font-weight: 100;
                 line-height: 1.6;
+                font-size: 16px;
             }
         }
         > .card:hover {
@@ -199,7 +213,7 @@
 #tp_num {
     font-size: 20px;
     letter-spacing: 2px;
-    padding-bottom: 32px;
+    padding-bottom: 14px;
     font-weight: bold;
 }
 

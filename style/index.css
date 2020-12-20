@@ -1,5 +1,5 @@
 .navbar {
-  padding: 10px 25px 10px 25px;
+  padding: 10px 25px 10px 15px;
 }
 
 .navbar > a {
@@ -8,12 +8,29 @@
   letter-spacing: 7px;
 }
 
+.navbar > a > img {
+  margin-top: -14px;
+}
+
 .navbar > ul > li {
   padding: 0 60px 0 60px;
 }
 
 .navbar > ul > li > a {
   font-size: 18px;
+}
+
+.navbar > ul > li > .dropdown-menu {
+  width: 100%;
+}
+
+.navbar > ul > li > .dropdown-menu > .dropdown-item {
+  padding: 15px 0 15px 20px;
+  font-size: 110%;
+}
+
+.navbar > ul > li > .dropdown-menu > .dropdown-item:hover {
+  background-color: rgba(237, 233, 225, 0.6);
 }
 
 .navbar > ul > .active {
@@ -38,7 +55,6 @@
 }
 
 .jumbotron {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 108, 0, 0.8)), to(rgba(255, 108, 0, 0.8))), url("../img/main.png");
   background-image: linear-gradient(rgba(255, 108, 0, 0.8), rgba(255, 108, 0, 0.8)), url("../img/main.png");
   background-size: cover;
   background-position: 0% 50%;
@@ -87,7 +103,6 @@
   height: 346px;
   margin: 0 32px 0 20px;
   border-radius: 0%;
-  -webkit-transition: 0.3s ease-in;
   transition: 0.3s ease-in;
 }
 
@@ -108,10 +123,8 @@
 }
 
 .section1 > div > .card:hover {
-  -webkit-transform: scale(1.05);
-          transform: scale(1.05);
-  -webkit-box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.7);
-          box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.7);
+  transform: scale(1.05);
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.7);
 }
 
 #card1 {
@@ -144,9 +157,7 @@
 
 .section2 > .row {
   margin: auto;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  align-items: center;
   padding-top: 100px;
   padding-bottom: 100px;
 }
@@ -162,7 +173,7 @@
 }
 
 .section2 > .row > .text > p {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: lighter;
   line-height: 1.8;
   letter-spacing: 0.05;
@@ -206,12 +217,11 @@
   width: 466px;
   height: 433px;
   border-radius: 0;
-  -webkit-transition: 0.3s ease-in;
   transition: 0.3s ease-in;
 }
 
 .section3 > .row > .card > .card-body {
-  padding: 64px 68px 22px 68px;
+  padding: 60px 68px 22px 68px;
 }
 
 .section3 > .row > .card > .card-body > .card-title {
@@ -225,19 +235,18 @@
 .section3 > .row > .card .card-text {
   font-weight: 100;
   line-height: 1.6;
+  font-size: 16px;
 }
 
 .section3 > .row > .card:hover {
-  -webkit-transform: scale(1.05);
-          transform: scale(1.05);
-  -webkit-box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.7);
-          box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.7);
+  transform: scale(1.05);
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.7);
 }
 
 #tp_num {
   font-size: 20px;
   letter-spacing: 2px;
-  padding-bottom: 32px;
+  padding-bottom: 14px;
   font-weight: bold;
 }
 

@@ -1,0 +1,193 @@
+@import "navbar";
+@import "background";
+@import 'lib.scss';
+
+.background {
+    align-items: center;
+    justify-content: center;
+}
+
+.body {
+    @include cus-body;
+    > .overall {
+        justify-content: center;
+        align-items: center;
+        > div {
+            background-color: #fc9a55;
+            width: 200px;
+            height: 75px;
+            border-radius: 25px;
+            color: white;
+            margin: 50px auto;
+            text-align: center;
+            padding: 14px;
+            > h5 {
+                margin-bottom: 0;
+            }
+        }
+    }
+    > .chart {
+        justify-content: center;
+        align-items: center;
+    }
+    > .head {
+        margin: 0 auto;
+        margin-top: 25px;
+        width: 95%;
+        padding-left: 0;
+        padding-right: 0;
+        > h4 { 
+            margin-top: 5px;
+            padding-left: 5px;
+        }
+        > div {
+            padding-right: 0;
+            > a {
+                float: right;
+                color: white;
+                padding: 5px 15px;
+                background-color: #fc9a55;
+                border-color: #fc9a55;
+                margin: 5px;
+                margin-top: 0;
+            }
+            > a:hover {
+                background-color: rgba($color: #fc9a55, $alpha: 0.65);
+                border-color: rgba($color: #fc9a55, $alpha: 0.65);
+            }
+            > a::-moz-focus-inner, a::-moz-focus-outer {
+                background-color: rgba($color: #fc9a55, $alpha: 0.65);
+                border-color: rgba($color: #fc9a55, $alpha: 0.65);
+            }
+        }
+    }
+    > .institution-table {
+        margin: 0 auto;
+        width: 95%;
+        text-align: center;
+        > thead {
+            background-color: #fc9a55;
+            color: white;
+        }
+    }
+    > h4 {
+        padding-top: 40px;
+        text-align: center;
+    }
+    > hr {
+        width: 30%;
+        margin: 0 auto;
+        height: 3px;
+        background-color: #E1E1E1;
+        border: 0s;
+    }
+    > .filter {
+        justify-content: center;
+        align-items: center;
+        > div {
+            padding: 50px 100px;
+            > select {
+                width: 200px;
+            }
+        }
+    }
+    > .filter2 {
+        > .show {
+            padding-left: 50px;
+            > h6, select {
+                float: left;
+            }
+            > h6 {
+                padding: 5px 10px 0 10px;
+                margin: 0;
+                font-size: 110%;
+                letter-spacing: 1px;
+            }
+            > select {
+                border-radius: 12px;
+                width: 75px;
+                > option {
+                    font-size: 12px;
+                }
+            }
+        }
+        > .search {
+            padding-right: 0;
+            margin-right: 15px;
+            > h6, input {
+                float: right;
+            }
+            > h6 {
+                padding: 5px 10px 0 10px;
+                margin: 0;
+                font-size: 110%;
+                letter-spacing: 1px;
+            }
+            > input {
+                border-radius: 25px;
+            }
+        }
+    }
+    > .transaction-table {
+        margin: 15px auto;
+        width: 95%;
+        text-align: center;
+        > thead {
+            background-color: #fc9a55;
+            color: white;
+        }
+        > tbody {
+            .action {
+                width: 130px;
+                > a {
+                    color: #FF6C00;
+                }
+            }
+        }
+    }
+    > .filter3 {
+        padding-top: 20px;
+        > .show {
+            font-size: 110%;
+            letter-spacing: 1px;
+            padding-left: 42px;
+        }
+        > nav {
+            > ul {
+                float: right;
+                margin-top: -10px;
+                > li {
+                    > a {
+                         color: black;
+                    }
+                }
+                > .active {
+                    .page-link {
+                        background-color: #fc9a55;
+                        border-color: #fc9a55;
+                        color: white;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.edit-modal {
+    > .modal-dialog {
+        > .modal-content {
+            > .modal-header {
+                background-color: #fc9a55;
+                > .modal-title, .close {
+                    color: white;
+                }
+            }
+            > .modal-footer {
+                > .btn-primary {
+                    background-color: #fc9a55;
+                    border-color: #fc9a55;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,60 @@
+
+@import "navbar";
+@import "background";
+@import 'lib.scss';
+
+.body {
+    @include cus-body;
+    margin-bottom: 40px;
+    > nav {
+        margin-bottom: 10px;
+    }
+}
+
+.snapshot {
+    > .row {
+        padding-bottom: 10px;
+        margin: 0;
+        justify-content: center;
+        align-items: center;
+        > div {
+            background-color: #fc9a55;
+            text-align: center;
+            margin: 0 10px;
+            width: 180px;
+            height: 75px;
+            border-radius: 15px;
+            color: white;
+            padding-top: 8px;
+            > h5 {
+                margin-bottom: 2px;
+            }
+        }
+        > div:hover {
+            background-color: #c47a46;
+            transition: 0.5s ease-in-out;
+            cursor: default;
+            > p {
+                font-size: 20px;
+                transition: 0.7s ease-in-out;
+            }
+        }
+    }
+}
+
+.investment {
+    > .chart {
+        justify-content: center;
+        align-items: center;
+    }
+    > .institution-table {
+        margin: 0 auto;
+        width: 95%;
+        text-align: center;
+        font-size: 12px;
+        > thead {
+            background-color: #fc9a55;
+            color: white;
+        }
+    }
+}
