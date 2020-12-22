@@ -1,0 +1,77 @@
+Customer
+1 -> Jerry Cus, password= customer
+
+Predefined
+Category
+
+Category
+1-> Salary, income
+2	Awards, income
+3	Rental, income
+4	Investment Profit, income
+5	food, expenses
+6	home, expenses
+7	transportation, expenses
+8	entertainment, expenses
+9	investment, expenses (for budget also)
+10	liability, expenses
+11	saving, budget 
+12	other, budget <-for budget, not a must in plan, but might display for budget status, is basically general expenses
+13	house loan, liability
+14	car loan, liability 
+15	credit card, liability 
+16	stock, investment
+17	ETF, investment 
+18	Fixed Deposit,investment
+19	announcement, notification 
+20	feedback, notification 
+21	question, notifcation 
+22	feedback response, notification 
+23	question response, notification 
+
+
+
+
+1. transactions (try think notification)
+2. automated transactions
+2. Liabilities
+3. investments
+4. budget
+5. financial goal
+6. report
+	admin
+	advisor
+7. maybe the reminder to pay part cannot do, is server side
+   or like, always show, when user click delete and permanent delete
+8. notification, maybe can add notification status int, to check if the notification need to pop out
+
+
+OPTIONAL
+6. other viewing (API) can do
+   announcement
+
+
+
+
+Functions / Pages:
+Login and Session (Customer Class)
+Register (Customer Class)
+Transactions (Try think notfication)
+	-reminder
+	-auto record
+		based on time / on login?
+		maybe need 研究how to call function based on time
+Liability : Howard
+Investment (WITH APIs) : Howard
+Budget
+Financial Goal
+Report
+Validations (CLASS)
+(notification)
+Questions
+Feedback
+
+MAYBE CAN CONSIDER REMOVE:
+1. advisor / admin either one
+2. auto record
+3. auto reminder

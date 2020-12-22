@@ -1,0 +1,245 @@
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+DROP TABLE IF EXISTS `Customer`;
+CREATE TABLE IF NOT EXISTS `Customer` (
+  `cusID` int(255) NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(30) NOT NULL,
+  PRIMARY KEY (`cusID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO `Customer` (`username`, `password`, `name`, `email`) VALUES
+('customer1', '$2y$10$sbRkFbveV/CbxKpyS3IY.u4E.9t3MNFtmp068FeGHz1m6fa14ASKG','Jerry Cus', 'howard_bb@hotmail.com'),
+('customer2', '$2y$10$sk3.6iF6nXtMEzV/ClwA4uYMJ7iTwe93H/zJ9qONEnNsyGtWcHYh.','Jerry Two', 'jerry2@mail.com');
+
+-- --------------------------------------------------------
+
+-- `total` decimal(20,2) NOT NULL,
+--
+-- Table structure for table `FinancialGoal`
+--
+
+DROP TABLE IF EXISTS `FinancialGoal`;
+CREATE TABLE IF NOT EXISTS `FinancialGoal` (
+  `goalID` int(255) NOT NULL AUTO_INCREMENT,
+  `cusID` int(255) NOT NULL,
+  `currentSaving` decimal(20,2) NOT NULL,
+  `incomePerAnnum` decimal(20,2) NOT NULL,
+  `expensePerAnnum` decimal(20,2) NOT NULL,
+  `goalAmount` decimal(20,2) NOT NULL,
+  `totalAsset` decimal(20,2) NOT NULL,
+  `totalLiability` decimal(20,2) NOT NULL,
+  `netWorth` decimal(20,2) NOT NULL,
+  `yearNeeded` int(255) NOT NULL,
+  PRIMARY KEY (`goalID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cart_detail`
+--
+
+DROP TABLE IF EXISTS `Budget`;
+CREATE TABLE IF NOT EXISTS `Budget` (
+  `budgetID` int(255) NOT NULL AUTO_INCREMENT,
+  `cudID` int(255) NOT NULL,
+  `categoryID` int(255) NOT NULL,
+  `percentage` decimal(20,2) NOT NULL,
+  PRIMARY KEY (`budgetID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customer`
+--
+
+DROP TABLE IF EXISTS `Transaction`;
+CREATE TABLE IF NOT EXISTS `Transaction` (
+  `transactionID` int(255) NOT NULL AUTO_INCREMENT,
+  `cusID` int(255) NOT NULL,
+  `categoryID` int(255) NOT NULL,
+  `date` datetime NOT NULL,
+  `amount` decimal(20,2) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`transactionID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `deliverable_postcode`
+--
+
+DROP TABLE IF EXISTS `Category`;
+CREATE TABLE IF NOT EXISTS `Category` (
+  `categoryID` int(255) NOT NULL AUTO_INCREMENT,
+  `categoryName` varchar(255) NOT NULL,
+  `categoryType` varchar(255) NOT NULL,
+  `preDefine` tinyint(1) NOT NULL,
+  `cusID` int(255),
+  PRIMARY KEY (`categoryID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `deliverable_postcode`
+--
+INSERT INTO `Category` (`categoryName`,`categoryType`,`preDefine`,`cusID`) VALUES 
+('salary','income',1, NULL),
+('awards','income',1, NULL),
+('rental','income',1, NULL),
+('investment profit','income',1, NULL),
+('food','expenses',1, NULL),
+('home','expenses',1, NULL),
+('transportation','expenses',1, NULL),
+('entertainment','expenses',1, NULL),
+('investment','expenses',1, NULL),
+('courses','expenses',1, NULL),
+('saving','budget',1, NULL),
+('other','budget',1, NULL),
+('house loan','liability',1, NULL),
+('car loan','liability',1, NULL),
+('credit card','liability',1, NULL),
+('stock','investment',1, NULL),
+('ETF','investment',1, NULL),
+('Fixed Deposit','investment',1, NULL),
+('announcement','notification',1, NULL),
+('feedback','notification',1, NULL),
+('question','notification',1, NULL),
+('feedback response','notification',1, NULL),
+('question response','notification',1, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `delivery_status`
+--
+
+DROP TABLE IF EXISTS `AutomatedTransaction`;
+CREATE TABLE IF NOT EXISTS `AutomatedTransaction` (
+  `aTransactionID` int(255) NOT NULL AUTO_INCREMENT,
+  `cusID` int(255) NOT NULL,
+  `categoryID` int(255) NOT NULL,
+  `amount` decimal(20,2) NOT NULL,
+  `recordTime` varchar(255) NOT NULL,
+  `autoRecord` TINYINT(1) NOT NULL,
+  `paymentReminder` TINYINT(1) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`aTransactionID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+-- --------------------------------------------------------
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `food`
+--
+
+DROP TABLE IF EXISTS `Liability`;
+CREATE TABLE IF NOT EXISTS `Liability` (
+  `liabilityID` int(255) NOT NULL AUTO_INCREMENT,
+  `cusID` int(255) NOT NULL,
+  `liabilityName` varchar(255) DEFAULT NULL,
+  `liabilityType` varchar(255) NOT NULL,
+  `startDate` date NOT NULL,
+  `totalAmountToPay` decimal(20,2) NOT NULL,
+  `totalMonths` int(255) NOT NULL,
+  `paymentTime` varchar(255) NOT NULL,
+  `amountEachPayment` decimal(20,2) NOT NULL,
+  `amountPaid` decimal(20,2) NOT NULL,
+  `paymentReminder` TINYINT(1) NOT NULL,
+  `autoRecord` TINYINT(1) NOT NULL,
+  PRIMARY KEY (`liabilityID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `food`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `food_category`
+--
+
+DROP TABLE IF EXISTS `Investment`;
+CREATE TABLE IF NOT EXISTS `Investment` (
+  `investmentID` int(255) NOT NULL AUTO_INCREMENT,
+  `cusID` int(255) NOT NULL,
+  `investmentName` varchar(255) DEFAULT NULL,
+  `investmentType` varchar(255) NOT NULL,
+  `startDate` date NOT NULL,
+  `amountInvested` decimal(20,2) NOT NULL,
+  `ratePerAnnum` decimal(20,2) NOT NULL,
+  PRIMARY KEY (`investmentID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order`
+--
+
+DROP TABLE IF EXISTS `Notification`;
+CREATE TABLE IF NOT EXISTS `Notification` (
+  `notificationID` int(255) NOT NULL AUTO_INCREMENT,
+  `senderID` int(255),
+  `receiver` decimal(10,2),
+  `date` datetime NOT NULL,
+  `content` varchar(255),
+  `notificationType` varchar(255),
+  `receiverCusID` int(255),
+  PRIMARY KEY (`notificationID`)
+)  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `order`
+--
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_cancel_request`
+--
+
+DROP TABLE IF EXISTS `Admin`;
+CREATE TABLE IF NOT EXISTS `Admin` (
+  `adminID` int(255) NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  PRIMARY KEY (`adminID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `order_cancel_request`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_detail`
+--
+
+DROP TABLE IF EXISTS `Advisor`;
+CREATE TABLE IF NOT EXISTS `Advisor` (
+  `advisorID` int(255) NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  PRIMARY KEY (`advisorID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
