@@ -1,4 +1,3 @@
-
 #ignore all unit testing
 tests/
 
@@ -9,3 +8,5 @@ composer.json
 composer.lock
 
 phpunit.xml
+
+.vscode/

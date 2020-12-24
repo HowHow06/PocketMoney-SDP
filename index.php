@@ -19,7 +19,6 @@
                     <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown">Login / Sign Up</a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a href="login.php?role=customer" class="dropdown-item">Customer</a>
-                        <a href="login.php?role=advisor" class="dropdown-item">Advisor</a>
                         <a href="login.php?role=admin" class="dropdown-item">Admin</a>
                     </div>
                 </li>

@@ -1,3 +1,4 @@
+<?php include('checkSessionCookie.php'); ?>
 <nav class="navbar navbar-expand-lg navbar-light">
     <a href="#" class="navbar-brand"><img src="./img/logo_i.png" width="50px" height="50px"> POCKETMONEY</a>
     <ul class="navbar-nav ml-auto">
@@ -31,7 +32,7 @@
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                 <a href="#" class="dropdown-item">Profile</a>
                 <a href="#" class="dropdown-item">Enquiry</a>
-                <a href="index.html" class="dropdown-item">Logout</a>
+                <a href="logout.php" class="dropdown-item">Logout</a>
             </div>
         </li>
     </ul>
