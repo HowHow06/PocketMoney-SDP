@@ -4,19 +4,176 @@ use function PHPUnit\Framework\isEmpty;
 
 class Customer
 {
+    private $id;
+
+    /**
+     * Static instance of self
+     *
+     * @var Customer
+     */
+    protected static $_instance;
 
     function __construct($db = null)
     {
         // $this->db          = $db;
         require_once('MysqliDb.php');
-        $this->db          = new MysqliDb("sql12.freemysqlhosting.net", "sql12382802", "Pcfz54XCtn", "sql12382802", "3306"); //temporary
+        $this->db          = new MysqliDb("db4free.net", "pocketmoney", "m&nsuperdry", "pocketmoney", "3306"); //temporary
         //$this->validation  = $validation;
     }
+
+
+    /** 
+     * Set customer id
+     * 
+     */
+    function setId($id)
+    {
+        $this->id = strval($id);
+    }
+
+    /** 
+     * Return the id if the id is set before
+     * @return String|NULL
+     * 
+     */
+    function getId()
+    {
+        if (!empty($this->id)) {
+            return strval($this->id);
+        }
+
+        return NULL;
+    }
+
+    /** 
+     * Return the total invested amount if the id is set before
+     * @return int|NULL
+     * 
+     */
+    function getTotalInvestedAmount()
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $id = $this->id;
+            $db->where('cusID', $id);
+            $result = $db->getOne('Investment', "SUM(amountInvested) AS SUM");
+            return intval($result['SUM']);
+        }
+        return NULL;
+    }
+
+    /** 
+     * Return the top holding name if the id is set before
+     * @return String|NULL
+     * 
+     */
+    function getTopHolding()
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $id = $this->id;
+            $db->where('cusID', $id);
+            $db->orderBy("total", "Desc");
+            $db->groupBy("investmentName");
+            $result = $db->getOne('Investment', "SUM(amountInvested) AS total, investmentName");
+            return strval($result['investmentName']);
+        }
+        return NULL;
+    }
+
+    /** 
+     * Return the total count of holding if the id is set before
+     * @return int|NULL
+     * 
+     */
+    function getHoldingCount()
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $id = $this->id;
+            $db->where('cusID', $id);
+            $result = $db->getOne('Investment', "COUNT(DISTINCT investmentName) AS count");
+            return intval($result['count']);
+        }
+        return NULL;
+    }
+
+    /** 
+     * Return the array of distinct investment types => amount invested if the id is set before
+     * @return array|NULL
+     * 'investmentType' -> array: array of investmentTypes
+     * 'amount' -> array: an array
+     */
+    function getInvestTypesAndAmount()
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $id = $this->id;
+            $db->where('cusID', $id);
+            $db->groupBy('investmentType');
+            $investmentTypesToValue = array('investmentType' => array(), 'amount' => array());
+            $result = $db->get('Investment', null, "SUM(amountInvested) AS amount, investmentType");
+            foreach ($result as $row => $data) {
+                array_push($investmentTypesToValue['amount'], $data['amount']);
+                array_push($investmentTypesToValue['investmentType'], $data['investmentType']);
+            }
+            //print_r($investmentTypesToValue['investmentType']);
+            return $investmentTypesToValue;
+        }
+
+        return NULL;
+    }
+
+
+    /** 
+     * Return string of JSON format of investment Type only
+     * @return String|NULL
+     * 
+     * 
+     */
+    function getInvestTypesJSON()
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $data = $this->getInvestTypesAndAmount();
+            $investTypesStr = '[';
+            foreach ($data['investmentType'] as $type) {
+                $investTypesStr .= '\'' . strval($type) . '\',';
+            }
+            $investTypesStr = substr($investTypesStr, 0, -1);
+            $investTypesStr .= ']';
+            return $investTypesStr;
+        }
+        return NULL;
+    }
+
+    /** 
+     * Return string of JSON format of amount only
+     * @return String|NULL
+     * 
+     * 
+     */
+    function getInvestAmountsJSON()
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $data = $this->getInvestTypesAndAmount();
+            $investAmountStr = '[';
+            foreach ($data['amount'] as $amount) {
+                $investAmountStr .= strval($amount) . ',';
+            }
+            $investAmountStr = substr($investAmountStr, 0, -1);
+            $investAmountStr .= ']';
+            return $investAmountStr;
+        }
+        return NULL;
+    }
+
 
     /**
      * Login via email/username and password. Session and cookie are not set.
      *
-     * @param array $param
+     * @param array $params
      * 'loginInfo'-> String: username or email of the customer;
      * 'password'-> String: password of the customer;
      * 
