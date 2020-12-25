@@ -4,6 +4,7 @@
 <head>
     <?php include(".head.php"); ?>
     <link rel="stylesheet" href="./style/investment.css">
+
     <title>PocketMoney | Investment</title>
 </head>
 
@@ -18,22 +19,26 @@
 
             <div class="container-fluid row overall">
                 <div>
-                    <h5>Portfolio Value</h5>
-                    <p>RM150,000.00</p>
+                    <h5>Total Amount</h5>
+                    <p>
+                        RM <?php echo ($customer->getTotalInvestedAmount()); ?>
+                    </p>
                 </div>
                 <div>
                     <h5>Top Holding</h5>
-                    <p>Company ABC</p>
+                    <p><?php echo ($customer->getTopHolding()); ?></p>
                 </div>
                 <div>
                     <h5>Total Holdings</h5>
-                    <p>3</p>
+                    <p><?php echo ($customer->getHoldingCount()); ?></p>
                 </div>
             </div>
 
             <div class="container-fluid row chart">
                 <!-- horizontal bar chart -->
-                <div class="col-7 horizontal-chart" id="horizontal-chart"></div>
+                <input type="hidden" id="amountsOfInvestments" name="amountsOfInvestments" value='<?php echo ($customer->getInvestAmountsJSON()); ?>'>
+                <input type="hidden" id="typesOfInvestments" name="typesOfInvestments" value="<?php echo ($customer->getInvestTypesJSON()); ?>">
+                <div class="col-7 horizontal-chart" id="investmentTypes-donut-chart"></div>
                 <!-- pie chart -->
                 <div class="col-5 donut-chart" id="donut-chart"></div>
             </div>
@@ -556,90 +561,6 @@
         </div>
     </div>
 </body>
-<script>
-    var horizontalOptions = {
-        series: [{
-            name: 'Institution Invest Amount',
-            data: [{
-                x: 'Company ABC',
-                y: 1350.00
-            }, {
-                x: 'Apple',
-                y: 2032.00
-            }, {
-                x: 'Samsung',
-                y: 320.10
-            }]
-        }],
-        chart: {
-            type: 'bar',
-            height: 300,
-            dropShadow: {
-                enabled: true,
-                top: 0,
-                left: 0,
-                blur: 2,
-                opacity: 0.2
-            }
-        },
-        plotOptions: {
-            bar: {
-                horizontal: true,
-                barHeight: '55%'
-            }
-        },
-        dataLabels: {
-            enabled: true
-        },
-        theme: {
-            monochrome: {
-                enabled: true,
-                color: '#F89542',
-                shadeIntensity: 0.65
-            }
-        },
-        xaxis: {
-            categories: ['Company ABC', 'Apple', 'Samsung']
-        }
-    };
-
-    var horizontalChart = new ApexCharts(document.querySelector("#horizontal-chart"), horizontalOptions);
-    horizontalChart.render();
-
-    var donutOptions = {
-        series: [1350.00, 2032.00, 320.10],
-        labels: ['Company ABC', 'Apple', 'Samsung'],
-        chart: {
-            type: 'donut',
-        },
-        plotOptions: {
-            pie: {
-                customScale: 0.85,
-                donut: {
-                    size: '55%'
-                }
-            }
-        },
-        responsive: [{
-            breakpoint: 480,
-            options: {
-                chart: {
-                    width: 400
-                },
-                legend: {
-                    position: 'bottom'
-                }
-            }
-        }],
-        colors: ['#D08F78', '#F89542', '#FFB07C']
-    };
-
-    var donutChart = new ApexCharts(document.querySelector("#donut-chart"), donutOptions);
-    donutChart.render();
-
-    $(document).ready(function() {
-        $("body").niceScroll();
-    });
-</script>
+<script src="./script/investment.js"></script>
 
 </html>

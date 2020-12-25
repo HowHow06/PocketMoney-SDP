@@ -1,0 +1,12 @@
+#ignore all unit testing
+tests/
+
+vendor/
+
+composer.json
+
+composer.lock
+
+phpunit.xml
+
+.vscode/

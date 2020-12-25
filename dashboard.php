@@ -9,7 +9,6 @@
 
 <body>
     <?php include(".navbar.php"); ?>
-
     <div class="container-fluid background">
         <div class="col-6 left-body">
             <div class="container-fluid body">
