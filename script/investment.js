@@ -38,13 +38,15 @@ var investmentTypes_donutChart = new ApexCharts(
 
 var investmentTypes = $("#typesOfInvestments").val();
 var investmentAmount = $("#amountsOfInvestments").val();
+alert(investmentTypes);
+alert(investmentAmount);
+
+investmentTypes_donutChart.render();
 
 investmentTypes_donutChart.updateOptions({
   series: investmentAmount,
   labels: investmentTypes,
 });
-
-investmentTypes_donutChart.render();
 
 var donutOptions = {
   series: [1350.0, 2032.0, 320.1],
