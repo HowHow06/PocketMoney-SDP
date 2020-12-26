@@ -235,7 +235,7 @@
 }
 
 .body > .transaction-table {
-  margin: 15px auto;
+  margin: 25px auto;
   width: 95%;
   text-align: center;
 }
@@ -289,4 +289,8 @@
 .edit-modal > .modal-dialog > .modal-content > .modal-footer > .btn-primary {
   background-color: #fc9a55;
   border-color: #fc9a55;
+}
+
+#delete-row p {
+  margin-bottom: 0;
 }
