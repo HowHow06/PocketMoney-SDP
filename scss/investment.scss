@@ -129,7 +129,7 @@
         }
     }
     > .transaction-table {
-        margin: 15px auto;
+        margin: 25px auto;
         width: 95%;
         text-align: center;
         > thead {
@@ -189,5 +189,11 @@
                 }
             }
         }
+    }
+}
+
+#delete-row{
+    p{
+        margin-bottom: 0;
     }
 }

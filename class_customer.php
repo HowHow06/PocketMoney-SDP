@@ -6,12 +6,6 @@ class Customer
 {
     private $id;
 
-    /**
-     * Static instance of self
-     *
-     * @var Customer
-     */
-    protected static $_instance;
 
     function __construct($db = null)
     {
@@ -100,7 +94,71 @@ class Customer
     }
 
     /** 
-     * Return the array of distinct investment types => amount invested if the id is set before
+     * Return the array of distinct investment NAME and amount invested if the id is set before
+     * @return array|NULL
+     * 'investmentName' -> array: array of investmentName
+     * 'amount' -> array: an array
+     */
+    function getInvestNameAndAmount()
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $id = $this->id;
+            $db->where('cusID', $id);
+            $db->groupBy('investmentName');
+            $investmentNameToValue = array('investmentName' => array(), 'amount' => array());
+            $result = $db->get('Investment', null, "SUM(amountInvested) AS amount, investmentName");
+            foreach ($result as $row => $data) {
+                array_push($investmentNameToValue['amount'], $data['amount']);
+                array_push($investmentNameToValue['investmentName'], $data['investmentName']);
+            }
+            return $investmentNameToValue;
+        }
+
+        return NULL;
+    }
+
+
+    /** 
+     * Return JSON format of investment Name only
+     * @return JSON|NULL
+     * 
+     * 
+     */
+    function getInvestNameJSON()
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $data = $this->getInvestNameAndAmount();
+            $investNameArr = $data['investmentName'];
+            $investNameJSON = json_encode($investNameArr);
+            return $investNameJSON;
+        }
+        return NULL;
+    }
+
+    /** 
+     * Return JSON format of amount(investment Name) only
+     * @return JSON |NULL
+     * 
+     * 
+     */
+    function getNameAmountsJSON()
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $data = $this->getInvestNameAndAmount();
+            $investAmountArr = array_map('floatval', $data['amount']);
+            $investAmountJSON = json_encode($investAmountArr);
+            return $investAmountJSON;
+        }
+        return NULL;
+    }
+
+
+
+    /** 
+     * Return the array of distinct investment types and amount invested if the id is set before
      * @return array|NULL
      * 'investmentType' -> array: array of investmentTypes
      * 'amount' -> array: an array
@@ -127,8 +185,30 @@ class Customer
 
 
     /** 
-     * Return string of JSON format of investment Type only
-     * @return String|NULL
+     * Return the array of inventment table data if the id is set before
+     * @param String $columnName
+     * the name of the specific column
+     * 
+     * @return array|NULL
+     * 
+     */
+    function getInvestmentData($columnName = "*")
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $id = $this->id;
+            $db->where('cusID', $id);
+            $result = $db->get('Investment', null, $columnName);
+            return $result;
+        }
+
+        return NULL;
+    }
+
+
+    /** 
+     * Return JSON format of investment Type only
+     * @return JSON|NULL
      * 
      * 
      */
@@ -137,38 +217,31 @@ class Customer
         $db = MysqliDb::getInstance();
         if (!empty($this->id)) {
             $data = $this->getInvestTypesAndAmount();
-            $investTypesStr = '[';
-            foreach ($data['investmentType'] as $type) {
-                $investTypesStr .= '\'' . strval($type) . '\',';
-            }
-            $investTypesStr = substr($investTypesStr, 0, -1);
-            $investTypesStr .= ']';
-            return $investTypesStr;
+            $investTypesArr = $data['investmentType'];
+            $investTypesJSON = json_encode($investTypesArr);
+            return $investTypesJSON;
         }
         return NULL;
     }
 
     /** 
-     * Return string of JSON format of amount only
-     * @return String|NULL
+     * Return JSON format of amount(investment TYPE) only
+     * @return JSON |NULL
      * 
      * 
      */
-    function getInvestAmountsJSON()
+    function getTypeAmountsJSON()
     {
         $db = MysqliDb::getInstance();
         if (!empty($this->id)) {
             $data = $this->getInvestTypesAndAmount();
-            $investAmountStr = '[';
-            foreach ($data['amount'] as $amount) {
-                $investAmountStr .= strval($amount) . ',';
-            }
-            $investAmountStr = substr($investAmountStr, 0, -1);
-            $investAmountStr .= ']';
-            return $investAmountStr;
+            $investAmountArr = array_map('floatval', $data['amount']);
+            $investAmountJSON = json_encode($investAmountArr);
+            return $investAmountJSON;
         }
         return NULL;
     }
+
 
 
     /**
