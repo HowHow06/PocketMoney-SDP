@@ -7,6 +7,20 @@
     justify-content: center;
 }
 
+.btn-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 120px;
+    text-align: center;
+    font-size: 20px;
+    line-height: 1.42857;
+    position: fixed;
+    bottom: 5%;
+    right: 2%;
+    background-color: #fc9a55;
+    box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
+}
+
 .body {
     @include cus-body;
     > .overall {
