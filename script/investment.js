@@ -3,6 +3,30 @@ var investmentAmount = $("#amountsOfInvestments").val();
 var typeJSON = JSON.parse(investmentTypes);
 var amountJSON = JSON.parse([investmentAmount]);
 
+function resetEdit() {
+  var investID = $("#edit_investmentID").val();
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      var data = JSON.parse(this.responseText);
+
+      var investDate = data["startDate"];
+      var investAmount = data["amountInvested"];
+      var investName = data["investmentName"];
+      var investType = data["investmentType"];
+      var investRate = data["ratePerAnnum"];
+
+      $("#edit_startDate").val(investDate);
+      $("#edit_amountInvested").val(investAmount);
+      $("#edit_investmentName").val(investName);
+      $("#edit_investmentType").val(investType);
+      $("#edit_ratePerAnnum").val(investRate);
+    }
+  };
+  xmlhttp.open("GET", "form_process.php?resetEditInvest=" + investID, true);
+  xmlhttp.send();
+}
+
 var donutOptions = {
   series: amountJSON,
   labels: typeJSON,

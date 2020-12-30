@@ -185,24 +185,61 @@ class Customer
 
 
     /** 
-     * Return the array of inventment table data if the id is set before
+     * Return the array of table data if the id is set before
+     * * @param String $tablename
+     * the name of the table
+     * 
      * @param String $columnName
      * the name of the specific column
      * 
      * @return array|NULL
      * 
      */
-    function getInvestmentData($columnName = "*")
+    function getData($tablename, $columnName = "*")
     {
         $db = MysqliDb::getInstance();
         if (!empty($this->id)) {
             $id = $this->id;
             $db->where('cusID', $id);
-            $result = $db->get('Investment', null, $columnName);
+            $result = $db->get($tablename, null, $columnName);
             return $result;
         }
-
         return NULL;
+    }
+
+
+    /** 
+     * Return the array of table data if the id is set before
+     * * @param String $query
+     * select query statement
+     * 
+     * @return array|NULL
+     * 
+     */
+    function getDataByQuery($query)
+    {
+        $db = MysqliDb::getInstance();
+        $data = $db->rawQuery($query);
+        return $data;
+    }
+
+    /** 
+     * Return ONE row of inventment table data for the given investment ID
+     * @param String $columnName
+     * the name of the specific column
+     * 
+     * @param String $investmentID
+     * the investment id
+     * 
+     * @return array|NULL
+     * 
+     */
+    function getOneInvestmentData($columnName = "*", $investmentID)
+    {
+        $db = MysqliDb::getInstance();
+        $db->where('investmentID', $investmentID);
+        $result = $db->getOne('Investment', $columnName);
+        return $result;
     }
 
 
@@ -242,6 +279,118 @@ class Customer
         return NULL;
     }
 
+
+    /**
+     *
+     * @param array $params
+     * 'tableName'-> String
+     * 'idName'-> String: id name;
+     * 'id'-> String:id of the record;
+     * 'data'-> array: column name TO actual data;
+     * 
+     * 
+     * @return array 
+     * 'status'-> String: 'ok' or 'error';
+     * 'statusMsg'-> String: the status msg;
+     *
+     */
+    public function customerUpdate($params)
+    {
+        $db = MysqliDb::getInstance();
+        $tablename = $params['tableName'];
+        $idName = $params['idName'];
+        $id = $params['id'];
+        $data = $params['data'];
+
+        $db->where($idName, $id);
+
+        if ($db->update($tablename, $data)) {
+            return array('status' => 'ok', 'statusMsg' => $db->count . ' records were updated');
+        } else {
+            return array('status' => 'error', 'statusMsg' => 'update failed: ' . $db->getLastError());
+        }
+    }
+
+    /**
+     *
+     * @param array $params
+     * 'tableName'-> String
+     * 'data'-> array: column name TO actual data;
+     * 
+     * 
+     * @return array 
+     * 'status'-> String: 'ok' or 'error';
+     * 'statusMsg'-> String: the status msg;
+     *
+     */
+    public function customerInsert($params)
+    {
+        $db = MysqliDb::getInstance();
+        $tablename = $params['tableName'];
+        $data = $params['data'];
+
+        $id = $db->insert($tablename, $data);
+        if ($id)
+            return array('status' => 'ok', 'statusMsg' => 'Record is added.');
+        else
+            return array('status' => 'error', 'statusMsg' => 'Add failed: ' . $db->getLastError());
+    }
+
+    /**
+     *
+     * @param array $params
+     * 'tableName'-> String
+     * 'idName'-> String: id name;
+     * 'id'-> String:id of the record;
+     * 
+     * 
+     * @return array 
+     * 'status'-> String: 'ok' or 'error';
+     * 'statusMsg'-> String: the status msg;
+     *
+     */
+    public function customerDelete($params)
+    {
+        $db = MysqliDb::getInstance();
+        $tablename = $params['tableName'];
+        $idName = $params['idName'];
+        $id = $params['id'];
+
+        $db->where($idName, $id);
+        if ($db->delete($tablename)) {
+            return array('status' => 'ok', 'statusMsg' => 'Deleted successfully.');
+        } else {
+            return array('status' => 'error', 'statusMsg' => 'Delete failed');
+        }
+    }
+
+    /**
+     *go to the page using js
+     * 
+     * @param String $url
+     * 
+     * 
+     *
+     */
+    public function goTo($url)
+    {
+        echo ('<script>
+            window.location.href = "' . $url . '"
+            </script>');
+    }
+
+    /**
+     * show alert box
+     *
+     * @param String $msg
+     * the msg to show in alert box
+     * 
+     */
+    public function showAlert($msg)
+    {
+        echo ('<script>alert("' . $msg . '");
+        </script>');
+    }
 
 
     /**
