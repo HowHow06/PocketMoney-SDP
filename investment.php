@@ -292,7 +292,7 @@
             <div class="container-fluid row filter">
                 <div>
                     <h5>CATEGORY:</h5>
-                    <select name="filter-transaction-category" id="filter-transaction-category" class="custom-select">
+                    <select name="filter-transaction-category" id="filter-transaction-category" class="custom-select" onchange="showsearch('')">
                         <option value="ALL" selected>ALL</option>
                         <?php
                         $data = $customer->getData('Investment', "DISTINCT investmentType");
@@ -307,7 +307,7 @@
 
                 <div>
                     <h5>TIME PERIOD:</h5>
-                    <select name="filter-transaction-time" id="filter-transaction-time" class="custom-select">
+                    <select name="filter-transaction-time" id="filter-transaction-time" class="custom-select" onchange="showsearch('')">
                         <option value="ALL">ALL</option>
                         <option value="ThisMonth">This Month</option>
                         <option value="Last3Months">Last 3 Months</option>
@@ -318,18 +318,18 @@
 
             <div class="container-fluid row filter2">
                 <div class="col-6 row show">
-                    <h6>Showing:
-                        <?php $datarow = $customer->getData('Investment');
-                        if (empty($datarow)) {
-                            echo (0);
-                        } else {
-                            echo (sizeof($datarow));
-                        }
-                        ?> entries</h6>
+                    <h6>Showing:<span id="table-row-count">
+                            <?php $datarow = $customer->getData('Investment');
+                            if (empty($datarow)) {
+                                echo (0);
+                            } else {
+                                echo (sizeof($datarow));
+                            }
+                            ?> </span>entries</h6>
                 </div>
 
                 <div class="col-6 search">
-                    <input type="text" name="" id="" placeholder="  Apple eg.">
+                    <input type="text" name="" id="search-transaction" placeholder="  Apple eg.">
                     <h6>Search:</h6>
                 </div>
             </div>
@@ -344,20 +344,21 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form action="" method="POST">
+                        <form action="" method="POST" id="testing" onsubmit="return validateform(this);">
                             <div class="modal-body">
                                 <div class="container">
                                     <div class="form-group row">
                                         <label class="col-5" for="">Date:</label>
-                                        <input class="col-6" type="date" id="new_startDate" name="new_startDate">
+                                        <input class="col-6 form-startDate" type="date" id="new_startDate" name="new_startDate"></input>
+                                        <label class="error" for="new_startDate">Please enter a valid date</label>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Amount:</label>
-                                        <input class="col-6" type="number" step='0.01' id="new_amountInvested" name="new_amountInvested">
+                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="new_amountInvested" name="new_amountInvested" />
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Name:</label>
-                                        <input id="new_investmentName" class="col-6" list="new_investmentNameList" name="new_investmentName" required>
+                                        <input id="new_investmentName" class="col-6 form-investmentName" list="new_investmentNameList" name="new_investmentName" />
                                         <datalist id="new_investmentNameList">
                                             <?php
                                             $data = $customer->getData('Investment', "DISTINCT investmentName");
@@ -371,7 +372,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Category:</label>
-                                        <input id="new_investmentType" class="col-6" list="new_investmentTypeList" name="new_investmentType" required>
+                                        <input id="new_investmentType" class="col-6 form-investmentType" list="new_investmentTypeList" name="new_investmentType">
                                         <datalist id="new_investmentTypeList">
                                             <?php
                                             $data = $customer->getData('Investment', "DISTINCT investmentType");
@@ -385,7 +386,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Annual Rate:</label>
-                                        <input class="col-6" type="number" step='0.01' id="new_ratePerAnnum" name="new_ratePerAnnum">
+                                        <input class="col-6 form-ratePerAnnum" type="number" step='0.01' id="new_ratePerAnnum" name="new_ratePerAnnum">
                                     </div>
 
                                 </div>
@@ -408,22 +409,23 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form action="" method="POST">
+                        <form action="" method="POST" id="edit-form" onsubmit="return validateform(this);">
                             <div class="modal-body">
                                 <div class="container">
 
                                     <input type="hidden" id="edit_investmentID" name="edit_investmentID"></input>
                                     <div class="form-group row">
-                                        <label class="col-5" for="">Date:</label>
-                                        <input class="col-6" type="date" id="edit_startDate" name="edit_startDate">
+                                        <label class="col-5" for="edit_startDate">Date:</label>
+                                        <input class="col-6 form-startDate" type="date" id="edit_startDate" name="edit_startDate">
+
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Amount:</label>
-                                        <input class="col-6" type="number" step='0.01' id="edit_amountInvested" name="edit_amountInvested">
+                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="edit_amountInvested" name="edit_amountInvested">
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Name:</label>
-                                        <input id="edit_investmentName" class="col-6" list="edit_investmentNameList" name="edit_investmentName" required>
+                                        <input id="edit_investmentName" class="col-6 form-investmentName" list="edit_investmentNameList" name="edit_investmentName" required>
                                         <datalist id="edit_investmentNameList">
                                             <?php
                                             $data = $customer->getData('Investment', "DISTINCT investmentName");
@@ -437,7 +439,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Category:</label>
-                                        <input id="edit_investmentType" class="col-6" list="edit_investmentTypeList" name="edit_investmentType" required>
+                                        <input id="edit_investmentType" class="col-6 form-investmentType" list="edit_investmentTypeList" name="edit_investmentType" required>
                                         <datalist id="edit_investmentTypeList">
                                             <?php
                                             $data = $customer->getData('Investment', "DISTINCT investmentType");
@@ -451,7 +453,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Annual Rate:</label>
-                                        <input class="col-6" type="number" step='0.01' id="edit_ratePerAnnum" name="edit_ratePerAnnum">
+                                        <input class="col-6 form-ratePerAnnum" type="number" step='0.01' id="edit_ratePerAnnum" name="edit_ratePerAnnum">
                                     </div>
 
                                 </div>
