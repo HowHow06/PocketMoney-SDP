@@ -36,4 +36,5 @@
             </div>
         </li>
     </ul>
+    <input type="hidden" id="cusID" value="<?php echo ($customer->getId()); ?>"></input>
 </nav>

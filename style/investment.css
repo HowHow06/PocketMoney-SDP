@@ -292,17 +292,25 @@
   color: white;
 }
 
-.edit-modal > .modal-dialog > .modal-content > .modal-header {
+.modal-dialog > .modal-content > .modal-header {
   background-color: #fc9a55;
 }
 
-.edit-modal > .modal-dialog > .modal-content > .modal-header > .modal-title, .edit-modal > .modal-dialog > .modal-content > .modal-header .close {
+.modal-dialog > .modal-content > .modal-header > .modal-title, .modal-dialog > .modal-content > .modal-header .close {
   color: white;
 }
 
-.edit-modal > .modal-dialog > .modal-content > .modal-footer > .btn-primary {
+.modal-dialog > .modal-content > .modal-footer > .btn-primary {
   background-color: #fc9a55;
   border-color: #fc9a55;
+}
+
+label.error {
+  display: none;
+  padding-left: 41.66%;
+  margin-bottom: 0;
+  color: red;
+  font-size: 0.9rem;
 }
 
 #delete-row p {

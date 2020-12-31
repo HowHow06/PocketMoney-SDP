@@ -6,16 +6,39 @@ class Customer
 {
     private $id;
 
+    /**
+     * Static instance of self
+     *
+     * @var Customer
+     */
+    protected static $_instance;
 
-    function __construct($db = null)
+
+
+    function __construct($id = null, $db = null)
     {
         // $this->db          = $db;
         require_once('MysqliDb.php');
+        $this->$id = $id;
         //$this->db          = new MysqliDb("db4free.net", "pocketmoney", "m&nsuperdry", "pocketmoney", "3306"); //temporary
         $this->db          = new MysqliDb("localhost", "root", "", "pocketmoney", "3308"); //temporary
         //$this->validation  = $validation;
+        self::$_instance = $this;
     }
 
+    /**
+     * A method of returning the static instance to allow access to the
+     * instantiated object from within another class.
+     * Inheriting this class would require reloading connection info.
+     *
+     * @uses $customer = Customer::getInstance();
+     *
+     * @return Customer Returns the current instance.
+     */
+    public static function getInstance()
+    {
+        return self::$_instance;
+    }
 
     /** 
      * Set customer id
@@ -186,7 +209,7 @@ class Customer
 
     /** 
      * Return the array of table data if the id is set before
-     * * @param String $tablename
+     * @param String $tablename
      * the name of the table
      * 
      * @param String $columnName
