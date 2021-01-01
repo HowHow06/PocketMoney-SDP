@@ -32,6 +32,8 @@
         $customer->goTo('investment.php');
     }
 
+
+    //delete transaction
     if (isset($_POST['delete_submit'])) {
         $params['tableName'] = 'Investment';
         $params['idName'] = 'investmentID';
@@ -45,6 +47,7 @@
         $customer->goTo('investment.php');
     }
 
+    //new transaction
     if (isset($_POST['new_submit'])) {
         $params['tableName'] = 'Investment';
         $params['data'] = array(
@@ -64,6 +67,40 @@
         }
         $customer->goTo('investment.php');
     }
+
+    //edit general investment
+    if (isset($_POST['edit-general-submit'])) {
+        $params['tableName'] = 'Investment';
+        $params['idName'] = 'investmentName';
+        $params['id'] = $_POST['edit-general-name'];
+        $params['data'] = array(
+            'investmentName' => $_POST['edit-general-newName'],
+            'investmentType' => $_POST['edit-general-investmentType'],
+            'ratePerAnnum' => $_POST['edit-general-ratePerAnnum']
+        );
+        $result = $customer->customerUpdate($params);
+        if ($result['status'] == 'ok') {
+            $customer->showAlert($result['statusMsg']);
+        } else {
+            $customer->showAlert($result['statusMsg']);
+        }
+        $customer->goTo('investment.php');
+    }
+
+    //delete general invesment
+    if (isset($_POST['delete-general-submit'])) {
+        $params['tableName'] = 'Investment';
+        $params['idName'] = 'investmentName';
+        $params['id'] = $_POST['delete-general-name'];
+        $result = $customer->customerDelete($params);
+        if ($result['status'] == 'ok') {
+            $customer->showAlert($result['statusMsg']);
+        } else {
+            $customer->showAlert($result['statusMsg']);
+        }
+        $customer->goTo('investment.php');
+    }
+
     ?>
     <div class="container-fluid background">
         <div class="container-fluid body">
@@ -89,7 +126,7 @@
             </div>
 
             <div class="container-fluid row chart">
-                <!-- horizontal bar chart -->
+                <!-- pie chart -->
                 <input type="hidden" id="amountsOfInvestments" name="amountsOfInvestments" value='<?php echo ($customer->getTypeAmountsJSON()); ?>'></input>
                 <input type="hidden" id="typesOfInvestments" name="typesOfInvestments" value='<?php echo ($customer->getInvestTypesJSON()); ?>'></input>
                 <div class="col-6 horizontal-chart" id="investmentTypes-donut-chart"></div>
@@ -99,13 +136,12 @@
                 <div class="col-6 donut-chart" id="investmentNames-donut-chart"></div>
             </div>
 
-            <!-- table -->
+
             <div class="container-fluid row head">
                 <h4 class="col-6">INVESTMENT SUMMARY</h5>
                     <div class="col-6">
                         <a href="#" class="btn delete" data-toggle="modal" data-target="#delete">DELETE</a>
                         <a href="#" class="btn edit" data-toggle="modal" data-target="#edit">EDIT</a>
-                        <a href="#" class="btn add" data-toggle="modal" data-target="#add">ADD</a>
                     </div>
 
                     <!-- delete modal -->
@@ -113,28 +149,36 @@
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="edit-title">Delete Institution</h5>
+                                    <h5 class="modal-title" id="edit-title">Delete Investment</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <div class="modal-body">
-                                    <p>Pick an institution and click Delete.</p>
-                                    <form action="" method="post">
+                                <form action="" method="post" onsubmit="return confirm('This cannot be undone, are you sure you want to proceed?');">
+                                    <div class="modal-body">
+                                        <p>Pick an investment and click Delete.</p>
+
                                         <div class="form-group row">
-                                            <label class="col-4" for="">Institution:</label>
-                                            <select class="col-6" class="custom-select" id="category">
-                                                <option value="">Company ABC</option>
-                                                <option value="">Apple</option>
-                                                <option value="">Samsung</option>
+                                            <label class="col-5" for="">Please Select:</label>
+                                            <select class="col-6" class="custom-select" id="delete-general-name" name="delete-general-name" required>
+                                                <option value="" selected>Select an investment</option>
+                                                <?php
+                                                $data = $customer->getData('Investment', "DISTINCT investmentName");
+                                                foreach ($data as $row => $value) {
+                                                ?>
+                                                    <option value="<?php echo ($value['investmentName']); ?>"><?php echo ($value['investmentName']); ?></option>
+                                                <?php
+                                                }
+                                                ?>
                                             </select>
                                         </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary">Delete</button>
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" name="delete-general-submit" class="btn btn-primary">Delete</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -144,112 +188,73 @@
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="edit-title">Edit Institution</h5>
+                                    <h5 class="modal-title" id="edit-title">Edit by Investment</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <div class="modal-body">
-                                    <form action="" method="post">
+                                <form action="" method="POST" id="edit-general-form" onsubmit="return validateform(this);">
+                                    <div class="modal-body">
+
                                         <div class="form-group row">
-                                            <label class="col-4" for="">Institution:</label>
-                                            <select class="col-6" class="custom-select" id="institution">
-                                                <option value="">Company ABC</option>
-                                                <option value="">Apple</option>
+                                            <label class="col-5" for="">Please Select:</label>
+                                            <select class="col-6" class="custom-select" id="edit-general-name" name="edit-general-name" required>
+                                                <option value="" selected>Select an investment</option>
+                                                <?php
+                                                $data = $customer->getData('Investment', "DISTINCT investmentName");
+                                                foreach ($data as $row => $value) {
+                                                ?>
+                                                    <option value="<?php echo ($value['investmentName']); ?>"><?php echo ($value['investmentName']); ?></option>
+                                                <?php
+                                                }
+                                                ?>
                                             </select>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-4" for="">Description:</label>
-                                            <input class="col-6" type="text">
+                                            <label class="col-5" for="">Name:</label>
+                                            <input class="col-6 form-investmentName" type="text" id="edit-general-newName" name="edit-general-newName" required disabled>
+                                            <label class="error" for="edit-general-newName">Please enter a valid name</label>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-4" for="">Type:</label>
-                                            <select class="col-6" class="custom-select" id="type">
-                                                <option value="">Holding</option>
-                                                <option value="">Diposed</option>
-                                            </select>
+                                            <label class="col-5" for="">Category:</label>
+                                            <input id="edit-general-investmentType" class="col-6 form-investmentType" list="edit-general-investmentTypeList" name="edit-general-investmentType" required disabled />
+                                            <datalist id="edit-general-investmentTypeList">
+                                                <?php
+                                                $data = $customer->getData('Investment', "DISTINCT investmentType");
+                                                foreach ($data as $row => $value) {
+                                                ?>
+                                                    <option id="type<?php echo ($value['investmentType']); ?>" value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
+                                                <?php
+                                                }
+                                                ?>
+                                            </datalist>
+                                            <label class="error" for="edit-general-investmentType">Please enter a valid category</label>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-4" for="">Price:</label>
-                                            <input class="col-6" type="number" step='0.01'>
+                                            <label class="col-5" for="">Rate per Annum:</label>
+                                            <input class="col-6 form-ratePerAnnum" type="number" name="edit-general-ratePerAnnum" step='0.01' id="edit-general-ratePerAnnum" required disabled>
+                                            <label class="error" for="edit-general-ratePerAnnum">Please enter a valid rate</label>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-4" for="">Rate per Annum:</label>
-                                            <input class="col-6" type="number" step='0.01'>
+                                            <label class="col-5" for="">Total Amount:</label>
+                                            <input class="col-6" id="edit-general-totalAmount" type="number" step='0.01' value="" disabled>
                                         </div>
-                                        <div class="form-group row">
-                                            <label class="col-4" for="">Profit:</label>
-                                            <input class="col-6" type="number" step='0.01' value="0.00" disabled>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-4" for="">Current Value:</label>
-                                            <input class="col-6" type="number" step='0.01' value="1300.00" disabled>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Save changes</button>
-                                </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary" name="edit-general-submit">Save changes</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
 
-                    <!-- add modal -->
-                    <div class="modal fade edit-modal" id="add" tabindex="-1" role="dialog" aria-labelledby="add-title" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="edit-title">Add Institution</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <form action="" method="post">
-                                        <div class="form-group row">
-                                            <label class="col-4" for="">Institution:</label>
-                                            <input class="col-6" type="text">
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-4" for="">Description:</label>
-                                            <input class="col-6" type="text">
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-4" for="">Type:</label>
-                                            <select class="col-6" class="custom-select" id="type">
-                                                <option value="">Holding</option>
-                                                <option value="">Diposed</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-4" for="">Price:</label>
-                                            <input class="col-6" type="number">
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-4" for="">Rate per Annum:</label>
-                                            <input class="col-6" type="number">
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-4" for="">Profit:</label>
-                                            <input class="col-6" type="number" value="0.00" disabled>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-4" for="">Current Value:</label>
-                                            <input class="col-6" type="number" value="1300.00" disabled>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary">Add</button>
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
 
 
             </div>
+            <!-- table -->
             <table class="table table-bordered table-hover institution-table">
                 <thead>
                     <tr>
@@ -349,16 +354,17 @@
                                 <div class="container">
                                     <div class="form-group row">
                                         <label class="col-5" for="">Date:</label>
-                                        <input class="col-6 form-startDate" type="date" id="new_startDate" name="new_startDate"></input>
+                                        <input class="col-6 form-startDate" type="date" id="new_startDate" name="new_startDate" required />
                                         <label class="error" for="new_startDate">Please enter a valid date</label>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Amount:</label>
-                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="new_amountInvested" name="new_amountInvested" />
+                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="new_amountInvested" name="new_amountInvested" required />
+                                        <label class="error" for="new_amountInvested">Please enter a valid amount</label>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Name:</label>
-                                        <input id="new_investmentName" class="col-6 form-investmentName" list="new_investmentNameList" name="new_investmentName" />
+                                        <input id="new_investmentName" class="col-6 form-investmentName" list="new_investmentNameList" name="new_investmentName" required />
                                         <datalist id="new_investmentNameList">
                                             <?php
                                             $data = $customer->getData('Investment', "DISTINCT investmentName");
@@ -369,10 +375,11 @@
                                             }
                                             ?>
                                         </datalist>
+                                        <label class="error" for="new_investmentName">Please enter a valid name</label>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Category:</label>
-                                        <input id="new_investmentType" class="col-6 form-investmentType" list="new_investmentTypeList" name="new_investmentType">
+                                        <input id="new_investmentType" class="col-6 form-investmentType" list="new_investmentTypeList" name="new_investmentType" required />
                                         <datalist id="new_investmentTypeList">
                                             <?php
                                             $data = $customer->getData('Investment', "DISTINCT investmentType");
@@ -383,10 +390,12 @@
                                             }
                                             ?>
                                         </datalist>
+                                        <label class="error" for="new_investmentType">Please enter a valid category</label>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Annual Rate:</label>
-                                        <input class="col-6 form-ratePerAnnum" type="number" step='0.01' id="new_ratePerAnnum" name="new_ratePerAnnum">
+                                        <input class="col-6 form-ratePerAnnum" type="number" step='0.01' id="new_ratePerAnnum" name="new_ratePerAnnum" required />
+                                        <label class="error" for="new_ratePerAnnum">Please enter a valid rate</label>
                                     </div>
 
                                 </div>
@@ -412,20 +421,20 @@
                         <form action="" method="POST" id="edit-form" onsubmit="return validateform(this);">
                             <div class="modal-body">
                                 <div class="container">
-
                                     <input type="hidden" id="edit_investmentID" name="edit_investmentID"></input>
                                     <div class="form-group row">
                                         <label class="col-5" for="edit_startDate">Date:</label>
-                                        <input class="col-6 form-startDate" type="date" id="edit_startDate" name="edit_startDate">
-
+                                        <input class="col-6 form-startDate" type="date" id="edit_startDate" name="edit_startDate" required />
+                                        <label class="error" for="edit_startDate">Please enter a valid date</label>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Amount:</label>
-                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="edit_amountInvested" name="edit_amountInvested">
+                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="edit_amountInvested" name="edit_amountInvested" required />
+                                        <label class="error" for="edit_amountInvested">Please enter a valid amount</label>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Name:</label>
-                                        <input id="edit_investmentName" class="col-6 form-investmentName" list="edit_investmentNameList" name="edit_investmentName" required>
+                                        <input id="edit_investmentName" class="col-6 form-investmentName" list="edit_investmentNameList" name="edit_investmentName" required />
                                         <datalist id="edit_investmentNameList">
                                             <?php
                                             $data = $customer->getData('Investment', "DISTINCT investmentName");
@@ -436,10 +445,11 @@
                                             }
                                             ?>
                                         </datalist>
+                                        <label class="error" for="edit_investmentName">Please enter a valid name</label>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Category:</label>
-                                        <input id="edit_investmentType" class="col-6 form-investmentType" list="edit_investmentTypeList" name="edit_investmentType" required>
+                                        <input id="edit_investmentType" class="col-6 form-investmentType" list="edit_investmentTypeList" name="edit_investmentType" required />
                                         <datalist id="edit_investmentTypeList">
                                             <?php
                                             $data = $customer->getData('Investment', "DISTINCT investmentType");
@@ -450,12 +460,13 @@
                                             }
                                             ?>
                                         </datalist>
+                                        <label class="error" for="edit_investmentType">Please enter a valid category</label>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Annual Rate:</label>
-                                        <input class="col-6 form-ratePerAnnum" type="number" step='0.01' id="edit_ratePerAnnum" name="edit_ratePerAnnum">
+                                        <input class="col-6 form-ratePerAnnum" type="number" step='0.01' id="edit_ratePerAnnum" name="edit_ratePerAnnum" required />
+                                        <label class="error" for="edit_ratePerAnnum">Please enter a valid rate</label>
                                     </div>
-
                                 </div>
                             </div>
                             <div class="modal-footer">
