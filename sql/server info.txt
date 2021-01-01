@@ -1,0 +1,3 @@
+Server: sql12.freemysqlhosting.net
+Username: sql12382802
+Password: Pcfz54XCtn

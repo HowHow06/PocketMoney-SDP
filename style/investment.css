@@ -72,6 +72,20 @@
   justify-content: center;
 }
 
+.btn-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 120px;
+  text-align: center;
+  font-size: 20px;
+  line-height: 1.42857;
+  position: fixed;
+  bottom: 5%;
+  right: 2%;
+  background-color: #fc9a55;
+  box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
+}
+
 .body {
   box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
   padding: 0;
@@ -235,7 +249,7 @@
 }
 
 .body > .transaction-table {
-  margin: 15px auto;
+  margin: 25px auto;
   width: 95%;
   text-align: center;
 }
@@ -278,15 +292,27 @@
   color: white;
 }
 
-.edit-modal > .modal-dialog > .modal-content > .modal-header {
+.modal-dialog > .modal-content > .modal-header {
   background-color: #fc9a55;
 }
 
-.edit-modal > .modal-dialog > .modal-content > .modal-header > .modal-title, .edit-modal > .modal-dialog > .modal-content > .modal-header .close {
+.modal-dialog > .modal-content > .modal-header > .modal-title, .modal-dialog > .modal-content > .modal-header .close {
   color: white;
 }
 
-.edit-modal > .modal-dialog > .modal-content > .modal-footer > .btn-primary {
+.modal-dialog > .modal-content > .modal-footer > .btn-primary {
   background-color: #fc9a55;
   border-color: #fc9a55;
+}
+
+label.error {
+  display: none;
+  padding-left: 41.66%;
+  margin-bottom: 0;
+  color: red;
+  font-size: 0.9rem;
+}
+
+#delete-row p {
+  margin-bottom: 0;
 }
