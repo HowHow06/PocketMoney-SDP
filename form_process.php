@@ -4,8 +4,7 @@ $customer = new Customer();
 
 /**
  * 
- * @return String 
- * the JSON format of fields within Investment Edit modal
+ * echo the JSON format of fields within Investment Edit modal
  */
 if (isset($_GET['resetEditInvest'])) {
     $investment_id = $_GET['resetEditInvest'];
@@ -67,4 +66,25 @@ if (isset($_GET['searchInvest'])) {
             ');
         }
     }
+}
+
+
+/**
+ * 
+ * echo the JSON format of data for investment summary edit modal
+ */
+if (isset($_GET['editGeneralInvestName'])) {
+    $cusID = $_GET['cusID'];
+    $investName = $_GET["editGeneralInvestName"];
+    $data = $customer->getDataByQuery(
+        "SELECT investmentID, investmentName, investmentType, SUM(amountInvested) AS sumAmount, CAST(AVG(ratePerAnnum) AS DECIMAL(10,2)) AS avgRate 
+    FROM Investment 
+    WHERE cusID = '" . $cusID . "'
+    AND investmentName = '" . $investName . "'
+    GROUP BY investmentName
+    ORDER BY sumAmount DESC;
+    "
+    );
+    $dataJSON = json_encode($data[0]);
+    echo ($dataJSON);
 }

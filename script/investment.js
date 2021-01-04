@@ -19,6 +19,7 @@ function validateform(ele) {
   var investType = $(id).find(".form-investmentType");
   var investRate = $(id).find(".form-ratePerAnnum");
 
+  //validate date
   if (investDate.length) {
     if (!validDate(investDate.val())) {
       //set the error msg to display
@@ -26,77 +27,123 @@ function validateform(ele) {
       //decrease some margin-bottom for the form group
       investDate.parent().css("margin-bottom", "0.2rem");
       return failValidation("Invalid Date!");
+    } else {
+      investDate.parent().find(".error").css("display", "none");
+      //decrease some margin-bottom for the form group
+      investDate.parent().css("margin-bottom", "1rem");
     }
   }
 
+  //validate amount
   if (investAmount.length) {
+    if (!validAmount(investAmount.val())) {
+      investAmount.parent().find(".error").css("display", "inline-block");
+      //decrease some margin-bottom for the form group
+      investAmount.parent().css("margin-bottom", "0.2rem");
+      return failValidation("Invalid Amount!");
+    } else {
+      investAmount.parent().find(".error").css("display", "none");
+      //decrease some margin-bottom for the form group
+      investAmount.parent().css("margin-bottom", "1rem");
+    }
   }
 
+  //validate name
   if (investName.length) {
+    if (!validTransactionName(investName.val())) {
+      investName.parent().find(".error").css("display", "inline-block");
+      //decrease some margin-bottom for the form group
+      investName.parent().css("margin-bottom", "0.2rem");
+      return failValidation("Name cannot contain any special character!");
+    } else {
+      investName.parent().find(".error").css("display", "none");
+      //decrease some margin-bottom for the form group
+      investName.parent().css("margin-bottom", "1rem");
+    }
   }
+
+  //validate type
   if (investType.length) {
+    if (!validTransactionName(investType.val())) {
+      investType.parent().find(".error").css("display", "inline-block");
+      //decrease some margin-bottom for the form group
+      investType.parent().css("margin-bottom", "0.2rem");
+      return failValidation("Category cannot contain any special character!");
+    } else {
+      investType.parent().find(".error").css("display", "none");
+      //decrease some margin-bottom for the form group
+      investType.parent().css("margin-bottom", "1rem");
+    }
   }
+  //validate rate
   if (investRate.length) {
+    if (!validAmount(investRate.val())) {
+      investRate.parent().find(".error").css("display", "inline-block");
+      //decrease some margin-bottom for the form group
+      investRate.parent().css("margin-bottom", "0.2rem");
+      return failValidation("Invalid rate!");
+    } else {
+      investRate.parent().find(".error").css("display", "none");
+      //decrease some margin-bottom for the form group
+      investRate.parent().css("margin-bottom", "1rem");
+    }
   }
 
-  // //validate file
-  // if (filecheckresult == -1) {
-  //   return failValidation("Please insert a valid image!");
-  // }
+  //to check if the category exist
+  if (investType.length) {
+    var category = investType.val();
+    if (!investCategoryExist(category)) {
+      //if it is a new cateogory
+      if (
+        !confirm(
+          category + " is a new category, do you wish to create a new category?"
+        )
+      ) {
+        //if the user dont want to create new category, then return false, else proceed
+        return false;
+      }
+    }
+  }
 
-  // //validate food name
-  // if (!validfoodname(id)) {
-  //   return failValidation(
-  //     "Please insert a valid FOOD NAME \n (only alphabets and digits are allowed!)"
-  //   );
-  // }
-  // //validate category
-  // if (!validcate(id)) {
-  //   return failValidation(
-  //     "Please insert a valid CATEGORY NAME \n (only alphabets and digits are allowed!)"
-  //   );
-  // }
+  return confirm("Are you sure you want to proceed?");
+}
 
-  // //validate price
-  // if (!validprice(id)) {
-  //   return failValidation(
-  //     "Please insert a valid PRICE \n (only positive number under 150.00 is allowed!)"
-  //   );
-  // }
+function investCategoryExist(category) {
+  var x = $("#filter-transaction-category option");
+  var i;
+  for (i = 1; i < x.length; i++) {
+    if (category == x[i].text) {
+      //turn the flag true when the cate matches
+      return true;
+    }
+  }
+  return false;
+}
 
-  // //validate price
-  // if (!validdescription(id)) {
-  //   return failValidation(
-  //     "Please insert a valid DESCRIPTION: \nLength must not exceed 500 characters \nThese special characters are not allowed \n / \\ : * ? < > | "
-  //   );
-  // }
+function validTransactionName(name) {
+  if (isEmpty(name)) {
+    return false;
+  }
+  if (!isAlNum(name)) {
+    return false;
+  }
+  return true;
+}
 
-  // //to check if the category exist
-  // var currentcate = document.getElementById("cateinput" + id).value;
-  // if (categoryexist(id, currentcate) == false) {
-  //   //if it is a new cateogory
-  //   if (
-  //     !confirm(
-  //       currentcate +
-  //         " is a new category, do you wish to create a new category?"
-  //     )
-  //   ) {
-  //     //if the user dont want to create new category, then return false, else proceed
-  //     return false;
-  //   }
-  // }
-
-  // if (filecheckresult == 1) {
-  //   return confirm("Are you sure u want to proceed without a picture?");
-  // } else if (id == -1) {
-  //   return confirm("Are you sure you want to add new food?");
-  // } else {
-  //   return confirm("Are you sure you want to update the food details?");
-  // }
+function isAlNum(inputtext) {
+  var letterNumber = /^[0-9a-zA-Z ]+$/;
+  if (inputtext.match(letterNumber)) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function validDate(date) {
   var GivenDate = date;
+  if (isEmpty(GivenDate)) {
+    return false;
+  }
   var CurrentDate = new Date();
   GivenDate = new Date(GivenDate);
 
@@ -106,6 +153,23 @@ function validDate(date) {
   } else {
     return true;
   }
+}
+
+function isEmpty(value) {
+  return value.trim() == "";
+}
+
+function validAmount(price) {
+  if (isEmpty(price)) {
+    return false;
+  }
+  if (price.includes("e")) {
+    return false;
+  }
+  if (Math.sign(price) != 1) {
+    return false;
+  }
+  return true;
 }
 
 function failValidation(msg) {
@@ -366,6 +430,50 @@ $(document).on("click", ".delete-investment-anchor", function () {
   $("#delete_investmentID").val(investID);
 });
 
+$(document).on("change", ".delete-investment-anchor", function () {
+  var investID = $(this).parent().parent().find(".investmentID").val();
+  $("#delete_investmentID").val(investID);
+});
+
 $(document).ready(function () {
   $("body").niceScroll();
+});
+
+$(document).on("change", "#edit-general-name", function () {
+  var investName = $(this).val();
+  var cusID = $("#cusID").val();
+  if (investName == "") {
+    //if the user select the first "select an investment" option
+    $("#edit-general-newName").val("");
+    $("#edit-general-totalAmount").val("");
+    $("#edit-general-investmentType").val("");
+    $("#edit-general-ratePerAnnum").val("");
+    $("#edit-general-newName").prop("disabled", true);
+    $("#edit-general-investmentType").prop("disabled", true);
+    $("#edit-general-ratePerAnnum").prop("disabled", true);
+    return;
+  }
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      var data = JSON.parse(this.responseText);
+      var investTotalAmount = data["sumAmount"];
+      var investName = data["investmentName"];
+      var investType = data["investmentType"];
+      var investRate = data["avgRate"];
+      $("#edit-general-newName").val(investName);
+      $("#edit-general-totalAmount").val(investTotalAmount);
+      $("#edit-general-investmentType").val(investType);
+      $("#edit-general-ratePerAnnum").val(investRate);
+      $("#edit-general-newName").prop("disabled", false);
+      $("#edit-general-investmentType").prop("disabled", false);
+      $("#edit-general-ratePerAnnum").prop("disabled", false);
+    }
+  };
+  xmlhttp.open(
+    "GET",
+    "form_process.php?editGeneralInvestName=" + investName + "&cusID=" + cusID,
+    true
+  );
+  xmlhttp.send();
 });
