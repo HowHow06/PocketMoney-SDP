@@ -206,6 +206,14 @@
                     background-color: #f88837 !important;
                     border-color: #fc9a55 !important;
                 }
+                > .delete {
+                    background-color: #ff6767 !important;
+                    border-color: #ff6767 !important;
+                }
+                > .delete:hover {
+                    background-color: red !important;
+                    border-color: red !important;
+                }
             }
         }
         // For delete-part

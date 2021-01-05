@@ -48,6 +48,7 @@ switch ($activePage) {
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                 <a href="income_trans.php" class="dropdown-item">Income Summary</a>
                 <a href="expense_trans.php" class="dropdown-item">Expenses Summary</a>
+                <a href="overall_trans.php" class="dropdown-item">All Transactions</a>
             </div>
         </li>
         <li class="nav-item <?php echo $isActiveBudgets ?> ">
