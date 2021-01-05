@@ -93,7 +93,7 @@
                             }
                             > .excess-bar {
                                 width: 100%; 
-                                background-color: rgb(255, 86, 86) !important;
+                                background-color: #ff6767 !important;
                             }
                             > .excess-value {
                                 color: white !important;
@@ -119,7 +119,7 @@
                                     color: #fc9a55;
                                 }
                                 > .excess {
-                                    color: rgb(255, 86, 86) !important;
+                                    color: #ff6767 !important;
                                 }
                                 > .target {
                                     float: right;
@@ -311,7 +311,7 @@
     }
 }
 
- .modal-dialog {
+.modal-dialog {
     > .modal-content {
         > .modal-header {
             background-color: #fc9a55;
@@ -319,10 +319,29 @@
                 color: white;
             }
         }
+        > form {
+            > .modal-footer {
+                > .btn-primary {
+                    background-color: #fc9a55 !important;
+                    border-color: #fc9a55 !important;
+                }
+                > .btn-primary:hover {
+                    background-color: #f88837 !important;
+                    border-color: #fc9a55 !important;
+                }
+            }
+        }
+        // For delete-part
         > .modal-footer {
-            > .btn-primary {
-                background-color: #fc9a55;
-                border-color: #fc9a55;
+            > form {
+                > .btn-primary {
+                    background-color: #ff6767 !important;
+                    border-color: #ff6767 !important;
+                }
+                > .btn-primary:hover {
+                    background-color: red !important;
+                    border-color: red !important;
+                }
             }
         }
     }
