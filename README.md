@@ -17,6 +17,7 @@ Financial Management System (Website)
 - Create ```budget.php```
 - Update ```income_trans.php``` and ```expense_trans.php```
 - Create ```overall_trans.php``` just showing all transaction records.
+- Update ```dashboard.php```
 
 ### 2020-12-17 - 2021-01-02
 > Howard's Part
