@@ -364,6 +364,16 @@
   border-color: #fc9a55 !important;
 }
 
+.modal-dialog > .modal-content > form > .modal-footer > .delete {
+  background-color: #ff6767 !important;
+  border-color: #ff6767 !important;
+}
+
+.modal-dialog > .modal-content > form > .modal-footer > .delete:hover {
+  background-color: red !important;
+  border-color: red !important;
+}
+
 .modal-dialog > .modal-content > .modal-footer > form > .btn-primary {
   background-color: #ff6767 !important;
   border-color: #ff6767 !important;

@@ -111,6 +111,22 @@
           justify-content: center;
 }
 
+.btn-circle {
+  width: 100px;
+  height: 100px;
+  color: white;
+  border-radius: 120px;
+  text-align: center;
+  font-size: 30px;
+  line-height: 1.42857;
+  position: fixed;
+  bottom: 5%;
+  right: 2%;
+  background-color: #fc9a55;
+  -webkit-box-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
+          box-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
+}
+
 .row {
   margin-left: 0 !important;
   margin-right: 0 !important;
@@ -184,23 +200,23 @@
 }
 
 .body > div > .pie-chart {
-  padding: 10px 20px 10px 100px;
+  padding: 10px 0px 10px 85px;
 }
 
 .body > div > .pie-chart > div {
   width: 600px;
-  height: 380px;
+  height: 418px;
   margin: 0 auto;
   border-width: 4px !important;
 }
 
 .body > div > .chart-explain {
-  padding: 10px 100px 10px 20px;
+  padding: 10px 20px 10px 20px;
 }
 
 .body > div > .chart-explain > div {
-  width: 760px;
-  height: 416px;
+  width: 900px;
+  height: 418px;
   margin: 0 auto;
   border-width: 4px !important;
 }
@@ -285,14 +301,26 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  padding: 50px 0;
 }
 
 .body > .filter > div {
-  padding: 50px 100px;
+  margin: 0 auto;
 }
 
-.body > .filter > div > select {
+.body > .filter > div > div > h5 {
+  margin-left: 35px;
+  padding-right: 20px;
+}
+
+.body > .filter > div > div > select {
+  margin-top: -7px;
+  padding-left: 15px;
   width: 200px;
+}
+
+.body > .filter2 > .show {
+  padding-left: 50px;
 }
 
 .body > .filter2 > .show > h6, .body > .filter2 > .show select {
@@ -316,12 +344,11 @@
 }
 
 .body > .filter2 > .search {
-  padding-right: 0;
-  margin-right: 15px;
+  padding-right: 45px;
 }
 
 .body > .filter2 > .search > h6, .body > .filter2 > .search input {
-  float: right !important;
+  float: right;
 }
 
 .body > .filter2 > .search > h6 {
@@ -379,30 +406,42 @@
   color: white;
 }
 
-.edit-modal > .modal-dialog > .modal-content > .modal-header {
+.modal-dialog > .modal-content > .modal-header {
   background-color: #fc9a55;
 }
 
-.edit-modal > .modal-dialog > .modal-content > .modal-header > .modal-title, .edit-modal > .modal-dialog > .modal-content > .modal-header .close {
+.modal-dialog > .modal-content > .modal-header > .modal-title, .modal-dialog > .modal-content > .modal-header .close {
   color: white;
 }
 
-.edit-modal > .modal-dialog > .modal-content > .modal-footer > .btn-primary {
-  background-color: #fc9a55;
-  border-color: #fc9a55;
+.modal-dialog > .modal-content > form > .modal-footer > .btn-primary {
+  background-color: #fc9a55 !important;
+  border-color: #fc9a55 !important;
 }
 
-.btn-circle {
-  width: 120px;
-  height: 120px;
-  border-radius: 120px;
-  text-align: center;
-  font-size: 20px;
-  line-height: 1.42857;
-  position: fixed;
-  bottom: 5%;
-  right: 2%;
-  background-color: #fc9a55;
-  -webkit-box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
-          box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
+.modal-dialog > .modal-content > form > .modal-footer > .btn-primary:hover {
+  background-color: #f88837 !important;
+  border-color: #fc9a55 !important;
+}
+
+.modal-dialog > .modal-content > .modal-footer > form > .btn-primary {
+  background-color: #ff6767 !important;
+  border-color: #ff6767 !important;
+}
+
+.modal-dialog > .modal-content > .modal-footer > form > .btn-primary:hover {
+  background-color: red !important;
+  border-color: red !important;
+}
+
+label.error {
+  display: none;
+  padding-left: 41.66%;
+  margin-bottom: 0;
+  color: red;
+  font-size: 0.9rem;
+}
+
+#delete-row p {
+  margin-bottom: 0;
 }

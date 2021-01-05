@@ -15,6 +15,8 @@ Financial Management System (Website)
 > Moses's Part
 - Fix bugs on ```.navbar.php```
 - Create ```budget.php```
+- Update ```income_trans.php``` and ```expense_trans.php```
+- Create ```overall_trans.php``` just showing all transaction records.
 
 ### 2020-12-17 - 2021-01-02
 > Howard's Part
