@@ -263,6 +263,18 @@
             }
         }
         > form {
+            > .modal-body {
+                > div {
+                    > .form-group {
+                        > input[type=checkbox] {
+                            transform: scale(1.5);
+                            position: absolute;
+                            bottom: 42px;
+                            right: 40px;
+                        }
+                    }
+                }
+            }
             > .modal-footer {
                 > .btn-primary {
                     background-color: #fc9a55 !important;

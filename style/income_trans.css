@@ -414,6 +414,14 @@
   color: white;
 }
 
+.modal-dialog > .modal-content > form > .modal-body > div > .form-group > input[type=checkbox] {
+  -webkit-transform: scale(1.5);
+          transform: scale(1.5);
+  position: absolute;
+  bottom: 42px;
+  right: 40px;
+}
+
 .modal-dialog > .modal-content > form > .modal-footer > .btn-primary {
   background-color: #fc9a55 !important;
   border-color: #fc9a55 !important;

@@ -301,6 +301,22 @@
                                         </datalist>
                                         <label class="error" for="new_investmentName">Please enter a valid description</label>
                                     </div>
+                                    <div class="form-group row">
+                                        <label class="col-5" for="">Repeat for:</label>
+                                        <input id="new_investmentType" class="col-6 form-investmentType" list="new_investmentTypeList" name="new_investmentType" disabled />
+                                        <datalist id="new_investmentTypeList">
+                                            <?php
+                                            $data = $customer->getData('Investment', "DISTINCT investmentType");
+                                            foreach ($data as $row => $value) {
+                                            ?>
+                                                <option id="type<?php echo ($value['investmentType']); ?>" value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </datalist>
+                                        <input type="checkbox" name="new_automate" id="new_automate">
+                                        <label class="error" for="new_investmentType">Please enter a valid category</label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
