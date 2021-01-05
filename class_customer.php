@@ -20,7 +20,7 @@ class Customer
         // $this->db          = $db;
         require_once('MysqliDb.php');
         $this->$id = $id;
-        //$this->db          = new MysqliDb("db4free.net", "pocketmoney", "m&nsuperdry", "pocketmoney", "3306"); //temporary
+        // $this->db          = new MysqliDb("db4free.net", "pocketmoney", "m&nsuperdry", "pocketmoney", "3306"); //temporary
         $this->db          = new MysqliDb("localhost", "root", "", "pocketmoney", "3308"); //temporary
         //$this->validation  = $validation;
         self::$_instance = $this;

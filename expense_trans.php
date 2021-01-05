@@ -4,11 +4,14 @@
 <head>
     <?php include(".head.php"); ?>
     <link rel="stylesheet" href="./style/income_trans.css">
-    <title>PocketMoney | Transaction</title>
+    <title>PocketMoney | Transactions</title>
 </head>
 
 <body>
-    <?php include(".navbar.php"); ?>
+    <?php 
+    $activePage = "transactions"; 
+    include(".navbar.php"); 
+    ?>
 
     <div class="container-fluid background">
         <div class="container-fluid body">

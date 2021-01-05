@@ -5,11 +5,13 @@
     <?php include(".head.php"); ?>
     <link rel="stylesheet" href="./style/investment.css">
 
-    <title>PocketMoney | Investment</title>
+    <title>PocketMoney | Investments</title>
 </head>
 
 <body>
-    <?php include(".navbar.php");
+    <?php
+    $activePage = "investments"; 
+    include(".navbar.php");
 
     //update the investment transaction
     if (isset($_POST['edit_submit'])) {
