@@ -227,7 +227,7 @@
 
 .body > .budget-overview > div > .budget-row > .row > .col-9 > .progress > .excess-bar, .body > .budget-overview > div .budget-row-head > .row > .col-9 > .progress > .excess-bar {
   width: 100%;
-  background-color: #ff5656 !important;
+  background-color: #ff6767 !important;
 }
 
 .body > .budget-overview > div > .budget-row > .row > .col-9 > .progress > .excess-value, .body > .budget-overview > div .budget-row-head > .row > .col-9 > .progress > .excess-value {
@@ -261,7 +261,7 @@
 }
 
 .body > .budget-overview > div > .budget-row > .row > .col-9 > .row > .col-6 > .excess, .body > .budget-overview > div .budget-row-head > .row > .col-9 > .row > .col-6 > .excess {
-  color: #ff5656 !important;
+  color: #ff6767 !important;
 }
 
 .body > .budget-overview > div > .budget-row > .row > .col-9 > .row > .col-6 > .target, .body > .budget-overview > div .budget-row-head > .row > .col-9 > .row > .col-6 > .target {
@@ -475,9 +475,24 @@
   color: white;
 }
 
-.modal-dialog > .modal-content > .modal-footer > .btn-primary {
-  background-color: #fc9a55;
-  border-color: #fc9a55;
+.modal-dialog > .modal-content > form > .modal-footer > .btn-primary {
+  background-color: #fc9a55 !important;
+  border-color: #fc9a55 !important;
+}
+
+.modal-dialog > .modal-content > form > .modal-footer > .btn-primary:hover {
+  background-color: #f88837 !important;
+  border-color: #fc9a55 !important;
+}
+
+.modal-dialog > .modal-content > .modal-footer > form > .btn-primary {
+  background-color: #ff6767 !important;
+  border-color: #ff6767 !important;
+}
+
+.modal-dialog > .modal-content > .modal-footer > form > .btn-primary:hover {
+  background-color: red !important;
+  border-color: red !important;
 }
 
 label.error {

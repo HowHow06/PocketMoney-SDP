@@ -66,6 +66,7 @@
                         </div>
                         <hr>
                     </div>
+                    <!-- When a row is being clicked, it will direct to expense transaction page, with a bookmark category there  -->
                     <div class="budget-row">
                         <div class="row">
                             <div class="col-3">
@@ -175,9 +176,9 @@
                                         <h5>RM 1000.00</h5>
                                     </div>
                                     <div class="col-3 action row">
-                                        <a href="#" class="edit-investment-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
+                                        <a href="#" class="edit-investment-anchor" data-toggle="modal" data-target="#edit-budget">Edit</a>
                                         <div class="vl"></div>
-                                        <a href="#" class="delete-investment-anchor" data-toggle="modal" data-target="#delete-row">Delete</a>
+                                        <a href="#" class="delete-investment-anchor" data-toggle="modal" data-target="#delete-budget">Delete</a>
                                     </div>
                                 </div>
 
@@ -192,9 +193,9 @@
                                         <h5>RM 400.00</h5>
                                     </div>
                                     <div class="col-3 action row">
-                                        <a href="#" class="edit-investment-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
+                                        <a href="#" class="edit-investment-anchor" data-toggle="modal" data-target="#edit-budget">Edit</a>
                                         <div class="vl"></div>
-                                        <a href="#" class="delete-investment-anchor" data-toggle="modal" data-target="#delete-row">Delete</a>
+                                        <a href="#" class="delete-investment-anchor" data-toggle="modal" data-target="#delete-budget">Delete</a>
                                     </div>
                                 </div>
 
@@ -209,10 +210,10 @@
                                         <h5>RM 350.00</h5>
                                     </div>
                                     <div class="col-3 action row">
-                                        <a href="#" class="edit-investment-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
+                                        <a href="#" class="edit-investment-anchor" data-toggle="modal" data-target="#edit-budget">Edit</a>
                                         <div class="vl"></div>
-                                        <a href="#" class="delete-investment-anchor" data-toggle="modal" data-target="#delete-row">Delete</a>
-                                    </div>
+                                        <a href="#" class="delete-investment-anchor" data-toggle="modal" data-target="#delete-budget">Delete</a>
+                                    </div>                                    
                                 </div>
 
                                 <div class="container-fluid row category">
@@ -226,19 +227,126 @@
                                         <h5>RM 50.00</h5>
                                     </div>
                                     <div class="col-3 action row">
-                                        <a href="#" class="edit-investment-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
+                                        <a href="#" class="edit-investment-anchor" data-toggle="modal" data-target="#edit-budget">Edit</a>
                                         <div class="vl"></div>
-                                        <a href="#" class="delete-investment-anchor" data-toggle="modal" data-target="#delete-row">Delete</a>
+                                        <a href="#" class="delete-investment-anchor" data-toggle="modal" data-target="#delete-budget">Delete</a>
                                     </div>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-circle btn-xl" data-toggle="modal" data-target="#new-row">
+                            <button type="button" class="btn btn-circle btn-xl" data-toggle="modal" data-target="#new-budget">
                                 <i class="fas fa-plus"></i>
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
+            <!-- new-budget modal -->
+            <div class="modal fade new-modal" id="new-budget" tabindex="-1" role="dialog" aria-labelledby="new-title" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="new-title">New Budget</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form action="" method="POST" id="testing" onsubmit="return validateform(this);">
+                            <div class="modal-body">
+                                <div class="container">
+                                    <div class="form-group row">
+                                        <label class="col-5" for="">Category:</label>
+                                        <input id="new_investmentType" class="col-6 form-investmentType" list="new_investmentTypeList" name="new_investmentType" required />
+                                        <datalist id="new_investmentTypeList">
+                                            <?php
+                                            $data = $customer->getData('Investment', "DISTINCT investmentType");
+                                            foreach ($data as $row => $value) {
+                                            ?>
+                                                <option id="type<?php echo ($value['investmentType']); ?>" value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </datalist>
+                                        <label class="error" for="new_investmentType">Please enter a valid category</label>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-5" for="">Amount:</label>
+                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="new_amountInvested" name="new_amountInvested" required />
+                                        <label class="error" for="new_amountInvested">Please enter a valid amount</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" name="new_submit" class="btn btn-primary">Add new</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- edit-budget modal -->
+            <div class="modal fade edit-modal" id="edit-budget" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="edit-title">Edit Budget</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form action="" method="POST" id="edit-form" onsubmit="return validateform(this);">
+                            <div class="modal-body">
+                                <div class="container">
+                                    <input type="hidden" id="edit_investmentID" name="edit_investmentID"></input>
+                                    <div class="form-group row">
+                                        <label class="col-5" for="">Category:</label>
+                                        <input id="edit_investmentType" class="col-6 form-investmentType" list="edit_investmentTypeList" name="edit_investmentType" required />
+                                        <datalist id="edit_investmentTypeList">
+                                            <?php
+                                            $data = $customer->getData('Investment', "DISTINCT investmentType");
+                                            foreach ($data as $row => $value) {
+                                            ?>
+                                                <option id="type<?php echo ($value['investmentType']); ?>" value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </datalist>
+                                        <label class="error" for="edit_investmentType">Please enter a valid category</label>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-5" for="">Amount:</label>
+                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="edit_amountInvested" name="edit_amountInvested" required />
+                                        <label class="error" for="edit_amountInvested">Please enter a valid amount</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="reset" class="btn btn-success" onclick="resetEdit()">Reset</button>
+                                <button type="submit" name="edit_submit" class="btn btn-primary">Save changes</button>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- delete-budget modal -->
+            <div class="modal fade edit-modal" id="delete-budget" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <p>Are you sure want to Delete this budget?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <form action="" method="POST">
+                                <input type="hidden" id="delete_investmentID" name="delete_investmentID"></input>
+                                <button type="submit" class="btn btn-primary" name="delete_submit">Delete</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
             <h4>ALL EXPENSES TRANSACTIONS</h4>
             <hr>
@@ -278,76 +386,6 @@
                 <div class="col-6 search">
                     <input type="text" name="" id="search-transaction" placeholder="  Expenses Name">
                     <h6>Search:</h6>
-                </div>
-            </div>
-
-            <!-- new-row modal -->
-            <div class="modal fade new-modal" id="new-row" tabindex="-1" role="dialog" aria-labelledby="new-title" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="new-title">New Transaction</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <form action="" method="POST" id="testing" onsubmit="return validateform(this);">
-                            <div class="modal-body">
-                                <div class="container">
-                                    <div class="form-group row">
-                                        <label class="col-5" for="">Date:</label>
-                                        <input class="col-6 form-startDate" type="date" id="new_startDate" name="new_startDate" required />
-                                        <label class="error" for="new_startDate">Please enter a valid date</label>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="">Amount:</label>
-                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="new_amountInvested" name="new_amountInvested" required />
-                                        <label class="error" for="new_amountInvested">Please enter a valid amount</label>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="">Name:</label>
-                                        <input id="new_investmentName" class="col-6 form-investmentName" list="new_investmentNameList" name="new_investmentName" required />
-                                        <datalist id="new_investmentNameList">
-                                            <?php
-                                            $data = $customer->getData('Investment', "DISTINCT investmentName");
-                                            foreach ($data as $row => $value) {
-                                            ?>
-                                                <option value="<?php echo ($value['investmentName']); ?>"><?php echo ($value['investmentName']); ?></option>
-                                            <?php
-                                            }
-                                            ?>
-                                        </datalist>
-                                        <label class="error" for="new_investmentName">Please enter a valid name</label>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="">Category:</label>
-                                        <input id="new_investmentType" class="col-6 form-investmentType" list="new_investmentTypeList" name="new_investmentType" required />
-                                        <datalist id="new_investmentTypeList">
-                                            <?php
-                                            $data = $customer->getData('Investment', "DISTINCT investmentType");
-                                            foreach ($data as $row => $value) {
-                                            ?>
-                                                <option id="type<?php echo ($value['investmentType']); ?>" value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
-                                            <?php
-                                            }
-                                            ?>
-                                        </datalist>
-                                        <label class="error" for="new_investmentType">Please enter a valid category</label>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="">Annual Rate:</label>
-                                        <input class="col-6 form-ratePerAnnum" type="number" step='0.01' id="new_ratePerAnnum" name="new_ratePerAnnum" required />
-                                        <label class="error" for="new_ratePerAnnum">Please enter a valid rate</label>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" name="new_submit" class="btn btn-primary">Add new</button>
-                            </div>
-                        </form>
-                    </div>
                 </div>
             </div>
             <!-- edit-row modal -->
@@ -446,8 +484,8 @@
                         <th scope="col">DATE</th>
                         <th scope="col">AMOUNT</th>
                         <th scope="col">NAME</th>
+                        <th scope="col">DESCRIPTION</th>
                         <th scope="col">CATEGORY</th>
-                        <th scope="col">ANNUAL RATE</th>
                         <th scope="col">ACTION</th>
                     </tr>
                 </thead>
@@ -462,8 +500,8 @@
                                 <td class="investDate"><?php echo ($datarow[$i]['startDate']); ?></td>
                                 <td class="investAmount"><?php echo ($datarow[$i]['amountInvested']); ?></td>
                                 <td class="investName"><?php echo ($datarow[$i]['investmentName']); ?></td>
-                                <td class="investType"><?php echo ($datarow[$i]['investmentType']); ?></td>
                                 <td class="investRate"><?php echo ($datarow[$i]['ratePerAnnum']); ?></td>
+                                <td class="investType"><?php echo ($datarow[$i]['investmentType']); ?></td>
                                 <td class="action">
                                     <a href="#" class="edit-investment-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
                                     <span> | </span>
