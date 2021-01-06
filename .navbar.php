@@ -7,7 +7,7 @@ $isActiveDashboard = "";
 $isActiveTransactions = "";
 $isActiveBudgets = "";
 $isActiveInvestments = "";
-$isActiveDebts = "";
+$isActiveLiabilities = "";
 $isActiveFinancialGoals = "";
 $isActiveReports = "";
 
@@ -24,8 +24,8 @@ switch ($activePage) {
     case "investments":
         $isActiveInvestments = "active";
         break;
-    case "debts":
-        $isActiveDebts = "active";
+    case "liabilities":
+        $isActiveLiabilities = "active";
         break;
     case "financialgoals":
         $isActiveFinancialGoals = "active";
@@ -57,8 +57,8 @@ switch ($activePage) {
         <li class="nav-item <?php echo $isActiveInvestments ?> ">
             <a href="investment.php" class="nav-link">Investments</a>
         </li>
-        <li class="nav-item <?php echo $isActiveDebts ?> ">
-            <a href="#" class="nav-link">Debts</a>
+        <li class="nav-item <?php echo $isActiveLiabilities ?> ">
+            <a href="liability.php" class="nav-link">Liabilities</a>
         </li>
         <li class="nav-item <?php echo $isActiveFinancialGoals ?> ">
             <a href="#" class="nav-link">Financial Goals</a>
