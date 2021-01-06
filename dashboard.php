@@ -177,9 +177,9 @@
                 </div>
             </div>
 
-            <div class="container-fluid body">
+            <div class="container-fluid body liability">
                 <nav class="navbar navbar-expand-lg">
-                    <a href="#" class="navbar-brand">DEBTS</a>
+                    <a href="#" class="navbar-brand">LIABILITIES</a>
                 </nav>
 
             </div>

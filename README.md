@@ -11,6 +11,11 @@ Financial Management System (Website)
 
 ## Work Progress
 
+### 2021-01-06
+> Moses's Part
+- Fix bugs on ```.navbar.php```
+- Create ```liability.php```
+
 ### 2021-01-05
 > Moses's Part
 - Fix bugs on ```.navbar.php```
