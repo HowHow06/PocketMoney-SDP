@@ -256,9 +256,12 @@
   margin-top: -6px;
 }
 
+.body > div > .chart-explain > div > div > .show > button > a {
+  color: black;
+}
+
 .body > div > .chart-explain > div > div:hover {
   background-color: #ececec;
-  cursor: pointer;
   -webkit-transition: 0.5s ease-in;
   transition: 0.5s ease-in;
 }
@@ -301,21 +304,13 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  padding: 50px 0;
 }
 
 .body > .filter > div {
-  margin: 0 auto;
+  padding: 50px 100px;
 }
 
-.body > .filter > div > div > h5 {
-  margin-left: 35px;
-  padding-right: 20px;
-}
-
-.body > .filter > div > div > select {
-  margin-top: -7px;
-  padding-left: 15px;
+.body > .filter > div > select {
   width: 200px;
 }
 

@@ -63,149 +63,7 @@ class Customer
         return NULL;
     }
 
-    /** 
-     * Return the total invested amount if the id is set before
-     * @return int|NULL
-     * 
-     */
-    function getTotalInvestedAmount()
-    {
-        $db = MysqliDb::getInstance();
-        if (!empty($this->id)) {
-            $id = $this->id;
-            $db->where('cusID', $id);
-            $result = $db->getOne('Investment', "SUM(amountInvested) AS SUM");
-            return intval($result['SUM']);
-        }
-        return NULL;
-    }
-
-    /** 
-     * Return the top holding name if the id is set before
-     * @return String|NULL
-     * 
-     */
-    function getTopHolding()
-    {
-        $db = MysqliDb::getInstance();
-        if (!empty($this->id)) {
-            $id = $this->id;
-            $db->where('cusID', $id);
-            $db->orderBy("total", "Desc");
-            $db->groupBy("investmentName");
-            $result = $db->getOne('Investment', "SUM(amountInvested) AS total, investmentName");
-            return strval($result['investmentName']);
-        }
-        return NULL;
-    }
-
-    /** 
-     * Return the total count of holding if the id is set before
-     * @return int|NULL
-     * 
-     */
-    function getHoldingCount()
-    {
-        $db = MysqliDb::getInstance();
-        if (!empty($this->id)) {
-            $id = $this->id;
-            $db->where('cusID', $id);
-            $result = $db->getOne('Investment', "COUNT(DISTINCT investmentName) AS count");
-            return intval($result['count']);
-        }
-        return NULL;
-    }
-
-    /** 
-     * Return the array of distinct investment NAME and amount invested if the id is set before
-     * @return array|NULL
-     * 'investmentName' -> array: array of investmentName
-     * 'amount' -> array: an array
-     */
-    function getInvestNameAndAmount()
-    {
-        $db = MysqliDb::getInstance();
-        if (!empty($this->id)) {
-            $id = $this->id;
-            $db->where('cusID', $id);
-            $db->groupBy('investmentName');
-            $investmentNameToValue = array('investmentName' => array(), 'amount' => array());
-            $result = $db->get('Investment', null, "SUM(amountInvested) AS amount, investmentName");
-            foreach ($result as $row => $data) {
-                array_push($investmentNameToValue['amount'], $data['amount']);
-                array_push($investmentNameToValue['investmentName'], $data['investmentName']);
-            }
-            return $investmentNameToValue;
-        }
-
-        return NULL;
-    }
-
-
-    /** 
-     * Return JSON format of investment Name only
-     * @return JSON|NULL
-     * 
-     * 
-     */
-    function getInvestNameJSON()
-    {
-        $db = MysqliDb::getInstance();
-        if (!empty($this->id)) {
-            $data = $this->getInvestNameAndAmount();
-            $investNameArr = $data['investmentName'];
-            $investNameJSON = json_encode($investNameArr);
-            return $investNameJSON;
-        }
-        return NULL;
-    }
-
-    /** 
-     * Return JSON format of amount(investment Name) only
-     * @return JSON |NULL
-     * 
-     * 
-     */
-    function getNameAmountsJSON()
-    {
-        $db = MysqliDb::getInstance();
-        if (!empty($this->id)) {
-            $data = $this->getInvestNameAndAmount();
-            $investAmountArr = array_map('floatval', $data['amount']);
-            $investAmountJSON = json_encode($investAmountArr);
-            return $investAmountJSON;
-        }
-        return NULL;
-    }
-
-
-
-    /** 
-     * Return the array of distinct investment types and amount invested if the id is set before
-     * @return array|NULL
-     * 'investmentType' -> array: array of investmentTypes
-     * 'amount' -> array: an array
-     */
-    function getInvestTypesAndAmount()
-    {
-        $db = MysqliDb::getInstance();
-        if (!empty($this->id)) {
-            $id = $this->id;
-            $db->where('cusID', $id);
-            $db->groupBy('investmentType');
-            $investmentTypesToValue = array('investmentType' => array(), 'amount' => array());
-            $result = $db->get('Investment', null, "SUM(amountInvested) AS amount, investmentType");
-            foreach ($result as $row => $data) {
-                array_push($investmentTypesToValue['amount'], $data['amount']);
-                array_push($investmentTypesToValue['investmentType'], $data['investmentType']);
-            }
-            //print_r($investmentTypesToValue['investmentType']);
-            return $investmentTypesToValue;
-        }
-
-        return NULL;
-    }
-
+    
 
     /** 
      * Return the array of table data if the id is set before
@@ -245,63 +103,6 @@ class Customer
         $data = $db->rawQuery($query);
         return $data;
     }
-
-    /** 
-     * Return ONE row of inventment table data for the given investment ID
-     * @param String $columnName
-     * the name of the specific column
-     * 
-     * @param String $investmentID
-     * the investment id
-     * 
-     * @return array|NULL
-     * 
-     */
-    function getOneInvestmentData($columnName = "*", $investmentID)
-    {
-        $db = MysqliDb::getInstance();
-        $db->where('investmentID', $investmentID);
-        $result = $db->getOne('Investment', $columnName);
-        return $result;
-    }
-
-
-    /** 
-     * Return JSON format of investment Type only
-     * @return JSON|NULL
-     * 
-     * 
-     */
-    function getInvestTypesJSON()
-    {
-        $db = MysqliDb::getInstance();
-        if (!empty($this->id)) {
-            $data = $this->getInvestTypesAndAmount();
-            $investTypesArr = $data['investmentType'];
-            $investTypesJSON = json_encode($investTypesArr);
-            return $investTypesJSON;
-        }
-        return NULL;
-    }
-
-    /** 
-     * Return JSON format of amount(investment TYPE) only
-     * @return JSON |NULL
-     * 
-     * 
-     */
-    function getTypeAmountsJSON()
-    {
-        $db = MysqliDb::getInstance();
-        if (!empty($this->id)) {
-            $data = $this->getInvestTypesAndAmount();
-            $investAmountArr = array_map('floatval', $data['amount']);
-            $investAmountJSON = json_encode($investAmountArr);
-            return $investAmountJSON;
-        }
-        return NULL;
-    }
-
 
     /**
      *
@@ -516,4 +317,234 @@ class Customer
         $_SESSION[$sessionName] = $userData;
         session_write_close();
     }
+
+    /*************************************************************************\
+     *                   Below Part are show investment page                  *
+     *                           For extra functions                          *
+     *                                                                        *
+     *    **********   **     **  **           **  ***********   **********   *
+     *        **       ***    **   **         **   **            **           *
+     *        **       ****   **    **       **    **            **           *
+     *        **       ** **  **     **     **     ***********   **           *
+     *        **       **  ** **      **   **      **            **********   *
+     *        **       **   ****       ** **       **                    **   *
+     *        **       **    ***        ***        **                    **   *
+     *    **********   **     **         *         ***********   **********   *
+     *                                                                        *
+     *************************************************************************/
+
+    /** 
+     * Return the total invested amount if the id is set before
+     * @return int|NULL
+     * 
+     */
+    function getTotalInvestedAmount()
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $id = $this->id;
+            $db->where('cusID', $id);
+            $result = $db->getOne('Investment', "SUM(amountInvested) AS SUM");
+            return intval($result['SUM']);
+        }
+        return NULL;
+    }
+
+    /** 
+     * Return the top holding name if the id is set before
+     * @return String|NULL
+     * 
+     */
+    function getTopHolding()
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $id = $this->id;
+            $db->where('cusID', $id);
+            $db->orderBy("total", "Desc");
+            $db->groupBy("investmentName");
+            $result = $db->getOne('Investment', "SUM(amountInvested) AS total, investmentName");
+            return strval($result['investmentName']);
+        }
+        return NULL;
+    }
+
+    /** 
+     * Return the total count of holding if the id is set before
+     * @return int|NULL
+     * 
+     */
+    function getHoldingCount()
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $id = $this->id;
+            $db->where('cusID', $id);
+            $result = $db->getOne('Investment', "COUNT(DISTINCT investmentName) AS count");
+            return intval($result['count']);
+        }
+        return NULL;
+    }
+
+    /** 
+     * Return the array of distinct investment NAME and amount invested if the id is set before
+     * @return array|NULL
+     * 'investmentName' -> array: array of investmentName
+     * 'amount' -> array: an array
+     */
+    function getInvestNameAndAmount()
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $id = $this->id;
+            $db->where('cusID', $id);
+            $db->groupBy('investmentName');
+            $investmentNameToValue = array('investmentName' => array(), 'amount' => array());
+            $result = $db->get('Investment', null, "SUM(amountInvested) AS amount, investmentName");
+            foreach ($result as $row => $data) {
+                array_push($investmentNameToValue['amount'], $data['amount']);
+                array_push($investmentNameToValue['investmentName'], $data['investmentName']);
+            }
+            return $investmentNameToValue;
+        }
+
+        return NULL;
+    }
+
+
+    /** 
+     * Return JSON format of investment Name only
+     * @return JSON|NULL
+     * 
+     * 
+     */
+    function getInvestNameJSON()
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $data = $this->getInvestNameAndAmount();
+            $investNameArr = $data['investmentName'];
+            $investNameJSON = json_encode($investNameArr);
+            return $investNameJSON;
+        }
+        return NULL;
+    }
+
+    /** 
+     * Return JSON format of amount(investment Name) only
+     * @return JSON |NULL
+     * 
+     * 
+     */
+    function getNameAmountsJSON()
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $data = $this->getInvestNameAndAmount();
+            $investAmountArr = array_map('floatval', $data['amount']);
+            $investAmountJSON = json_encode($investAmountArr);
+            return $investAmountJSON;
+        }
+        return NULL;
+    }
+
+
+
+    /** 
+     * Return the array of distinct investment types and amount invested if the id is set before
+     * @return array|NULL
+     * 'investmentType' -> array: array of investmentTypes
+     * 'amount' -> array: an array
+     */
+    function getInvestTypesAndAmount()
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $id = $this->id;
+            $db->where('cusID', $id);
+            $db->groupBy('investmentType');
+            $investmentTypesToValue = array('investmentType' => array(), 'amount' => array());
+            $result = $db->get('Investment', null, "SUM(amountInvested) AS amount, investmentType");
+            foreach ($result as $row => $data) {
+                array_push($investmentTypesToValue['amount'], $data['amount']);
+                array_push($investmentTypesToValue['investmentType'], $data['investmentType']);
+            }
+            //print_r($investmentTypesToValue['investmentType']);
+            return $investmentTypesToValue;
+        }
+
+        return NULL;
+    }
+
+    /** 
+     * Return ONE row of inventment table data for the given investment ID
+     * @param String $columnName
+     * the name of the specific column
+     * 
+     * @param String $investmentID
+     * the investment id
+     * 
+     * @return array|NULL
+     * 
+     */
+    function getOneInvestmentData($columnName = "*", $investmentID)
+    {
+        $db = MysqliDb::getInstance();
+        $db->where('investmentID', $investmentID);
+        $result = $db->getOne('Investment', $columnName);
+        return $result;
+    }
+
+
+    /** 
+     * Return JSON format of investment Type only
+     * @return JSON|NULL
+     * 
+     * 
+     */
+    function getInvestTypesJSON()
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $data = $this->getInvestTypesAndAmount();
+            $investTypesArr = $data['investmentType'];
+            $investTypesJSON = json_encode($investTypesArr);
+            return $investTypesJSON;
+        }
+        return NULL;
+    }
+
+    /** 
+     * Return JSON format of amount(investment TYPE) only
+     * @return JSON |NULL
+     * 
+     * 
+     */
+    function getTypeAmountsJSON()
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $data = $this->getInvestTypesAndAmount();
+            $investAmountArr = array_map('floatval', $data['amount']);
+            $investAmountJSON = json_encode($investAmountArr);
+            return $investAmountJSON;
+        }
+        return NULL;
+    }
+
+    /*********************************************************************\
+     *               Below Part are show transaction page                 *
+     *                       For extra functions                          *
+     *                                                                    *
+     *    **********   ********        ****      **      **   **********  *
+     *        **       **     **    ***    ***   ****    **   **          *
+     *        **       **      **   **      **   ** **   **   **          *
+     *        **       **     **    **      **   **  **  **   **          *
+     *        **       ********     **********   **   ** **   **********  *
+     *        **       **     **    **      **   **    ****           **  *
+     *        **       **      **   **      **   **     ***           **  *
+     *        **       **      **   **      **   **      **   **********  *
+     *                                                                    *
+     *********************************************************************/
+
 }

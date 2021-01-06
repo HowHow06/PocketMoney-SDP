@@ -15,6 +15,11 @@ Financial Management System (Website)
 > Moses's Part
 - Fix bugs on ```.navbar.php```
 - Create ```liability.php```
+- Update ```dashboard.php```
+- Update transaction functions
+Backend Progress
+- Change abit layout of ```class.customer.php```
+- Create ```income_trans.js```
 
 ### 2021-01-05
 > Moses's Part

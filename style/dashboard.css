@@ -273,3 +273,71 @@
   background-color: #fc9a55;
   color: white;
 }
+
+.liability > .liability-overview > .liability-row > .row > .col-3 {
+  margin-top: 9px;
+  margin-bottom: 5px;
+}
+
+.liability > .liability-overview > .liability-row > .row > .col-3 > div {
+  height: 35px;
+}
+
+.liability > .liability-overview > .liability-row > .row > .col-3 > div > sub {
+  bottom: -1.25em;
+  color: grey;
+}
+
+.liability > .liability-overview > .liability-row > .row > .col-3 p {
+  margin-bottom: 0;
+  font-size: 14px;
+}
+
+.liability > .liability-overview > .liability-row > .row > .col-9 {
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+
+.liability > .liability-overview > .liability-row > .row > .col-9 > .progress {
+  height: 25px;
+  border-radius: 8px !important;
+}
+
+.liability > .liability-overview > .liability-row > .row > .col-9 > .progress > .progress-bar {
+  width: 16%;
+  background-color: #fc9a55 !important;
+  border-radius: 8px;
+}
+
+.liability > .liability-overview > .liability-row > .row > .col-9 > .progress > h6 {
+  position: absolute;
+  right: 30px;
+  bottom: 28px;
+  font-size: 12px;
+}
+
+.liability > .liability-overview > .liability-row > .row > .col-9 > .row {
+  padding-top: 7px;
+}
+
+.liability > .liability-overview > .liability-row > .row > .col-9 > .row > .col-6 {
+  padding: 0;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.liability > .liability-overview > .liability-row > .row > .col-9 > .row > .col-6 > .paid {
+  float: left;
+  color: #fc9a55;
+  font-size: 14px;
+}
+
+.liability > .liability-overview > .liability-row > .row > .col-9 > .row > .col-6 > .target {
+  float: right;
+  font-size: 14px;
+}
+
+.liability > .liability-overview > .liability-row hr {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}

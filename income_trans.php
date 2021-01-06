@@ -65,7 +65,7 @@
                             </div>
                             <div class="col-1 show">
                                 <button class="btn">
-                                    <i class="fas fa-chevron-right"></i>
+                                    <a href="#salary" data-toggle="row-hover" data-text="Show more"><i class="fas fa-chevron-right"></i></a>
                                 </button>
                             </div>
                         </div>
@@ -82,7 +82,7 @@
                             </div>
                             <div class="col-1 show">
                                 <button class="btn">
-                                    <i class="fas fa-chevron-right"></i>
+                                    <a href="#salary" data-toggle="row-hover" data-text="Show more"><i class="fas fa-chevron-right"></i></a>
                                 </button>
                             </div>
                         </div>
@@ -99,7 +99,7 @@
                             </div>
                             <div class="col-1 show">
                                 <button class="btn">
-                                    <i class="fas fa-chevron-right"></i>
+                                    <a href="#salary" data-toggle="row-hover" data-text="Show more"><i class="fas fa-chevron-right"></i></a>
                                 </button>
                             </div>
                         </div>
@@ -116,7 +116,7 @@
                             </div>
                             <div class="col-1 show">
                                 <button class="btn">
-                                    <i class="fas fa-chevron-right"></i>
+                                    <a href="#salary" data-toggle="row-hover" data-text="Show more"><i class="fas fa-chevron-right"></i></a>
                                 </button>
                             </div>
                         </div>
@@ -124,7 +124,7 @@
                 </div>
             </div>
 
-            <div class="container-fluid category">
+            <div class="container-fluid category" id="salary">
                 <div class="border round">
                     <div class="container-fluid title">
                         <h2>SALARY</h2>
@@ -181,29 +181,36 @@
             <h4>ALL TRANSACTIONS</h4>
             <hr>
 
-            <div class="container-fluid filter">
-                <div class="col-3">
-                    <div class="row">
-                        <h5>CATEGORY:</h5>
-                        <select name="filter-transaction-category" id="filter-transaction-category" class="custom-select" onchange="showsearch('')">
-                            <option value="ALL" selected>ALL</option>
-                            <?php
-                            $data = $customer->getData('Investment', "DISTINCT investmentType");
-                            foreach ($data as $row => $value) {
-                            ?>
-                                <option value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
-                            <?php
-                            }
-                            ?>
-                        </select>
-                    </div>
+            <div class="container-fluid row filter">
+                <div>
+                    <h5>CATEGORY:</h5>
+                    <select name="filter-transaction-category" id="filter-transaction-category" class="custom-select" onchange="showsearch('')">
+                        <option value="ALL" selected>ALL</option>
+                        <?php
+                        $data = $customer->getData('Investment', "DISTINCT investmentType");
+                        foreach ($data as $row => $value) {
+                        ?>
+                            <option value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+
+                <div>
+                    <h5>TYPE:</h5>
+                    <select name="filter-transaction-time" id="filter-transaction-time" class="custom-select" onchange="showsearch('')">
+                        <option value="ALL">ALL</option>
+                        <option value="Debit">Debit</option>
+                        <option value="Credit">Credit</option>
+                    </select>
                 </div>
             </div>
 
             <div class="container-fluid row filter2">
                 <div class="col-6 show">
                     <h6>Showing:<span id="table-row-count">
-                            <?php $datarow = $customer->getData('Investment');
+                            <?php $datarow = $customer->getData('Transaction');
                             if (empty($datarow)) {
                                 echo (0);
                             } else {
@@ -457,7 +464,7 @@
                 </div>
             </div>
             <!-- table -->
-            <table class="table table-bordered table-hover transaction-table" id="investmentTransactionTable">
+            <table class="table table-bordered table-hover transaction-table" id="overallTransactionTable">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -465,29 +472,27 @@
                         <th scope="col">AMOUNT</th>
                         <th scope="col">CATEGORY</th>
                         <th scope="col">NAME</th>
-                        <th scope="col">DESCRIPTION</th>
                         <th scope="col">TYPE</th>
                         <th scope="col">ACTION</th>
                     </tr>
                 </thead>
-                <tbody id="investmentTransactionTableBody">
+                <tbody id="overallTransactionTableBody">
 
                     <?php if (!empty($datarow)) {
                         for ($i = 0; $i < sizeof($datarow); $i++) {
                     ?>
                             <tr>
-                                <input type="hidden" class="investmentID" value='<?php echo ($datarow[$i]['investmentID']); ?>'></input>
+                                <input type="hidden" class="transactionID" value='<?php echo ($datarow[$i]['transactionID']); ?>'></input>
                                 <th scope="row"><?php echo (($i + 1)); ?></th>
-                                <td class="investDate"><?php echo ($datarow[$i]['startDate']); ?></td>
-                                <td class="investAmount"><?php echo ($datarow[$i]['amountInvested']); ?></td>
-                                <td class="investType"><?php echo ($datarow[$i]['investmentType']); ?></td>
-                                <td class="investName"><?php echo ($datarow[$i]['investmentName']); ?></td>
-                                <td class="investRate"><?php echo ($datarow[$i]['ratePerAnnum']); ?></td>
-                                <td class="investType"><?php echo ($datarow[$i]['investmentType']); ?></td>
+                                <td class="transactionDate"><?php echo ($datarow[$i]['date']); ?></td>
+                                <td class="transactionAmount"><?php echo ($datarow[$i]['amount']); ?></td>
+                                <td class="transactionCategory"><?php echo ($datarow[$i]['categoryID']); ?></td>
+                                <td class="transactionName"><?php echo ($datarow[$i]['description']); ?></td>
+                                <td class="transactionType"><?php echo ($datarow[$i]['categoryID']); ?></td>
                                 <td class="action">
-                                    <a href="#" class="edit-investment-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
+                                    <a href="#" class="edit-transaction-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
                                     <span> | </span>
-                                    <a href="#" class="delete-investment-anchor" data-toggle="modal" data-target="#delete-row">Delete</a>
+                                    <a href="#" class="delete-transaction-anchor" data-toggle="modal" data-target="#delete-row">Delete</a>
                                 </td>
                             </tr>
                     <?php
@@ -600,6 +605,29 @@
 
     var lineChart = new ApexCharts(document.querySelector("#line-chart"), lineOptions);
     lineChart.render();
+
+    // smoothing the bookmark section
+    let anchorlinks = document.querySelectorAll('a[href^="#"]')
+ 
+    for (let item of anchorlinks) { // relitere 
+        item.addEventListener('click', (e)=> {
+            let hashval = item.getAttribute('href')
+            let target = document.querySelector(hashval)
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            })
+            history.pushState(null, null, hashval)
+            e.preventDefault()
+        })
+    }
+
+    $('[data-toggle="row-hover"]').popover({
+      html: true,
+      trigger: 'hover',
+      placement: 'top',
+      content: function () { return $(this).data('text'); }
+    });
 </script>
 
 </html>

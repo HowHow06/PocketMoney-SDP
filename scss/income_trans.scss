@@ -114,11 +114,15 @@
                     > .show {
                         text-align: center;
                         margin-top: -6px;
+                        > button {
+                            > a {
+                                color: black;
+                            }
+                        }
                     }
                 }
                 > div:hover {
                     background-color: rgb(236, 236, 236);
-                    cursor: pointer;
                     transition: 0.5s ease-in;
                 }
             }
@@ -156,19 +160,10 @@
     > .filter {
         justify-content: center;
         align-items: center;
-        padding: 50px 0;
         > div {
-            margin: 0 auto;
-            > div {
-                > h5 {
-                    margin-left: 35px;
-                    padding-right: 20px;
-                }
-                > select {
-                    margin-top: -7px;
-                    padding-left: 15px;
-                    width: 200px;
-                }
+            padding: 50px 100px;
+            > select {
+                width: 200px;
             }
         }
     }
