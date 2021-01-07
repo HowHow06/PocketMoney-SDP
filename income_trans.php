@@ -11,6 +11,21 @@
     <?php 
     $activePage = "transactions"; 
     include(".navbar.php"); 
+
+    //delete transaction
+    if (isset($_POST['delete_submit'])) {
+        $params['tableName'] = 'Transaction';
+        $params['idName'] = 'transactionID';
+        $params['id'] = $_POST['delete_transactionID'];
+        $result = $customer->customerDelete($params);
+        if ($result['status'] == 'ok') {
+            $customer->showAlert($result['statusMsg']);
+        } else {
+            $customer->showAlert($result['statusMsg']);
+        }
+        $customer->goTo('income_trans.php');
+    }
+
     ?>
 
     <div class="container-fluid background">
@@ -201,8 +216,8 @@
                     <h5>TYPE:</h5>
                     <select name="filter-transaction-time" id="filter-transaction-time" class="custom-select" onchange="showsearch('')">
                         <option value="ALL">ALL</option>
-                        <option value="Debit">Debit</option>
-                        <option value="Credit">Credit</option>
+                        <option value="Income">Income</option>
+                        <option value="Expense">Expense</option>
                     </select>
                 </div>
             </div>
@@ -347,90 +362,63 @@
                         <form action="" method="POST" id="edit-form" onsubmit="return validateform(this);">
                             <div class="modal-body">
                                 <div class="container">
-                                    <input type="hidden" id="edit_investmentID" name="edit_investmentID"></input>
+                                    <input type="hidden" id="edit_transactionID" name="edit_transactionID"></input>
                                     <div class="form-group row">
-                                        <label class="col-5" for="edit_startDate">Date:</label>
-                                        <input class="col-6 form-startDate" type="date" id="edit_startDate" name="edit_startDate" required />
-                                        <label class="error" for="edit_startDate">Please enter a valid date</label>
+                                        <label class="col-5" for="edit_transactionDate">Date & Time:</label>
+                                        <input class="col-6 form-transactionDate" type="datetime-local" id="edit_transactionDate" name="edit_transactionDate" required />
+                                        <label class="error" for="edit_transactionDate">Please enter a valid date and time</label>
                                     </div>
                                     <div class="form-group row">
-                                        <label class="col-5" for="">Amount:</label>
-                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="edit_amountInvested" name="edit_amountInvested" required />
-                                        <label class="error" for="edit_amountInvested">Please enter a valid amount</label>
+                                        <label class="col-5" for="edit_transactionAmount">Amount:</label>
+                                        <input class="col-6 form-transactionAmount" type="number" step='0.01' id="edit_transactionAmount" name="edit_transactionAmount" required />
+                                        <label class="error" for="edit_transactionAmount">Please enter a valid amount</label>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Type:</label>
-                                        <input id="edit_investmentType" class="col-6 form-investmentType" list="edit_investmentTypeList" name="edit_investmentType" required />
-                                        <datalist id="edit_investmentTypeList">
-                                            <?php
-                                            $data = $customer->getData('Investment', "DISTINCT investmentType");
-                                            foreach ($data as $row => $value) {
-                                            ?>
-                                                <option id="type<?php echo ($value['investmentType']); ?>" value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
-                                            <?php
-                                            }
-                                            ?>
+                                        <input id="edit_transactionType" class="col-6 form-transactionType" list="edit_transactionTypeList" name="edit_transactionType" required />
+                                        <datalist id="edit_transactionTypeList">
+                                            <option id="typeIncome" value="Income">Income</option>
+                                            <option id="typeExpense" value="Expense">Expense</option>
                                         </datalist>
-                                        <label class="error" for="edit_investmentType">Please enter a valid type</label>
+                                        <label class="error" for="edit_transactionType">Please enter a valid type</label>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Category:</label>
-                                        <input id="edit_investmentType" class="col-6 form-investmentType" list="edit_investmentTypeList" name="edit_investmentType" required />
-                                        <datalist id="edit_investmentTypeList">
+                                        <input id="edit_transactionCategory" class="col-6 form-transactionCategory" list="edit_transactionCategoryList" name="edit_transactionCategory" required />
+                                        <datalist id="edit_transactionCategoryList">
                                             <?php
-                                            $data = $customer->getData('Investment', "DISTINCT investmentType");
-                                            foreach ($data as $row => $value) {
-                                            ?>
-                                                <option id="type<?php echo ($value['investmentType']); ?>" value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
-                                            <?php
-                                            }
+                                                $data = $customer->getDataByQuery("SELECT categoryName FROM category
+                                                                                    WHERE categoryType = 'income'
+                                                                                    ORDER BY categoryName ASC;
+                                                                                    ");
+                                                foreach ($data as $row => $value) {
+                                                ?>
+                                                    <option id="type<?php echo ($value['categoryName']); ?>" value="<?php echo ($value['categoryName']); ?>"><?php echo ($value['categoryName']); ?></option>
+                                                <?php
+                                                }
                                             ?>
                                         </datalist>
-                                        <label class="error" for="edit_investmentType">Please enter a valid category</label>
+                                        <label class="error" for="edit_transactionCategory">Please enter a valid category</label>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Name:</label>
-                                        <input id="edit_investmentName" class="col-6 form-investmentName" list="edit_investmentNameList" name="edit_investmentName" required />
-                                        <datalist id="edit_investmentNameList">
+                                        <input id="edit_transactionName" class="col-6 form-transactionName" list="edit_transactionNameList" name="edit_transactionName" required />
+                                        <datalist id="edit_transactionNameList">
                                             <?php
-                                            $data = $customer->getData('Investment', "DISTINCT investmentName");
+                                            $data = $customer->getData('Transaction', "DISTINCT description");
                                             foreach ($data as $row => $value) {
                                             ?>
-                                                <option value="<?php echo ($value['investmentName']); ?>"><?php echo ($value['investmentName']); ?></option>
+                                                <option value="<?php echo ($value['description']); ?>"><?php echo ($value['description']); ?></option>
                                             <?php
                                             }
                                             ?>
                                         </datalist>
-                                        <label class="error" for="edit_investmentName">Please enter a valid name</label>
+                                        <label class="error" for="edit_transactionName">Please enter a valid name</label>
                                     </div>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="">Description:</label>
-                                        <input id="edit_investmentName" class="col-6 form-investmentName" list="edit_investmentNameList" name="edit_investmentName" required />
-                                        <datalist id="edit_investmentNameList">
-                                            <?php
-                                            $data = $customer->getData('Investment', "DISTINCT investmentName");
-                                            foreach ($data as $row => $value) {
-                                            ?>
-                                                <option value="<?php echo ($value['investmentName']); ?>"><?php echo ($value['investmentName']); ?></option>
-                                            <?php
-                                            }
-                                            ?>
-                                        </datalist>
-                                        <label class="error" for="edit_investmentName">Please enter a valid description</label>
-                                    </div>
+                                    <!-- Hold this first -->
                                     <div class="form-group row">
                                         <label class="col-5" for="">Repeat for:</label>
-                                        <input id="new_investmentType" class="col-6 form-investmentType" list="new_investmentTypeList" name="new_investmentType" disabled />
-                                        <datalist id="new_investmentTypeList">
-                                            <?php
-                                            $data = $customer->getData('Investment', "DISTINCT investmentType");
-                                            foreach ($data as $row => $value) {
-                                            ?>
-                                                <option id="type<?php echo ($value['investmentType']); ?>" value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
-                                            <?php
-                                            }
-                                            ?>
-                                        </datalist>
+                                        <input id="new_transactionRepeat" class="col-6 form-transactionRepeat" name="new_transactionRepeat" value="On Hold" disabled />
                                         <input type="checkbox" name="new_automate" id="new_automate">
                                         <label class="error" for="new_investmentType">Please enter a valid category</label>
                                     </div>
@@ -447,7 +435,7 @@
                 </div>
             </div>
             <!-- delete-row modal -->
-            <div class="modal fade edit-modal" id="delete-row" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
+            <div class="modal fade edit-modal" id="delete-row" tabindex="-1" role="dialog" aria-labelledby="delete-title" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
                     <div class="modal-content">
                         <div class="modal-body">
@@ -455,7 +443,7 @@
                         </div>
                         <div class="modal-footer">
                             <form action="" method="POST">
-                                <input type="hidden" id="delete_investmentID" name="delete_investmentID"></input>
+                                <input type="hidden" id="delete_transactionID" name="delete_transactionID"></input>
                                 <button type="submit" class="btn btn-primary" name="delete_submit">Delete</button>
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                             </form>
@@ -469,6 +457,7 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">DATE</th>
+                        <th scope="col">TIME</th>
                         <th scope="col">AMOUNT</th>
                         <th scope="col">CATEGORY</th>
                         <th scope="col">NAME</th>
@@ -478,17 +467,25 @@
                 </thead>
                 <tbody id="overallTransactionTableBody">
 
-                    <?php if (!empty($datarow)) {
+                    <?php 
+                    $datarow = $customer->getDataByQuery("SELECT t.transactionID, c.categoryName AS category, t.date, t.amount, t.description AS name, c.categoryType AS type
+                                                            FROM transaction t, category c
+                                                            WHERE t.cusID = '" . $customer->getId() . "' AND
+                                                            t.categoryID = c.categoryID
+                                                            ORDER BY date DESC;
+                                                            ");
+                    if (!empty($datarow)) {
                         for ($i = 0; $i < sizeof($datarow); $i++) {
                     ?>
                             <tr>
                                 <input type="hidden" class="transactionID" value='<?php echo ($datarow[$i]['transactionID']); ?>'></input>
                                 <th scope="row"><?php echo (($i + 1)); ?></th>
-                                <td class="transactionDate"><?php echo ($datarow[$i]['date']); ?></td>
+                                <td class="transactionDate"><?php print_r($customer->getDate($datarow[$i]['transactionID'])); ?></td>
+                                <td class="transactionTime"><?php print_r($customer->getTime($datarow[$i]['transactionID'])); ?></td>
                                 <td class="transactionAmount"><?php echo ($datarow[$i]['amount']); ?></td>
-                                <td class="transactionCategory"><?php echo ($datarow[$i]['categoryID']); ?></td>
-                                <td class="transactionName"><?php echo ($datarow[$i]['description']); ?></td>
-                                <td class="transactionType"><?php echo ($datarow[$i]['categoryID']); ?></td>
+                                <td class="transactionCategory"><?php echo ($datarow[$i]['category']); ?></td>
+                                <td class="transactionName"><?php echo ($datarow[$i]['name']); ?></td>
+                                <td class="transactionType"><?php echo ($datarow[$i]['type']); ?></td>
                                 <td class="action">
                                     <a href="#" class="edit-transaction-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
                                     <span> | </span>
@@ -629,5 +626,5 @@
       content: function () { return $(this).data('text'); }
     });
 </script>
-
+<script src="./script/income_trans.js"></script>
 </html>

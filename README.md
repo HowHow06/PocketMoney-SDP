@@ -11,6 +11,10 @@ Financial Management System (Website)
 
 ## Work Progress
 
+### 2021-01-07
+> Moses's Part
+- Update ```class.customer.php``` mostly for income page
+
 ### 2021-01-06
 > Moses's Part
 - Fix bugs on ```.navbar.php```

@@ -547,4 +547,52 @@ class Customer
      *                                                                    *
      *********************************************************************/
 
+
+    /** 
+     * Return Array format of time (XX:XX PM)
+     * 
+     * @param int $transactionId 
+     * 
+     * @return Array |NULL
+     * 
+     */
+    function getTime($transactionId) {
+
+    $db = MysqliDb::getInstance();
+    if (!empty($this->id)) {
+        $id = $this->id;
+        $db->where('cusID', $id);
+        $db->where('transactionID', $transactionId);
+        $result = $db->getOne('Transaction', "date");
+        $format = 'Y-m-d H:i:s';
+        $formatedTime = DateTime::createFromFormat($format, $result['date']);
+        $formatedTime = $formatedTime->format('H:i A');
+        return $formatedTime;
+    }
+    return NULL;
+    }
+
+    /** 
+     * Return Array format of date (YYYY-MM-DD)
+     * 
+     * @param int $transactionId 
+     * 
+     * @return Array |NULL
+     * 
+     */
+    function getDate($transactionId) {
+
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $id = $this->id;
+            $db->where('cusID', $id);
+            $db->where('transactionID', $transactionId);
+            $result = $db->getOne('Transaction', "date");
+            $format = 'Y-m-d H:i:s';
+            $formatedDate = DateTime::createFromFormat($format, $result['date']);
+            $formatedDate = $formatedDate->format('Y-m-d');
+            return $formatedDate;
+        }
+        return NULL;
+    }
 }
