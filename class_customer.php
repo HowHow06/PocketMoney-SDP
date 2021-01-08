@@ -556,12 +556,21 @@ class Customer
      * @return Array |NULL
      * 
      */
-    function getTime($transactionId) {
+    function getTime($transactionId,$cusID="") {
 
     $db = MysqliDb::getInstance();
     if (!empty($this->id)) {
         $id = $this->id;
         $db->where('cusID', $id);
+        $db->where('transactionID', $transactionId);
+        $result = $db->getOne('Transaction', "date");
+        $format = 'Y-m-d H:i:s';
+        $formatedTime = DateTime::createFromFormat($format, $result['date']);
+        $formatedTime = $formatedTime->format('H:i A');
+        return $formatedTime;
+    }
+    elseif (!empty($cusID)) {
+        $db->where('cusID', $cusID);
         $db->where('transactionID', $transactionId);
         $result = $db->getOne('Transaction', "date");
         $format = 'Y-m-d H:i:s';
@@ -580,7 +589,7 @@ class Customer
      * @return Array |NULL
      * 
      */
-    function getDate($transactionId) {
+    function getDate($transactionId,$cusID="") {
 
         $db = MysqliDb::getInstance();
         if (!empty($this->id)) {
@@ -593,6 +602,39 @@ class Customer
             $formatedDate = $formatedDate->format('Y-m-d');
             return $formatedDate;
         }
+        elseif (!empty($cusID)) {
+            $db->where('cusID', $cusID);
+            $db->where('transactionID', $transactionId);
+            $result = $db->getOne('Transaction', "date");
+            $format = 'Y-m-d H:i:s';
+            $formatedDate = DateTime::createFromFormat($format, $result['date']);
+            $formatedDate = $formatedDate->format('Y-m-d');
+            return $formatedDate;
+        }
         return NULL;
+    }
+
+    /** 
+     * Return ONE row of transaction table data for the given transaction ID
+     * @param String $columnName
+     * the name of the specific column
+     * 
+     * @param String $transactionID
+     * the transaction id
+     * 
+     * @return array|NULL
+     * 
+     */
+    function getOneTransactionData($transactionID, $cusID)
+    {
+        $db = MysqliDb::getInstance();
+        $result = $db->getDataByQuery("SELECT t.transactionID, c.categoryName, t.date, t.amount, t.description, c.categoryType
+                                FROM transaction t, category c
+                                WHERE t.cusID = '" . $cusID . "' 
+                                AND t.transactionID = '" . $transactionID . "' 
+                                AND t.categoryID = c.categoryID
+                                ORDER BY date DESC;
+                                ");
+        return $result;
     }
 }

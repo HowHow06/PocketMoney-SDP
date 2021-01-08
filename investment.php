@@ -332,6 +332,7 @@
                 </div>
 
                 <div class="col-6 search">
+                    <input type="hidden" name="cusID" id="cusID" value="<?php echo ($customer->getId()) ?>">
                     <input type="text" name="" id="search-transaction" placeholder="  Apple eg.">
                     <h6>Search:</h6>
                 </div>

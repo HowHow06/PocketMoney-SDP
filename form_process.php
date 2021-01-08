@@ -88,3 +88,78 @@ if (isset($_GET['editGeneralInvestName'])) {
     $dataJSON = json_encode($data[0]);
     echo ($dataJSON);
 }
+
+/**
+ * 
+ * echo the JSON format of fields within Transaction Edit modal
+ */
+if (isset($_GET['resetEditTransaction'])) {
+    $transaction_id = $_GET['resetEditTransaction'];
+    $cusID = $_GET['cusID'];
+    $data = $customer->getDataByQuery("SELECT t.transactionID, c.categoryName, t.date, t.amount, t.description, c.categoryType
+                                FROM transaction t, category c
+                                WHERE t.cusID = '" . $cusID . "' 
+                                AND t.transactionID = '" . $transaction_id . "' 
+                                AND t.categoryID = c.categoryID
+                                ORDER BY t.date DESC;
+                                ");
+    $dataJSON = json_encode($data[0]);
+    echo ($dataJSON);
+}
+
+/**
+ * 
+ * @return String 
+ * the body of transaction
+ */
+if (isset($_GET['searchTransaction'])) {
+    $cusID = $_GET['cusID'];
+    $searchname = $_GET['searchTransaction'];
+    $typeFilter = $_GET['type'];
+    $cateFilter = $_GET['cate'];
+    if ($typeFilter == "Income") {
+        $typeSQL = "income";
+    } elseif ($typeFilter == "Expenses") {
+        $typeSQL = "expenses";
+    } elseif ($typeFilter == "ALL") {
+        $typeSQL = '';
+    }
+    if ($cateFilter == 'ALL') {
+        $cateFilter = '';
+    }
+    if (empty($searchname)) {
+        $searchname = '';
+    }
+
+    $datarow = $customer->getDataByQuery("SELECT *
+    FROM Transaction t, Category c
+    WHERE t.cusID = '" . $cusID . "'
+    AND t.categoryID = c.categoryID
+    AND t.description LIKE '%" . $searchname . "%'
+    AND c.categoryType LIKE  '%" . $typeSQL . "%'
+    AND c.categoryName LIKE  '%" . $cateFilter . "%'
+    ORDER BY t.date DESC
+    ;");
+    if (!empty($datarow)) {
+        for ($i = 0; $i < sizeof($datarow); $i++) {
+            echo ('
+            <tr>
+                <input type="hidden" class="transactionID" value="' . ($datarow[$i]['transactionID']) . '"></input>
+                <input type="hidden" class="transactionDateTime" value="' . ($datarow[$i]['date']) . '"></input>
+                <th scope="row">' . (($i + 1)) . '</th>
+                <td class="transactionDate">' . ($customer->getDate($datarow[$i]['transactionID'],$cusID)) . '</td>
+                <td class="transactionTime">' . ($customer->getTime($datarow[$i]['transactionID'],$cusID)) . '</td>
+                <td class="transactionAmount">' .($datarow[$i]['amount']) . '</td>
+                <td class="transactionCategory">' . ($datarow[$i]['categoryName']) . '</td>
+                <td class="transactionName">' . ($datarow[$i]['description']) . '</td>
+                <td class="transactionType">' . ($datarow[$i]['categoryType']) . '</td>
+                <td class="action">
+                    <a href="#" class="edit-transaction-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
+                    <span> | </span>
+                    <a href="#" class="delete-transaction-anchor" data-toggle="modal" data-target="#delete-row">Delete</a>
+                </td>
+            </tr>
+            ');
+        }
+    }
+}
