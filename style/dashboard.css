@@ -32,7 +32,7 @@
 }
 
 .navbar > ul > li > .dropdown-menu > .dropdown-item {
-  padding: 10px 0 10px 20px;
+  padding: 10px 0 10px 10px !important;
 }
 
 .navbar > ul > li > .dropdown-menu > .dropdown-item:hover {
@@ -41,6 +41,7 @@
 
 .navbar > ul > li:hover, .navbar > ul .active {
   background-color: rgba(255, 255, 255, 0.6);
+  -webkit-transition: 0.2s ease-in;
   transition: 0.2s ease-in;
 }
 
@@ -62,13 +63,48 @@
 
 .background {
   min-height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   background-color: #f7e0b5;
   padding: 70px 100px;
 }
 
+#category1 {
+  background-color: #FF6C00;
+}
+
+#category2 {
+  background-color: #DC8600;
+}
+
+#category3 {
+  background-color: #A1756C;
+}
+
+#category4 {
+  background-color: #54433A;
+}
+
+#category5 {
+  background-color: #BCA79D;
+}
+
+#category6 {
+  background-color: #AD7267;
+}
+
+#category7 {
+  background-color: #754C44;
+}
+
+#category8 {
+  background-color: #FF6C00;
+}
+
 .body {
-  box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
+          box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
   padding: 0;
   background-color: white;
   border-radius: 12px;
@@ -91,11 +127,115 @@
   margin-bottom: 10px;
 }
 
+.transaction > .transaction-table {
+  margin: 0 auto;
+  width: 95%;
+  text-align: center;
+  font-size: 12px;
+}
+
+.transaction > .transaction-table > thead {
+  background-color: #fc9a55;
+  color: white;
+}
+
+.budget > .budget-overview > .budget-row > .row > .col-3 {
+  margin-top: 9px;
+  margin-bottom: 5px;
+}
+
+.budget > .budget-overview > .budget-row > .row > .col-3 > div {
+  height: 35px;
+}
+
+.budget > .budget-overview > .budget-row > .row > .col-3 > div > sub {
+  bottom: -1.25em;
+  color: grey;
+}
+
+.budget > .budget-overview > .budget-row > .row > .col-3 p {
+  margin-bottom: 0;
+  font-size: 14px;
+}
+
+.budget > .budget-overview > .budget-row > .row > .col-9 {
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+
+.budget > .budget-overview > .budget-row > .row > .col-9 > .progress {
+  height: 25px;
+  border-radius: 8px !important;
+}
+
+.budget > .budget-overview > .budget-row > .row > .col-9 > .progress > .progress-bar {
+  width: 50%;
+  background-color: #fc9a55 !important;
+  border-radius: 8px;
+}
+
+.budget > .budget-overview > .budget-row > .row > .col-9 > .progress > .excess-bar {
+  width: 100%;
+  background-color: #ff6767 !important;
+}
+
+.budget > .budget-overview > .budget-row > .row > .col-9 > .progress > .excess-value {
+  color: white !important;
+}
+
+.budget > .budget-overview > .budget-row > .row > .col-9 > .progress > h6 {
+  position: absolute;
+  right: 30px;
+  bottom: 28px;
+  font-size: 12px;
+}
+
+.budget > .budget-overview > .budget-row > .row > .col-9 > .progress > .vl {
+  border-left: 2px solid white;
+  height: 30px;
+  position: absolute;
+  left: 10%;
+}
+
+.budget > .budget-overview > .budget-row > .row > .col-9 > .row {
+  padding-top: 7px;
+}
+
+.budget > .budget-overview > .budget-row > .row > .col-9 > .row > .col-6 {
+  padding: 0;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.budget > .budget-overview > .budget-row > .row > .col-9 > .row > .col-6 > .spent {
+  float: left;
+  color: #fc9a55;
+  font-size: 14px;
+}
+
+.budget > .budget-overview > .budget-row > .row > .col-9 > .row > .col-6 > .excess {
+  color: #ff6767 !important;
+}
+
+.budget > .budget-overview > .budget-row > .row > .col-9 > .row > .col-6 > .target {
+  float: right;
+  font-size: 14px;
+}
+
+.budget > .budget-overview > .budget-row hr {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
 .snapshot > .row {
   padding-bottom: 10px;
   margin: 0;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .snapshot > .row > div {
@@ -113,20 +253,13 @@
   margin-bottom: 2px;
 }
 
-.snapshot > .row > div:hover {
-  background-color: #c47a46;
-  transition: 0.5s ease-in-out;
-  cursor: default;
-}
-
-.snapshot > .row > div:hover > p {
-  font-size: 20px;
-  transition: 0.7s ease-in-out;
-}
-
 .investment > .chart {
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .investment > .institution-table {

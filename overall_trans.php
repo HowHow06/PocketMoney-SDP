@@ -4,9 +4,9 @@
 <head>
     <?php include(".head.php"); ?>
     <link rel="stylesheet" href="./style/income_trans.css">
+
     <title>PocketMoney | Transactions</title>
 </head>
-
 <body>
     <?php 
     $activePage = "transactions"; 
@@ -16,7 +16,7 @@
     <div class="container-fluid background">
         <div class="container-fluid body">
             <nav class="navbar navbar-expand-lg">
-                <a href="#" class="navbar-brand">EXPENSES TRANSACTIONS</a>
+                <a href="#" class="navbar-brand">ALL TRANSACTIONS</a>
             </nav>
             <div class="container-fluid row">
                 <div class="col-6 left">
@@ -45,138 +45,6 @@
 
                 </div>
             </div>
-
-            <div class="container-fluid row">
-                <div class="pie-chart">
-                    <div class="border rounded" id="pie-chart">
-                    </div>
-                </div>
-                <div class="chart-explain">
-                    <div class="border rounded">
-                        <div class="container-fluid row category">
-                            <div class="col-1">
-                                <p id="category1">49%</p>
-                            </div>
-                            <div class="col-5">
-                                <h5>Food</h5>
-                            </div>
-                            <div class="col-5 value">
-                                <h5>RM 1200.00</h5>
-                            </div>
-                            <div class="col-1 show">
-                                <button class="btn">
-                                    <i class="fas fa-chevron-right"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="container-fluid row category">
-                            <div class="col-1">
-                                <p id="category2">12%</p>
-                            </div>
-                            <div class="col-5">
-                                <h5>Transportation</h5>
-                            </div>
-                            <div class="col-5 value">
-                                <h5>RM 300.00</h5>
-                            </div>
-                            <div class="col-1 show">
-                                <button class="btn">
-                                    <i class="fas fa-chevron-right"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="container-fluid row category">
-                            <div class="col-1">
-                                <p id="category3">21%</p>
-                            </div>
-                            <div class="col-5">
-                                <h5>Rental Fee</h5>
-                            </div>
-                            <div class="col-5 value">
-                                <h5>RM 500.00</h5>
-                            </div>
-                            <div class="col-1 show">
-                                <button class="btn">
-                                    <i class="fas fa-chevron-right"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="container-fluid row category">
-                            <div class="col-1">
-                                <p id="category4">18%</p>
-                            </div>
-                            <div class="col-5">
-                                <h5>Donation</h5>
-                            </div>
-                            <div class="col-5 value">
-                                <h5>RM 432.60</h5>
-                            </div>
-                            <div class="col-1 show">
-                                <button class="btn">
-                                    <i class="fas fa-chevron-right"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="container-fluid category">
-                <div class="border round">
-                    <div class="container-fluid title">
-                        <h2>Food</h2>
-                        <h5>Total: 1200.00</h5>
-                        <h5>Average Daily: 40.00</h5>
-                    </div>
-                    <div class="line-chart">
-                        <div id="line-chart">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- table -->
-            <table class="table table-bordered table-hover transaction-table" id="investmentTransactionTable">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">DATE</th>
-                        <th scope="col">AMOUNT</th>
-                        <th scope="col">NAME</th>
-                        <th scope="col">DESCRIPTION</th>
-                        <th scope="col">TYPE</th>
-                        <th scope="col">ACTION</th>
-                    </tr>
-                </thead>
-                <tbody id="investmentTransactionTableBody">
-
-                    <?php
-                    $datarow = $customer->getData('Investment'); 
-                    if (!empty($datarow)) {
-                        for ($i = 0; $i < sizeof($datarow); $i++) {
-                    ?>
-                            <tr>
-                                <input type="hidden" class="investmentID" value='<?php echo ($datarow[$i]['investmentID']); ?>'></input>
-                                <th scope="row"><?php echo (($i + 1)); ?></th>
-                                <td class="investDate"><?php echo ($datarow[$i]['startDate']); ?></td>
-                                <td class="investAmount"><?php echo ($datarow[$i]['amountInvested']); ?></td>
-                                <td class="investName"><?php echo ($datarow[$i]['investmentName']); ?></td>
-                                <td class="investRate"><?php echo ($datarow[$i]['ratePerAnnum']); ?></td>
-                                <td class="investType"><?php echo ($datarow[$i]['investmentType']); ?></td>
-                                <td class="action">
-                                    <a href="#" class="edit-investment-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
-                                    <span> | </span>
-                                    <a href="#" class="delete-investment-anchor" data-toggle="modal" data-target="#delete-row">Delete</a>
-                                </td>
-                            </tr>
-                    <?php
-                        }
-                    } ?>
-                </tbody>
-            </table>
 
             <h4>ALL TRANSACTIONS</h4>
             <hr>
@@ -411,22 +279,6 @@
                                         </datalist>
                                         <label class="error" for="edit_investmentName">Please enter a valid description</label>
                                     </div>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="">Repeat for:</label>
-                                        <input id="new_investmentType" class="col-6 form-investmentType" list="new_investmentTypeList" name="new_investmentType" disabled />
-                                        <datalist id="new_investmentTypeList">
-                                            <?php
-                                            $data = $customer->getData('Investment', "DISTINCT investmentType");
-                                            foreach ($data as $row => $value) {
-                                            ?>
-                                                <option id="type<?php echo ($value['investmentType']); ?>" value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
-                                            <?php
-                                            }
-                                            ?>
-                                        </datalist>
-                                        <input type="checkbox" name="new_automate" id="new_automate">
-                                        <label class="error" for="new_investmentType">Please enter a valid category</label>
-                                    </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -533,73 +385,6 @@
     $(document).ready(function () {
         $("body").niceScroll();
     });
-
-    var pieOptions = {
-        series: [623.00, 450.00, 500.00, 43.60],
-        chart: {
-            width: 550,
-            type: 'pie',
-        },
-        labels: ['Food', 'Transportation', 'Rental Fee', 'Donation'],
-        theme: {
-            monochrome: {
-                enabled: true,
-                color: '#F89542',
-                shadeIntensity: 0.65
-            }
-        },
-    };
-
-    var pieChart = new ApexCharts(document.querySelector("#pie-chart"), pieOptions);
-    pieChart.render();
-
-    var lineOptions = {
-        series: [{
-            name: "Food",
-            data: [150.00, 330.00, 240.00, 200.00, 250.00, 400.00, 600.00, 220.00, 0.00, 0.00]
-        }],
-        chart: {
-            height: 400,
-            type: 'line',
-            dropShadow: {
-                enabled: true,
-                color: '#000',
-                top: 18,
-                left: 7,
-                blur: 10,
-                opacity: 0.2
-            }
-        },
-        dataLabels: {
-            enabled: true
-        },
-        stroke: {
-            curve: 'straight',
-            width: 1
-        },
-        colors: ['#F89542'],
-        grid: {
-            row: {
-                colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-                opacity: 0.5
-            },
-        },
-        xaxis: {
-            max: 7,
-            categories: ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb'],
-        },
-        yaxis: {
-            min: function(min) {
-                return min - 100
-            },
-            max: function(max) {
-                return max + 100
-            }
-        }
-    };
-
-    var lineChart = new ApexCharts(document.querySelector("#line-chart"), lineOptions);
-    lineChart.render();
 </script>
 
 </html>

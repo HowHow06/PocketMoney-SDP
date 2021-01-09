@@ -13,7 +13,7 @@
             <a href="#" class="navbar-brand"><img src="./img/logo.png" width="50px" height="50px"> POCKETMONEY</a>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active">
-                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="index.php" class="nav-link">Home</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown">Login / Sign Up</a>

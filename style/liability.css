@@ -171,6 +171,183 @@
   margin-bottom: 0;
 }
 
+.body > .liability-overview {
+  padding: 20px 50px;
+}
+
+.body > .liability-overview > div {
+  border-width: 4px !important;
+  padding: 10px 0 0 0;
+}
+
+.body > .liability-overview > div > .col-12 {
+  padding-bottom: 15px;
+}
+
+.body > .liability-overview > div > .liability-row > .row {
+  padding: 0 20px;
+}
+
+.body > .liability-overview > div > .liability-row > .row > .col-3 {
+  margin-top: 25px;
+  margin-bottom: 5px;
+}
+
+.body > .liability-overview > div > .liability-row > .row > .col-3 > div {
+  height: 35px;
+}
+
+.body > .liability-overview > div > .liability-row > .row > .col-3 > div > sub {
+  bottom: -1.25em;
+  color: grey;
+}
+
+.body > .liability-overview > div > .liability-row > .row > .col-3 p {
+  margin-bottom: 0;
+}
+
+.body > .liability-overview > div > .liability-row > .row > .col-9 {
+  margin-top: 25px;
+  margin-bottom: 5px;
+}
+
+.body > .liability-overview > div > .liability-row > .row > .col-9 > .progress {
+  height: 30px;
+  border-radius: 8px !important;
+}
+
+.body > .liability-overview > div > .liability-row > .row > .col-9 > .progress > .progress-bar {
+  width: 16%;
+  background-color: #fc9a55 !important;
+  border-radius: 8px;
+}
+
+.body > .liability-overview > div > .liability-row > .row > .col-9 > .progress > h6 {
+  position: absolute;
+  right: 30px;
+  bottom: 30px;
+}
+
+.body > .liability-overview > div > .liability-row > .row > .col-9 > .row {
+  padding-top: 7px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.body > .liability-overview > div > .liability-row > .row > .col-9 > .row > .col-6 {
+  padding: 0;
+}
+
+.body > .liability-overview > div > .liability-row > .row > .col-9 > .row > .col-6 > .paid {
+  float: left;
+  color: #fc9a55;
+}
+
+.body > .liability-overview > div > .liability-row > .row > .col-9 > .row > .col-6 > .target {
+  float: right;
+}
+
+.body > .liability-overview > div > .liability-row hr {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.body > .upcoming-payment > .pie-chart {
+  padding: 10px 0px 10px 50px;
+}
+
+.body > .upcoming-payment > .pie-chart > div {
+  width: 700px;
+  height: 500px;
+  margin: 0 auto;
+  border-width: 4px !important;
+}
+
+.body > .upcoming-payment > .chart-explain {
+  padding: 10px 5px 10px 20px;
+}
+
+.body > .upcoming-payment > .chart-explain > div {
+  width: 900px;
+  height: 500px;
+  margin: 0 auto;
+  border-width: 4px !important;
+}
+
+.body > .upcoming-payment > .chart-explain > div > form > label {
+  color: white;
+  position: absolute;
+  bottom: 105px;
+  right: 370px;
+  font-size: 22px;
+}
+
+.body > .upcoming-payment > .chart-explain > div > form > label::before {
+  width: 20px;
+  height: 20px;
+  border-radius: 11px;
+  background-color: transparent;
+  content: '';
+  visibility: visible;
+  border: 2px solid white;
+  position: absolute;
+  right: 80px;
+  bottom: 6px;
+}
+
+.body > .upcoming-payment > .chart-explain > div > form > .year {
+  right: 270px !important;
+}
+
+.body > .upcoming-payment > .chart-explain > div > form > .year::before {
+  right: 58px !important;
+}
+
+.body > .upcoming-payment > .chart-explain > div > form > input[type=radio]:checked + label::after {
+  width: 12px;
+  height: 12px;
+  border-radius: 11px;
+  background-color: white;
+  content: '';
+  display: block;
+  position: absolute;
+  right: 84px;
+  bottom: 10px;
+}
+
+.body > .upcoming-payment > .chart-explain > div > form > input[type=radio]:checked + .year::after {
+  right: 62px !important;
+}
+
+.body > .upcoming-payment > .chart-explain > div > form > input[type=radio] {
+  display: none;
+}
+
+.body > .upcoming-payment > .chart-explain > div > form > .transaction-table {
+  margin: 20px auto;
+  width: 95%;
+  text-align: center;
+}
+
+.body > .upcoming-payment > .chart-explain > div > form > .transaction-table > thead {
+  background-color: #fc9a55;
+  color: white;
+}
+
+.body > .upcoming-payment > .chart-explain > div > form > .transaction-table > thead > tr > .title {
+  text-align: left;
+  font-size: 1.5rem;
+  padding: 10px;
+}
+
+.body > .upcoming-payment > .chart-explain > div > form > .transaction-table > tbody .action {
+  width: 130px;
+}
+
+.body > .upcoming-payment > .chart-explain > div > form > .transaction-table > tbody .action > a {
+  color: #FF6C00;
+}
+
 .body > .chart {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
@@ -178,6 +355,7 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  margin-top: 70px;
 }
 
 .body > .head {
@@ -215,17 +393,6 @@
 .body > .head > div > a::-moz-focus-inner, .body > .head > div a::-moz-focus-outer {
   background-color: rgba(252, 154, 85, 0.65);
   border-color: rgba(252, 154, 85, 0.65);
-}
-
-.body > .institution-table {
-  margin: 0 auto;
-  width: 95%;
-  text-align: center;
-}
-
-.body > .institution-table > thead {
-  background-color: #fc9a55;
-  color: white;
 }
 
 .body > h4 {
@@ -352,6 +519,18 @@
 
 .modal-dialog > .modal-content > .modal-header > .modal-title, .modal-dialog > .modal-content > .modal-header .close {
   color: white;
+}
+
+.modal-dialog > .modal-content > form > .modal-body > div > .form-group > input[type=checkbox] {
+  -webkit-transform: scale(1.5);
+          transform: scale(1.5);
+  position: absolute;
+  bottom: 42px;
+  right: 30px;
+}
+
+.modal-dialog > .modal-content > form > .modal-body > div > .form-group > .reminder {
+  bottom: 90px !important;
 }
 
 .modal-dialog > .modal-content > form > .modal-footer > .btn-primary {

@@ -11,7 +11,39 @@ Financial Management System (Website)
 
 ## Work Progress
 
+### 2021-01-06
+> Moses's Part
+- Fix bugs on ```.navbar.php```
+- Create ```liability.php```
+
+### 2021-01-05
+> Moses's Part
+- Fix bugs on ```.navbar.php```
+- Create ```budget.php```
+- Update ```income_trans.php``` and ```expense_trans.php```
+- Create ```overall_trans.php``` just showing all transaction records.
+- Update ```dashboard.php```
+
+### 2020-12-17 - 2021-01-02
+> Howard's Part
+- Fully established ```investment.php``` along with supportive files.
+- Create ```class_customer.php```
+- Create ```pocketmoney.db```
+- Create ```Validation.php```
+- Create ```investment.js```
+
+> Law's Part
+- Draft ```budget``` layout
+- Draft ```liability``` layout
+
+> Nash's Part
+- Draft ```financial gaol``` layout
+- Draft ```admin``` layout
 ### 2020-12-16
+> Howard's Part
+- Create ```_background.scss``` and ```_navbar.scss```
+- Change structure of the scss code.
+
 > Moses's Part
 - **Update navbar of for customer site** Important if u guys has pulled, might have conflict
 - Update ```income_trans.php```
