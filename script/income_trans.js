@@ -6,6 +6,171 @@ $(document).ready(function () {
     input;
 });
 
+function validateform(ele) {
+    var id = "#" + ele.id;
+    var transactionDateTime = $(id).find(".form-transactionDateTime");
+    var transactionAmount = $(id).find(".form-transactionAmount");
+    var transactionType = $(id).find(".form-transactionType");
+    var transactionCategory = $(id).find(".form-transactionCategory");
+    var transactionName = $(id).find(".form-transactionName");
+
+    //validate datetime-local
+    if (transactionDateTime.length) {
+        if (!validDate(transactionDateTime.val())) {
+        //set the error msg to display
+        transactionDateTime.parent().find(".error").css("display", "inline-block");
+        //decrease some margin-bottom for the form group
+        transactionDateTime.parent().css("margin-bottom", "0.2rem");
+        return failValidation("Invalid Date!");
+        } else {
+        transactionDateTime.parent().find(".error").css("display", "none");
+        //decrease some margin-bottom for the form group
+        transactionDateTime.parent().css("margin-bottom", "1rem");
+        }
+    }
+
+    //validate amount
+    if (transactionAmount.length) {
+        // alert(validAmount(transactionAmount.val()));
+        if (!validAmount(transactionAmount.val())) {
+        transactionAmount.parent().find(".error").css("display", "inline-block");
+        //decrease some margin-bottom for the form group
+        transactionAmount.parent().css("margin-bottom", "0.2rem");
+        return failValidation("Invalid Amount!");
+        } else {
+        transactionAmount.parent().find(".error").css("display", "none");
+        //decrease some margin-bottom for the form group
+        transactionAmount.parent().css("margin-bottom", "1rem");
+        }
+    }
+
+    //validate name
+    if (transactionName.length) {
+        // alert(transactionName.val());
+        if (!validTransactionName(transactionName.val())) {
+        transactionName.parent().find(".error").css("display", "inline-block");
+        //decrease some margin-bottom for the form group
+        transactionName.parent().css("margin-bottom", "0.2rem");
+        return failValidation("Name cannot contain any special character!");
+        } else {
+        transactionName.parent().find(".error").css("display", "none");
+        //decrease some margin-bottom for the form group
+        transactionName.parent().css("margin-bottom", "1rem");
+        }
+    }
+
+    //validate type
+    if (transactionType.length) {
+        if (!validTransactionType(transactionType.val())) {
+        transactionType.parent().find(".error").css("display", "inline-block");
+        //decrease some margin-bottom for the form group
+        transactionType.parent().css("margin-bottom", "0.2rem");
+        return failValidation("Type must be income or expenses!");
+        } else {
+        transactionType.parent().find(".error").css("display", "none");
+        //decrease some margin-bottom for the form group
+        transactionType.parent().css("margin-bottom", "1rem");
+        }
+    }
+
+    //to check if the category exist
+    if (transactionCategory.length) {
+        var category = transactionCategory.val();
+        if (!investCategoryExist(category)) {
+        //if it is a new cateogory
+        if (
+            !confirm(
+            category + " is a new category, do you wish to create a new category?"
+            )
+        ) {
+            //if the user dont want to create new category, then return false, else proceed
+            return false;
+        }
+        }
+    }
+
+    return confirm("Are you sure you want to proceed?");
+}
+
+function investCategoryExist(category) {
+    var x = $("#filter-transaction-category option");
+    var i;
+    for (i = 1; i < x.length; i++) {
+      if (category == x[i].text) {
+        //turn the flag true when the cate matches
+        return true;
+      }
+    }
+    return false;
+}
+
+function validTransactionType(name) {
+    if (!isAlNum(name)) {
+      return false;
+    }
+    if (name != 'income' && name != 'expenses') {
+        return false;
+    }
+    return true;
+}
+
+function validTransactionName(name) {
+    if (isEmpty(name)) {
+        return true;
+    }
+    if (!isAlNum(name)) {
+      return false;
+    }
+    return true;
+}
+
+function isAlNum(inputtext) {
+    var letterNumber = /^[0-9a-zA-Z ]+$/;
+    if (inputtext.match(letterNumber)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function validDate(date) {
+    var GivenDate = date;
+    if (isEmpty(GivenDate)) {
+      return false;
+    }
+    var CurrentDate = new Date();
+    GivenDate = new Date(GivenDate);
+  
+    if (GivenDate >= CurrentDate) {
+      //the date is bigger then current date
+      return false;
+    } else {
+      return true;
+    }
+}
+  
+function isEmpty(value) {
+    return value.trim() == "";
+}
+
+function validAmount(price) {
+    if (isEmpty(price)) {
+        return false;
+    }
+    if (price.includes("e")) {
+        return false;
+    }
+    if (Math.sign(price) != 1) {
+        return false;
+    }
+    return true;
+}
+
+function failValidation(msg) {
+    alert(msg); // just an alert for now but you can spice this up later
+    return false;
+}
+
 function showsearch() {
     var keyword = document.getElementById("search-transaction").value;
     var xmlhttp = new XMLHttpRequest();
@@ -67,6 +232,60 @@ function resetEdit() {
     );
     xmlhttp.send();
 }
+
+var lineOptions = {
+    series: [{
+        name: "Salary",
+        data: [1100.00, 1030.00, 950.00, 2000.00, 1250.00, 1200.00, 1000.00, 1200.00]
+    }],
+    chart: {
+        height: 400,
+        type: 'line',
+        dropShadow: {
+            enabled: true,
+            color: '#000',
+            top: 18,
+            left: 7,
+            blur: 10,
+            opacity: 0.2
+        },
+        toolbar: {
+            show: false,
+        },
+        zoom: {
+            enabled: false,
+        }
+    },
+    dataLabels: {
+        enabled: true
+    },
+    stroke: {
+        curve: 'straight',
+        width: 1
+    },
+    colors: ['#F89542'],
+    grid: {
+        row: {
+            colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+            opacity: 0.5
+        },
+    },
+    xaxis: {
+        max: 8,
+        categories: ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    },
+    yaxis: {
+        min: function(min) {
+            return min - 100
+        },
+        max: function(max) {
+            return max + 100
+        }
+    }
+};
+
+var lineChart = new ApexCharts(document.querySelector("#line-chart"), lineOptions);
+lineChart.render();
 
 $(document).on("click", ".edit-transaction-anchor", function () {
     var transactionID = $(this).parent().parent().find(".transactionID").val();

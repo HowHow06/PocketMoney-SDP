@@ -11,6 +11,23 @@ Financial Management System (Website)
 
 ## Work Progress
 
+### 2021-01-09
+> Moses's Part
+- Update ```class.customer.php``` and ```income_trans.js``` mostly for income page
+- Create ```fusioncharts-suite-xt``` file
+- Fasioncharts can be used in php therefore is implemented in server side
+- These are the reference used for fasioncharts (another chart)
+```
+<script src="./fusioncharts-suite-xt/js/fusioncharts.js"></script>
+```
+```
+<script src="./fusioncharts-suite-xt/js/themes/fusioncharts.theme.fusion.js"></script>
+```
+```
+<?php include('./fusioncharts-suite-xt/integrations/php/fusioncharts-wrapper/fusioncharts.php') ?>
+```
+
+
 ### 2021-01-08
 > Moses's Part
 - Update ```class.customer.php``` and ```income_trans.js``` and ```form_process.php``` mostly for income page

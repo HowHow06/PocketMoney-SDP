@@ -23,6 +23,27 @@
                                                 WHERE categoryName=\'' . $_POST['edit_transactionCategory'] . '\';
                                                 ');
         
+        // The categoryName is new, create a new categoryID for it 
+        if (empty($datarow)) {
+            // set new param
+            $paramsNew['tableName'] = 'Category';
+            $paramsNew['data'] = array(
+                'categoryName' => $_POST['edit_transactionCategory'],
+                'categoryType' => $_POST['edit_transactionType'],
+                'preDefine' => 0, // usermade
+                'cusID' => $customer->getId(),
+            );
+            $result = $customer->customerInsert($paramsNew);
+            if ($result['status'] == 'ok') {
+                // Get categoryID based on categoryName
+                $datarow = $customer->getDataByQuery('SELECT categoryID FROM category
+                WHERE categoryName=\'' . $_POST['edit_transactionCategory'] . '\';
+                ');
+            } else {
+                $customer->showAlert($result['statusMsg']);
+            }
+        }
+
         $params['data'] = array(
             'date' => $_POST['edit_transactionDateTime'],
             'amount' => $_POST['edit_transactionAmount'],
@@ -60,6 +81,27 @@
         $datarow = $customer->getDataByQuery('SELECT categoryID FROM category
         WHERE categoryName=\'' . $_POST['new_transactionCategory'] . '\';
         ');
+
+        // The categoryName is new, create a new categoryID for it 
+        if (empty($datarow)) {
+            // set new param
+            $paramsNew['tableName'] = 'Category';
+            $paramsNew['data'] = array(
+                'categoryName' => $_POST['new_transactionCategory'],
+                'categoryType' => $_POST['new_transactionType'],
+                'preDefine' => 0, // usermade
+                'cusID' => $customer->getId(),
+            );
+            $result = $customer->customerInsert($paramsNew);
+            if ($result['status'] == 'ok') {
+                // Get categoryID based on categoryName
+                $datarow = $customer->getDataByQuery('SELECT categoryID FROM category
+                WHERE categoryName=\'' . $_POST['new_transactionCategory'] . '\';
+                ');
+            } else {
+                $customer->showAlert($result['statusMsg']);
+            }
+        }
 
         $params['data'] = array(
             'cusID' => $customer->getId(),
@@ -115,81 +157,55 @@
 
             <div class="container-fluid row">
                 <div class="pie-chart">
-                    <div class="border rounded" id="pie-chart">
+                    <div class="border rounded" id="incomeTypes-pie-chart">
+                        <?php 
+                            $chart = new FusionCharts("pie2d", "ex1", "100%", "100%", "incomeTypes-pie-chart", "json", $customer->getTypesAndAmount());
+                            $chart->render();
+                        ?>
                     </div>
                 </div>
                 <div class="chart-explain">
                     <div class="border rounded">
-                        <div class="container-fluid row category">
-                            <div class="col-1">
-                                <p id="category1">49%</p>
+                        <?php 
+                        $datarow = $customer->getDataByQuery("SELECT c.categoryName, SUM(t.amount) AS amount 
+                                                                FROM category c
+                                                                LEFT JOIN transaction t
+                                                                ON c.categoryID = t.categoryID
+                                                                WHERE t.cusID = '" . $customer->getId() . "'
+                                                                AND c.categoryType = 'income'
+                                                                GROUP BY c.categoryName
+                                                                ORDER BY t.amount DESC
+                                                            ");
+                        if (!empty($datarow)) {
+                            $percentageArray = $customer->getPercentage();
+                            for ($i = 0; $i < sizeof($datarow); $i++) {
+                        ?>
+                            <div class="container-fluid row category">
+                                <div class="col-1">
+                                    <p id="category<?php echo (($i + 1)); ?>"><?php echo $percentageArray[$i]['percentage'] ?></p>
+                                </div>
+                                <div class="col-5">
+                                    <h5><?php echo ($datarow[$i]['categoryName']); ?></h5>
+                                </div>
+                                <div class="col-5 value">
+                                    <h5><?php echo ($datarow[$i]['amount']); ?></h5>
+                                </div>
+                                <div class="col-1 show">
+                                    <button class="btn">
+                                        <a href="#salary" data-toggle="row-hover" data-text="Show more"><i class="fas fa-chevron-right"></i></a>
+                                    </button>
+                                </div>
                             </div>
-                            <div class="col-5">
-                                <h5>Salary</h5>
-                            </div>
-                            <div class="col-5 value">
-                                <h5>RM 1200.00</h5>
-                            </div>
-                            <div class="col-1 show">
-                                <button class="btn">
-                                    <a href="#salary" data-toggle="row-hover" data-text="Show more"><i class="fas fa-chevron-right"></i></a>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="container-fluid row category">
-                            <div class="col-1">
-                                <p id="category2">12%</p>
-                            </div>
-                            <div class="col-5">
-                                <h5>Bonus</h5>
-                            </div>
-                            <div class="col-5 value">
-                                <h5>RM 300.00</h5>
-                            </div>
-                            <div class="col-1 show">
-                                <button class="btn">
-                                    <a href="#salary" data-toggle="row-hover" data-text="Show more"><i class="fas fa-chevron-right"></i></a>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="container-fluid row category">
-                            <div class="col-1">
-                                <p id="category3">21%</p>
-                            </div>
-                            <div class="col-5">
-                                <h5>Savings</h5>
-                            </div>
-                            <div class="col-5 value">
-                                <h5>RM 500.00</h5>
-                            </div>
-                            <div class="col-1 show">
-                                <button class="btn">
-                                    <a href="#salary" data-toggle="row-hover" data-text="Show more"><i class="fas fa-chevron-right"></i></a>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="container-fluid row category">
-                            <div class="col-1">
-                                <p id="category4">18%</p>
-                            </div>
-                            <div class="col-5">
-                                <h5>Sales</h5>
-                            </div>
-                            <div class="col-5 value">
-                                <h5>RM 432.60</h5>
-                            </div>
-                            <div class="col-1 show">
-                                <button class="btn">
-                                    <a href="#salary" data-toggle="row-hover" data-text="Show more"><i class="fas fa-chevron-right"></i></a>
-                                </button>
-                            </div>
-                        </div>
+                        <?php
+                            }
+                        } ?>
                     </div>
                 </div>
             </div>
+
+            <input type="hidden" id="typeCategoryChoose" name="typeCategoryChoose" value='<?php echo ($customer->getTypeAmountsJSON()); ?>'></input>
+            <input type="hidden" id="amountCategoryChoose" name="amountCategoryChoose" value='<?php echo ($customer->getInvestTypesJSON()); ?>'></input>
+            <input type="hidden" id="currentDateChoose" name="currentDateChoose" value='<?php echo ($customer->getTypeAmountsJSON()); ?>'></input>
 
             <div class="container-fluid category" id="salary">
                 <div class="border round">
@@ -262,8 +278,8 @@
                         <option value="ALL" selected>ALL</option>
                         <?php
                         $data = $customer->getDataByQuery("SELECT categoryName FROM category
-                                                            WHERE categoryType = 'income' AND preDefine = 1 OR cusID = " . $customer->getId() . "
-                                                            OR categoryType = 'expenses' AND preDefine = 1 OR cusID = " . $customer->getId() . "
+                                                            WHERE categoryType = 'income' AND preDefine = 1 OR categoryType = 'income' AND cusID = " . $customer->getId() . "
+                                                            OR categoryType = 'expenses' AND preDefine = 1 OR categoryType = 'expenses' AND cusID = " . $customer->getId() . "
                                                             ORDER BY categoryName ASC;
                                                             ");
                         foreach ($data as $row => $value) {
@@ -344,7 +360,8 @@
                                                 $data = $customer->getDataByQuery("SELECT categoryName FROM category
                                                                                     WHERE categoryType = 'income'
                                                                                     AND preDefine = 1
-                                                                                    OR cusID = " . $customer->getId() . "
+                                                                                    OR categoryType = 'income'
+                                                                                    AND cusID = " . $customer->getId() . "
                                                                                     ORDER BY categoryName ASC;
                                                                                     ");
                                                 foreach ($data as $row => $value) {
@@ -359,7 +376,8 @@
                                                 $data = $customer->getDataByQuery("SELECT categoryName FROM category
                                                                                     WHERE categoryType = 'expenses'
                                                                                     AND preDefine = 1
-                                                                                    OR cusID = " . $customer->getId() . "
+                                                                                    OR categoryType = 'expenses'
+                                                                                    AND cusID = " . $customer->getId() . "
                                                                                     ORDER BY categoryName ASC;
                                                                                     ");
                                                 foreach ($data as $row => $value) {
@@ -423,7 +441,7 @@
                                         <label class="error" for="edit_transactionDateTime">Please enter a valid date and time</label>
                                     </div>
                                     <div class="form-group row">
-                                        <label class="col-5" for="edit_transactionAmount">Amount:</label>
+                                        <label class="col-5" for="">Amount:</label>
                                         <input class="col-6 form-transactionAmount" type="number" step='0.01' id="edit_transactionAmount" name="edit_transactionAmount" required />
                                         <label class="error" for="edit_transactionAmount">Please enter a valid amount</label>
                                     </div>
@@ -444,7 +462,8 @@
                                                 $data = $customer->getDataByQuery("SELECT categoryName FROM category
                                                                                     WHERE categoryType = 'income'
                                                                                     AND preDefine = 1
-                                                                                    OR cusID = " . $customer->getId() . "
+                                                                                    OR categoryType = 'income'
+                                                                                    AND cusID = " . $customer->getId() . "
                                                                                     ORDER BY categoryName ASC;
                                                                                     ");
                                                 foreach ($data as $row => $value) {
@@ -459,7 +478,8 @@
                                                 $data = $customer->getDataByQuery("SELECT categoryName FROM category
                                                                                     WHERE categoryType = 'expenses'
                                                                                     AND preDefine = 1
-                                                                                    OR cusID = " . $customer->getId() . "
+                                                                                    OR categoryType = 'expenses'
+                                                                                    AND cusID = " . $customer->getId() . "
                                                                                     ORDER BY categoryName ASC;
                                                                                     ");
                                                 foreach ($data as $row => $value) {
@@ -603,74 +623,5 @@
         <i class="fas fa-plus"></i>
     </button>
 </body>
-<script>
-
-    var pieOptions = {
-        series: [1200.00, 300.00, 500.00, 432.60],
-        chart: {
-            width: 550,
-            type: 'pie',
-        },
-        labels: ['Salary', 'Bonus', 'Savings', 'Sales'],
-        theme: {
-            monochrome: {
-                enabled: true,
-                color: '#F89542',
-                shadeIntensity: 0.65
-            }
-        },
-    };
-
-    var pieChart = new ApexCharts(document.querySelector("#pie-chart"), pieOptions);
-    pieChart.render();
-
-    var lineOptions = {
-        series: [{
-            name: "Salary",
-            data: [1100.00, 1030.00, 950.00, 2000.00, 1250.00, 1200.00, 1000.00, 1200.00, 0.00, 0.00]
-        }],
-        chart: {
-            height: 400,
-            type: 'line',
-            dropShadow: {
-                enabled: true,
-                color: '#000',
-                top: 18,
-                left: 7,
-                blur: 10,
-                opacity: 0.2
-            }
-        },
-        dataLabels: {
-            enabled: true
-        },
-        stroke: {
-            curve: 'straight',
-            width: 1
-        },
-        colors: ['#F89542'],
-        grid: {
-            row: {
-                colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-                opacity: 0.5
-            },
-        },
-        xaxis: {
-            max: 7,
-            categories: ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb'],
-        },
-        yaxis: {
-            min: function(min) {
-                return min - 100
-            },
-            max: function(max) {
-                return max + 100
-            }
-        }
-    };
-
-    var lineChart = new ApexCharts(document.querySelector("#line-chart"), lineOptions);
-    lineChart.render();
-</script>
 <script src="./script/income_trans.js"></script>
 </html>
