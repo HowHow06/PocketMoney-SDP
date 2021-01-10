@@ -65,7 +65,7 @@
                             </div>
                             <div class="col-1 show">
                                 <button class="btn">
-                                    <i class="fas fa-chevron-right"></i>
+                                <a href="#salary" data-toggle="row-hover" data-text="Show more"><i class="fas fa-chevron-right"></i></a>
                                 </button>
                             </div>
                         </div>
@@ -82,7 +82,7 @@
                             </div>
                             <div class="col-1 show">
                                 <button class="btn">
-                                    <i class="fas fa-chevron-right"></i>
+                                <a href="#salary" data-toggle="row-hover" data-text="Show more"><i class="fas fa-chevron-right"></i></a>
                                 </button>
                             </div>
                         </div>
@@ -99,7 +99,7 @@
                             </div>
                             <div class="col-1 show">
                                 <button class="btn">
-                                    <i class="fas fa-chevron-right"></i>
+                                <a href="#salary" data-toggle="row-hover" data-text="Show more"><i class="fas fa-chevron-right"></i></a>
                                 </button>
                             </div>
                         </div>
@@ -116,7 +116,7 @@
                             </div>
                             <div class="col-1 show">
                                 <button class="btn">
-                                    <i class="fas fa-chevron-right"></i>
+                                <a href="#salary" data-toggle="row-hover" data-text="Show more"><i class="fas fa-chevron-right"></i></a>
                                 </button>
                             </div>
                         </div>
@@ -124,7 +124,7 @@
                 </div>
             </div>
 
-            <div class="container-fluid category">
+            <div class="container-fluid category" id="salary">
                 <div class="border round">
                     <div class="container-fluid title">
                         <h2>Food</h2>
@@ -181,22 +181,29 @@
             <h4>ALL TRANSACTIONS</h4>
             <hr>
 
-            <div class="container-fluid filter">
-                <div class="col-3">
-                    <div class="row">
-                        <h5>CATEGORY:</h5>
-                        <select name="filter-transaction-category" id="filter-transaction-category" class="custom-select" onchange="showsearch('')">
-                            <option value="ALL" selected>ALL</option>
-                            <?php
-                            $data = $customer->getData('Investment', "DISTINCT investmentType");
-                            foreach ($data as $row => $value) {
-                            ?>
-                                <option value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
-                            <?php
-                            }
-                            ?>
-                        </select>
-                    </div>
+            <div class="container-fluid row filter">
+                <div>
+                    <h5>CATEGORY:</h5>
+                    <select name="filter-transaction-category" id="filter-transaction-category" class="custom-select" onchange="showsearch('')">
+                        <option value="ALL" selected>ALL</option>
+                        <?php
+                        $data = $customer->getData('Investment', "DISTINCT investmentType");
+                        foreach ($data as $row => $value) {
+                        ?>
+                            <option value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+
+                <div>
+                    <h5>TYPE:</h5>
+                    <select name="filter-transaction-time" id="filter-transaction-time" class="custom-select" onchange="showsearch('')">
+                        <option value="ALL">ALL</option>
+                        <option value="Debit">Debit</option>
+                        <option value="Credit">Credit</option>
+                    </select>
                 </div>
             </div>
 
@@ -600,6 +607,29 @@
 
     var lineChart = new ApexCharts(document.querySelector("#line-chart"), lineOptions);
     lineChart.render();
+
+    // smoothing the bookmark section
+    let anchorlinks = document.querySelectorAll('a[href^="#"]')
+ 
+    for (let item of anchorlinks) { // relitere 
+        item.addEventListener('click', (e)=> {
+            let hashval = item.getAttribute('href')
+            let target = document.querySelector(hashval)
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            })
+            history.pushState(null, null, hashval)
+            e.preventDefault()
+        })
+    }
+
+    $('[data-toggle="row-hover"]').popover({
+    html: true,
+    trigger: 'hover',
+    placement: 'top',
+    content: function () { return $(this).data('text'); }
+    });
 </script>
 
 </html>

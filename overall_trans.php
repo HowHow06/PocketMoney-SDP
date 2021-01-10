@@ -49,22 +49,29 @@
             <h4>ALL TRANSACTIONS</h4>
             <hr>
 
-            <div class="container-fluid filter">
-                <div class="col-3">
-                    <div class="row">
-                        <h5>CATEGORY:</h5>
-                        <select name="filter-transaction-category" id="filter-transaction-category" class="custom-select" onchange="showsearch('')">
-                            <option value="ALL" selected>ALL</option>
-                            <?php
-                            $data = $customer->getData('Investment', "DISTINCT investmentType");
-                            foreach ($data as $row => $value) {
-                            ?>
-                                <option value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
-                            <?php
-                            }
-                            ?>
-                        </select>
-                    </div>
+            <div class="container-fluid row filter">
+                <div>
+                    <h5>CATEGORY:</h5>
+                    <select name="filter-transaction-category" id="filter-transaction-category" class="custom-select" onchange="showsearch('')">
+                        <option value="ALL" selected>ALL</option>
+                        <?php
+                        $data = $customer->getData('Investment', "DISTINCT investmentType");
+                        foreach ($data as $row => $value) {
+                        ?>
+                            <option value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+
+                <div>
+                    <h5>TYPE:</h5>
+                    <select name="filter-transaction-time" id="filter-transaction-time" class="custom-select" onchange="showsearch('')">
+                        <option value="ALL">ALL</option>
+                        <option value="Debit">Debit</option>
+                        <option value="Credit">Credit</option>
+                    </select>
                 </div>
             </div>
 

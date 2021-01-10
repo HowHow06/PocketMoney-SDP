@@ -220,6 +220,8 @@
   width: 16%;
   background-color: #fc9a55 !important;
   border-radius: 8px;
+  -webkit-transition: 0.3s ease-in-out;
+  transition: 0.3s ease-in-out;
 }
 
 .body > .liability-overview > div > .liability-row > .row > .col-9 > .progress > h6 {
