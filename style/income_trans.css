@@ -152,30 +152,27 @@
   cursor: default;
 }
 
-.body > div > .left > form {
+.body > div > .left > .row {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   padding-left: 20px;
   padding-top: 20px;
 }
 
-.body > div > .left > form > div {
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.body > div > .left > form > div > button {
+.body > div > .left > .row > form > button {
   width: 50px;
   height: 65px;
 }
 
-.body > div > .left > form > div > button > i {
+.body > div > .left > .row > form > button > i {
   color: #FF6C00;
   font-size: 24px;
 }
 
-.body > div > .left > form > div > h6 {
+.body > div > .left > .row > label {
   font-size: 20px;
-  margin-bottom: 0;
+  margin-bottom: 5px;
 }
 
 .body > div > .right > form {

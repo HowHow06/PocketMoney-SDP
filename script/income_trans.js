@@ -4,7 +4,15 @@ $(document).ready(function () {
       showsearch();
     });
     input;
+
+    $("body").niceScroll();
+
+    var currentdate = document.getElementById("filter-current-date").textContent;
+    var d = new Date(currentdate);
+    var m = d.getMonth();
+    // alert(d);
 });
+
 
 function validateform(ele) {
     var id = "#" + ele.id;
@@ -184,6 +192,7 @@ function showsearch() {
         ).innerHTML = this.responseText;
         var rowCount = $("#overallTransactionTableBody tr").length;
         $("#table-row-count").html(" " + rowCount + " ");
+        $("body").niceScroll().resize();
       }
     };
     xmlhttp.open(
@@ -233,59 +242,139 @@ function resetEdit() {
     xmlhttp.send();
 }
 
-var lineOptions = {
-    series: [{
-        name: "Salary",
-        data: [1100.00, 1030.00, 950.00, 2000.00, 1250.00, 1200.00, 1000.00, 1200.00]
-    }],
-    chart: {
-        height: 400,
-        type: 'line',
-        dropShadow: {
-            enabled: true,
-            color: '#000',
-            top: 18,
-            left: 7,
-            blur: 10,
-            opacity: 0.2
-        },
-        toolbar: {
-            show: false,
-        },
-        zoom: {
-            enabled: false,
-        }
-    },
-    dataLabels: {
-        enabled: true
-    },
-    stroke: {
-        curve: 'straight',
-        width: 1
-    },
-    colors: ['#F89542'],
-    grid: {
-        row: {
-            colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-            opacity: 0.5
-        },
-    },
-    xaxis: {
-        max: 8,
-        categories: ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-    },
-    yaxis: {
-        min: function(min) {
-            return min - 100
-        },
-        max: function(max) {
-            return max + 100
-        }
+function showdetail(name,date,year) {
+    var xmlhttp = new XMLHttpRequest();
+    var cateAmount = document.getElementById("showAmount"+name).textContent;
+    document.getElementById("cateName").textContent = name.toUpperCase();
+    document.getElementById("cateAmount").textContent = "Total: RM"+cateAmount;
+    raw = parseFloat(cateAmount);
+    switch(date) {
+        case 1:
+        case 3:
+        case 5:
+        case 7:
+        case 8:
+        case 10:
+        case 12:
+            avg = raw / 31;
+            break;
+        case 4:
+        case 6:
+        case 9:
+        case 11:
+            avg = raw / 30;
+            break;
+        case 2:
+            avg = raw / 28;
+            break;
     }
-};
+    document.getElementById("cateAvg").textContent = "Average Daily: RM"+avg.toFixed(2);
+    document.getElementsByClassName('cate-overall')[0].id = name;
+    cusID = document.getElementById("cusID").value;
+    
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var data = JSON.parse(this.responseText);
+            var amount = String(data['amount']);
+            var month = String(data['month']);
 
-var lineChart = new ApexCharts(document.querySelector("#line-chart"), lineOptions);
-lineChart.render();
+            var datalist = data['datalist'];
+            document.getElementById("categoryTransactionTableBody").innerHTML = datalist;
+
+            refreshchart(amount, month);
+            $("body").niceScroll().resize();
+        }
+    };
+    xmlhttp.open(
+        "GET", 
+        "form_process.php?cateName=" + 
+        name + 
+        "&cusID=" + 
+        cusID +
+        "&date=" + 
+        date +
+        "&year=" + 
+        year,
+        true
+    );
+    xmlhttp.send();
+}
+
+// smoothing the bookmark section
+let anchorlinks = document.querySelectorAll('a[href^="#"]')
+
+for (let item of anchorlinks) { // relitere 
+    item.addEventListener('click', (e)=> {
+        let hashval = item.getAttribute('href')
+        let target = document.querySelector(hashval)
+        target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        })
+        history.pushState(null, null, hashval)
+        e.preventDefault()
+    })
+}
+
+function refreshchart(amount, month) 
+{
+    amountJSON = JSON.parse(amount);
+    monthJSON = JSON.parse(month);
+    var lineOptions = {
+        series: [{
+            data: amountJSON
+        }],
+        chart: {
+            height: 400,
+            type: 'line',
+            dropShadow: {
+                enabled: true,
+                color: '#000',
+                top: 18,
+                left: 7,
+                blur: 10,
+                opacity: 0.2
+            },
+            toolbar: {
+                show: false,
+            },
+            zoom: {
+                enabled: false,
+            }
+        },
+        dataLabels: {
+            enabled: true
+        },
+        stroke: {
+            curve: 'straight',
+            width: 1
+        },
+        colors: ['#F89542'],
+        grid: {
+            row: {
+                colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                opacity: 0.5
+            },
+        },
+        xaxis: {
+            max: 8,
+            categories: monthJSON
+        },
+        yaxis: {
+            min: function(min) {
+                return min - 100
+            },
+            max: function(max) {
+                return max + 100
+            }
+        }
+    };
+    
+    
+    $('#line-chart').contents().remove();
+    var lineChart = new ApexCharts(document.querySelector("#line-chart"), lineOptions);
+    lineChart.render();
+}
 
 $(document).on("click", ".edit-transaction-anchor", function () {
     var transactionID = $(this).parent().parent().find(".transactionID").val();
@@ -342,29 +431,9 @@ $(document).on("change", "#new_transactionType", function () {
     }
 });
 
-// smoothing the bookmark section
-let anchorlinks = document.querySelectorAll('a[href^="#"]')
- 
-for (let item of anchorlinks) { // relitere 
-    item.addEventListener('click', (e)=> {
-        let hashval = item.getAttribute('href')
-        let target = document.querySelector(hashval)
-        target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        })
-        history.pushState(null, null, hashval)
-        e.preventDefault()
-    })
-}
-
 $('[data-toggle="row-hover"]').popover({
   html: true,
   trigger: 'hover',
   placement: 'top',
   content: function () { return $(this).data('text'); }
-});
-
-$(document).ready(function () {
-    $("body").niceScroll();
 });
