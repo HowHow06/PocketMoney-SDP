@@ -163,3 +163,55 @@ if (isset($_GET['searchTransaction'])) {
         }
     }
 }
+
+/**
+ * 
+ * echo the JSON format of fields within Transaction Edit modal
+ */
+if (isset($_GET['cateName'])) {
+    $cateName = $_GET['cateName'];
+    $cusID = $_GET['cusID'];
+    $month = $_GET['date'];
+    $year = $_GET['year'];
+    $data = $customer->getCategoryAmountJSON($cateName,$cusID,$month,$year);
+    $data1 = $customer->getCategoryMonthJSON($cateName,$cusID,$month,$year);
+    
+    // table
+    $datarow = $customer->getDataByQuery("SELECT t.transactionID, c.categoryName AS category, t.date, t.amount, t.description AS name, c.categoryType AS type
+                                            FROM transaction t, category c
+                                            WHERE t.cusID = " . $cusID . " 
+                                            AND c.categoryName = '" . $cateName . "' 
+                                            AND MONTH(t.date) = " . $month . "
+                                            AND YEAR(t.date) = " . $year . "
+                                            AND t.categoryID = c.categoryID
+                                            ORDER BY t.date DESC;
+                                        ");
+    if (!empty($datarow)) {
+        $datalist = "";
+        for ($i = 0; $i < sizeof($datarow); $i++) {
+            $datalist .= ('
+            <tr>
+                <input type="hidden" class="transactionID" value="' . ($datarow[$i]['transactionID']) . '"></input>
+                <input type="hidden" class="transactionDateTime" value="' . ($datarow[$i]['date']) . '"></input>
+                <th style="display:none;" class="transactionCategory">' . ($datarow[$i]['category']) . '</th>
+                <th scope="row">' . (($i + 1)) . '</th>
+                <td class="transactionDate">' . ($customer->getDate($datarow[$i]['transactionID'],$cusID)) . '</td>
+                <td class="transactionTime">' . ($customer->getTime($datarow[$i]['transactionID'],$cusID)) . '</td>
+                <td class="transactionAmount">' .($datarow[$i]['amount']) . '</td>
+                <td class="transactionName">' . ($datarow[$i]['name']) . '</td>
+                <td class="transactionType">' . ($datarow[$i]['type']) . '</td>
+                <td class="action">
+                    <a href="#" class="edit-transaction-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
+                    <span> | </span>
+                    <a href="#" class="delete-transaction-anchor" data-toggle="modal" data-target="#delete-row">Delete</a>
+                </td>
+            </tr>
+            ');
+        }
+    }
+
+    $arr = array(['amount'=>$data,'month'=>$data1,'datalist'=>$datalist]);
+    $dataJSON = json_encode($arr[0]);
+    echo ($dataJSON);
+}
+

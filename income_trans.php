@@ -12,6 +12,8 @@
     $activePage = "transactions"; 
     include(".navbar.php"); 
 
+    $customer->setCurDate();
+
     //update the transaction
     if (isset($_POST['edit_submit'])) {
         $params['tableName'] = 'Transaction';
@@ -120,6 +122,17 @@
         $customer->goTo('income_trans.php');
     }
 
+    if (isset($_POST['filter-previous'])) {
+        $date = strtotime($_POST['current-date']);
+        $d = date("Y-m-d",$date);
+        $customer->setCurDate(-1,$d);
+    }
+
+    if (isset($_POST['filter-next'])) {
+        $date = strtotime($_POST['current-date']);
+        $d = date("Y-m-d",$date);
+        $customer->setCurDate(1,$d);
+    }
     ?>
 
     <div class="container-fluid background">
@@ -129,17 +142,21 @@
             </nav>
             <div class="container-fluid row">
                 <div class="col-6 left">
-                    <form action="" method="post">
-                        <div class="row">
-                            <button class="btn">
+                    <div class="row">
+                        <form action="" method="post">
+                            <button class="btn" type="submit" id="filter-previous" name="filter-previous">
                                 <i class="fas fa-chevron-left"></i>
                             </button>
-                            <h6>Dec 2020</h6>
-                            <button class="btn">
+                            <input type="hidden" id="current-date" name="current-date" value="<?php echo ($customer->getCurrentFilterTime()); ?>"></input>
+                        </form>
+                        <label id="filter-current-date" name="filter-current-date"><?php echo ($customer->getCurrentFilterTime()); ?></label>
+                        <form action="" method="post">
+                            <input type="hidden" id="current-date" name="current-date" value="<?php echo ($customer->getCurrentFilterTime()); ?>"></input>
+                            <button class="btn" type="submit" id="filter-next" name="filter-next" onclick="filter(1)">
                                 <i class="fas fa-chevron-right"></i>
                             </button>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
                 <div class="col-6 right">
                     <form action="">
@@ -159,7 +176,7 @@
                 <div class="pie-chart">
                     <div class="border rounded" id="incomeTypes-pie-chart">
                         <?php 
-                            $chart = new FusionCharts("pie2d", "ex1", "100%", "100%", "incomeTypes-pie-chart", "json", $customer->getTypesAndAmount());
+                            $chart = new FusionCharts("pie2d", "ex1", "100%", "100%", "incomeTypes-pie-chart", "json", $customer->getTypesAndAmount($customer->getCurrentFilterTime("",1,0),$customer->getCurrentFilterTime("",1,1)));
                             $chart->render();
                         ?>
                     </div>
@@ -171,28 +188,32 @@
                                                                 FROM category c
                                                                 LEFT JOIN transaction t
                                                                 ON c.categoryID = t.categoryID
-                                                                WHERE t.cusID = '" . $customer->getId() . "'
+                                                                WHERE t.cusID = " . $customer->getId() . "
                                                                 AND c.categoryType = 'income'
+                                                                AND MONTH(t.date) = " . $customer->getCurrentFilterTime("",1,0) ."
+                                                                AND YEAR(t.date) = " . $customer->getCurrentFilterTime("",1,1) ."
                                                                 GROUP BY c.categoryName
-                                                                ORDER BY t.amount DESC
+                                                                ORDER BY amount DESC
                                                             ");
                         if (!empty($datarow)) {
-                            $percentageArray = $customer->getPercentage();
+                            $percentageArray = $customer->getPercentage($customer->getCurrentFilterTime("",1,0),$customer->getCurrentFilterTime("",1,1));
                             for ($i = 0; $i < sizeof($datarow); $i++) {
                         ?>
                             <div class="container-fluid row category">
                                 <div class="col-1">
                                     <p id="category<?php echo (($i + 1)); ?>"><?php echo $percentageArray[$i]['percentage'] ?></p>
                                 </div>
-                                <div class="col-5">
-                                    <h5><?php echo ($datarow[$i]['categoryName']); ?></h5>
+                                <div class="col-5 forshowName">
+                                    <h5 id="showName<?php echo ($datarow[$i]['categoryName']); ?>" name="showName"><?php echo ($datarow[$i]['categoryName']); ?></h5>
                                 </div>
-                                <div class="col-5 value">
-                                    <h5><?php echo ($datarow[$i]['amount']); ?></h5>
+                                <div class="col-5 value forshowAmount">
+                                    <h5 id="showAmount<?php echo ($datarow[$i]['categoryName']); ?>" name="showAmount"><?php echo ($datarow[$i]['amount']); ?></h5>
                                 </div>
-                                <div class="col-1 show">
+                                <div class="col-1 show forshowDetail">
                                     <button class="btn">
-                                        <a href="#salary" data-toggle="row-hover" data-text="Show more"><i class="fas fa-chevron-right"></i></a>
+                                        <a href="#<?php echo ($datarow[$i]['categoryName']); ?>" id="showDetail<?php echo ($datarow[$i]['categoryName']); ?>" name="showDetail" data-toggle="row-hover" data-text="Show more" onclick="showdetail('<?php echo ($datarow[$i]['categoryName']); ?>',<?php echo ($customer->getCurrentFilterTime('',1,0)); ?>,<?php echo ($customer->getCurrentFilterTime('',1,1)); ?>)">
+                                            <i class="fas fa-chevron-right"></i>
+                                        </a>
                                     </button>
                                 </div>
                             </div>
@@ -203,16 +224,12 @@
                 </div>
             </div>
 
-            <input type="hidden" id="typeCategoryChoose" name="typeCategoryChoose" value='<?php echo ($customer->getTypeAmountsJSON()); ?>'></input>
-            <input type="hidden" id="amountCategoryChoose" name="amountCategoryChoose" value='<?php echo ($customer->getInvestTypesJSON()); ?>'></input>
-            <input type="hidden" id="currentDateChoose" name="currentDateChoose" value='<?php echo ($customer->getTypeAmountsJSON()); ?>'></input>
-
-            <div class="container-fluid category" id="salary">
+            <div class="container-fluid category cate-overall">
                 <div class="border round">
                     <div class="container-fluid title">
-                        <h2>SALARY</h2>
-                        <h5>Total: 1200.00</h5>
-                        <h5>Average Daily: 40.00</h5>
+                        <h2 id="cateName" name="cateName">CATEGORY</h2>
+                        <h5 id="cateAmount" name="cateAmount">Total: RM</h5>
+                        <h5 id="cateAvg" name="cateAvg">Average Daily: RM</h5>
                     </div>
                     <div class="line-chart">
                         <div id="line-chart">
@@ -235,36 +252,6 @@
                     </tr>
                 </thead>
                 <tbody id="categoryTransactionTableBody">
-
-                    <?php
-                    $datarow = $customer->getDataByQuery("SELECT t.transactionID, c.categoryName AS category, t.date, t.amount, t.description AS name, c.categoryType AS type
-                                                            FROM transaction t, category c
-                                                            WHERE t.cusID = '" . $customer->getId() . "' AND
-                                                            t.categoryID = c.categoryID
-                                                            ORDER BY date DESC;
-                                                            ");
-                    if (!empty($datarow)) {
-                        for ($i = 0; $i < sizeof($datarow); $i++) {
-                    ?>
-                            <tr>
-                                <input type="hidden" class="transactionID" value='<?php echo ($datarow[$i]['transactionID']); ?>'></input>
-                                <input type="hidden" class="transactionDateTime" value='<?php echo ($datarow[$i]['date']); ?>'></input>
-                                <th style="display:none;" class="transactionCategory"><?php echo ($datarow[$i]['category']); ?></th>
-                                <th scope="row"><?php echo (($i + 1)); ?></th>
-                                <td class="transactionDate"><?php print_r($customer->getDate($datarow[$i]['transactionID'])); ?></td>
-                                <td class="transactionTime"><?php print_r($customer->getTime($datarow[$i]['transactionID'])); ?></td>
-                                <td class="transactionAmount"><?php echo ($datarow[$i]['amount']); ?></td>
-                                <td class="transactionName"><?php echo ($datarow[$i]['name']); ?></td>
-                                <td class="transactionType"><?php echo ($datarow[$i]['type']); ?></td>
-                                <td class="action">
-                                    <a href="#" class="edit-transaction-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
-                                    <span> | </span>
-                                    <a href="#" class="delete-transaction-anchor" data-toggle="modal" data-target="#delete-row">Delete</a>
-                                </td>
-                            </tr>
-                    <?php
-                        }
-                    } ?>
                 </tbody>
             </table>
 
@@ -561,8 +548,9 @@
                     <?php 
                     $datarow = $customer->getDataByQuery("SELECT t.transactionID, c.categoryName AS category, t.date, t.amount, t.description AS name, c.categoryType AS type
                                                             FROM transaction t, category c
-                                                            WHERE t.cusID = '" . $customer->getId() . "' AND
-                                                            t.categoryID = c.categoryID
+                                                            WHERE t.cusID = " . $customer->getId() . " 
+                                                            AND t.categoryID = c.categoryID 
+                                                            AND MONTH(t.date) = " . $customer->getCurrentFilterTime('',1,0) . "
                                                             ORDER BY date DESC;
                                                             ");
                     if (!empty($datarow)) {

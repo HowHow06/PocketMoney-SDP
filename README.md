@@ -11,7 +11,11 @@ Financial Management System (Website)
 
 ## Work Progress
 
-### 2021-01-09
+### 2021-01-11
+> Moses's Part
+- Update ```class.customer.php``` and ```income_trans.js```  and ```form_process.php``` mostly for income page
+
+### 2021-01-10
 > Moses's Part
 - Update ```class.customer.php``` and ```income_trans.js``` mostly for income page
 - Create ```fusioncharts-suite-xt``` file
