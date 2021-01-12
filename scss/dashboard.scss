@@ -11,6 +11,100 @@
     }
 }
 
+.transaction {
+    > .transaction-table {
+        margin: 0 auto;
+        width: 95%;
+        text-align: center;
+        font-size: 12px;
+        > thead {
+            background-color: #fc9a55;
+            color: white;
+        }
+    }
+}
+
+.budget {
+    > .budget-overview {
+        > .budget-row {
+            > .row {
+                > .col-3 {
+                    margin-top: 9px;
+                    margin-bottom: 5px;
+                    > div {
+                        height: 35px;
+                        > sub {
+                            bottom: -1.25em;
+                            color: grey;
+                        }
+                    }
+                    p {
+                        margin-bottom: 0;
+                        font-size: 14px;
+                    }
+                }
+                > .col-9 {
+                    margin-top: 15px;
+                    margin-bottom: 5px;
+                    > .progress {
+                        // margin-top: 10px;
+                        height: 25px;
+                        border-radius: 8px !important;
+                        > .progress-bar {
+                            width: 50%; 
+                            background-color: #fc9a55 !important;
+                            border-radius: 8px;
+                        }
+                        > .excess-bar {
+                            width: 100%; 
+                            background-color: #ff6767 !important;
+                        }
+                        > .excess-value {
+                            color: white !important;
+                        }
+                        > h6 {
+                            position: absolute;
+                            right: 30px;
+                            bottom: 28px;
+                            font-size: 12px;
+                        }
+                        > .vl {
+                            border-left: 2px solid white;
+                            height: 30px;
+                            position: absolute;
+                            left: 10%;
+                        }
+                    }
+                    > .row {
+                        padding-top: 7px;
+                        > .col-6 {
+                            padding: 0;
+                            padding-left: 15px;
+                            padding-right: 15px;
+                            > .spent {
+                                float: left;
+                                color: #fc9a55;
+                                font-size: 14px;
+                            }
+                            > .excess {
+                                color: #ff6767 !important;
+                            }
+                            > .target {
+                                float: right;
+                                font-size: 14px;
+                            }
+                        }
+                    }
+                }
+            }
+            hr {
+                margin-top: 0 !important;
+                margin-bottom: 0 !important;
+            }
+        }
+    }
+}
+
 .snapshot {
     > .row {
         padding-bottom: 10px;
@@ -30,15 +124,6 @@
                 margin-bottom: 2px;
             }
         }
-        > div:hover {
-            background-color: #c47a46;
-            transition: 0.5s ease-in-out;
-            cursor: default;
-            > p {
-                font-size: 20px;
-                transition: 0.7s ease-in-out;
-            }
-        }
     }
 }
 
@@ -55,6 +140,71 @@
         > thead {
             background-color: #fc9a55;
             color: white;
+        }
+    }
+}
+
+.liability {
+    > .liability-overview {
+        > .liability-row {
+            > .row {
+                > .col-3 {
+                    margin-top: 9px;
+                    margin-bottom: 5px;
+                    > div {
+                        height: 35px;
+                        > sub {
+                            bottom: -1.25em;
+                            color: grey;
+                        }
+                    }
+                    p {
+                        margin-bottom: 0;
+                        font-size: 14px;
+                    }
+                }
+                > .col-9 {
+                    margin-top: 15px;
+                    margin-bottom: 5px;
+                    > .progress {
+                        // margin-top: 10px;
+                        height: 25px;
+                        border-radius: 8px !important;
+                        > .progress-bar {
+                            width: 16%; 
+                            background-color: #fc9a55 !important;
+                            border-radius: 8px;
+                        }
+                        > h6 {
+                            position: absolute;
+                            right: 30px;
+                            bottom: 28px;
+                            font-size: 12px;
+                        }
+                    }
+                    > .row {
+                        padding-top: 7px;
+                        > .col-6 {
+                            padding: 0;
+                            padding-left: 15px;
+                            padding-right: 15px;
+                            > .paid {
+                                float: left;
+                                color: #fc9a55;
+                                font-size: 14px;
+                            }
+                            > .target {
+                                float: right;
+                                font-size: 14px;
+                            }
+                        }
+                    }
+                }
+            }
+            hr {
+                margin-top: 0 !important;
+                margin-bottom: 0 !important;
+            }
         }
     }
 }

@@ -4,235 +4,288 @@
 <head>
     <?php include(".head.php"); ?>
     <link rel="stylesheet" href="./style/investment.css">
-    <title>PocketMoney | Investment</title>
+
+    <title>PocketMoney | Investments</title>
 </head>
 
 <body>
-    <?php include(".navbar.php"); ?>
+    <?php
+    $activePage = "investments"; 
+    include(".navbar.php");
 
+    //update the investment transaction
+    if (isset($_POST['edit_submit'])) {
+        $params['tableName'] = 'Investment';
+        $params['idName'] = 'investmentID';
+        $params['id'] = $_POST['edit_investmentID'];
+        $params['data'] = array(
+            'investmentName' => $_POST['edit_investmentName'],
+            'investmentType' => $_POST['edit_investmentType'],
+            'startDate' => $_POST['edit_startDate'],
+            'amountInvested' => $_POST['edit_amountInvested'],
+            'ratePerAnnum' => $_POST['edit_ratePerAnnum']
+        );
+        $result = $customer->customerUpdate($params);
+        if ($result['status'] == 'ok') {
+            $customer->showAlert($result['statusMsg']);
+        } else {
+            $customer->showAlert($result['statusMsg']);
+        }
+        $customer->goTo('investment.php');
+    }
+
+
+    //delete transaction
+    if (isset($_POST['delete_submit'])) {
+        $params['tableName'] = 'Investment';
+        $params['idName'] = 'investmentID';
+        $params['id'] = $_POST['delete_investmentID'];
+        $result = $customer->customerDelete($params);
+        if ($result['status'] == 'ok') {
+            $customer->showAlert($result['statusMsg']);
+        } else {
+            $customer->showAlert($result['statusMsg']);
+        }
+        $customer->goTo('investment.php');
+    }
+
+    //new transaction
+    if (isset($_POST['new_submit'])) {
+        $params['tableName'] = 'Investment';
+        $params['data'] = array(
+            'cusID' => $customer->getId(),
+            'investmentName' => $_POST['new_investmentName'],
+            'investmentType' => $_POST['new_investmentType'],
+            'startDate' => $_POST['new_startDate'],
+            'amountInvested' => $_POST['new_amountInvested'],
+            'ratePerAnnum' => $_POST['new_ratePerAnnum']
+        );
+        $result = $customer->customerInsert($params);
+
+        if ($result['status'] == 'ok') {
+            $customer->showAlert($result['statusMsg']);
+        } else {
+            $customer->showAlert($result['statusMsg']);
+        }
+        $customer->goTo('investment.php');
+    }
+
+    //edit general investment
+    if (isset($_POST['edit-general-submit'])) {
+        $params['tableName'] = 'Investment';
+        $params['idName'] = 'investmentName';
+        $params['id'] = $_POST['edit-general-name'];
+        $params['data'] = array(
+            'investmentName' => $_POST['edit-general-newName'],
+            'investmentType' => $_POST['edit-general-investmentType'],
+            'ratePerAnnum' => $_POST['edit-general-ratePerAnnum']
+        );
+        $result = $customer->customerUpdate($params);
+        if ($result['status'] == 'ok') {
+            $customer->showAlert($result['statusMsg']);
+        } else {
+            $customer->showAlert($result['statusMsg']);
+        }
+        $customer->goTo('investment.php');
+    }
+
+    //delete general invesment
+    if (isset($_POST['delete-general-submit'])) {
+        $params['tableName'] = 'Investment';
+        $params['idName'] = 'investmentName';
+        $params['id'] = $_POST['delete-general-name'];
+        $result = $customer->customerDelete($params);
+        if ($result['status'] == 'ok') {
+            $customer->showAlert($result['statusMsg']);
+        } else {
+            $customer->showAlert($result['statusMsg']);
+        }
+        $customer->goTo('investment.php');
+    }
+
+    ?>
     <div class="container-fluid background">
         <div class="container-fluid body">
             <nav class="navbar navbar-expand-lg">
-                <a href="#" class="navbar-brand">INVESTMENT</a>
+                <a href="#" class="navbar-brand">INVESTMENTS</a>
             </nav>
 
             <div class="container-fluid row overall">
                 <div>
-                    <h5>Portfolio Value</h5>
-                    <p>RM150,000.00</p>
+                    <h5>Total Amount</h5>
+                    <p>
+                        RM <?php echo ($customer->getTotalInvestedAmount()); ?>
+                    </p>
                 </div>
                 <div>
                     <h5>Top Holding</h5>
-                    <p>Company ABC</p>
+                    <p><?php echo ($customer->getTopHolding()); ?></p>
                 </div>
                 <div>
                     <h5>Total Holdings</h5>
-                    <p>3</p>
+                    <p><?php echo ($customer->getHoldingCount()); ?></p>
                 </div>
             </div>
 
             <div class="container-fluid row chart">
-                <!-- horizontal bar chart -->
-                <div class="col-7 horizontal-chart" id="horizontal-chart"></div>
                 <!-- pie chart -->
-                <div class="col-5 donut-chart" id="donut-chart"></div>
+                <input type="hidden" id="amountsOfInvestments" name="amountsOfInvestments" value='<?php echo ($customer->getTypeAmountsJSON()); ?>'></input>
+                <input type="hidden" id="typesOfInvestments" name="typesOfInvestments" value='<?php echo ($customer->getInvestTypesJSON()); ?>'></input>
+                <div class="col-6 horizontal-chart" id="investmentTypes-donut-chart"></div>
+                <!-- pie chart -->
+                <input type="hidden" id="amountsOfInvestmentByName" name="amountsOfInvestmentByName" value='<?php echo ($customer->getNameAmountsJSON()); ?>'>
+                <input type="hidden" id="nameOfInvestment" name="nameOfInvestment" value='<?php echo ($customer->getInvestNameJSON()); ?>'>
+                <div class="col-6 donut-chart" id="investmentNames-donut-chart"></div>
             </div>
 
-            <!-- table -->
-            <div class="container-fluid row head">
-                <h4 class="col-6">INVESTMENT SUMMARY</h5>
-                    <div class="col-6">
-                        <a href="#" class="btn delete" data-toggle="modal" data-target="#delete">DELETE</a>
-                        <a href="#" class="btn edit" data-toggle="modal" data-target="#edit">EDIT</a>
-                        <a href="#" class="btn add" data-toggle="modal" data-target="#add">ADD</a>
-                    </div>
 
-                    <!-- delete modal -->
-                    <div class="modal fade edit-modal" id="delete" tabindex="-1" role="dialog" aria-labelledby="delete-title" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="edit-title">Delete Institution</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
+            <div class="container-fluid row head">
+                <h4 class="col-6">INVESTMENT SUMMARY</h4>
+                <div class="col-6">
+                    <a href="#" class="btn delete" data-toggle="modal" data-target="#delete">DELETE</a>
+                    <a href="#" class="btn edit" data-toggle="modal" data-target="#edit">EDIT</a>
+                </div>
+
+                <!-- delete modal -->
+                <div class="modal fade edit-modal" id="delete" tabindex="-1" role="dialog" aria-labelledby="delete-title" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="edit-title">Delete Investment</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form action="" method="post" onsubmit="return confirm('This cannot be undone, are you sure you want to proceed?');">
                                 <div class="modal-body">
-                                    <p>Pick an institution and click Delete.</p>
-                                    <form action="" method="post">
-                                        <div class="form-group row">
-                                            <label class="col-4" for="">Institution:</label>
-                                            <select class="col-6" class="custom-select" id="category">
-                                                <option value="">Company ABC</option>
-                                                <option value="">Apple</option>
-                                                <option value="">Samsung</option>
-                                            </select>
-                                        </div>
-                                    </form>
+                                    <p>Pick an investment and click Delete.</p>
+
+                                    <div class="form-group row">
+                                        <label class="col-5" for="">Please Select:</label>
+                                        <select class="col-6" class="custom-select" id="delete-general-name" name="delete-general-name" required>
+                                            <option value="" selected>Select an investment</option>
+                                            <?php
+                                            $data = $customer->getData('Investment', "DISTINCT investmentName");
+                                            foreach ($data as $row => $value) {
+                                            ?>
+                                                <option value="<?php echo ($value['investmentName']); ?>"><?php echo ($value['investmentName']); ?></option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary">Delete</button>
+                                    <button type="submit" name="delete-general-submit" class="btn btn-primary delete">Delete</button>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
+                </div>
 
-                    <!-- edit modal -->
-                    <div class="modal fade edit-modal" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="edit-title">Edit Institution</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
+                <!-- edit modal -->
+                <div class="modal fade edit-modal" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="edit-title">Edit by Investment</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form action="" method="POST" id="edit-general-form" onsubmit="return validateform(this);">
                                 <div class="modal-body">
-                                    <form action="" method="post">
-                                        <div class="form-group row">
-                                            <label class="col-4" for="">Institution:</label>
-                                            <select class="col-6" class="custom-select" id="institution">
-                                                <option value="">Company ABC</option>
-                                                <option value="">Apple</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-4" for="">Description:</label>
-                                            <input class="col-6" type="text">
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-4" for="">Type:</label>
-                                            <select class="col-6" class="custom-select" id="type">
-                                                <option value="">Holding</option>
-                                                <option value="">Diposed</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-4" for="">Price:</label>
-                                            <input class="col-6" type="number">
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-4" for="">Rate per Annum:</label>
-                                            <input class="col-6" type="number">
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-4" for="">Profit:</label>
-                                            <input class="col-6" type="number" value="0.00" disabled>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-4" for="">Current Value:</label>
-                                            <input class="col-6" type="number" value="1300.00" disabled>
-                                        </div>
-                                    </form>
+
+                                    <div class="form-group row">
+                                        <label class="col-5" for="">Please Select:</label>
+                                        <select class="col-6" class="custom-select" id="edit-general-name" name="edit-general-name" required>
+                                            <option value="" selected>Select an investment</option>
+                                            <?php
+                                            $data = $customer->getData('Investment', "DISTINCT investmentName");
+                                            foreach ($data as $row => $value) {
+                                            ?>
+                                                <option value="<?php echo ($value['investmentName']); ?>"><?php echo ($value['investmentName']); ?></option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-5" for="">Name:</label>
+                                        <input class="col-6 form-investmentName" type="text" id="edit-general-newName" name="edit-general-newName" required disabled>
+                                        <label class="error" for="edit-general-newName">Please enter a valid name</label>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-5" for="">Category:</label>
+                                        <input id="edit-general-investmentType" class="col-6 form-investmentType" list="edit-general-investmentTypeList" name="edit-general-investmentType" required disabled />
+                                        <datalist id="edit-general-investmentTypeList">
+                                            <?php
+                                            $data = $customer->getData('Investment', "DISTINCT investmentType");
+                                            foreach ($data as $row => $value) {
+                                            ?>
+                                                <option id="type<?php echo ($value['investmentType']); ?>" value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </datalist>
+                                        <label class="error" for="edit-general-investmentType">Please enter a valid category</label>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-5" for="">Rate per Annum:</label>
+                                        <input class="col-6 form-ratePerAnnum" type="number" name="edit-general-ratePerAnnum" step='0.01' id="edit-general-ratePerAnnum" required disabled>
+                                        <label class="error" for="edit-general-ratePerAnnum">Please enter a valid rate</label>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-5" for="">Total Amount:</label>
+                                        <input class="col-6" id="edit-general-totalAmount" type="number" step='0.01' value="" disabled>
+                                    </div>
+
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                    <button type="submit" class="btn btn-primary" name="edit-general-submit">Save changes</button>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
-
-                    <!-- add modal -->
-                    <div class="modal fade edit-modal" id="add" tabindex="-1" role="dialog" aria-labelledby="add-title" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="edit-title">Add Institution</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <form action="" method="post">
-                                        <div class="form-group row">
-                                            <label class="col-4" for="">Institution:</label>
-                                            <input class="col-6" type="text">
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-4" for="">Description:</label>
-                                            <input class="col-6" type="text">
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-4" for="">Type:</label>
-                                            <select class="col-6" class="custom-select" id="type">
-                                                <option value="">Holding</option>
-                                                <option value="">Diposed</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-4" for="">Price:</label>
-                                            <input class="col-6" type="number">
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-4" for="">Rate per Annum:</label>
-                                            <input class="col-6" type="number">
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-4" for="">Profit:</label>
-                                            <input class="col-6" type="number" value="0.00" disabled>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-4" for="">Current Value:</label>
-                                            <input class="col-6" type="number" value="1300.00" disabled>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary">Add</button>
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
+                </div>
             </div>
+            <!-- table -->
             <table class="table table-bordered table-hover institution-table">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">INSTITUTION</th>
-                        <th scope="col">DESCRIPTION</th>
-                        <th scope="col">TYPE</th>
-                        <th scope="col">PRICE</th>
-                        <th scope="col">RATE PER ANNUM</th>
-                        <th scope="col">PROFIT</th>
-                        <th scope="col">CURRENT VALUE</th>
+                        <th scope="col">NAME</th>
+                        <th scope="col">CATEGORY</th>
+                        <th scope="col">TOTAL AMOUNT</th>
+                        <th scope="col">AVG ANNUAL RATE</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Company ABC</td>
-                        <td>Self-Developed Company</td>
-                        <td>Holding</td>
-                        <td>850.00</td>
-                        <td>1.05</td>
-                        <td>500.00</td>
-                        <td>1350.00</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Apple</td>
-                        <td>Phone Electronic Company</td>
-                        <td>Holding</td>
-                        <td>1682.00</td>
-                        <td>1.25</td>
-                        <td>350.00</td>
-                        <td>2032.00</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Samsung</td>
-                        <td>Phone Electronic Company</td>
-                        <td>Holding</td>
-                        <td>310.00</td>
-                        <td>1.05</td>
-                        <td>10.00</td>
-                        <td>320.10</td>
-                    </tr>
+                    <?php
+                    $datarow = $customer->getDataByQuery("SELECT investmentID, investmentName, investmentType, SUM(amountInvested) AS sumAmount, CAST(AVG(ratePerAnnum) AS DECIMAL(10,2)) AS avgRate 
+                                                            FROM Investment 
+                                                            WHERE cusID = '" . $customer->getId() . "'
+                                                            GROUP BY investmentName
+                                                            ORDER BY sumAmount DESC;
+                                                            ");
+                    if (!empty($datarow)) {
+                        for ($i = 0; $i < sizeof($datarow); $i++) {
+                    ?>
+                            <tr>
+                                <input type="hidden" class="investmentID" value='<?php echo ($datarow[$i]['investmentID']); ?>'></input>
+                                <th scope="row"><?php echo (($i + 1)); ?></th>
+                                <td class="investName"><?php echo ($datarow[$i]['investmentName']); ?></td>
+                                <td class="investType"><?php echo ($datarow[$i]['investmentType']); ?></td>
+                                <td class="investAmount"><?php echo ($datarow[$i]['sumAmount']); ?></td>
+                                <td class="investRate"><?php echo ($datarow[$i]['avgRate']); ?></td>
+                            </tr>
+                    <?php
+                        }
+                    } ?>
+
                 </tbody>
             </table>
 
@@ -241,300 +294,253 @@
 
             <div class="container-fluid row filter">
                 <div>
-                    <h5>INSTITUTION:</h5>
-                    <select name="" id="" class="custom-select">
-                        <option value="">ALL</option>
-                        <option value=""></option>
+                    <h5>CATEGORY:</h5>
+                    <select name="filter-transaction-category" id="filter-transaction-category" class="custom-select" onchange="showsearch('')">
+                        <option value="ALL" selected>ALL</option>
+                        <?php
+                        $data = $customer->getData('Investment', "DISTINCT investmentType");
+                        foreach ($data as $row => $value) {
+                        ?>
+                            <option value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
+                        <?php
+                        }
+                        ?>
                     </select>
                 </div>
 
                 <div>
                     <h5>TIME PERIOD:</h5>
-                    <select name="" id="" class="custom-select">
-                        <option value="">Last 3 Months</option>
-                        <option value=""></option>
+                    <select name="filter-transaction-time" id="filter-transaction-time" class="custom-select" onchange="showsearch('')">
+                        <option value="ALL">ALL</option>
+                        <option value="ThisMonth">This Month</option>
+                        <option value="Last3Months">Last 3 Months</option>
+                        <option value="ThisYear">This Year</option>
                     </select>
                 </div>
             </div>
 
             <div class="container-fluid row filter2">
                 <div class="col-6 row show">
-                    <h6>Show:</h6>
-                    <select name="" id="" class="custom-select">
-                        <option value="">50</option>
-                        <option value=""></option>
-                    </select>
-                    <h6>entries</h6>
+                    <h6>Showing:<span id="table-row-count">
+                            <?php $datarow = $customer->getData('Investment');
+                            if (empty($datarow)) {
+                                echo (0);
+                            } else {
+                                echo (sizeof($datarow));
+                            }
+                            ?> </span>entries</h6>
                 </div>
 
                 <div class="col-6 search">
-                    <input type="text" name="" id="">
+                    <input type="hidden" name="cusID" id="cusID" value="<?php echo ($customer->getId()) ?>">
+                    <input type="text" name="" id="search-transaction" placeholder="  Apple eg.">
                     <h6>Search:</h6>
                 </div>
             </div>
 
+            <!-- new-row modal -->
+            <div class="modal fade new-modal" id="new-row" tabindex="-1" role="dialog" aria-labelledby="new-title" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="new-title">New Transaction</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form action="" method="POST" id="testing" onsubmit="return validateform(this);">
+                            <div class="modal-body">
+                                <div class="container">
+                                    <div class="form-group row">
+                                        <label class="col-5" for="">Date:</label>
+                                        <input class="col-6 form-startDate" type="date" id="new_startDate" name="new_startDate" required />
+                                        <label class="error" for="new_startDate">Please enter a valid date</label>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-5" for="">Amount:</label>
+                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="new_amountInvested" name="new_amountInvested" required />
+                                        <label class="error" for="new_amountInvested">Please enter a valid amount</label>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-5" for="">Name:</label>
+                                        <input id="new_investmentName" class="col-6 form-investmentName" list="new_investmentNameList" name="new_investmentName" required />
+                                        <datalist id="new_investmentNameList">
+                                            <?php
+                                            $data = $customer->getData('Investment', "DISTINCT investmentName");
+                                            foreach ($data as $row => $value) {
+                                            ?>
+                                                <option value="<?php echo ($value['investmentName']); ?>"><?php echo ($value['investmentName']); ?></option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </datalist>
+                                        <label class="error" for="new_investmentName">Please enter a valid name</label>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-5" for="">Category:</label>
+                                        <input id="new_investmentType" class="col-6 form-investmentType" list="new_investmentTypeList" name="new_investmentType" required />
+                                        <datalist id="new_investmentTypeList">
+                                            <?php
+                                            $data = $customer->getData('Investment', "DISTINCT investmentType");
+                                            foreach ($data as $row => $value) {
+                                            ?>
+                                                <option id="type<?php echo ($value['investmentType']); ?>" value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </datalist>
+                                        <label class="error" for="new_investmentType">Please enter a valid category</label>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-5" for="">Annual Rate:</label>
+                                        <input class="col-6 form-ratePerAnnum" type="number" step='0.01' id="new_ratePerAnnum" name="new_ratePerAnnum" required />
+                                        <label class="error" for="new_ratePerAnnum">Please enter a valid rate</label>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" name="new_submit" class="btn btn-primary">Add new</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- edit-row modal -->
+            <div class="modal fade edit-modal" id="edit-row" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="edit-title">Edit Transaction</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form action="" method="POST" id="edit-form" onsubmit="return validateform(this);">
+                            <div class="modal-body">
+                                <div class="container">
+                                    <input type="hidden" id="edit_investmentID" name="edit_investmentID"></input>
+                                    <div class="form-group row">
+                                        <label class="col-5" for="edit_startDate">Date:</label>
+                                        <input class="col-6 form-startDate" type="date" id="edit_startDate" name="edit_startDate" required />
+                                        <label class="error" for="edit_startDate">Please enter a valid date</label>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-5" for="">Amount:</label>
+                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="edit_amountInvested" name="edit_amountInvested" required />
+                                        <label class="error" for="edit_amountInvested">Please enter a valid amount</label>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-5" for="">Name:</label>
+                                        <input id="edit_investmentName" class="col-6 form-investmentName" list="edit_investmentNameList" name="edit_investmentName" required />
+                                        <datalist id="edit_investmentNameList">
+                                            <?php
+                                            $data = $customer->getData('Investment', "DISTINCT investmentName");
+                                            foreach ($data as $row => $value) {
+                                            ?>
+                                                <option value="<?php echo ($value['investmentName']); ?>"><?php echo ($value['investmentName']); ?></option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </datalist>
+                                        <label class="error" for="edit_investmentName">Please enter a valid name</label>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-5" for="">Category:</label>
+                                        <input id="edit_investmentType" class="col-6 form-investmentType" list="edit_investmentTypeList" name="edit_investmentType" required />
+                                        <datalist id="edit_investmentTypeList">
+                                            <?php
+                                            $data = $customer->getData('Investment', "DISTINCT investmentType");
+                                            foreach ($data as $row => $value) {
+                                            ?>
+                                                <option id="type<?php echo ($value['investmentType']); ?>" value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </datalist>
+                                        <label class="error" for="edit_investmentType">Please enter a valid category</label>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-5" for="">Annual Rate:</label>
+                                        <input class="col-6 form-ratePerAnnum" type="number" step='0.01' id="edit_ratePerAnnum" name="edit_ratePerAnnum" required />
+                                        <label class="error" for="edit_ratePerAnnum">Please enter a valid rate</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="reset" class="btn btn-success" onclick="resetEdit()">Reset</button>
+                                <button type="submit" name="edit_submit" class="btn btn-primary">Save changes</button>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- delete-row modal -->
+            <div class="modal fade edit-modal" id="delete-row" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <p>Are you sure want to Delete this transaction?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <form action="" method="POST">
+                                <input type="hidden" id="delete_investmentID" name="delete_investmentID"></input>
+                                <button type="submit" class="btn btn-primary" name="delete_submit">Delete</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- table -->
-            <table class="table table-bordered table-hover transaction-table">
+            <table class="table table-bordered table-hover transaction-table" id="investmentTransactionTable">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">DATE</th>
                         <th scope="col">AMOUNT</th>
-                        <th scope="col">DESCRIPTION</th>
+                        <th scope="col">NAME</th>
                         <th scope="col">CATEGORY</th>
-                        <th scope="col">INSTITUTION</th>
-                        <th scope="col">TYPE</th>
+                        <th scope="col">ANNUAL RATE</th>
                         <th scope="col">ACTION</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>2020-12-12</td>
-                        <td>350.00</td>
-                        <td>Service Tax</td>
-                        <td>Tax</td>
-                        <td>Company ABC</td>
-                        <td>Crefit</td>
-                        <td class="action">
-                            <a href="#" class="edit" data-toggle="modal" data-target="#edit-row1">Edit</a>
-                            <a href="#" class="delete" data-toggle="modal" data-target="#delete-row1">Delete</a>
-                        </td>
+                <tbody id="investmentTransactionTableBody">
 
-                        <!-- edit-row1 modal -->
-                        <div class="modal fade edit-modal" id="edit-row1" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="edit-title">Edit Transaction</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form action="" method="post">
-                                            <div class="form-group row">
-                                                <label class="col-4" for="">Date:</label>
-                                                <input class="col-6" type="date" value="2020-12-12">
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-4" for="">Insititution:</label>
-                                                <input class="col-6" type="text" value="Company ABC" disabled>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-4" for="">Amount:</label>
-                                                <input class="col-6" type="text" value="350.00">
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-4" for="">Description:</label>
-                                                <input class="col-6" type="text" value="Service Tax">
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-4" for="">Category:</label>
-                                                <select class="col-6" class="custom-select" id="category">
-                                                    <option value="">Tax</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-4" for="">Type:</label>
-                                                <select class="col-6" class="custom-select" id="type">
-                                                    <option value="">Credit</option>
-                                                    <option value="">Debit</option>
-                                                </select>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary">Save changes</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- delete-row1 modal -->
-                        <div class="modal fade edit-modal" id="delete-row1" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-body">
-                                        <p>Are you sure want to Delete this transaction?</p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary">Delete</button>
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>2020-12-02</td>
-                        <td>410.30</td>
-                        <td>Dividence</td>
-                        <td>Bonus</td>
-                        <td>Company ABC</td>
-                        <td>Debit</td>
-                        <td class="action">
-                            <a href="#" class="edit" data-toggle="modal" data-target="#edit-row2">Edit</a>
-                            <a href="#" class="delete" data-toggle="modal" data-target="#delete-row2">Delete</a>
-                        </td>
-
-                        <!-- edit-row2 modal -->
-                        <div class="modal fade edit-modal" id="edit-row2" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="edit-title">Edit Transaction</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form action="" method="post">
-                                            <div class="form-group row">
-                                                <label class="col-4" for="">Date:</label>
-                                                <input class="col-6" type="date" value="2020-12-12">
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-4" for="">Insititution:</label>
-                                                <input class="col-6" type="text" value="Company ABC" disabled>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-4" for="">Amount:</label>
-                                                <input class="col-6" type="text" value="350.00">
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-4" for="">Description:</label>
-                                                <input class="col-6" type="text" value="Service Tax">
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-4" for="">Category:</label>
-                                                <select class="col-6" class="custom-select" id="category">
-                                                    <option value="">Tax</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-4" for="">Type:</label>
-                                                <select class="col-6" class="custom-select" id="type">
-                                                    <option value="">Credit</option>
-                                                    <option value="">Debit</option>
-                                                </select>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary">Save changes</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- delete-row2 modal -->
-                        <div class="modal fade edit-modal" id="delete-row2" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-body">
-                                        <p>Are you sure want to Delete this transaction?</p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary">Delete</button>
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>2020-11-30</td>
-                        <td>10.10</td>
-                        <td>Stock Price</td>
-                        <td>Investment</td>
-                        <td>Samsung</td>
-                        <td>Debit</td>
-                        <td class="action">
-                            <a href="#" class="edit" data-toggle="modal" data-target="#edit-row3">Edit</a>
-                            <a href="#" class="delete" data-toggle="modal" data-target="#delete-row3">Delete</a>
-                        </td>
-
-                        <!-- edit-row2 modal -->
-                        <div class="modal fade edit-modal" id="edit-row3" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="edit-title">Edit Transaction</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form action="" method="post">
-                                            <div class="form-group row">
-                                                <label class="col-4" for="">Date:</label>
-                                                <input class="col-6" type="date" value="2020-12-12">
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-4" for="">Insititution:</label>
-                                                <input class="col-6" type="text" value="Company ABC" disabled>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-4" for="">Amount:</label>
-                                                <input class="col-6" type="text" value="350.00">
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-4" for="">Description:</label>
-                                                <input class="col-6" type="text" value="Service Tax">
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-4" for="">Category:</label>
-                                                <select class="col-6" class="custom-select" id="category">
-                                                    <option value="">Tax</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-4" for="">Type:</label>
-                                                <select class="col-6" class="custom-select" id="type">
-                                                    <option value="">Credit</option>
-                                                    <option value="">Debit</option>
-                                                </select>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary">Save changes</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- delete-row2 modal -->
-                        <div class="modal fade edit-modal" id="delete-row3" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-body">
-                                        <p>Are you sure want to Delete this transaction?</p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary">Delete</button>
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </tr>
+                    <?php if (!empty($datarow)) {
+                        for ($i = 0; $i < sizeof($datarow); $i++) {
+                    ?>
+                            <tr>
+                                <input type="hidden" class="investmentID" value='<?php echo ($datarow[$i]['investmentID']); ?>'></input>
+                                <th scope="row"><?php echo (($i + 1)); ?></th>
+                                <td class="investDate"><?php echo ($datarow[$i]['startDate']); ?></td>
+                                <td class="investAmount"><?php echo ($datarow[$i]['amountInvested']); ?></td>
+                                <td class="investName"><?php echo ($datarow[$i]['investmentName']); ?></td>
+                                <td class="investType"><?php echo ($datarow[$i]['investmentType']); ?></td>
+                                <td class="investRate"><?php echo ($datarow[$i]['ratePerAnnum']); ?></td>
+                                <td class="action">
+                                    <a href="#" class="edit-investment-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
+                                    <span> | </span>
+                                    <a href="#" class="delete-investment-anchor" data-toggle="modal" data-target="#delete-row">Delete</a>
+                                </td>
+                            </tr>
+                    <?php
+                        }
+                    } ?>
                 </tbody>
             </table>
 
-            <div class="container-fluid row filter3">
+            <!-- the row below table, last thing to do  -->
+            <!-- <div class="container-fluid row filter3">
                 <div class="show col-6">
                     <h6>Showing 1 to 3 of 3 entries</h6>
-                </div>
+                </div> -->
 
-                <!-- Pagination -->
-                <nav class="col-6">
+            <!-- Pagination -->
+            <!-- <nav class="col-6">
                     <ul class="pagination">
                         <li class="page-item disabled">
                             <span class="page-link">Previous</span>
@@ -552,94 +558,14 @@
                         </li>
                     </ul>
                 </nav>
-            </div>
+            </div> -->
         </div>
     </div>
+
+    <button type="button" class="btn btn-circle btn-xl" data-toggle="modal" data-target="#new-row">
+        <i class="fas fa-plus"></i>
+    </button>
 </body>
-<script>
-    var horizontalOptions = {
-        series: [{
-            name: 'Institution Invest Amount',
-            data: [{
-                x: 'Company ABC',
-                y: 1350.00
-            }, {
-                x: 'Apple',
-                y: 2032.00
-            }, {
-                x: 'Samsung',
-                y: 320.10
-            }]
-        }],
-        chart: {
-            type: 'bar',
-            height: 300,
-            dropShadow: {
-                enabled: true,
-                top: 0,
-                left: 0,
-                blur: 2,
-                opacity: 0.2
-            }
-        },
-        plotOptions: {
-            bar: {
-                horizontal: true,
-                barHeight: '55%'
-            }
-        },
-        dataLabels: {
-            enabled: true
-        },
-        theme: {
-            monochrome: {
-                enabled: true,
-                color: '#F89542',
-                shadeIntensity: 0.65
-            }
-        },
-        xaxis: {
-            categories: ['Company ABC', 'Apple', 'Samsung']
-        }
-    };
-
-    var horizontalChart = new ApexCharts(document.querySelector("#horizontal-chart"), horizontalOptions);
-    horizontalChart.render();
-
-    var donutOptions = {
-        series: [1350.00, 2032.00, 320.10],
-        labels: ['Company ABC', 'Apple', 'Samsung'],
-        chart: {
-            type: 'donut',
-        },
-        plotOptions: {
-            pie: {
-                customScale: 0.85,
-                donut: {
-                    size: '55%'
-                }
-            }
-        },
-        responsive: [{
-            breakpoint: 480,
-            options: {
-                chart: {
-                    width: 400
-                },
-                legend: {
-                    position: 'bottom'
-                }
-            }
-        }],
-        colors: ['#D08F78', '#F89542', '#FFB07C']
-    };
-
-    var donutChart = new ApexCharts(document.querySelector("#donut-chart"), donutOptions);
-    donutChart.render();
-
-    $(document).ready(function() {
-        $("body").niceScroll();
-    });
-</script>
+<script src="./script/investment.js"></script>
 
 </html>

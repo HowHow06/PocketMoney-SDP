@@ -53,23 +53,42 @@ OPTIONAL
 
 
 
+
+
+
+
+
+
+
+
+
 Functions / Pages:
-Login and Session (Customer Class)
+Login and Session (Customer Class) - Howard
 Register (Customer Class)
 Transactions (Try think notfication)
 	-reminder
 	-auto record
 		based on time / on login?
 		maybe need 研究how to call function based on time
-Liability : Howard
-Investment (WITH APIs) : Howard
+Liability : Howard -
+Investment (WITH APIs) : Howard -
+
 Budget
 Financial Goal
+
 Report
 Validations (CLASS)
+
+	name
+	password
+	email
+	number -> not negative
+	
+
 (notification)
 Questions
 Feedback
+Admin / Advisor
 
 MAYBE CAN CONSIDER REMOVE:
 1. advisor / admin either one

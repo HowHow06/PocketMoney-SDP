@@ -8,27 +8,185 @@
 </head>
 
 <body>
-    <?php include(".navbar.php"); ?>
-
+    <?php 
+    $activePage = "dashboard";
+    include(".navbar.php")
+    ?>
+    
     <div class="container-fluid background">
         <div class="col-6 left-body">
-            <div class="container-fluid body">
+            <div class="container-fluid body transaction">
                 <nav class="navbar navbar-expand-lg">
                     <a href="#" class="navbar-brand">RECENT TRANSACTIONS</a>
                 </nav>
+                <!-- table -->
+                <table class="table table-bordered table-hover transaction-table table-sm" id="investmentTransactionTable">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">DATE</th>
+                            <th scope="col">AMOUNT</th>
+                            <th scope="col">CATEGORY</th>
+                            <th scope="col">NAME</th>
+                            <th scope="col">DESCRIPTION</th>
+                            <th scope="col">TYPE</th>
+                        </tr>
+                    </thead>
+                    <tbody id="investmentTransactionTableBody">
 
+                        <?php 
+                            $datarow = $customer->getData('Investment');
+                            if (!empty($datarow)) {
+                            for ($i = 0; $i < sizeof($datarow); $i++) {
+                        ?>
+                                <tr>
+                                    <input type="hidden" class="investmentID" value='<?php echo ($datarow[$i]['investmentID']); ?>'></input>
+                                    <th scope="row"><?php echo (($i + 1)); ?></th>
+                                    <td class="investDate"><?php echo ($datarow[$i]['startDate']); ?></td>
+                                    <td class="investAmount"><?php echo ($datarow[$i]['amountInvested']); ?></td>
+                                    <td class="investType"><?php echo ($datarow[$i]['investmentType']); ?></td>
+                                    <td class="investName"><?php echo ($datarow[$i]['investmentName']); ?></td>
+                                    <td class="investRate"><?php echo ($datarow[$i]['ratePerAnnum']); ?></td>
+                                    <td class="investType"><?php echo ($datarow[$i]['investmentType']); ?></td>
+                                </tr>
+                        <?php
+                            }
+                        } ?>
+                    </tbody>
+                </table>
+                <br>
+            </div>
+
+            <div class="container-fluid body budget">
+                <nav class="navbar navbar-expand-lg">
+                    <a href="#" class="navbar-brand">BUDGETS</a>
+                </nav>
+                <div class="container-fluid budget-overview">
+                    <div class="budget-row">
+                        <div class="row">
+                            <div class="col-3">
+                                <div>
+                                    <sub>Total Budget</sub>
+                                </div>
+                                <p>RM 1000.00</p>
+                            </div>
+                            <div class="col-9">
+                                <!-- bar -->
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" id="progress-bar"></div>
+                                    <h6>50%</h6>
+                                    <div class="vl" data-toggle="vl-hover" data-text="Today"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <h6 class="spent">RM 350.00</h6>
+                                    </div>
+                                    <div class="col-6">
+                                        <h6 class="target">RM 650.00</h6>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                    <!-- When a row is being clicked, it will direct to expense transaction page, with a bookmark category there  -->
+                    <div class="budget-row">
+                        <div class="row">
+                            <div class="col-3">
+                                <div>
+                                    <sub>Food</sub>
+                                </div>
+                                <p>RM 400.00</p>
+                            </div>
+                            <div class="col-9">
+                                <!-- bar -->
+                                <div class="progress">
+                                    <div class="progress-bar excess-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" id="progress-bar"></div>
+                                    <h6 class="excess-value">110%</h6>
+                                    <div class="vl" data-toggle="vl-hover" data-text="Today"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <h6 class="spent excess">RM 550.00</h6>
+                                    </div>
+                                    <div class="col-6">
+                                        <h6 class="target">Excess RM -110.00</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="budget-row">
+                        <div class="row">
+                            <div class="col-3">
+                                <div>
+                                    <sub>Transportation</sub>
+                                </div>
+                                <p>RM 350.00</p>
+                            </div>
+                            <div class="col-9">
+                                <!-- bar -->
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" id="progress-bar"></div>
+                                    <h6>30%</h6>
+                                    <div class="vl" data-toggle="vl-hover" data-text="Today"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <h6 class="spent">RM 100.00</h6>
+                                    </div>
+                                    <div class="col-6">
+                                        <h6 class="target">RM 250.00</h6>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="budget-row">
+                        <div class="row">
+                            <div class="col-3">
+                                <div>
+                                    <sub>Fashion</sub>
+                                </div>
+                                <p>RM 150.00</p>
+                            </div>
+                            <div class="col-9">
+                                <!-- bar -->
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" id="progress-bar"></div>
+                                    <h6>50%</h6>
+                                    <div class="vl" data-toggle="vl-hover" data-text="Today"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <h6 class="spent">RM 75.00</h6>
+                                    </div>
+                                    <div class="col-6">
+                                        <h6 class="target">RM 75.00</h6>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                </div>
             </div>
 
             <div class="container-fluid body">
                 <nav class="navbar navbar-expand-lg">
-                    <a href="#" class="navbar-brand">BUDGETS</a>
+                    <a href="#" class="navbar-brand">FINANCIAL GOALS</a>
                 </nav>
 
             </div>
 
             <div class="container-fluid body">
                 <nav class="navbar navbar-expand-lg">
-                    <a href="#" class="navbar-brand">DEBTS</a>
+                    <a href="#" class="navbar-brand">BALANCE SHEET</a>
                 </nav>
 
             </div>
@@ -79,7 +237,7 @@
 
             <div class="container-fluid body investment">
                 <nav class="navbar navbar-expand-lg">
-                    <a href="#" class="navbar-brand">INVESTMENT</a>
+                    <a href="#" class="navbar-brand">INVESTMENTS</a>
                 </nav>
                 <div class="container-fluid row chart">
                     <!-- horizontal bar chart -->
@@ -136,11 +294,90 @@
                 <br>
             </div>
 
-            <div class="container-fluid body">
+            <div class="container-fluid body liability">
                 <nav class="navbar navbar-expand-lg">
-                    <a href="#" class="navbar-brand">FINANCIAL GOALS</a>
+                    <a href="#" class="navbar-brand">LIABILITIES</a>
                 </nav>
-
+                <div class="container-fluid liability-overview">
+                    <div class="liability-row">
+                        <div class="row">
+                            <div class="col-3">
+                                <div>
+                                    <sub>Proton Car Loan</sub>
+                                </div>
+                                <p>RM 57000.00</p>
+                            </div>
+                            <div class="col-9">
+                                <!-- bar -->
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="16" aria-valuemin="0" aria-valuemax="100" id="progress-bar-liability"></div>
+                                    <h6>16%</h6>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <h6 class="paid">RM 4200.00</h6>
+                                    </div>
+                                    <div class="col-6">
+                                        <h6 class="target">RM 52800.00</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="liability-row">
+                        <div class="row">
+                            <div class="col-3">
+                                <div>
+                                    <sub>PTPTN</sub>
+                                </div>
+                                <p>RM 120000.00</p>
+                            </div>
+                            <div class="col-9">
+                                <!-- bar -->
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="32" aria-valuemin="0" aria-valuemax="100" id="progress-bar-liability"></div>
+                                    <h6>32%</h6>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <h6 class="paid">RM 12000.00</h6>
+                                    </div>
+                                    <div class="col-6">
+                                        <h6 class="target">RM 91800.00</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="liability-row">
+                        <div class="row">
+                            <div class="col-3">
+                                <div>
+                                    <sub>VKB-A1 House Loan</sub>
+                                </div>
+                                <p>RM 110000.00</p>
+                            </div>
+                            <div class="col-9">
+                                <!-- bar -->
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="58" aria-valuemin="0" aria-valuemax="100" id="progress-bar-liability"></div>
+                                    <h6>58%</h6>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <h6 class="paid">RM 56000.00</h6>
+                                    </div>
+                                    <div class="col-6">
+                                        <h6 class="target">RM 52800.00</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

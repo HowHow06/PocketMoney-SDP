@@ -7,6 +7,21 @@
     justify-content: center;
 }
 
+.btn-circle {
+    width: 100px;
+    height: 100px;
+    color: white;
+    border-radius: 120px;
+    text-align: center;
+    font-size: 30px;
+    line-height: 1.42857;
+    position: fixed;
+    bottom: 5%;
+    right: 2%;
+    background-color: #fc9a55;
+    box-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
+}
+
 .body {
     @include cus-body;
     > .overall {
@@ -129,7 +144,7 @@
         }
     }
     > .transaction-table {
-        margin: 15px auto;
+        margin: 25px auto;
         width: 95%;
         text-align: center;
         > thead {
@@ -173,21 +188,60 @@
     }
 }
 
-.edit-modal {
-    > .modal-dialog {
-        > .modal-content {
-            > .modal-header {
-                background-color: #fc9a55;
-                > .modal-title, .close {
-                    color: white;
-                }
+.modal-dialog {
+    > .modal-content {
+        > .modal-header {
+            background-color: #fc9a55;
+            > .modal-title, .close {
+                color: white;
             }
+        }
+        > form {
             > .modal-footer {
                 > .btn-primary {
-                    background-color: #fc9a55;
-                    border-color: #fc9a55;
+                    background-color: #fc9a55 !important;
+                    border-color: #fc9a55 !important;
+                }
+                > .btn-primary:hover {
+                    background-color: #f88837 !important;
+                    border-color: #fc9a55 !important;
+                }
+                > .delete {
+                    background-color: #ff6767 !important;
+                    border-color: #ff6767 !important;
+                }
+                > .delete:hover {
+                    background-color: red !important;
+                    border-color: red !important;
                 }
             }
         }
+        // For delete-part
+        > .modal-footer {
+            > form {
+                > .btn-primary {
+                    background-color: #ff6767 !important;
+                    border-color: #ff6767 !important;
+                }
+                > .btn-primary:hover {
+                    background-color: red !important;
+                    border-color: red !important;
+                }
+            }
+        }
+    }
+}
+
+label.error{
+    display:none;
+    padding-left: 41.66%;
+    margin-bottom: 0;
+    color: red;
+    font-size: 0.9rem;
+}
+
+#delete-row{
+    p{
+        margin-bottom: 0;
     }
 }

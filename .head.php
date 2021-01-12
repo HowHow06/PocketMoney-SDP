@@ -10,3 +10,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Nerko+One&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="./fusioncharts-suite-xt/js/fusioncharts.js"></script>
+<script src="./fusioncharts-suite-xt/js/themes/fusioncharts.theme.fusion.js"></script>
+<?php include('./fusioncharts-suite-xt/integrations/php/fusioncharts-wrapper/fusioncharts.php') ?>

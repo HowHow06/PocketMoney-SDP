@@ -11,7 +11,73 @@ Financial Management System (Website)
 
 ## Work Progress
 
+### 2021-01-11
+> Moses's Part
+- Update ```class.customer.php``` and ```income_trans.js```  and ```form_process.php``` mostly for income page
+
+### 2021-01-10
+> Moses's Part
+- Update ```class.customer.php``` and ```income_trans.js``` mostly for income page
+- Create ```fusioncharts-suite-xt``` file
+- Fasioncharts can be used in php therefore is implemented in server side
+- These are the reference used for fasioncharts (another chart)
+```
+<script src="./fusioncharts-suite-xt/js/fusioncharts.js"></script>
+```
+```
+<script src="./fusioncharts-suite-xt/js/themes/fusioncharts.theme.fusion.js"></script>
+```
+```
+<?php include('./fusioncharts-suite-xt/integrations/php/fusioncharts-wrapper/fusioncharts.php') ?>
+```
+
+
+### 2021-01-08
+> Moses's Part
+- Update ```class.customer.php``` and ```income_trans.js``` and ```form_process.php``` mostly for income page
+
+### 2021-01-07
+> Moses's Part
+- Update ```class.customer.php``` mostly for income page
+
+### 2021-01-06
+> Moses's Part
+- Fix bugs on ```.navbar.php```
+- Create ```liability.php```
+- Update ```dashboard.php```
+- Update transaction functions
+Backend Progress
+- Change abit layout of ```class.customer.php```
+- Create ```income_trans.js```
+
+### 2021-01-05
+> Moses's Part
+- Fix bugs on ```.navbar.php```
+- Create ```budget.php```
+- Update ```income_trans.php``` and ```expense_trans.php```
+- Create ```overall_trans.php``` just showing all transaction records.
+- Update ```dashboard.php```
+
+### 2020-12-17 - 2021-01-02
+> Howard's Part
+- Fully established ```investment.php``` along with supportive files.
+- Create ```class_customer.php```
+- Create ```pocketmoney.db```
+- Create ```Validation.php```
+- Create ```investment.js```
+
+> Law's Part
+- Draft ```budget``` layout
+- Draft ```liability``` layout
+
+> Nash's Part
+- Draft ```financial gaol``` layout
+- Draft ```admin``` layout
 ### 2020-12-16
+> Howard's Part
+- Create ```_background.scss``` and ```_navbar.scss```
+- Change structure of the scss code.
+
 > Moses's Part
 - **Update navbar of for customer site** Important if u guys has pulled, might have conflict
 - Update ```income_trans.php```

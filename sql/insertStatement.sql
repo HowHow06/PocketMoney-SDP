@@ -19,7 +19,7 @@ INSERT INTO `Category` (`categoryName`,`categoryType`,`preDefine`,`cusID`) VALUE
 ('house loan','liability',1, NULL),
 ('car loan','liability',1, NULL),
 ('credit card','liability',1, NULL),
-('stock','investment',1, NULL),
+('Stock','investment',1, NULL),
 ('ETF','investment',1, NULL),
 ('Fixed Deposit','investment',1, NULL),
 ('announcement','notification',1, NULL),
@@ -88,14 +88,14 @@ INSERT INTO `Liability` (`cusID`,`liabilityName`,`liabilityType`,`startDate`,`to
 
 
 INSERT INTO `Investment` (`cusID`,`investmentName`,`investmentType`,`startDate`,`amountInvested`,`ratePerAnnum`) VALUES 
-(1, 'Microsoft','stock', '2020-09-05', 1000, 20.0),
-(1, 'Microsoft','stock', '2020-10-05', 500, 20.0),
-(1, 'Microsoft','stock', '2020-11-05', 800, 20.0),
-(1, 'AMD','stock', '2020-10-05', 900, 30.0),
-(1, 'AMD','stock', '2020-12-05', 1000, 30.0),
+(1, 'Microsoft','Stock', '2020-09-05', 1000, 20.0),
+(1, 'Microsoft','Stock', '2020-10-05', 500, 20.0),
+(1, 'Microsoft','Stock', '2020-11-05', 800, 20.0),
+(1, 'AMD','Stock', '2020-10-05', 900, 30.0),
+(1, 'AMD','Stock', '2020-12-05', 1000, 30.0),
 (1, 'SPY','ETF', '2020-09-05', 2000, 15.0),
 (1, 'VOO','ETF', '2020-08-05', 1500, 13.0),
-(1, NULL,'Fixed Deposit', '2020-05-05', 10000, 2.4);
+(1, 'CIMB FD','Fixed Deposit', '2020-05-05', 10000, 2.4);
 
 
 INSERT INTO `Admin` (`username`,`password`,`email`) VALUES 
