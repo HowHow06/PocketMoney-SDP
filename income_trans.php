@@ -3,7 +3,7 @@
 
 <head>
     <?php include(".head.php"); ?>
-    <link rel="stylesheet" href="./style/income_trans.css">
+    <link rel="stylesheet" href="./style/transaction.css">
 
     <title>PocketMoney | Transactions</title>
 </head>
@@ -633,5 +633,5 @@
         <i class="fas fa-plus"></i>
     </button>
 </body>
-<script src="./script/income_trans.js"></script>
+<script src="./script/transaction.js"></script>
 </html>

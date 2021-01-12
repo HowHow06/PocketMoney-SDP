@@ -11,7 +11,14 @@ Financial Management System (Website)
 
 ## Work Progress
 
-### 2021-01-11
+### 2021-01-13
+> Moses's Part
+- Update ```expense_trans.php``` and ```overall_trans.php```
+- Rename ```income_trans.scss``` to ```transaction.scss```
+- Rename ```income_trans.js``` to ```transaction.js```
+- Both three transactions pages sharing same stylesheet and JavaScript, as well as PHP functions
+
+### 2021-01-12
 > Moses's Part
 - Update ```class.customer.php``` and ```income_trans.js```  and ```form_process.php``` mostly for income page
 - At this point 95% of income page done
