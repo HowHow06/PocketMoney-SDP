@@ -1,16 +1,21 @@
 $(document).ready(function () {
+    var query = document.getElementById("filter-query").value;
     var input = document.getElementById("search-transaction");
     input.addEventListener("keyup", function (event) {
-      showsearch();
+      showsearch(query);
     });
     input;
 
+    var keyword = $("#current-date").val();
+    var numbers = /^[0-9-]+$/;
+    if (String(keyword).match(numbers)) {
+        $("#filter-month-year").val('Yearly');
+    } else {
+        $("#filter-month-year").val('Monthly');
+    }
+
     $("body").niceScroll();
 
-    var currentdate = document.getElementById("filter-current-date").textContent;
-    var d = new Date(currentdate);
-    var m = d.getMonth();
-    // alert(d);
 });
 
 
@@ -179,7 +184,17 @@ function failValidation(msg) {
     return false;
 }
 
-function showsearch() {
+function showMonthYear() {
+    var keyword = document.getElementById("current-date").value;
+    if (String(keyword).length < 5) {
+        document.getElementById("filter-month-year").value = 'Monthly';
+    } else {
+        document.getElementById("filter-month-year").value = 'Yearly';
+    }
+
+}
+
+function showsearch(query) {
     var keyword = document.getElementById("search-transaction").value;
     var xmlhttp = new XMLHttpRequest();
     var typeFilter = document.getElementById("filter-transaction-type");
@@ -204,7 +219,9 @@ function showsearch() {
         "&searchTransaction=" +
         keyword +
         "&cusID=" +
-        cusID.value,
+        cusID.value +
+        "&query=" + 
+        query,
       true
     );
     xmlhttp.send();
@@ -242,62 +259,97 @@ function resetEdit() {
     xmlhttp.send();
 }
 
-function showdetail(name,date,year) {
+function showdetail(name,month,year) {
     var xmlhttp = new XMLHttpRequest();
     var cateAmount = document.getElementById("showAmount"+name).textContent;
     document.getElementById("cateName").textContent = name.toUpperCase();
     document.getElementById("cateAmount").textContent = "Total: RM"+cateAmount;
     raw = parseFloat(cateAmount);
-    switch(date) {
-        case 1:
-        case 3:
-        case 5:
-        case 7:
-        case 8:
-        case 10:
-        case 12:
-            avg = raw / 31;
-            break;
-        case 4:
-        case 6:
-        case 9:
-        case 11:
-            avg = raw / 30;
-            break;
-        case 2:
-            avg = raw / 28;
-            break;
-    }
-    document.getElementById("cateAvg").textContent = "Average Daily: RM"+avg.toFixed(2);
-    document.getElementsByClassName('cate-overall')[0].id = name;
-    cusID = document.getElementById("cusID").value;
-    
-    xmlhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            var data = JSON.parse(this.responseText);
-            var amount = String(data['amount']);
-            var month = String(data['month']);
-
-            var datalist = data['datalist'];
-            document.getElementById("categoryTransactionTableBody").innerHTML = datalist;
-
-            refreshchart(amount, month);
-            $("body").niceScroll().resize();
+    if (month != 0) {
+        switch(month) {
+            case 1:
+            case 3:
+            case 5:
+            case 7:
+            case 8:
+            case 10:
+            case 12:
+                avg = raw / 31;
+                break;
+            case 4:
+            case 6:
+            case 9:
+            case 11:
+                avg = raw / 30;
+                break;
+            case 2:
+                avg = raw / 28;
+                break;
         }
-    };
-    xmlhttp.open(
-        "GET", 
-        "form_process.php?cateName=" + 
-        name + 
-        "&cusID=" + 
-        cusID +
-        "&date=" + 
-        date +
-        "&year=" + 
-        year,
-        true
-    );
-    xmlhttp.send();
+        document.getElementById("cateAvg").textContent = "Average Daily: RM"+avg.toFixed(2);
+        document.getElementsByClassName('cate-overall')[0].id = name;
+        cusID = document.getElementById("cusID").value;
+        
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var data = JSON.parse(this.responseText);
+                var amount = String(data['amount']);
+                var month = String(data['month']);
+    
+                var datalist = data['datalist'];
+                document.getElementById("categoryTransactionTableBody").innerHTML = datalist;
+    
+                refreshchart(amount, month);
+                $("body").niceScroll().resize();
+            }
+        };
+        xmlhttp.open(
+            "GET", 
+            "form_process.php?cateName=" + 
+            name + 
+            "&cusID=" + 
+            cusID +
+            "&date=" + 
+            month +
+            "&year=" + 
+            year,
+            true
+        );
+        xmlhttp.send();
+    } 
+    else {
+        avg = raw / 12;
+        document.getElementById("cateAvg").textContent = "Average Monthly: RM"+avg.toFixed(2);
+        document.getElementsByClassName('cate-overall')[0].id = name;
+        cusID = document.getElementById("cusID").value;
+        
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var data = JSON.parse(this.responseText);
+                var amount = String(data['amount']);
+                var month = String(data['month']);
+    
+                var datalist = data['datalist'];
+                document.getElementById("categoryTransactionTableBody").innerHTML = datalist;
+    
+                refreshchart(amount, month);
+                $("body").niceScroll().resize();
+            }
+        };
+        xmlhttp.open(
+            "GET", 
+            "form_process.php?cateName=" + 
+            name + 
+            "&cusID=" + 
+            cusID +
+            "&date=" + 
+            month +
+            "&year=" + 
+            year,
+            true
+        );
+        xmlhttp.send();
+    }
 }
 
 // smoothing the bookmark section

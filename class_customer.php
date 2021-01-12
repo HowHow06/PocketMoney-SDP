@@ -548,6 +548,35 @@ class Customer
      *                                                                    *
      *********************************************************************/
 
+
+     /** 
+     * Set customer id
+     * 
+     */
+    function setFlag($bool)
+    {
+        if ($bool == 0) {
+            // initialise
+            $this->flag = 0;
+        } else {
+            $this->flag = 1;
+        }
+    }
+
+    /** 
+     * Return the id if the id is set before
+     * @return String|NULL
+     * 
+     */
+    function getFlag()
+    {
+        if (!empty($this->flag)) {
+            return $this->flag;
+        }
+
+        return NULL;
+    }
+
     /** 
      * Set customer id
      * 
@@ -558,11 +587,17 @@ class Customer
             // initialise
             $this->date = date("Y-m-d");
         } else {
-            if ($number > 0) {
-                $var = strtotime("+1 month",strtotime($cd));
+            if ($number == 1) {
+                $var = strtotime("first day of +1 month",strtotime($cd));
                 $this->date = date("Y-m-d", $var);
-            } elseif ($number < 0) {
-                $var = strtotime("-1 month",strtotime($cd));
+            } elseif ($number == -1) {
+                $var = strtotime("first day of -1 month",strtotime($cd));
+                $this->date = date("Y-m-d", $var);
+            } elseif ($number == 2) {
+                $var = strtotime("first day of +1 year",strtotime($cd));
+                $this->date = date("Y-m-d", $var);
+            } elseif ($number == -2) {
+                $var = strtotime("first day of -1 year",strtotime($cd));
                 $this->date = date("Y-m-d", $var);
             }
         }
@@ -586,72 +621,77 @@ class Customer
      /** 
      * Return String format of date
      * 
-     * @param String $date
-     * String of date
-     * 
      * @param int $purpose
-     * 0 -> used to display
-     * 1 -> used for query
+     * 0 -> used for display purpose
+     * 1 -> used for query purpose
      * 
-     * @param int $filter
+     * @param int $conditionFlag
+     * 0 -> no condition, default is 'December 2020'
+     * 1 -> condition, month -> NULL, year->2020
+     * 2 -> condition,
+     * 
+     * @param int $yearlyFlag
      * 0 -> monthly
      * 1 -> yearly
      * 
      * @return Array |NULL
      * 
      */
-    function getCurrentFilterTime($date="", $purpose=0, $filter=0) {
-        // for display (using current month)
-        if (empty($date) && $purpose==0 && $filter==0) {
+    function getCurrentFilterTime($purpose=0, $conditionFlag=0, $yearlyFlag=0) {
+        // for display (December 2020)
+        if (($purpose==0 && $conditionFlag==0 && $yearlyFlag==0) OR ($purpose==0 && $conditionFlag==1 && $yearlyFlag==0)) {
             $d = strtotime($this->getCurDate());
             $systemMonth = date('F',$d);
             $systemYear = date("Y",$d);
             $systemDate = $systemMonth." ".$systemYear;
             return $systemDate;
-        } 
-        // for display (using current year)
-        elseif (empty($date) && $purpose==0 && $filter==1) {
+        }
+        // for display (01 December 2020)
+        if ($purpose==0 && $conditionFlag==1 && $yearlyFlag==0) {
             $d = strtotime($this->getCurDate());
+            $systemMonth = date('m',$d);
             $systemYear = date("Y",$d);
-            return $systemYear;
-        } 
-        // for display (specify month/year)
-        elseif (!empty($date) && $purpose==0 && $filter==0) {
-            $d = strtotime($date);
-            $systemMonth = date('F',$d);
-            $systemYear = date("Y",$d);
-            $systemDate = $systemMonth." ".$systemYear;
+            $systemDate = "02 ".$systemMonth." ".$systemYear;
             return $systemDate;
-        } 
-        // for display (specify year)
-        elseif (!empty($date) && $purpose==0 && $filter==1) {
-            $d = strtotime($date);
-            $systemYear = date("Y",$d);
-            return $systemYear;
-        } 
-        // for query (using current month)
-        elseif (empty($date) && $purpose==1 && $filter==0) {
-            $d = strtotime($this->getCurDate());
-            $systemMonth = date("m",$d);
-            return $systemMonth;
         }
-        // for query (using current year)
-        elseif (empty($date) && $purpose==1 && $filter==1) {
+        // for display (01-12-2020)
+        if ($purpose==0 && $conditionFlag==1 && $yearlyFlag==1) {
+            $d = strtotime($this->getCurDate());
+            $systemMonth = date('m',$d);
+            $systemYear = date("Y",$d);
+            $systemDate = "01-".$systemMonth."-".$systemYear;
+            return $systemDate;
+        }
+        // for query (2020)
+        if (($purpose==0 && $conditionFlag==0 && $yearlyFlag==1) OR ($purpose==1 && $conditionFlag==1 && $yearlyFlag==0) OR ($purpose==1 && $conditionFlag==1 && $yearlyFlag==1)) {
             $d = strtotime($this->getCurDate());
             $systemYear = date("Y",$d);
             return $systemYear;
         }
-        // for query (using specific month)
-        elseif (!empty($date) && $purpose==1 && $filter==0) {
-            $d = strtotime($date);
-            $systemMonth = date("m",$d);
+        // for query (12 -> Month)
+        if ($purpose==1 && $conditionFlag==0 && $yearlyFlag==0) {
+            $d = strtotime($this->getCurDate());
+            $systemMonth = date('m',$d);
             return $systemMonth;
         }
-        // for query (using specific year)
-        elseif (!empty($date) && $purpose==1 && $filter==1) {
-            $d = strtotime($date);
+        // for query (NULL -> Month)
+        if ($purpose==1 && $conditionFlag==0 && $yearlyFlag==1) {
+            return 0;
+        }
+        // for query (A string contain sql query -> monthly)
+        if ($purpose==1 && $conditionFlag==2 && $yearlyFlag==0) {
+            $d = strtotime($this->getCurDate());
+            $systemMonth = date("m",$d);
             $systemYear = date("Y",$d);
-            return $systemYear;
+            $output = " AND MONTH(t.date) = ".$systemMonth." AND YEAR(t.date) = ".$systemYear." ";
+            return $output;
+        }
+        // for query (A string contain sql query -> yearly)
+        if ($purpose==1 && $conditionFlag==2 && $yearlyFlag==1) {
+            $d = strtotime($this->getCurDate());
+            $systemYear = date("Y",$d);
+            $output = " AND YEAR(t.date) = ".$systemYear." ";
+            return $output;
         }
         return NULL;
     }
@@ -726,7 +766,7 @@ class Customer
      * Return JSON format of chart data 
      * 
      * @return JSON |NULL
-     * 
+     * s
      */
     function getTypesAndAmount($month,$year)
     {
@@ -736,8 +776,12 @@ class Customer
             $db->join('transaction t', 'c.categoryID=t.categoryID', 'LEFT');
             $db->where('t.cusID', $id);
             $db->where('c.categoryType', 'income');
-            $db->where('MONTH(t.date)',$month);
-            $db->where('YEAR(t.date)',$year);
+            if (!empty($month)) {
+                $db->where('MONTH(t.date)',$month);
+                $db->where('YEAR(t.date)',$year);
+            } else {
+                $db->where('YEAR(t.date)',$year);
+            }
             $db->groupBy('c.categoryName');
             $db->orderBy('amount','DESC');
             $incomeTypesToValue = array();
@@ -784,8 +828,12 @@ class Customer
             $id = $this->id;
             $db->join('transaction t', 'c.categoryID=t.categoryID', 'LEFT');
             $db->where('t.cusID', $id);
-            $db->where('MONTH(t.date)', $month);
-            $db->where('YEAR(t.date)', $year);
+            if (!empty($month)) {
+                $db->where('MONTH(t.date)',$month);
+                $db->where('YEAR(t.date)',$year);
+            } else {
+                $db->where('YEAR(t.date)',$year);
+            }
             $db->where('c.categoryType', 'income');
             $db->groupBy('c.categoryName');
             $db->orderBy('amount','DESC');
@@ -827,12 +875,20 @@ class Customer
             $db->join('transaction t', 'c.categoryID=t.categoryID', 'LEFT');
             $db->where('t.cusID', $id);
             $db->where('c.categoryName', $cate);
-            $db->where('MONTH(t.date)', $month);
-            $db->where('YEAR(t.date)', $year);
-            $db->groupBy("MONTH(t.date)");
-            $db->orderBy('MONTH(t.date),year','DESC');
-            $categoryValueByMonth = array('value'=>array(),'month'=>array());
-            $result = $db->get('category c', 8, 'MONTHNAME(t.date) as month, YEAR(t.date) as year, SUM(t.amount) AS amount');
+            if (!empty($month)) {
+                $db->where('MONTH(t.date)',$month);
+                $db->where('YEAR(t.date)',$year);
+                $db->groupBy("MONTH(t.date)");
+                $db->orderBy('MONTH(t.date),year','DESC');
+                $categoryValueByMonth = array('value'=>array(),'month'=>array());
+                $result = $db->get('category c', 8, 'MONTHNAME(t.date) as month, YEAR(t.date) as year, SUM(t.amount) AS amount');
+            } else {
+                $db->where('YEAR(t.date)',$year);
+                $db->groupBy("MONTH(t.date)");
+                $db->orderBy('MONTH(t.date)','DESC');
+                $categoryValueByMonth = array('value'=>array(),'month'=>array());
+                $result = $db->get('category c', 12, 'MONTHNAME(t.date) as month, YEAR(t.date) as year, SUM(t.amount) AS amount');
+            }
             foreach ($result as $row => $data) {
                 array_push($categoryValueByMonth['value'],$data['amount']);
                 array_push($categoryValueByMonth['month'],$data['month']);
@@ -877,6 +933,32 @@ class Customer
             $monthArr = $data['month'];
             $monthJSON = json_encode($monthArr);
             return $monthJSON;
+        }
+        return NULL;
+    }
+
+    /** 
+     * Return JSON format of month only
+     * @return JSON |NULL
+     * 
+     * 
+     */
+    function getTableRowCount($month,$year)
+    {
+        $db = MysqliDb::getInstance();
+        
+        if (!empty($this->id)) {
+            $id = $this->id;
+            $db->join('category c', 'c.categoryID=t.categoryID', 'LEFT');
+            $db->where('t.cusID', $id);
+            if (!empty($month)) {
+                $db->where('MONTH(t.date)',$month);
+                $db->where('YEAR(t.date)',$year);
+            } else {
+                $db->where('YEAR(t.date)',$year);
+            }
+            $result = $db->get('transaction t');
+            return $result;
         }
         return NULL;
     }

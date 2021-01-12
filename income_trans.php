@@ -13,6 +13,16 @@
     include(".navbar.php"); 
 
     $customer->setCurDate();
+    $customer->setFlag(0);
+
+    if (isset($_GET['filter-month-year'])) {
+        $filter = $_GET['filter-month-year'];
+        if ($filter == 'Monthly') {
+            $customer->setFlag(0);
+        } elseif ($filter == 'Yearly') {
+            $customer->setFlag(1);
+        }
+    }
 
     //update the transaction
     if (isset($_POST['edit_submit'])) {
@@ -124,14 +134,25 @@
 
     if (isset($_POST['filter-previous'])) {
         $date = strtotime($_POST['current-date']);
-        $d = date("Y-m-d",$date);
-        $customer->setCurDate(-1,$d);
+        if (!preg_match("/^[0-9-]+$/", $_POST['current-date'])) {
+            $d = date("Y-m-d",$date);
+            $customer->setCurDate(-1,$d);
+        } else {
+            $d = date("Y-m-d",$date);
+            $customer->setCurDate(-2,$d);
+        }
+        
     }
 
     if (isset($_POST['filter-next'])) {
         $date = strtotime($_POST['current-date']);
-        $d = date("Y-m-d",$date);
-        $customer->setCurDate(1,$d);
+        if (!preg_match("/^[0-9-]+$/", $_POST['current-date'])) {
+            $d = date("Y-m-d",$date);
+            $customer->setCurDate(1,$d);
+        } else {
+            $d = date("Y-m-d",$date);
+            $customer->setCurDate(2,$d);
+        }
     }
     ?>
 
@@ -147,24 +168,25 @@
                             <button class="btn" type="submit" id="filter-previous" name="filter-previous">
                                 <i class="fas fa-chevron-left"></i>
                             </button>
-                            <input type="hidden" id="current-date" name="current-date" value="<?php echo ($customer->getCurrentFilterTime()); ?>"></input>
+                            <input type="hidden" id="current-date" name="current-date" value="<?php echo ($customer->getCurrentFilterTime(0,1,$customer->getFlag())); ?>"></input>
                         </form>
-                        <label id="filter-current-date" name="filter-current-date"><?php echo ($customer->getCurrentFilterTime()); ?></label>
+                        <label id="filter-current-date" name="filter-current-date"><?php echo ($customer->getCurrentFilterTime(0,0,$customer->getFlag())); ?></label>
                         <form action="" method="post">
-                            <input type="hidden" id="current-date" name="current-date" value="<?php echo ($customer->getCurrentFilterTime()); ?>"></input>
-                            <button class="btn" type="submit" id="filter-next" name="filter-next" onclick="filter(1)">
+                            <input type="hidden" id="current-date" name="current-date" value="<?php echo ($customer->getCurrentFilterTime(0,1,$customer->getFlag())); ?>"></input>
+                            <button class="btn" type="submit" id="filter-next" name="filter-next">
                                 <i class="fas fa-chevron-right"></i>
                             </button>
                         </form>
                     </div>
                 </div>
                 <div class="col-6 right">
-                    <form action="">
+                    <form action="income_trans.php" method="get">
                         <div class="row">
                             <h6>Show:</h6>
-                            <select name="" id="" class="custom-select">
-                                <option value="">Monthly</option>
-                                <option value="">Year</option>
+                            <select name="filter-month-year" id="filter-month-year" class="custom-select" onchange="this.form.submit()">
+                                <option value=""></option>
+                                <option value="Monthly">Monthly</option>
+                                <option value="Yearly">Yearly</option>
                             </select>
                         </div>
                     </form>
@@ -176,7 +198,7 @@
                 <div class="pie-chart">
                     <div class="border rounded" id="incomeTypes-pie-chart">
                         <?php 
-                            $chart = new FusionCharts("pie2d", "ex1", "100%", "100%", "incomeTypes-pie-chart", "json", $customer->getTypesAndAmount($customer->getCurrentFilterTime("",1,0),$customer->getCurrentFilterTime("",1,1)));
+                            $chart = new FusionCharts("pie2d", "ex1", "100%", "100%", "incomeTypes-pie-chart", "json", $customer->getTypesAndAmount($customer->getCurrentFilterTime(1,0,$customer->getFlag()),$customer->getCurrentFilterTime(1,1,$customer->getFlag())));
                             $chart->render();
                         ?>
                     </div>
@@ -189,14 +211,13 @@
                                                                 LEFT JOIN transaction t
                                                                 ON c.categoryID = t.categoryID
                                                                 WHERE t.cusID = " . $customer->getId() . "
-                                                                AND c.categoryType = 'income'
-                                                                AND MONTH(t.date) = " . $customer->getCurrentFilterTime("",1,0) ."
-                                                                AND YEAR(t.date) = " . $customer->getCurrentFilterTime("",1,1) ."
+                                                                AND c.categoryType = 'income'"
+                                                                . $customer->getCurrentFilterTime(1,2,$customer->getFlag()) ."
                                                                 GROUP BY c.categoryName
                                                                 ORDER BY amount DESC
                                                             ");
                         if (!empty($datarow)) {
-                            $percentageArray = $customer->getPercentage($customer->getCurrentFilterTime("",1,0),$customer->getCurrentFilterTime("",1,1));
+                            $percentageArray = $customer->getPercentage($customer->getCurrentFilterTime(1,0,$customer->getFlag()),$customer->getCurrentFilterTime(1,1,$customer->getFlag()));
                             for ($i = 0; $i < sizeof($datarow); $i++) {
                         ?>
                             <div class="container-fluid row category">
@@ -211,7 +232,7 @@
                                 </div>
                                 <div class="col-1 show forshowDetail">
                                     <button class="btn">
-                                        <a href="#<?php echo ($datarow[$i]['categoryName']); ?>" id="showDetail<?php echo ($datarow[$i]['categoryName']); ?>" name="showDetail" data-toggle="row-hover" data-text="Show more" onclick="showdetail('<?php echo ($datarow[$i]['categoryName']); ?>',<?php echo ($customer->getCurrentFilterTime('',1,0)); ?>,<?php echo ($customer->getCurrentFilterTime('',1,1)); ?>)">
+                                        <a href="#<?php echo ($datarow[$i]['categoryName']); ?>" id="showDetail<?php echo ($datarow[$i]['categoryName']); ?>" name="showDetail" data-toggle="row-hover" data-text="Show more" onclick="showdetail('<?php echo ($datarow[$i]['categoryName']); ?>',<?php echo ($customer->getCurrentFilterTime(1,0,$customer->getFlag())) ?>,<?php echo ($customer->getCurrentFilterTime(1,1,$customer->getFlag())) ?>)">
                                             <i class="fas fa-chevron-right"></i>
                                         </a>
                                     </button>
@@ -261,7 +282,7 @@
             <div class="container-fluid row filter">
                 <div>
                     <h5>CATEGORY:</h5>
-                    <select name="filter-transaction-category" id="filter-transaction-category" class="custom-select" onchange="showsearch('')">
+                    <select name="filter-transaction-category" id="filter-transaction-category" class="custom-select" onchange="showsearch('<?php echo ($customer->getCurrentFilterTime(1,2,$customer->getFlag())); ?>')">
                         <option value="ALL" selected>ALL</option>
                         <?php
                         $data = $customer->getDataByQuery("SELECT categoryName FROM category
@@ -280,7 +301,7 @@
 
                 <div>
                     <h5>TYPE:</h5>
-                    <select name="filter-transaction-type" id="filter-transaction-type" class="custom-select" onchange="showsearch('')">
+                    <select name="filter-transaction-type" id="filter-transaction-type" class="custom-select" onchange="showsearch('<?php echo ($customer->getCurrentFilterTime(1,2,$customer->getFlag())); ?>')">
                         <option value="ALL">ALL</option>
                         <option value="Income">Income</option>
                         <option value="Expenses">Expenses</option>
@@ -291,7 +312,7 @@
             <div class="container-fluid row filter2">
                 <div class="col-6 show">
                     <h6>Showing:<span id="table-row-count">
-                            <?php $datarow = $customer->getData('Transaction');
+                            <?php $datarow = $customer->getTableRowCount($customer->getCurrentFilterTime(1,0,$customer->getFlag()),$customer->getCurrentFilterTime(1,1,$customer->getFlag()));
                             if (empty($datarow)) {
                                 echo (0);
                             } else {
@@ -302,6 +323,7 @@
 
                 <div class="col-6 search">
                     <input type="hidden" name="cusID" id="cusID" value="<?php echo ($customer->getId()) ?>">
+                    <input type="hidden" name="filter-query" id="filter-query" value="<?php echo ($customer->getCurrentFilterTime(1,2,$customer->getFlag())); ?>">
                     <input type="text" name="" id="search-transaction" placeholder="  Transaction Name">
                     <h6>Search:</h6>
                 </div>
@@ -549,9 +571,9 @@
                     $datarow = $customer->getDataByQuery("SELECT t.transactionID, c.categoryName AS category, t.date, t.amount, t.description AS name, c.categoryType AS type
                                                             FROM transaction t, category c
                                                             WHERE t.cusID = " . $customer->getId() . " 
-                                                            AND t.categoryID = c.categoryID 
-                                                            AND MONTH(t.date) = " . $customer->getCurrentFilterTime('',1,0) . "
-                                                            ORDER BY date DESC;
+                                                            AND t.categoryID = c.categoryID "
+                                                            . $customer->getCurrentFilterTime(1,2,$customer->getFlag()) .
+                                                            "ORDER BY date DESC;
                                                             ");
                     if (!empty($datarow)) {
                         for ($i = 0; $i < sizeof($datarow); $i++) {
