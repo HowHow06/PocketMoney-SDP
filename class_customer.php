@@ -768,14 +768,19 @@ class Customer
      * @return JSON |NULL
      * s
      */
-    function getTypesAndAmount($month,$year)
+    function getTypesAndAmount($month,$year,$isExpense=0)
     {
         $db = MysqliDb::getInstance();
         if (!empty($this->id)) {
             $id = $this->id;
             $db->join('transaction t', 'c.categoryID=t.categoryID', 'LEFT');
             $db->where('t.cusID', $id);
-            $db->where('c.categoryType', 'income');
+            if (empty($isExpense)) {
+                $db->where('c.categoryType', 'income');
+            } else {
+                $db->where('c.categoryType', 'expenses');
+            }
+            
             if (!empty($month)) {
                 $db->where('MONTH(t.date)',$month);
                 $db->where('YEAR(t.date)',$year);
@@ -792,22 +797,41 @@ class Customer
             }
             $data = json_encode($incomeTypesToValue);
 
-            // Ploting chart
-            $chartJSON = '{
-                "chart": {
-                  "caption": "Income By Category",
-                  "plottooltext": "<b>$percentValue</b> of income are from $label",
-                  "showlegend": "0",
-                  "showpercentvalues": "1",
-                  "legendNumRows": "3",
-                  "legendNumColumns": "4",
-                  "legendposition": "bottom",
-                  "usedataplotcolorforlabels": "1",
-                  "theme": "fusion",
-                  palettecolors: "FE6E63,FE9850,FFD042,FEE801,BEE647,74D072,68E8DB,68E8DB"
-                },
-                "data": ' . $data . '
-            }';
+            if (empty($isExpense)) {
+                // Ploting chart
+                $chartJSON = '{
+                    "chart": {
+                    "caption": "Income By Category",
+                    "plottooltext": "<b>$percentValue</b> of income are from $label",
+                    "showlegend": "0",
+                    "showpercentvalues": "1",
+                    "legendNumRows": "3",
+                    "legendNumColumns": "4",
+                    "legendposition": "bottom",
+                    "usedataplotcolorforlabels": "1",
+                    "theme": "fusion",
+                    palettecolors: "FE6E63,FE9850,FFD042,FEE801,BEE647,74D072,68E8DB,68E8DB"
+                    },
+                    "data": ' . $data . '
+                }';
+            } else {
+                // Ploting chart
+                $chartJSON = '{
+                    "chart": {
+                    "caption": "Expenses By Category",
+                    "plottooltext": "<b>$percentValue</b> of expense are from $label",
+                    "showlegend": "0",
+                    "showpercentvalues": "1",
+                    "legendNumRows": "3",
+                    "legendNumColumns": "4",
+                    "legendposition": "bottom",
+                    "usedataplotcolorforlabels": "1",
+                    "theme": "fusion",
+                    palettecolors: "FE6E63,FE9850,FFD042,FEE801,BEE647,74D072,68E8DB,68E8DB"
+                    },
+                    "data": ' . $data . '
+                }';
+            }
 
             return $chartJSON;
         }
@@ -821,7 +845,7 @@ class Customer
      * @return Array |NULL
      * 
      */
-    function getPercentage($month,$year) 
+    function getPercentage($month,$year,$isExpense=0) 
     {
         $db = MysqliDb::getInstance();
         if (!empty($this->id)) {
@@ -834,7 +858,12 @@ class Customer
             } else {
                 $db->where('YEAR(t.date)',$year);
             }
-            $db->where('c.categoryType', 'income');
+            if (empty($isExpense)) {
+                $db->where('c.categoryType', 'income');
+            } else {
+                $db->where('c.categoryType', 'expenses');
+            }
+            
             $db->groupBy('c.categoryName');
             $db->orderBy('amount','DESC');
             $incomeTypesToValue = array();
