@@ -70,21 +70,18 @@
             }
         }
     }
-    > div {
+    > .overview {
+        padding: 10px 35px 0 35px;
         > .pie-chart {
-            padding: 10px 0px 10px 85px;
             > div {
                 padding-top: 10px;
-                width: 650px;
                 height: 500px;
                 margin: 0 auto;
                 border-width: 4px !important;
             }
         }
         > .chart-explain {
-            padding: 10px 0px 10px 20px;
             > div {
-                width: 850px;
                 height: 500px;
                 margin: 0 auto;
                 border-width: 4px !important;
@@ -133,7 +130,7 @@
     }
 
     > .category {
-        padding: 20px 100px;
+        padding: 30px 50px;
         > div {
             margin: 0 auto;
             border-width: 4px !important;
@@ -312,4 +309,13 @@ label.error{
     p{
         margin-bottom: 0;
     }
+}
+
+#cate-overall, #categoryTransactionTable {
+    visibility: hidden;
+    
+}
+
+#cate-overall {
+    display: none;
 }

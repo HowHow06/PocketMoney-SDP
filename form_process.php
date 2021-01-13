@@ -90,7 +90,7 @@ if (isset($_GET['editGeneralInvestName'])) {
 }
 
 /**
- * 
+ * @return JSON
  * echo the JSON format of fields within Transaction Edit modal
  */
 if (isset($_GET['resetEditTransaction'])) {
@@ -110,7 +110,7 @@ if (isset($_GET['resetEditTransaction'])) {
 /**
  * 
  * @return String 
- * the body of transaction
+ * the body of transaction table
  */
 if (isset($_GET['searchTransaction'])) {
     $cusID = $_GET['cusID'];
@@ -144,6 +144,11 @@ if (isset($_GET['searchTransaction'])) {
     ;");
     if (!empty($datarow)) {
         for ($i = 0; $i < sizeof($datarow); $i++) {
+            if (empty($datarow[$i]['name'])) {
+                $description = $datarow[$i]['categoryName'];
+            } else {
+                $description = $datarow[$i]['name'];
+            }
             echo ('
             <tr>
                 <input type="hidden" class="transactionID" value="' . ($datarow[$i]['transactionID']) . '"></input>
@@ -153,7 +158,7 @@ if (isset($_GET['searchTransaction'])) {
                 <td class="transactionTime">' . ($customer->getTime($datarow[$i]['transactionID'],$cusID)) . '</td>
                 <td class="transactionAmount">' .($datarow[$i]['amount']) . '</td>
                 <td class="transactionCategory">' . ($datarow[$i]['categoryName']) . '</td>
-                <td class="transactionName">' . ($datarow[$i]['description']) . '</td>
+                <td class="transactionName">' . ($description) . '</td>
                 <td class="transactionType">' . ($datarow[$i]['categoryType']) . '</td>
                 <td class="action">
                     <a href="#" class="edit-transaction-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
@@ -167,8 +172,8 @@ if (isset($_GET['searchTransaction'])) {
 }
 
 /**
- * 
- * echo the JSON format of fields within Transaction Edit modal
+ * @return JSON
+ * echo the JSON format of fields consists of amount, months, datalist
  */
 if (isset($_GET['cateName'])) {
     $cateName = $_GET['cateName'];
@@ -193,7 +198,12 @@ if (isset($_GET['cateName'])) {
         if (!empty($datarow)) {
             $datalist = "";
             for ($i = 0; $i < sizeof($datarow); $i++) {
-            $datalist .= ('
+                if (empty($datarow[$i]['name'])) {
+                    $description = $datarow[$i]['category'];
+                } else {
+                    $description = $datarow[$i]['name'];
+                }
+                $datalist .= ('
                             <tr>
                             <input type="hidden" class="transactionID" value="' . ($datarow[$i]['transactionID']) . '"></input>
                             <input type="hidden" class="transactionDateTime" value="' . ($datarow[$i]['date']) . '"></input>
@@ -202,7 +212,7 @@ if (isset($_GET['cateName'])) {
                             <td class="transactionDate">' . ($customer->getDate($datarow[$i]['transactionID'],$cusID)) . '</td>
                             <td class="transactionTime">' . ($customer->getTime($datarow[$i]['transactionID'],$cusID)) . '</td>
                             <td class="transactionAmount">' .($datarow[$i]['amount']) . '</td>
-                            <td class="transactionName">' . ($datarow[$i]['name']) . '</td>
+                            <td class="transactionName">' . ($description) . '</td>
                             <td class="transactionType">' . ($datarow[$i]['type']) . '</td>
                             <td class="action">
                             <a href="#" class="edit-transaction-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
@@ -228,6 +238,11 @@ if (isset($_GET['cateName'])) {
         if (!empty($datarow)) {
             $datalist = "";
             for ($i = 0; $i < sizeof($datarow); $i++) {
+                if (empty($datarow[$i]['name'])) {
+                    $description = $datarow[$i]['category'];
+                } else {
+                    $description = $datarow[$i]['name'];
+                }
                 $datalist .= ('
                             <tr>
                             <input type="hidden" class="transactionID" value="' . ($datarow[$i]['transactionID']) . '"></input>
@@ -237,7 +252,7 @@ if (isset($_GET['cateName'])) {
                             <td class="transactionDate">' . ($customer->getDate($datarow[$i]['transactionID'],$cusID)) . '</td>
                             <td class="transactionTime">' . ($customer->getTime($datarow[$i]['transactionID'],$cusID)) . '</td>
                             <td class="transactionAmount">' .($datarow[$i]['amount']) . '</td>
-                            <td class="transactionName">' . ($datarow[$i]['name']) . '</td>
+                            <td class="transactionName">' . ($description) . '</td>
                             <td class="transactionType">' . ($datarow[$i]['type']) . '</td>
                             <td class="action">
                             <a href="#" class="edit-transaction-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>

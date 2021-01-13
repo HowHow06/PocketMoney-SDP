@@ -11,6 +11,10 @@ Financial Management System (Website)
 
 ## Work Progress
 
+### 2021-01-14
+> Moses's Part
+- Update ```income_trans.php``` and ```expense_trans.php``` and ```overall_trans.php```
+
 ### 2021-01-13
 > Moses's Part
 - Update ```expense_trans.php``` and ```overall_trans.php```

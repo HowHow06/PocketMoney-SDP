@@ -6,7 +6,7 @@ $(document).ready(function () {
     });
     input;
 
-    var keyword = $("#current-date").val();
+    var keyword = $("#current-previous-date").val();
     var numbers = /^[0-9-]+$/;
     if (String(keyword).match(numbers)) {
         $("#filter-month-year").val('Yearly');
@@ -15,7 +15,6 @@ $(document).ready(function () {
     }
 
     $("body").niceScroll();
-
 });
 
 
@@ -283,24 +282,28 @@ function showdetail(name,month,year) {
                 avg = raw / 30;
                 break;
             case 2:
-                avg = raw / 28;
+                year % 4 == 0 ? avg = raw / 29 : avg = raw / 28;
                 break;
         }
         document.getElementById("cateAvg").textContent = "Average Daily: RM"+avg.toFixed(2);
         document.getElementsByClassName('cate-overall')[0].id = name;
         cusID = document.getElementById("cusID").value;
-        
         xmlhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 var data = JSON.parse(this.responseText);
+                
                 var amount = String(data['amount']);
                 var month = String(data['month']);
     
                 var datalist = data['datalist'];
                 document.getElementById("categoryTransactionTableBody").innerHTML = datalist;
-    
+                
                 refreshchart(amount, month);
+                $("#cate-overall").css({"visibility":"visible"});
+                $("#categoryTransactionTable").css({"visibility":"visible"});
+                $("#cate-overall").css({"display":"block"});
                 $("body").niceScroll().resize();
+                
             }
         };
         xmlhttp.open(
@@ -333,6 +336,9 @@ function showdetail(name,month,year) {
                 document.getElementById("categoryTransactionTableBody").innerHTML = datalist;
     
                 refreshchart(amount, month);
+                $("#cate-overall").css({"visibility":"visible"});
+                $("#categoryTransactionTable").css({"visibility":"visible"});
+                $("#cate-overall").css({"display":"block"});
                 $("body").niceScroll().resize();
             }
         };
@@ -350,22 +356,6 @@ function showdetail(name,month,year) {
         );
         xmlhttp.send();
     }
-}
-
-// smoothing the bookmark section
-let anchorlinks = document.querySelectorAll('a[href^="#"]')
-
-for (let item of anchorlinks) { // relitere 
-    item.addEventListener('click', (e)=> {
-        let hashval = item.getAttribute('href')
-        let target = document.querySelector(hashval)
-        target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        })
-        history.pushState(null, null, hashval)
-        e.preventDefault()
-    })
 }
 
 function refreshchart(amount, month) 
@@ -409,7 +399,6 @@ function refreshchart(amount, month)
             },
         },
         xaxis: {
-            max: 8,
             categories: monthJSON
         },
         yaxis: {
@@ -436,6 +425,11 @@ $(document).on("click", ".edit-transaction-anchor", function () {
     var transactionName = $(this).parent().parent().find(".transactionName").text();
     var transactionType = $(this).parent().parent().find(".transactionType").text();
 
+    //in reality name is not fill, we encourage to let user fill their own
+    if (transactionName == transactionCategory) {
+        transactionName = "";
+    }
+
     //change format to match datetime-local format
     const formattedDateTime = transactionDateTime.replace(/\s/,'T');
 
@@ -448,11 +442,6 @@ $(document).on("click", ".edit-transaction-anchor", function () {
 });
 
 $(document).on("click", ".delete-transaction-anchor", function () {
-    var transactionID = $(this).parent().parent().find(".transactionID").val();
-    $("#delete_transactionID").val(transactionID);
-});
-
-$(document).on("change", ".delete-transaction-anchor", function () {
     var transactionID = $(this).parent().parent().find(".transactionID").val();
     $("#delete_transactionID").val(transactionID);
 });
@@ -489,3 +478,45 @@ $('[data-toggle="row-hover"]').popover({
   placement: 'top',
   content: function () { return $(this).data('text'); }
 });
+
+// smoothing the bookmark section
+// let anchorlinks = document.querySelectorAll('a[href^="#"]')
+
+// for (let item of anchorlinks) { // relitere 
+//     item.addEventListener('click', (e)=> {
+//         let hashval = item.getAttribute('href')
+//         let target = document.querySelector(hashval)
+//         target.scrollIntoView({
+//             behavior: 'smooth',
+//             block: 'start'
+//         })
+//         history.pushState(null, null, hashval)
+//         e.preventDefault()
+//     })
+// }
+
+
+// Bookmarks JQuery code, only put at the end of code
+(function($){
+    var h = window.location.hash;
+    if( h.length > 1 ) {
+        var target = $(h);
+        if( target.length ) {
+            $('html,body').animate({ scrollTop: target.offset().top },400);
+        }
+    }
+    $(document).on('click','a',function(e){
+        var a = $(this), href = a.attr('href');
+        if(href && ~href.indexOf('#')){
+            var name = href.substr( href.indexOf('#') + 1 ), target = $('a[name='+ name +']'), target2 = $('#' + name);
+            console.log(name);
+            target = (target.length)? target : target2;
+            if(target.length){
+                e.preventDefault();
+                $('html,body').animate({
+                  scrollTop: target.offset().top
+                },400);
+            }
+        }
+    });
+})(jQuery);
