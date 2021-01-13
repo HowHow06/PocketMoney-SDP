@@ -30,7 +30,7 @@ Financial Management System (Website)
 ### 2021-01-11
 > Moses's Part
 - Update ```class.customer.php``` and ```income_trans.js```  and ```form_process.php``` mostly for income page
-- At this point 70% of income page done
+- At this point 80% of income page done
 
 ### 2021-01-10
 > Moses's Part

@@ -64,7 +64,7 @@ class Customer
         return NULL;
     }
 
-    
+
 
     /** 
      * Return the array of table data if the id is set before
@@ -548,7 +548,6 @@ class Customer
      *                                                                    *
      *********************************************************************/
 
-
      /** 
      * Set flag in 0 or 1
      * @param int $bool
@@ -593,23 +592,23 @@ class Customer
      * specific date string
      * 
      */
-    function setCurDate($number=0,$cd="")
+    function setCurDate($number = 0, $cd = "")
     {
         if ($number == 0) {
             // initialise
             $this->date = date("Y-m-d");
         } else {
             if ($number == 1) {
-                $var = strtotime("first day of +1 month",strtotime($cd));
+                $var = strtotime("first day of +1 month", strtotime($cd));
                 $this->date = date("Y-m-d", $var);
             } elseif ($number == -1) {
-                $var = strtotime("first day of -1 month",strtotime($cd));
+                $var = strtotime("first day of -1 month", strtotime($cd));
                 $this->date = date("Y-m-d", $var);
             } elseif ($number == 2) {
-                $var = strtotime("first day of +1 year",strtotime($cd));
+                $var = strtotime("first day of +1 year", strtotime($cd));
                 $this->date = date("Y-m-d", $var);
             } elseif ($number == -2) {
-                $var = strtotime("first day of -1 year",strtotime($cd));
+                $var = strtotime("first day of -1 year", strtotime($cd));
                 $this->date = date("Y-m-d", $var);
             }
         }
@@ -630,7 +629,7 @@ class Customer
     }
 
 
-     /** 
+    /** 
      * Return String format of date
      * 
      * @param int $purpose
@@ -649,41 +648,42 @@ class Customer
      * @return String |NULL
      * 
      */
-    function getCurrentFilterTime($purpose=0, $conditionFlag=0, $yearlyFlag=0) {
+    function getCurrentFilterTime($purpose = 0, $conditionFlag = 0, $yearlyFlag = 0)
+    {
         // for display (December 2020)
-        if (($purpose==0 && $conditionFlag==0 && $yearlyFlag==0) OR ($purpose==0 && $conditionFlag==1 && $yearlyFlag==0)) {
+        if (($purpose == 0 && $conditionFlag == 0 && $yearlyFlag == 0) or ($purpose == 0 && $conditionFlag == 1 && $yearlyFlag == 0)) {
             $d = strtotime($this->getCurDate());
-            $systemMonth = date('F',$d);
-            $systemYear = date("Y",$d);
-            $systemDate = $systemMonth." ".$systemYear;
+            $systemMonth = date('F', $d);
+            $systemYear = date("Y", $d);
+            $systemDate = $systemMonth . " " . $systemYear;
             return $systemDate;
         }
         // for display (01 December 2020)
-        if ($purpose==0 && $conditionFlag==1 && $yearlyFlag==0) {
+        if ($purpose == 0 && $conditionFlag == 1 && $yearlyFlag == 0) {
             $d = strtotime($this->getCurDate());
-            $systemMonth = date('m',$d);
-            $systemYear = date("Y",$d);
-            $systemDate = "02 ".$systemMonth." ".$systemYear;
+            $systemMonth = date('m', $d);
+            $systemYear = date("Y", $d);
+            $systemDate = "02 " . $systemMonth . " " . $systemYear;
             return $systemDate;
         }
         // for display (01-12-2020)
-        if ($purpose==0 && $conditionFlag==1 && $yearlyFlag==1) {
+        if ($purpose == 0 && $conditionFlag == 1 && $yearlyFlag == 1) {
             $d = strtotime($this->getCurDate());
-            $systemMonth = date('m',$d);
-            $systemYear = date("Y",$d);
-            $systemDate = "01-".$systemMonth."-".$systemYear;
+            $systemMonth = date('m', $d);
+            $systemYear = date("Y", $d);
+            $systemDate = "01-" . $systemMonth . "-" . $systemYear;
             return $systemDate;
         }
         // for query (2020)
-        if (($purpose==0 && $conditionFlag==0 && $yearlyFlag==1) OR ($purpose==1 && $conditionFlag==1 && $yearlyFlag==0) OR ($purpose==1 && $conditionFlag==1 && $yearlyFlag==1)) {
+        if (($purpose == 0 && $conditionFlag == 0 && $yearlyFlag == 1) or ($purpose == 1 && $conditionFlag == 1 && $yearlyFlag == 0) or ($purpose == 1 && $conditionFlag == 1 && $yearlyFlag == 1)) {
             $d = strtotime($this->getCurDate());
-            $systemYear = date("Y",$d);
+            $systemYear = date("Y", $d);
             return $systemYear;
         }
         // for query (12 -> Month)
-        if ($purpose==1 && $conditionFlag==0 && $yearlyFlag==0) {
+        if ($purpose == 1 && $conditionFlag == 0 && $yearlyFlag == 0) {
             $d = strtotime($this->getCurDate());
-            $systemMonth = date('m',$d);
+            $systemMonth = date('m', $d);
             return $systemMonth;
         }
         // for query (0 -> Month)
@@ -691,18 +691,18 @@ class Customer
             return 0;
         }
         // for query (A string contain sql query -> monthly)
-        if ($purpose==1 && $conditionFlag==2 && $yearlyFlag==0) {
+        if ($purpose == 1 && $conditionFlag == 2 && $yearlyFlag == 0) {
             $d = strtotime($this->getCurDate());
-            $systemMonth = date("m",$d);
-            $systemYear = date("Y",$d);
-            $output = " AND MONTH(t.date) = ".$systemMonth." AND YEAR(t.date) = ".$systemYear." ";
+            $systemMonth = date("m", $d);
+            $systemYear = date("Y", $d);
+            $output = " AND MONTH(t.date) = " . $systemMonth . " AND YEAR(t.date) = " . $systemYear . " ";
             return $output;
         }
         // for query (A string contain sql query -> yearly)
-        if ($purpose==1 && $conditionFlag==2 && $yearlyFlag==1) {
+        if ($purpose == 1 && $conditionFlag == 2 && $yearlyFlag == 1) {
             $d = strtotime($this->getCurDate());
-            $systemYear = date("Y",$d);
-            $output = " AND YEAR(t.date) = ".$systemYear." ";
+            $systemYear = date("Y", $d);
+            $output = " AND YEAR(t.date) = " . $systemYear . " ";
             return $output;
         }
         return NULL;
@@ -718,29 +718,29 @@ class Customer
      * @return Array |NULL
      * 
      */
-    function getTime($transactionId,$cusID="") {
+    function getTime($transactionId, $cusID = "")
+    {
 
-    $db = MysqliDb::getInstance();
-    if (!empty($this->id)) {
-        $id = $this->id;
-        $db->where('cusID', $id);
-        $db->where('transactionID', $transactionId);
-        $result = $db->getOne('Transaction', "date");
-        $format = 'Y-m-d H:i:s';
-        $formatedTime = DateTime::createFromFormat($format, $result['date']);
-        $formatedTime = $formatedTime->format('H:i A');
-        return $formatedTime;
-    }
-    elseif (!empty($cusID)) {
-        $db->where('cusID', $cusID);
-        $db->where('transactionID', $transactionId);
-        $result = $db->getOne('Transaction', "date");
-        $format = 'Y-m-d H:i:s';
-        $formatedTime = DateTime::createFromFormat($format, $result['date']);
-        $formatedTime = $formatedTime->format('H:i A');
-        return $formatedTime;
-    }
-    return NULL;
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $id = $this->id;
+            $db->where('cusID', $id);
+            $db->where('transactionID', $transactionId);
+            $result = $db->getOne('Transaction', "date");
+            $format = 'Y-m-d H:i:s';
+            $formatedTime = DateTime::createFromFormat($format, $result['date']);
+            $formatedTime = $formatedTime->format('H:i A');
+            return $formatedTime;
+        } elseif (!empty($cusID)) {
+            $db->where('cusID', $cusID);
+            $db->where('transactionID', $transactionId);
+            $result = $db->getOne('Transaction', "date");
+            $format = 'Y-m-d H:i:s';
+            $formatedTime = DateTime::createFromFormat($format, $result['date']);
+            $formatedTime = $formatedTime->format('H:i A');
+            return $formatedTime;
+        }
+        return NULL;
     }
 
     /** 
@@ -753,7 +753,8 @@ class Customer
      * @return Array|NULL
      * 
      */
-    function getDate($transactionId,$cusID="") {
+    function getDate($transactionId, $cusID = "")
+    {
 
         $db = MysqliDb::getInstance();
         if (!empty($this->id)) {
@@ -765,8 +766,7 @@ class Customer
             $formatedDate = DateTime::createFromFormat($format, $result['date']);
             $formatedDate = $formatedDate->format('Y-m-d');
             return $formatedDate;
-        }
-        elseif (!empty($cusID)) {
+        } elseif (!empty($cusID)) {
             $db->where('cusID', $cusID);
             $db->where('transactionID', $transactionId);
             $result = $db->getOne('Transaction', "date");
@@ -793,7 +793,7 @@ class Customer
      * @return JSON|NULL
      * s
      */
-    function getTypesAndAmount($month,$year,$isExpense=0)
+    function getTypesAndAmount($month, $year, $isExpense = 0)
     {
         $db = MysqliDb::getInstance();
         if (!empty($this->id)) {
@@ -805,20 +805,20 @@ class Customer
             } else {
                 $db->where('c.categoryType', 'expenses');
             }
-            
+
             if (!empty($month)) {
-                $db->where('MONTH(t.date)',$month);
-                $db->where('YEAR(t.date)',$year);
+                $db->where('MONTH(t.date)', $month);
+                $db->where('YEAR(t.date)', $year);
             } else {
-                $db->where('YEAR(t.date)',$year);
+                $db->where('YEAR(t.date)', $year);
             }
             $db->groupBy('c.categoryName');
-            $db->orderBy('amount','DESC');
+            $db->orderBy('amount', 'DESC');
             $incomeTypesToValue = array();
             $result = $db->get('category c', null, 'c.categoryName, SUM(t.amount) AS amount');
-            foreach ($result as $row => $data) { 
+            foreach ($result as $row => $data) {
                 $tempValue = (float) $data['amount'];
-                array_push($incomeTypesToValue, ['label'=>$data['categoryName'], 'value'=>$tempValue]);
+                array_push($incomeTypesToValue, ['label' => $data['categoryName'], 'value' => $tempValue]);
             }
             $data = json_encode($incomeTypesToValue);
 
@@ -879,7 +879,7 @@ class Customer
      * @return Array|NULL
      * 
      */
-    function getPercentage($month,$year,$isExpense=0) 
+    function getPercentage($month, $year, $isExpense = 0)
     {
         $db = MysqliDb::getInstance();
         if (!empty($this->id)) {
@@ -887,31 +887,31 @@ class Customer
             $db->join('transaction t', 'c.categoryID=t.categoryID', 'LEFT');
             $db->where('t.cusID', $id);
             if (!empty($month)) {
-                $db->where('MONTH(t.date)',$month);
-                $db->where('YEAR(t.date)',$year);
+                $db->where('MONTH(t.date)', $month);
+                $db->where('YEAR(t.date)', $year);
             } else {
-                $db->where('YEAR(t.date)',$year);
+                $db->where('YEAR(t.date)', $year);
             }
             if (empty($isExpense)) {
                 $db->where('c.categoryType', 'income');
             } else {
                 $db->where('c.categoryType', 'expenses');
             }
-            
+
             $db->groupBy('c.categoryName');
-            $db->orderBy('amount','DESC');
+            $db->orderBy('amount', 'DESC');
             $incomeTypesToValue = array();
             $total = 0;
             $result = $db->get('category c', null, 'c.categoryName, SUM(t.amount) AS amount');
-            foreach ($result as $row => $data) { 
+            foreach ($result as $row => $data) {
                 $tempValue = (float) $data['amount'];
                 $total += $tempValue;
-                array_push($incomeTypesToValue, ['label'=>$data['categoryName'], 'value'=>$tempValue, 'percentage'=>'']);
+                array_push($incomeTypesToValue, ['label' => $data['categoryName'], 'value' => $tempValue, 'percentage' => '']);
             }
 
             for ($i = 0; $i < sizeof($incomeTypesToValue); $i++) {
                 $percentage = $incomeTypesToValue[$i]['value'] / $total * 100.00;
-                $incomeTypesToValue[$i]['percentage'] = strval(round($percentage)).'%';
+                $incomeTypesToValue[$i]['percentage'] = strval(round($percentage)) . '%';
             }
 
             return $incomeTypesToValue;
@@ -981,7 +981,7 @@ class Customer
      * 'value' -> array: array of category value
      * 'month' -> array: an array of months
      */
-    function getCategoryAmountByMonth($cate,$cusID,$month,$year)
+    function getCategoryAmountByMonth($cate, $cusID, $month, $year)
     {
         $db = MysqliDb::getInstance();
         $id = $cusID;
@@ -1048,12 +1048,12 @@ class Customer
      * 
      * 
      */
-    function getCategoryAmountJSON($cate,$cusID,$month,$year)
+    function getCategoryAmountJSON($cate, $cusID, $month, $year)
     {
         $db = MysqliDb::getInstance();
         $id = $cusID;
         if (!empty($id)) {
-            $data = $this->getCategoryAmountByMonth($cate,$cusID,$month,$year);
+            $data = $this->getCategoryAmountByMonth($cate, $cusID, $month, $year);
             $amountArr = array_map('floatval', $data['value']);
             $amountJSON = json_encode($amountArr);
             return $amountJSON;
@@ -1078,12 +1078,12 @@ class Customer
      * @return JSON |NULL
      * 
      */
-    function getCategoryMonthJSON($cate,$cusID,$month,$year)
+    function getCategoryMonthJSON($cate, $cusID, $month, $year)
     {
         $db = MysqliDb::getInstance();
         $id = $cusID;
         if (!empty($id)) {
-            $data = $this->getCategoryAmountByMonth($cate,$cusID,$month,$year);
+            $data = $this->getCategoryAmountByMonth($cate, $cusID, $month, $year);
             $monthArr = $data['month'];
             $monthJSON = json_encode($monthArr);
             return $monthJSON;
@@ -1103,22 +1103,75 @@ class Customer
      * @return Array|NULL
      * 
      */
-    function getTableRowCount($month,$year)
+    function getTableRowCount($month, $year)
     {
         $db = MysqliDb::getInstance();
-        
+
         if (!empty($this->id)) {
             $id = $this->id;
             $db->join('category c', 'c.categoryID=t.categoryID', 'LEFT');
             $db->where('t.cusID', $id);
             if (!empty($month)) {
-                $db->where('MONTH(t.date)',$month);
-                $db->where('YEAR(t.date)',$year);
+                $db->where('MONTH(t.date)', $month);
+                $db->where('YEAR(t.date)', $year);
             } else {
-                $db->where('YEAR(t.date)',$year);
+                $db->where('YEAR(t.date)', $year);
             }
             $result = $db->get('transaction t');
             return $result;
+        }
+        return NULL;
+    }
+
+    /*********************************************************************\
+     *               Below Part are show liability page                   *
+     *                       For extra functions                          *
+     *                                                                    *
+     *    **           **********      ****      *********    **********  *
+     *    **               **       ***    ***   **      **       **      *
+     *    **               **       **      **   **      **       **      *
+     *    **               **       **      **   *********        **      *
+     *    **               **       **********   **      **       **      *
+     *    **               **       **      **   **       **      **      *
+     *    **               **       **      **   **      **       **      *
+     *    **********   **********   **      **   *********    **********  *
+     *                                                                    *
+     *********************************************************************/
+
+
+    /** 
+     * Return JSON format of category value only
+     * @return JSON|NULL
+     * 
+     * 
+     */
+    function getLiabCategoryAmountJSON($cate, $cusID, $month, $year)
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $data = $this->getInvestTypesAndAmount();
+            $investAmountArr = array_map('floatval', $data['amount']);
+            $investAmountJSON = json_encode($investAmountArr);
+            return $investAmountJSON;
+        }
+        return NULL;
+    }
+
+    /** 
+     * Return JSON format of category value only
+     * @return JSON|NULL
+     * 
+     * 
+     */
+    function getLiabCategoryNameJSON($cate, $cusID, $month, $year)
+    {
+        $db = MysqliDb::getInstance();
+        $id = $cusID;
+        if (!empty($id)) {
+            $data = $this->getCategoryAmountByMonth($cate, $cusID, $month, $year);
+            $amountArr = array_map('floatval', $data['value']);
+            $amountJSON = json_encode($amountArr);
+            return $amountJSON;
         }
         return NULL;
     }

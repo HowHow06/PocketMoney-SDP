@@ -10,7 +10,7 @@
 
 <body>
     <?php
-    $activePage = "investments"; 
+    $activePage = "investments";
     include(".navbar.php");
 
     //update the investment transaction
@@ -110,7 +110,7 @@
                 <a href="#" class="navbar-brand">INVESTMENTS</a>
             </nav>
 
-            <div class="container-fluid row overall">
+            <div class=" row overall">
                 <div>
                     <h5>Total Amount</h5>
                     <p>
