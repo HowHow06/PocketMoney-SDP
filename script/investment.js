@@ -439,6 +439,11 @@ $(document).ready(function () {
   $("body").niceScroll();
 });
 
+window.addEventListener("resize", function () {
+  console.log("helo");
+  $("body").niceScroll().resize();
+});
+
 $(document).on("change", "#edit-general-name", function () {
   var investName = $(this).val();
   var cusID = $("#cusID").val();
