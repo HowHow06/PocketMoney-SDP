@@ -23,19 +23,24 @@
 }
 
 .body {
+    .go-to{
+        padding-top: 0.4rem;
+        text-align: center;
+    }
     @include cus-body;
     > .overall {
         justify-content: center;
         align-items: center;
-        > div {
+        > a {
             background-color: #fc9a55;
             width: 200px;
-            height: 75px;
+            height: 1.7rem;
             border-radius: 25px;
             color: white;
-            margin: 50px auto;
+            margin: 10px auto;
             text-align: center;
-            padding: 14px;
+            padding: 0;
+            font-size: 0.9rem;
             > h5 {
                 margin-bottom: 0;
             }
@@ -43,7 +48,7 @@
     }
 
     > .liability-overview {
-        padding: 20px 50px;
+         padding: 20px 50px;
         > div {
             border-width: 4px !important;
             padding: 10px 0 0 0;
@@ -112,89 +117,104 @@
     }
 
     > .upcoming-payment {
-        > .pie-chart {
-            padding: 10px 0px 10px 50px;
-            > div {
-                width: 700px;
-                height: 500px;
-                margin: 0 auto;
+        margin: 0 2.5%;
+        .chart-display{
+            padding: 20px 2%;
+        }
+         .pie-chart {
+            // padding: 10px 0px 10px 50px;
+            //  div {
+                // width: 700px;
+                // height: 500px;
+                // margin: 0 auto;
                 border-width: 4px !important;
+            // }
+         }
+        $oripadding: 15px;
+        .left-div{
+            padding-right: ($oripadding/2);
+        }
+        .right-div{
+            padding-left: ($oripadding/2);
+        }
+        >div{
+            >div{
+                padding: 0 1.5%;
             }
         }
-        > .chart-explain {
-            padding: 10px 5px 10px 20px;
-            > div {
-                width: 900px;
-                height: 500px;
-                margin: 0 auto;
-                border-width: 4px !important;
-                // padding-top: 20px;
-                > form {
-                    > label {
-                        color: white;
-                        position: absolute;
-                        bottom: 105px;
-                        right: 370px;
-                        font-size: 22px;
+        div {
+            margin: 0 auto;
+            border-width: 4px !important;
+            // form {
+            //         label {
+            //         color: black;
+            //         position: absolute;
+            //         bottom: 105px;
+            //         right: 370px;
+            //         font-size: 22px;
+            //     }
+            //         label::before {
+            //         width: 20px;
+            //         height: 20px;
+            //         border-radius: 11px;
+            //         background-color: transparent;
+            //         content: '';
+            //         visibility: visible;
+            //         border: 2px solid white;
+            //         position: absolute;
+            //         right: 80px;
+            //         bottom: 6px;
+            //     }
+            //         .year {
+            //         right: 270px !important;
+            //     }
+            //         .year::before {
+            //         right: 58px !important;
+            //     }
+            //         input[type=radio]:checked + label::after {
+            //         width: 12px;
+            //         height: 12px;
+            //         border-radius: 11px;
+            //         background-color: white;
+            //         content: '';
+            //         display: block;
+            //         position: absolute;
+            //         right: 84px;
+            //         bottom: 10px; 
+            //     }
+            //         input[type=radio]:checked + .year::after {
+            //         right: 62px !important;
+            //     }
+            //         input[type=radio] {
+            //         display: none;
+            //     }  
+            // }
+        }
+        .transaction-table {
+            height: 60vh;
+            overflow-y: auto;
+            display: block;
+            margin: 20px auto;
+            th{
+                width: 100vw;
+            }
+            text-align: center;
+                thead {
+                background-color: #fc9a55;
+                color: white;
+                    tr {
+                        .title {
+                        text-align: left;
+                        font-size: 1.5rem;
+                        padding: 10px;
                     }
-                    > label::before {
-                        width: 20px;
-                        height: 20px;
-                        border-radius: 11px;
-                        background-color: transparent;
-                        content: '';
-                        visibility: visible;
-                        border: 2px solid white;
-                        position: absolute;
-                        right: 80px;
-                        bottom: 6px;
-                    }
-                    > .year {
-                        right: 270px !important;
-                    }
-                    > .year::before {
-                        right: 58px !important;
-                    }
-                    >  input[type=radio]:checked + label::after {
-                        width: 12px;
-                        height: 12px;
-                        border-radius: 11px;
-                        background-color: white;
-                        content: '';
-                        display: block;
-                        position: absolute;
-                        right: 84px;
-                        bottom: 10px; 
-                    }
-                    >  input[type=radio]:checked + .year::after {
-                        right: 62px !important;
-                    }
-                    > input[type=radio] {
-                        display: none;
-                    }
-                    > .transaction-table {
-                        margin: 20px auto;
-                        width: 95%;
-                        text-align: center;
-                        > thead {
-                            background-color: #fc9a55;
-                            color: white;
-                            > tr {
-                                > .title {
-                                    text-align: left;
-                                    font-size: 1.5rem;
-                                    padding: 10px;
-                                }
-                            }
-                        }
-                        > tbody {
-                            .action {
-                                width: 130px;
-                                > a {
-                                    color: #FF6C00;
-                                }
-                            }
-                        }
+                }
+            }
+                tbody {
+                .action {
+                    width: 130px;
+                        a {
+                        color: #FF6C00;
                     }
                 }
             }
@@ -204,7 +224,7 @@
     > .chart {
         justify-content: center;
         align-items: center;
-        margin-top: 70px;
+        margin-top: 50px;
     }
     > .head {
         margin: 0 auto;
@@ -260,6 +280,14 @@
     }
     > .filter2 {
         > .show {
+            > .btn {
+                font-size: 16px;
+                background-color: #fc9a55;
+                color: white;
+            }
+            > .btn:hover {
+                background-color: rgba($color: #FF6C00, $alpha: 0.6);
+            }
             padding-left: 50px;
             > h6, select {
                 float: left;
@@ -412,3 +440,5 @@ label.error{
         margin-bottom: 0;
     }
 }
+
+
