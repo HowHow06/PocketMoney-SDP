@@ -495,6 +495,11 @@
                                                             ");
                     if (!empty($datarow)) {
                         for ($i = 0; $i < sizeof($datarow); $i++) {
+                            if (empty($datarow[$i]['name'])) {
+                                $description = $datarow[$i]['category'];
+                            } else {
+                                $description = $datarow[$i]['name'];
+                            }
                     ?>
                             <tr>
                                 <input type="hidden" class="transactionID" value='<?php echo ($datarow[$i]['transactionID']); ?>'></input>
@@ -504,7 +509,7 @@
                                 <td class="transactionTime"><?php print_r($customer->getTime($datarow[$i]['transactionID'])); ?></td>
                                 <td class="transactionAmount"><?php echo ($datarow[$i]['amount']); ?></td>
                                 <td class="transactionCategory"><?php echo ($datarow[$i]['category']); ?></td>
-                                <td class="transactionName"><?php echo ($datarow[$i]['name']); ?></td>
+                                <td class="transactionName"><?php echo ($description); ?></td>
                                 <td class="transactionType"><?php echo ($datarow[$i]['type']); ?></td>
                                 <td class="action">
                                     <a href="#" class="edit-transaction-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>

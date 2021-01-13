@@ -194,8 +194,8 @@
                 </div>
             </div>
 
-            <div class="container-fluid row">
-                <div class="pie-chart">
+            <div class="container-fluid row overview">
+                <div class="pie-chart col-5">
                     <div class="border rounded" id="expenseTypes-pie-chart">
                         <?php 
                             $chart = new FusionCharts("pie2d", "ex1", "100%", "100%", "expenseTypes-pie-chart", "json", $customer->getTypesAndAmount($customer->getCurrentFilterTime(1,0,$customer->getFlag()),$customer->getCurrentFilterTime(1,1,$customer->getFlag()),1));
@@ -203,7 +203,7 @@
                         ?>
                     </div>
                 </div>
-                <div class="chart-explain">
+                <div class="chart-explain col-7">
                     <div class="border rounded">
                         <?php 
                         $datarow = $customer->getDataByQuery("SELECT c.categoryName, SUM(t.amount) AS amount 
@@ -246,7 +246,7 @@
                 </div>
             </div>
 
-            <div class="container-fluid category cate-overall">
+            <div class="container-fluid category cate-overall" id="cate-overall">
                 <div class="border round">
                     <div class="container-fluid title">
                         <h2 id="cateName" name="cateName">CATEGORY</h2>
@@ -578,6 +578,11 @@
                                                             ");
                     if (!empty($datarow)) {
                         for ($i = 0; $i < sizeof($datarow); $i++) {
+                            if (empty($datarow[$i]['name'])) {
+                                $description = $datarow[$i]['category'];
+                            } else {
+                                $description = $datarow[$i]['name'];
+                            }
                     ?>
                             <tr>
                                 <input type="hidden" class="transactionID" value='<?php echo ($datarow[$i]['transactionID']); ?>'></input>
@@ -587,7 +592,7 @@
                                 <td class="transactionTime"><?php print_r($customer->getTime($datarow[$i]['transactionID'])); ?></td>
                                 <td class="transactionAmount"><?php echo ($datarow[$i]['amount']); ?></td>
                                 <td class="transactionCategory"><?php echo ($datarow[$i]['category']); ?></td>
-                                <td class="transactionName"><?php echo ($datarow[$i]['name']); ?></td>
+                                <td class="transactionName"><?php echo ($description); ?></td>
                                 <td class="transactionType"><?php echo ($datarow[$i]['type']); ?></td>
                                 <td class="action">
                                     <a href="#" class="edit-transaction-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>

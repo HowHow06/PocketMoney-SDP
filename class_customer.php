@@ -548,9 +548,11 @@ class Customer
      *                                                                    *
      *********************************************************************/
 
-
-    /** 
-     * Set customer id
+     /** 
+     * Set flag in 0 or 1
+     * @param int $bool
+     * 0 -> Monthly
+     * 1 -> Yearly
      * 
      */
     function setFlag($bool)
@@ -564,8 +566,8 @@ class Customer
     }
 
     /** 
-     * Return the id if the id is set before
-     * @return String|NULL
+     * Return the flag value
+     * @return int|NULL
      * 
      */
     function getFlag()
@@ -578,7 +580,16 @@ class Customer
     }
 
     /** 
-     * Set customer id
+     * Set current or specify date
+     * @param int $number
+     * -2 -> set date before a year
+     * -1 -> set date before a month
+     * 0 -> set current date
+     * 1 -> set date after a month
+     * 2 -> set date after a year
+     * 
+     * @param String $cd
+     * specific date string
      * 
      */
     function setCurDate($number = 0, $cd = "")
@@ -604,7 +615,7 @@ class Customer
     }
 
     /** 
-     * Return the id if the id is set before
+     * Return the date value
      * @return String|NULL
      * 
      */
@@ -626,15 +637,15 @@ class Customer
      * 1 -> used for query purpose
      * 
      * @param int $conditionFlag
-     * 0 -> no condition, default is 'December 2020'
-     * 1 -> condition, month -> NULL, year->2020
-     * 2 -> condition,
+     * 0 -> no condition
+     * 1 -> condition
+     * 2 -> condition
      * 
      * @param int $yearlyFlag
      * 0 -> monthly
      * 1 -> yearly
      * 
-     * @return Array |NULL
+     * @return String |NULL
      * 
      */
     function getCurrentFilterTime($purpose = 0, $conditionFlag = 0, $yearlyFlag = 0)
@@ -675,8 +686,8 @@ class Customer
             $systemMonth = date('m', $d);
             return $systemMonth;
         }
-        // for query (NULL -> Month)
-        if ($purpose == 1 && $conditionFlag == 0 && $yearlyFlag == 1) {
+        // for query (0 -> Month)
+        if ($purpose==1 && $conditionFlag==0 && $yearlyFlag==1) {
             return 0;
         }
         // for query (A string contain sql query -> monthly)
@@ -701,6 +712,8 @@ class Customer
      * Return Array format of time (XX:XX PM)
      * 
      * @param int $transactionId 
+     * 
+     * @param int $cusID 
      * 
      * @return Array |NULL
      * 
@@ -733,9 +746,11 @@ class Customer
     /** 
      * Return Array format of date (YYYY-MM-DD)
      * 
-     * @param int $transactionId 
+     * @param int$transactionId 
      * 
-     * @return Array |NULL
+     * @param int$cusID
+     * 
+     * @return Array|NULL
      * 
      */
     function getDate($transactionId, $cusID = "")
@@ -766,7 +781,16 @@ class Customer
     /** 
      * Return JSON format of chart data 
      * 
-     * @return JSON |NULL
+     * @param int $month
+     * (12)
+     * 
+     * @param int $year
+     * (2020)
+     * 
+     * @param int $isExpense
+     * is income or expense
+     * 
+     * @return JSON|NULL
      * s
      */
     function getTypesAndAmount($month, $year, $isExpense = 0)
@@ -842,8 +866,17 @@ class Customer
 
     /** 
      * Return Array format of income categoryName + totalAmount + percentage
+     * 
+     * @param int $month
+     * (12)
+     * 
+     * @param int $year
+     * (2020)
+     * 
+     * @param int $isExpense
+     * is income or expense
      *  
-     * @return Array |NULL
+     * @return Array|NULL
      * 
      */
     function getPercentage($month, $year, $isExpense = 0)
@@ -888,40 +921,108 @@ class Customer
     }
 
     /** 
-     * Return the array of distinct investment types and amount invested if the id is set before
+     * Return total number of days for given month and year
+     * 
+     * @param int $month
+     * (12)
+     * 
+     * @param int $year
+     * (2020)
+     * 
+     * @return int|NULL
+     * 
+     */
+    function getDateNumByMonth($month,$year)
+    {
+        if (!empty($month)) {
+            switch ($month) {
+                case 1:
+                case 3:
+                case 5:
+                case 7:
+                case 8:
+                case 10:
+                case 12:
+                    return 31;
+                    break;
+                case 4:
+                case 6:
+                case 9:
+                case 11:
+                    return 30;
+                    break;
+                case 2:
+                    if ($year % 4 == 0) {
+                        return 29;
+                    } else { 
+                        return 28;
+                    }
+                    break;
+            }
+        }
+        return NULL;
+    }
+
+    /** 
+     * Return the array of amount and month for given month and year
      * 
      * @param String $cate
      * category name
      * 
+     * @param int $cusID
+     * 
+     * @param int $month
+     * (12)
+     * 
+     * @param int $year
+     * (2020)
+     * 
      * @return array|NULL
      * 'value' -> array: array of category value
-     * 'month' -> array: an array
+     * 'month' -> array: an array of months
      */
     function getCategoryAmountByMonth($cate, $cusID, $month, $year)
     {
         $db = MysqliDb::getInstance();
         $id = $cusID;
         if (!empty($id)) {
-            $db->join('transaction t', 'c.categoryID=t.categoryID', 'LEFT');
-            $db->where('t.cusID', $id);
-            $db->where('c.categoryName', $cate);
+            $categoryValueByMonth = array('value'=>array(),'month'=>array());
+            $monthArr = ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September','October', 'November', 'December'];
             if (!empty($month)) {
-                $db->where('MONTH(t.date)', $month);
-                $db->where('YEAR(t.date)', $year);
-                $db->groupBy("MONTH(t.date)");
-                $db->orderBy('MONTH(t.date),year', 'DESC');
-                $categoryValueByMonth = array('value' => array(), 'month' => array());
-                $result = $db->get('category c', 8, 'MONTHNAME(t.date) as month, YEAR(t.date) as year, SUM(t.amount) AS amount');
+                $numOfDays = $this->getDateNumByMonth($month,$year);
+                for ($i=1; $i<=$numOfDays; $i++) {
+                    strlen($i) == 1 ? $days = "0".$i : $days = strval($i);
+                    strlen($month) == 1 ? $months = "0".$month : $months = $month;
+                    $date = "%".$year."-".$months."-".$days."%";
+                    $db->join('transaction t', 'c.categoryID=t.categoryID', 'RIGHT');
+                    $db->where('t.cusID', $id);
+                    $db->where('c.categoryName', $cate);
+                    $db->where('t.date',$date,'LIKE');
+                    $db->groupBy("t.date");
+                    $result = $db->get('category c', null, 'SUM(t.amount) AS amount');
+                    if (!empty($result[0]['amount'])) {
+                        array_push($categoryValueByMonth['value'],$result[0]['amount']);
+                    } else {
+                        array_push($categoryValueByMonth['value'],0);
+                    }
+                    array_push($categoryValueByMonth['month'],$days);
+                }
             } else {
-                $db->where('YEAR(t.date)', $year);
-                $db->groupBy("MONTH(t.date)");
-                $db->orderBy('MONTH(t.date)', 'DESC');
-                $categoryValueByMonth = array('value' => array(), 'month' => array());
-                $result = $db->get('category c', 12, 'MONTHNAME(t.date) as month, YEAR(t.date) as year, SUM(t.amount) AS amount');
-            }
-            foreach ($result as $row => $data) {
-                array_push($categoryValueByMonth['value'], $data['amount']);
-                array_push($categoryValueByMonth['month'], $data['month']);
+                for ($j=1; $j<=12; $j++) {
+                    $db->join('transaction t', 'c.categoryID=t.categoryID', 'RIGHT');
+                    $db->where('t.cusID', $id);
+                    $db->where('c.categoryName', $cate);
+                    $db->where('MONTH(t.date)',$j);
+                    $db->where('YEAR(t.date)',$year);
+                    $db->groupBy("MONTH(t.date)");
+                    $result = $db->get('category c', null, 'SUM(t.amount) AS amount');
+                    if (!empty($result[0]['amount'])) {
+                        array_push($categoryValueByMonth['value'],$result[0]['amount']);
+                    } else {
+                        array_push($categoryValueByMonth['value'],0);
+                    }
+                    array_push($categoryValueByMonth['month'],$monthArr[$j-1]);
+                }
             }
             return $categoryValueByMonth;
         }
@@ -931,7 +1032,19 @@ class Customer
 
     /** 
      * Return JSON format of category value only
-     * @return JSON|NULL
+     *  
+     * @param String $cate
+     * category name
+     * 
+     * @param int $cusID
+     * 
+     * @param int $month
+     * (12)
+     * 
+     * @param int $year
+     * (2020)
+     *
+     *  @return JSON|NULL
      * 
      * 
      */
@@ -950,8 +1063,19 @@ class Customer
 
     /** 
      * Return JSON format of month only
-     * @return JSON |NULL
      * 
+     * @param String $cate
+     * category name
+     * 
+     * @param int $cusID
+     * 
+     * @param int $month
+     * (12)
+     * 
+     * @param int $year
+     * (2020)
+     * 
+     * @return JSON |NULL
      * 
      */
     function getCategoryMonthJSON($cate, $cusID, $month, $year)
@@ -968,9 +1092,15 @@ class Customer
     }
 
     /** 
-     * Return JSON format of month only
-     * @return JSON |NULL
+     * Return Array of table row count for transaction table only
      * 
+     * @param int $month
+     * (12)
+     * 
+     * @param int $year
+     * (2020)
+     * 
+     * @return Array|NULL
      * 
      */
     function getTableRowCount($month, $year)
@@ -994,10 +1124,19 @@ class Customer
     }
 
     /*********************************************************************\
-     LIABILITY
-
+     *               Below Part are show liability page                   *
+     *                       For extra functions                          *
+     *                                                                    *
+     *    **           **********      ****      *********    **********  *
+     *    **               **       ***    ***   **      **       **      *
+     *    **               **       **      **   **      **       **      *
+     *    **               **       **      **   *********        **      *
+     *    **               **       **********   **      **       **      *
+     *    **               **       **      **   **       **      **      *
+     *    **               **       **      **   **      **       **      *
+     *    **********   **********   **      **   *********    **********  *
+     *                                                                    *
      *********************************************************************/
-
 
 
     /** 

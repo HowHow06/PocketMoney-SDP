@@ -133,8 +133,8 @@
     }
 
     if (isset($_POST['filter-previous'])) {
-        $date = strtotime($_POST['current-date']);
-        if (!preg_match("/^[0-9-]+$/", $_POST['current-date'])) {
+        $date = strtotime($_POST['current-previous-date']);
+        if (!preg_match("/^[0-9-]+$/", $_POST['current-previous-date'])) {
             $d = date("Y-m-d",$date);
             $customer->setCurDate(-1,$d);
         } else {
@@ -145,8 +145,8 @@
     }
 
     if (isset($_POST['filter-next'])) {
-        $date = strtotime($_POST['current-date']);
-        if (!preg_match("/^[0-9-]+$/", $_POST['current-date'])) {
+        $date = strtotime($_POST['current-next-date']);
+        if (!preg_match("/^[0-9-]+$/", $_POST['current-next-date'])) {
             $d = date("Y-m-d",$date);
             $customer->setCurDate(1,$d);
         } else {
@@ -168,11 +168,11 @@
                             <button class="btn" type="submit" id="filter-previous" name="filter-previous">
                                 <i class="fas fa-chevron-left"></i>
                             </button>
-                            <input type="hidden" id="current-date" name="current-date" value="<?php echo ($customer->getCurrentFilterTime(0,1,$customer->getFlag())); ?>"></input>
+                            <input type="hidden" id="current-previous-date" name="current-previous-date" value="<?php echo ($customer->getCurrentFilterTime(0,1,$customer->getFlag())); ?>"></input>
                         </form>
                         <label id="filter-current-date" name="filter-current-date"><?php echo ($customer->getCurrentFilterTime(0,0,$customer->getFlag())); ?></label>
                         <form action="" method="post">
-                            <input type="hidden" id="current-date" name="current-date" value="<?php echo ($customer->getCurrentFilterTime(0,1,$customer->getFlag())); ?>"></input>
+                            <input type="hidden" id="current-next-date" name="current-next-date" value="<?php echo ($customer->getCurrentFilterTime(0,1,$customer->getFlag())); ?>"></input>
                             <button class="btn" type="submit" id="filter-next" name="filter-next">
                                 <i class="fas fa-chevron-right"></i>
                             </button>
@@ -184,7 +184,6 @@
                         <div class="row">
                             <h6>Show:</h6>
                             <select name="filter-month-year" id="filter-month-year" class="custom-select" onchange="this.form.submit()">
-                                <option value=""></option>
                                 <option value="Monthly">Monthly</option>
                                 <option value="Yearly">Yearly</option>
                             </select>
@@ -194,8 +193,8 @@
                 </div>
             </div>
 
-            <div class="container-fluid row">
-                <div class="pie-chart">
+            <div class="container-fluid row overview">
+                <div class="pie-chart col-5">
                     <div class="border rounded" id="incomeTypes-pie-chart">
                         <?php 
                             $chart = new FusionCharts("pie2d", "ex1", "100%", "100%", "incomeTypes-pie-chart", "json", $customer->getTypesAndAmount($customer->getCurrentFilterTime(1,0,$customer->getFlag()),$customer->getCurrentFilterTime(1,1,$customer->getFlag())));
@@ -203,7 +202,7 @@
                         ?>
                     </div>
                 </div>
-                <div class="chart-explain">
+                <div class="chart-explain col-7">
                     <div class="border rounded">
                         <?php 
                         $datarow = $customer->getDataByQuery("SELECT c.categoryName, SUM(t.amount) AS amount 
@@ -245,7 +244,7 @@
                 </div>
             </div>
 
-            <div class="container-fluid category cate-overall">
+            <div class="container-fluid category cate-overall" id="cate-overall">
                 <div class="border round">
                     <div class="container-fluid title">
                         <h2 id="cateName" name="cateName">CATEGORY</h2>
@@ -577,6 +576,11 @@
                                                             ");
                     if (!empty($datarow)) {
                         for ($i = 0; $i < sizeof($datarow); $i++) {
+                            if (empty($datarow[$i]['name'])) {
+                                $description = $datarow[$i]['category'];
+                            } else {
+                                $description = $datarow[$i]['name'];
+                            }
                     ?>
                             <tr>
                                 <input type="hidden" class="transactionID" value='<?php echo ($datarow[$i]['transactionID']); ?>'></input>
@@ -586,7 +590,7 @@
                                 <td class="transactionTime"><?php print_r($customer->getTime($datarow[$i]['transactionID'])); ?></td>
                                 <td class="transactionAmount"><?php echo ($datarow[$i]['amount']); ?></td>
                                 <td class="transactionCategory"><?php echo ($datarow[$i]['category']); ?></td>
-                                <td class="transactionName"><?php echo ($datarow[$i]['name']); ?></td>
+                                <td class="transactionName"><?php echo ($description); ?></td>
                                 <td class="transactionType"><?php echo ($datarow[$i]['type']); ?></td>
                                 <td class="action">
                                     <a href="#" class="edit-transaction-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
