@@ -15,6 +15,9 @@ Financial Management System (Website)
 > Moses's Part
 - Update ```income_trans.php``` and ```expense_trans.php``` and ```overall_trans.php```
 
+> Howard's Part
+- Update ```class.customer.php```
+
 ### 2021-01-13
 > Moses's Part
 - Update ```expense_trans.php``` and ```overall_trans.php```
