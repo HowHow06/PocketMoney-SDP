@@ -23,6 +23,10 @@
 }
 
 .body {
+
+    #liabilityNames-donut-chart{
+        padding-left: 11%;
+    }
     .go-to{
         padding-top: 0.4rem;
         text-align: center;
@@ -40,7 +44,7 @@
             margin: 10px auto;
             text-align: center;
             padding: 0;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             > h5 {
                 margin-bottom: 0;
             }
@@ -80,7 +84,7 @@
                             height: 30px;
                             border-radius: 8px !important;
                             > .progress-bar {
-                                width: 16%; 
+                                width: 30%; 
                                 background-color: #fc9a55 !important;
                                 border-radius: 8px;
                                 transition: 0.3s ease-in-out;

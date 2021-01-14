@@ -1,6 +1,6 @@
-<?php 
+<?php
 
-include('checkSessionCookie.php'); 
+include('checkSessionCookie.php');
 
 // changing active navbar link according to page
 $isActiveDashboard = "";
@@ -58,7 +58,7 @@ switch ($activePage) {
             <a href="investment.php" class="nav-link">Investments</a>
         </li>
         <li class="nav-item <?php echo $isActiveLiabilities ?> ">
-            <a href="liability.php" class="nav-link">Liabilities</a>
+            <a href="liability.php" class="nav-link">Debts</a>
         </li>
         <li class="nav-item <?php echo $isActiveFinancialGoals ?> ">
             <a href="#" class="nav-link">Financial Goals</a>

@@ -5,7 +5,7 @@
     <?php include(".head.php"); ?>
     <link rel="stylesheet" href="./style/liability.css">
 
-    <title>PocketMoney | Liabilities</title>
+    <title>PocketMoney | Debts</title>
 </head>
 
 <body>
@@ -17,110 +17,74 @@
     <div class="container-fluid background">
         <div class="container-fluid body">
             <nav class="navbar navbar-expand-lg">
-                <a href="#" class="navbar-brand">LIABILITIES</a>
+                <a href="#" class="navbar-brand">DEBTS</a>
             </nav>
             <h6 class="go-to">GO TO:</h6>
             <hr>
             <div class="row overall align">
-                <a class="btn" href="#mark-upcoming-payment" role="button">Upcoming Payment</a>
-                <a class="btn" href="#mark-payment-history" role="button">Payment History</a>
-                <a class="btn" href="#mark-all-liabilities" role="button">All liabilities</a>
+                <a class="btn" href="#mark-upcoming-payment" role="button"><i>Upcoming Payment</i></a>
+                <a class="btn" href="#mark-payment-history" role="button"><i>Payment History</i></a>
+                <a class="btn" href="#mark-all-liabilities" role="button"><i>All Debts</i></a>
             </div>
-            <div class="container-fluid row chart">
+            <div class="row chart">
                 <!-- pie chart -->
-                <input type="hidden" id="amountsOfInvestments" name="amountsOfInvestments" value='<?php echo ($customer->getTypeAmountsJSON()); ?>'></input>
-                <input type="hidden" id="typesOfInvestments" name="typesOfInvestments" value='<?php echo ($customer->getInvestTypesJSON()); ?>'></input>
-                <div class="col-6 horizontal-chart" id="liabilityTypes-donut-chart"></div>
+                <?php $query = "SELECT (l.totalAmountToPay - (SELECT SUM(amount) FROM debtpayment debt WHERE debt.liabilityID = l.liabilityID) ) as remainder, l.liabilityName
+                        FROM liability l, debtpayment dp
+                        WHERE l.liabilityID = dp.liabilityID
+                        AND (SELECT SUM(amount) FROM debtpayment debt WHERE debt.liabilityID = l.liabilityID) < l.totalAmountToPay 
+                        GROUP BY l.liabilityName"; ?>
                 <!-- pie chart -->
-                <input type="hidden" id="amountsOfInvestmentByName" name="amountsOfInvestmentByName" value='<?php echo ($customer->getNameAmountsJSON()); ?>'>
-                <input type="hidden" id="nameOfInvestment" name="nameOfInvestment" value='<?php echo ($customer->getInvestNameJSON()); ?>'>
-                <div class="col-6 donut-chart" id="liabilityNames-donut-chart"></div>
+                <input type="hidden" id="amountsOfInvestmentByName" name="amountsOfInvestmentByName" value='<?php echo ($customer->getJSONbyRawQuery($query, 'remainder', true)); ?>'>
+                <input type="hidden" id="nameOfInvestment" name="nameOfInvestment" value='<?php echo ($customer->getJSONbyRawQuery($query, 'liabilityName')); ?>'>
+                <div class="col-12 donut-chart d-flex justify-content-center" id="liabilityNames-donut-chart"></div>
             </div>
 
-            <!-- the pecentage  -->
+            <!-- the pecentage bar -->
             <div class="container-fluid liability-overview">
                 <div class="container-fluid rounded border">
                     <div class="col-12">
-                        <h4>LIABILITY OVERVIEW</h4>
+                        <h4>DEBTS OVERVIEW</h4>
                     </div>
-                    <div class="liability-row">
-                        <div class="row">
-                            <div class="col-3">
-                                <div>
-                                    <sub>Proton Car Loan</sub>
-                                </div>
-                                <p>RM 57000.00</p>
-                            </div>
-                            <div class="col-9">
-                                <!-- bar -->
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="16" aria-valuemin="0" aria-valuemax="100" id="progress-bar"></div>
-                                    <h6>16%</h6>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <h6 class="paid">RM 4200.00</h6>
+                    <?php $query = "SELECT (l.totalAmountToPay - (SELECT SUM(amount) FROM debtpayment debt WHERE debt.liabilityID = l.liabilityID) ) as remainder,l.liabilityName, l.totalAmountToPay as total, (SELECT SUM(amount) FROM debtpayment debt WHERE debt.liabilityID = l.liabilityID) as paidAmount, l.liabilityType FROM liability l, debtpayment dp WHERE l.liabilityID = dp.liabilityID AND (SELECT SUM(amount) FROM debtpayment debt WHERE debt.liabilityID = l.liabilityID) < l.totalAmountToPay GROUP BY l.liabilityName";
+                    $result = $customer->getDataByQuery($query);
+                    foreach ($result as $data) {
+                        # code...
+
+                    ?>
+                        <div class="liability-row">
+                            <div class="row">
+                                <div class="col-3">
+                                    <div>
+                                        <sub>
+                                            <?php echo ($data['liabilityName']); ?> | <?php echo ($data['liabilityType']); ?>
+                                        </sub>
                                     </div>
-                                    <div class="col-6">
-                                        <h6 class="target">RM 52800.00</h6>
+                                    <p>RM <?php echo ($data['total']); ?></p>
+                                </div>
+                                <div class="col-9">
+                                    <!-- bar -->
+                                    <div class="progress">
+                                        <?php $percent = round(($data['paidAmount'] / $data['total']) * 100.0, 1);
+                                        ?>
+
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo ($percent); ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <h6><?php echo ($percent); ?>%</h6>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <h6 class="paid">RM <?php echo ($data['paidAmount']); ?></h6>
+                                        </div>
+                                        <div class="col-6">
+                                            <h6 class="target">RM <?php echo ($data['remainder']); ?></h6>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <hr>
                         </div>
-                        <hr>
-                    </div>
-                    <div class="liability-row">
-                        <div class="row">
-                            <div class="col-3">
-                                <div>
-                                    <sub>PTPTN</sub>
-                                </div>
-                                <p>RM 120000.00</p>
-                            </div>
-                            <div class="col-9">
-                                <!-- bar -->
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="32" aria-valuemin="0" aria-valuemax="100" id="progress-bar"></div>
-                                    <h6>32%</h6>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <h6 class="paid">RM 12000.00</h6>
-                                    </div>
-                                    <div class="col-6">
-                                        <h6 class="target">RM 91800.00</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
-                    </div>
-                    <div class="liability-row">
-                        <div class="row">
-                            <div class="col-3">
-                                <div>
-                                    <sub>VKB-A1 House Loan</sub>
-                                </div>
-                                <p>RM 110000.00</p>
-                            </div>
-                            <div class="col-9">
-                                <!-- bar -->
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="58" aria-valuemin="0" aria-valuemax="100" id="progress-bar"></div>
-                                    <h6>58%</h6>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <h6 class="paid">RM 56000.00</h6>
-                                    </div>
-                                    <div class="col-6">
-                                        <h6 class="target">RM 52800.00</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
-                    </div>
+                    <?php
+                    }
+                    ?>
                 </div>
             </div>
             <br>
@@ -130,7 +94,7 @@
                         <table class="table table-bordered table-hover transaction-table table-sm" id="investmentTransactionTable">
                             <thead>
                                 <tr>
-                                    <th colspan="5" class="title">COMPLETED LIABILITIES</th>
+                                    <th colspan="5" class="title">COMPLETED DEBTS</th>
                                 </tr>
                                 <tr>
                                     <th scope="col">#</th>
@@ -143,17 +107,23 @@
                             <tbody id="investmentTransactionTableBody">
 
                                 <?php
-                                $datarow = $customer->getData('Investment');
+                                $query = "SELECT (l.totalAmountToPay - (SELECT SUM(amount) FROM debtpayment debt WHERE debt.liabilityID = l.liabilityID) ) as remainder, l.liabilityName, l.liabilityType, l.totalAmountToPay, (SELECT MAX(debt.paymentdate) FROM debtpayment debt WHERE debt.liabilityID = l.liabilityID) as endDate
+                                FROM liability l, debtpayment dp
+                                WHERE l.liabilityID = dp.liabilityID
+                                AND (SELECT SUM(amount) FROM debtpayment debt WHERE debt.liabilityID = l.liabilityID) >= l.totalAmountToPay 
+                                GROUP BY l.liabilityName
+                                ";
+                                $datarow = $customer->getDataByQuery($query);
                                 if (!empty($datarow)) {
                                     for ($i = 0; $i < sizeof($datarow); $i++) {
                                 ?>
                                         <tr>
-                                            <input type="hidden" class="investmentID" value='<?php echo ($datarow[$i]['investmentID']); ?>'></input>
+
                                             <th scope="row"><?php echo (($i + 1)); ?></th>
-                                            <td class="investName"><?php echo ($datarow[$i]['investmentName']); ?></td>
-                                            <td class="investType"><?php echo ($datarow[$i]['investmentType']); ?></td>
-                                            <td class="investAmount"><?php echo ($datarow[$i]['amountInvested']); ?></td>
-                                            <td class="investRate"><?php echo ($datarow[$i]['startDate']); ?></td>
+                                            <td class="investName"><?php echo ($datarow[$i]['liabilityName']); ?></td>
+                                            <td class="investType"><?php echo ($datarow[$i]['liabilityType']); ?></td>
+                                            <td class="investAmount"><?php echo ($datarow[$i]['totalAmountToPay']); ?></td>
+                                            <td class="investRate"><?php echo ($datarow[$i]['endDate']); ?></td>
                                         </tr>
                                 <?php
                                     }
@@ -183,17 +153,26 @@
                             <tbody id="investmentTransactionTableBody">
 
                                 <?php
-                                $datarow = $customer->getData('Investment');
+                                $query = "SELECT l.liabilityName, l.liabilityType, l.amountEachPayment, l.paymentTime
+                                FROM liability l, debtpayment dp
+                                WHERE l.liabilityID = dp.liabilityID
+                                AND (SELECT SUM(amount) FROM debtpayment debt WHERE debt.liabilityID = l.liabilityID) < l.totalAmountToPay
+                                AND l.paymentTime IS NOT NULL
+                                ";
+                                $datarow = $customer->getDataByQuery($query);
                                 if (!empty($datarow)) {
                                     for ($i = 0; $i < sizeof($datarow); $i++) {
+                                        $paymentTime = json_decode($datarow[$i]['paymentTime']);
+                                        $frequency = $paymentTime->frequency;
+                                        $period = $paymentTime->period;
+                                        $newdate = $customer->getDateByFrequency($frequency, $period);
                                 ?>
                                         <tr>
-                                            <input type="hidden" class="investmentID" value='<?php echo ($datarow[$i]['investmentID']); ?>'></input>
                                             <th scope="row"><?php echo (($i + 1)); ?></th>
-                                            <td class="investName"><?php echo ($datarow[$i]['investmentName']); ?></td>
-                                            <td class="investType"><?php echo ($datarow[$i]['investmentType']); ?></td>
-                                            <td class="investAmount"><?php echo ($datarow[$i]['amountInvested']); ?></td>
-                                            <td class="investRate"><?php echo ($datarow[$i]['startDate']); ?></td>
+                                            <td class="investName"><?php echo ($datarow[$i]['liabilityName']); ?></td>
+                                            <td class="investType"><?php echo ($datarow[$i]['liabilityType']); ?></td>
+                                            <td class="investAmount"><?php echo ($datarow[$i]['amountEachPayment']); ?></td>
+                                            <td class="investRate"><?php echo ($newdate); ?></td>
                                         </tr>
                                 <?php
                                     }
@@ -213,10 +192,10 @@
                     <select name="filter-transaction-category" id="filter-transaction-category" class="custom-select" onchange="showsearch('')">
                         <option value="ALL" selected>ALL</option>
                         <?php
-                        $data = $customer->getData('Investment', "DISTINCT investmentType");
+                        $data = $customer->getData('Liability', "DISTINCT liabilityType");
                         foreach ($data as $row => $value) {
                         ?>
-                            <option value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
+                            <option value="<?php echo ($value['liabilityType']); ?>"><?php echo ($value['liabilityType']); ?></option>
                         <?php
                         }
                         ?>
@@ -247,7 +226,7 @@
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="new-title">New Liability</h5>
+                            <h5 class="modal-title" id="new-title">New Debt</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -362,7 +341,7 @@
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="edit-title">Edit Liability</h5>
+                            <h5 class="modal-title" id="edit-title">Edit Debt</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -480,7 +459,7 @@
                 <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
                     <div class="modal-content">
                         <div class="modal-body">
-                            <p>Are you sure want to Delete this liability?</p>
+                            <p>Are you sure want to Delete this Debt?</p>
                         </div>
                         <div class="modal-footer">
                             <form action="" method="POST">
@@ -506,16 +485,22 @@
                 </thead>
                 <tbody id="investmentTransactionTableBody">
 
-                    <?php if (!empty($datarow)) {
+                    <?php
+                    $query = "SELECT * FROM debtpayment db, liability l
+                    WHERE l.liabilityID = db.liabilityID
+                    ORDER BY DB.paymentdate DESC";
+                    $datarow = $customer->getDataByQuery($query);
+
+                    if (!empty($datarow)) {
                         for ($i = 0; $i < sizeof($datarow); $i++) {
                     ?>
                             <tr>
-                                <input type="hidden" class="investmentID" value='<?php echo ($datarow[$i]['investmentID']); ?>'></input>
+                                <input type="hidden" class="investmentID" value='<?php echo ($datarow[$i]['paymentID']); ?>'></input>
                                 <th scope="row"><?php echo (($i + 1)); ?></th>
-                                <td class="investDate"><?php echo ($datarow[$i]['startDate']); ?></td>
-                                <td class="investName"><?php echo ($datarow[$i]['investmentName']); ?></td>
-                                <td class="investType"><?php echo ($datarow[$i]['investmentType']); ?></td>
-                                <td class="investAmount"><?php echo ($datarow[$i]['amountInvested']); ?></td>
+                                <td class="investDate"><?php echo ($datarow[$i]['paymentdate']); ?></td>
+                                <td class="investName"><?php echo ($datarow[$i]['liabilityName']); ?></td>
+                                <td class="investType"><?php echo ($datarow[$i]['liabilityType']); ?></td>
+                                <td class="investAmount"><?php echo ($datarow[$i]['amount']); ?></td>
                                 <td class="action">
                                     <a href="#" class="edit-investment-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
                                     <span> | </span>
@@ -531,7 +516,7 @@
 
 
 
-            <h4 id="mark-all-liabilities">ALL LIABILITIES</h4>
+            <h4 id="mark-all-liabilities">ALL DEBTS</h4>
             <hr>
 
             <div class="container-fluid row filter">
@@ -540,10 +525,10 @@
                     <select name="filter-transaction-category" id="filter-transaction-category" class="custom-select" onchange="showsearch('')">
                         <option value="ALL" selected>ALL</option>
                         <?php
-                        $data = $customer->getData('Investment', "DISTINCT investmentType");
+                        $data = $customer->getData('Liability', "DISTINCT liabilityType");
                         foreach ($data as $row => $value) {
                         ?>
-                            <option value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
+                            <option value="<?php echo ($value['liabilityType']); ?>"><?php echo ($value['liabilityType']); ?></option>
                         <?php
                         }
                         ?>
@@ -575,7 +560,7 @@
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="new-title">New Liability</h5>
+                            <h5 class="modal-title" id="new-title">New Debt</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -690,7 +675,7 @@
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="edit-title">Edit Liability</h5>
+                            <h5 class="modal-title" id="edit-title">Edit Debt</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -808,7 +793,7 @@
                 <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
                     <div class="modal-content">
                         <div class="modal-body">
-                            <p>Are you sure want to Delete this liability?</p>
+                            <p>Are you sure want to Delete this Debt?</p>
                         </div>
                         <div class="modal-footer">
                             <form action="" method="POST">
@@ -831,27 +816,29 @@
                         <th scope="col">TOTAL AMOUNT TO PAY</th>
                         <th scope="col">AMOUNT PAID</th>
                         <th scope="col">AMOUNT LEFT</th>
-                        <th scope="col">AMOUNT EACH PAYMENT</th>
-                        <th scope="col">TIME NEEDED</th>
                         <th scope="col">ACTION</th>
                     </tr>
                 </thead>
                 <tbody id="investmentTransactionTableBody">
 
-                    <?php if (!empty($datarow)) {
+                    <?php
+                    $query = "SELECT *, (SELECT SUM(amount) FROM debtpayment debt WHERE debt.liabilityID = l.liabilityID) as amountPaid
+                    FROM liability l, debtpayment dp
+                    WHERE l.liabilityID = dp.liabilityID
+                    GROUP BY l.liabilityID";
+                    $datarow = $customer->getDataByQuery($query);
+                    if (!empty($datarow)) {
                         for ($i = 0; $i < sizeof($datarow); $i++) {
                     ?>
                             <tr>
-                                <input type="hidden" class="investmentID" value='<?php echo ($datarow[$i]['investmentID']); ?>'></input>
+                                <input type="hidden" class="investmentID" value='<?php echo ($datarow[$i]['liabilityID']); ?>'></input>
                                 <th scope="row"><?php echo (($i + 1)); ?></th>
                                 <td class="investDate"><?php echo ($datarow[$i]['startDate']); ?></td>
-                                <td class="investName"><?php echo ($datarow[$i]['investmentName']); ?></td>
-                                <td class="investType"><?php echo ($datarow[$i]['investmentType']); ?></td>
-                                <td class="investAmount"><?php echo ($datarow[$i]['amountInvested']); ?></td>
-                                <td class="investAmount"><?php echo ($datarow[$i]['amountInvested']); ?></td>
-                                <td class="investAmount"><?php echo ($datarow[$i]['amountInvested']); ?></td>
-                                <td class="investAmount"><?php echo ($datarow[$i]['amountInvested']); ?></td>
-                                <td class="investRate"><?php echo ($datarow[$i]['ratePerAnnum']); ?></td>
+                                <td class="investName"><?php echo ($datarow[$i]['liabilityName']); ?></td>
+                                <td class="investType"><?php echo ($datarow[$i]['liabilityType']); ?></td>
+                                <td class="investAmount"><?php echo ($datarow[$i]['totalAmountToPay']); ?></td>
+                                <td class="investAmount"><?php echo ($datarow[$i]['amountPaid']); ?></td>
+                                <td class="investAmount"><?php echo ($datarow[$i]['totalAmountToPay'] - $datarow[$i]['amountPaid']); ?></td>
                                 <td class="action">
                                     <a href="#" class="edit-investment-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
                                     <span> | </span>
@@ -872,207 +859,6 @@
         <i class="fas fa-plus"></i>
     </button>
 </body>
-<script src="./script/investment.js"></script>
-<script>
-    $(document).ready(function() {
-        $("body").niceScroll();
-        $(".transaction-table").niceScroll();
-    });
-
-    // var pieOptions = {
-    //     series: [400.00, 350.00, 150.00, 50.00],
-    //     chart: {
-    //         // width: "110%",
-    //         type: 'pie',
-    //     },
-    //     labels: ['Food', 'Transportation', 'Fashion', 'Others'],
-    //     theme: {
-    //         monochrome: {
-    //             enabled: true,
-    //             color: '#F89542',
-    //             shadeIntensity: 0.65
-    //         }
-    //     },
-    // };
-
-    // var pieChart = new ApexCharts(document.querySelector("#pie-chart"), pieOptions);
-    // pieChart.render();
-
-    var donutOptions = {
-        series: amountJSON,
-        labels: typeJSON,
-        chart: {
-            type: "donut",
-        },
-        title: {
-            text: "Liabilities by Category",
-            align: "center",
-            margin: 15,
-            offsetX: -60,
-            floating: true,
-            style: {
-                fontSize: "22px",
-                fontWeight: "bold",
-                fontFamily: "Helvetica, Arial, sans-serif",
-                color: "#373d3f",
-            },
-        },
-        plotOptions: {
-            pie: {
-                expandOnClick: false,
-                customScale: 0.85,
-                donut: {
-                    background: "transparent",
-                    size: "55%",
-                    labels: {
-                        show: true,
-                        total: {
-                            show: true,
-                            showAlways: false,
-                            label: "Total",
-                            fontSize: "22px",
-                            fontFamily: "Helvetica, Arial, sans-serif",
-                            fontWeight: 600,
-                            color: "#373d3f",
-                            formatter: function(w) {
-                                return w.globals.seriesTotals.reduce((a, b) => {
-                                    return a + b;
-                                }, 0);
-                            },
-                        },
-                    },
-                },
-            },
-        },
-        noData: {
-            text: "Loading...",
-        },
-        responsive: [{
-            breakpoint: 480,
-            options: {
-                chart: {
-                    width: 400,
-                },
-                legend: {
-                    position: "bottom",
-                },
-            },
-        }, ],
-        colors: [
-            "#D08F78",
-            "#F89542",
-            "#FFB07C",
-            "#f68a32",
-
-            "#b27b56",
-
-            "#db5f43",
-            "#963727",
-            "#511d28",
-
-            "#263A4A",
-            "#45465B",
-            "#C5D3A9",
-            "#B0CA3C",
-            "#917580",
-        ],
-    };
-
-    var investmentTypes_donutChart = new ApexCharts(
-        document.querySelector("#liabilityTypes-donut-chart"),
-        donutOptions
-    );
-    investmentTypes_donutChart.render();
-
-    var investmentName = $("#nameOfInvestment").val();
-    var investmentNameAmount = $("#amountsOfInvestmentByName").val();
-    var nameJSON = JSON.parse(investmentName);
-    var nameAmountJSON = JSON.parse([investmentNameAmount]);
-
-    var donutOptions = {
-        series: nameAmountJSON,
-        labels: nameJSON,
-        chart: {
-            type: "donut",
-        },
-        title: {
-            text: "Liabilities by Name",
-            align: "center",
-            margin: 15,
-            offsetX: -45,
-            floating: true,
-            style: {
-                fontSize: "22px",
-                fontWeight: "bold",
-                fontFamily: "Helvetica, Arial, sans-serif",
-                color: "#373d3f",
-            },
-        },
-        plotOptions: {
-            pie: {
-                expandOnClick: false,
-                customScale: 0.85,
-                donut: {
-                    background: "transparent",
-                    size: "55%",
-                    labels: {
-                        show: true,
-                        total: {
-                            show: true,
-                            showAlways: false,
-                            label: "Highest Amount",
-                            fontSize: "22px",
-                            fontFamily: "Helvetica, Arial, sans-serif",
-                            fontWeight: 600,
-                            color: "#373d3f",
-                            formatter: function(w) {
-                                return w.globals.seriesTotals.reduce((a, b) => {
-                                    if (a > b) {
-                                        return a;
-                                    } else {
-                                        return b;
-                                    }
-                                }, 0);
-                            },
-                        },
-                    },
-                },
-            },
-        },
-        responsive: [{
-            breakpoint: 480,
-            options: {
-                chart: {
-                    width: 400,
-                },
-                legend: {
-                    position: "bottom",
-                },
-            },
-        }, ],
-        colors: [
-            "#FFB07C",
-            "#b27b56",
-            "#D08F78",
-            "#F89542",
-            "#f68a32",
-            "#db5f43",
-            "#963727",
-            "#511d28",
-
-            "#263A4A",
-            "#45465B",
-            "#C5D3A9",
-            "#B0CA3C",
-            "#917580",
-        ],
-    };
-
-    var donutChart = new ApexCharts(
-        document.querySelector("#liabilityNames-donut-chart"),
-        donutOptions
-    );
-    donutChart.render();
-</script>
+<script src="./script/liability.js"></script>
 
 </html>
