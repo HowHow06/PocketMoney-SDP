@@ -1,3 +1,35 @@
+#category1 {
+  background-color: #FE6E63;
+}
+
+#category2 {
+  background-color: #FE9850;
+}
+
+#category3 {
+  background-color: #FFD042;
+}
+
+#category4 {
+  background-color: #FEE801;
+}
+
+#category5 {
+  background-color: #BEE647;
+}
+
+#category6 {
+  background-color: #74D072;
+}
+
+#category7 {
+  background-color: #68E8DB;
+}
+
+#category8 {
+  background-color: #68E8DB;
+}
+
 .navbar {
   padding: 0px 25px 0px 15px;
   background-color: #f7802b;
@@ -67,38 +99,6 @@
   padding: 70px 100px;
 }
 
-#category1 {
-  background-color: #FE6E63;
-}
-
-#category2 {
-  background-color: #FE9850;
-}
-
-#category3 {
-  background-color: #FFD042;
-}
-
-#category4 {
-  background-color: #FEE801;
-}
-
-#category5 {
-  background-color: #BEE647;
-}
-
-#category6 {
-  background-color: #74D072;
-}
-
-#category7 {
-  background-color: #68E8DB;
-}
-
-#category8 {
-  background-color: #68E8DB;
-}
-
 .background {
   align-items: center;
   justify-content: center;
@@ -119,17 +119,17 @@
   box-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
 }
 
+.row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
 .body {
   box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
   padding: 0;
   background-color: white;
   border-radius: 12px;
   font-family: 'Open Sans', sans-serif;
-}
-
-.body .go-to {
-  padding-top: 0.4rem;
-  text-align: center;
 }
 
 .body > nav {
@@ -143,210 +143,122 @@
   cursor: default;
 }
 
-.body > .overall {
-  justify-content: center;
+.body > div > .left > .row {
   align-items: center;
+  padding-left: 20px;
+  padding-top: 20px;
 }
 
-.body > .overall > a {
-  background-color: #fc9a55;
-  width: 200px;
-  height: 1.7rem;
-  border-radius: 25px;
-  color: white;
-  margin: 10px auto;
-  text-align: center;
-  padding: 0;
-  font-size: 0.9rem;
+.body > div > .left > .row > form > button {
+  width: 50px;
+  height: 65px;
 }
 
-.body > .overall > a > h5 {
-  margin-bottom: 0;
-}
-
-.body > .liability-overview {
-  padding: 20px 50px;
-}
-
-.body > .liability-overview > div {
-  border-width: 4px !important;
-  padding: 10px 0 0 0;
-}
-
-.body > .liability-overview > div > .col-12 {
-  padding-bottom: 15px;
-}
-
-.body > .liability-overview > div > .liability-row > .row {
-  padding: 0 20px;
-}
-
-.body > .liability-overview > div > .liability-row > .row > .col-3 {
-  margin-top: 25px;
-  margin-bottom: 5px;
-}
-
-.body > .liability-overview > div > .liability-row > .row > .col-3 > div {
-  height: 35px;
-}
-
-.body > .liability-overview > div > .liability-row > .row > .col-3 > div > sub {
-  bottom: -1.25em;
-  color: grey;
-}
-
-.body > .liability-overview > div > .liability-row > .row > .col-3 p {
-  margin-bottom: 0;
-}
-
-.body > .liability-overview > div > .liability-row > .row > .col-9 {
-  margin-top: 25px;
-  margin-bottom: 5px;
-}
-
-.body > .liability-overview > div > .liability-row > .row > .col-9 > .progress {
-  height: 30px;
-  border-radius: 8px !important;
-}
-
-.body > .liability-overview > div > .liability-row > .row > .col-9 > .progress > .progress-bar {
-  width: 16%;
-  background-color: #fc9a55 !important;
-  border-radius: 8px;
-  transition: 0.3s ease-in-out;
-}
-
-.body > .liability-overview > div > .liability-row > .row > .col-9 > .progress > h6 {
-  position: absolute;
-  right: 30px;
-  bottom: 30px;
-}
-
-.body > .liability-overview > div > .liability-row > .row > .col-9 > .row {
-  padding-top: 7px;
-  padding-left: 15px;
-  padding-right: 15px;
-}
-
-.body > .liability-overview > div > .liability-row > .row > .col-9 > .row > .col-6 {
-  padding: 0;
-}
-
-.body > .liability-overview > div > .liability-row > .row > .col-9 > .row > .col-6 > .paid {
-  float: left;
-  color: #fc9a55;
-}
-
-.body > .liability-overview > div > .liability-row > .row > .col-9 > .row > .col-6 > .target {
-  float: right;
-}
-
-.body > .liability-overview > div > .liability-row hr {
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-}
-
-.body > .upcoming-payment {
-  margin: 0 2.5%;
-}
-
-.body > .upcoming-payment .chart-display {
-  padding: 20px 2%;
-}
-
-.body > .upcoming-payment .pie-chart {
-  border-width: 4px !important;
-}
-
-.body > .upcoming-payment .left-div {
-  padding-right: 7.5px;
-}
-
-.body > .upcoming-payment .right-div {
-  padding-left: 7.5px;
-}
-
-.body > .upcoming-payment > div > div {
-  padding: 0 1.5%;
-}
-
-.body > .upcoming-payment div {
-  margin: 0 auto;
-  border-width: 4px !important;
-}
-
-.body > .upcoming-payment .transaction-table {
-  height: 60vh;
-  overflow-y: auto;
-  display: block;
-  margin: 20px auto;
-  text-align: center;
-}
-
-.body > .upcoming-payment .transaction-table th {
-  width: 100vw;
-}
-
-.body > .upcoming-payment .transaction-table thead {
-  background-color: #fc9a55;
-  color: white;
-}
-
-.body > .upcoming-payment .transaction-table thead tr .title {
-  text-align: left;
-  font-size: 1.5rem;
-  padding: 10px;
-}
-
-.body > .upcoming-payment .transaction-table tbody .action {
-  width: 130px;
-}
-
-.body > .upcoming-payment .transaction-table tbody .action a {
+.body > div > .left > .row > form > button > i {
   color: #FF6C00;
+  font-size: 24px;
 }
 
-.body > .chart {
-  justify-content: center;
+.body > div > .left > .row > label {
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+.body > div > .right > form {
+  float: right;
+  padding-right: 20px;
+  padding-top: 20px;
+}
+
+.body > div > .right > form > div {
+  flex-wrap: inherit;
+  padding-top: 10px;
   align-items: center;
-  margin-top: 50px;
 }
 
-.body > .head {
+.body > div > .right > form > div > h6 {
+  margin-bottom: 0;
+  padding-right: 10px;
+  font-size: 20px;
+}
+
+.body > .overview {
+  padding: 10px 35px 0 35px;
+}
+
+.body > .overview > .pie-chart > div {
+  padding-top: 10px;
+  height: 500px;
   margin: 0 auto;
-  margin-top: 25px;
-  width: 95%;
-  padding-left: 0;
-  padding-right: 0;
+  border-width: 4px !important;
 }
 
-.body > .head > h4 {
-  margin-top: 5px;
+.body > .overview > .chart-explain > div {
+  height: 500px;
+  margin: 0 auto;
+  border-width: 4px !important;
+}
+
+.body > .overview > .chart-explain > div > div {
+  background-color: white;
+  cursor: default;
+  padding-top: 14px;
+}
+
+.body > .overview > .chart-explain > div > div > .col-1 {
+  text-align: center;
   padding-left: 5px;
 }
 
-.body > .head > div {
-  padding-right: 0;
-}
-
-.body > .head > div > a {
-  float: right;
+.body > .overview > .chart-explain > div > div > .col-1 > p {
+  width: 50px !important;
+  height: 30px;
+  border-radius: 8px;
+  background-color: #FF6C00;
   color: white;
-  padding: 5px 15px;
-  background-color: #fc9a55;
-  border-color: #fc9a55;
-  margin: 5px;
-  margin-top: 0;
+  padding-top: 2px;
+  font-weight: bold;
 }
 
-.body > .head > div > a:hover {
-  background-color: rgba(252, 154, 85, 0.65);
-  border-color: rgba(252, 154, 85, 0.65);
+.body > .overview > .chart-explain > div > div > .col-5 {
+  text-align: left;
+  padding-top: 2px;
 }
 
-.body > .head > div > a::-moz-focus-inner, .body > .head > div a::-moz-focus-outer {
-  background-color: rgba(252, 154, 85, 0.65);
-  border-color: rgba(252, 154, 85, 0.65);
+.body > .overview > .chart-explain > div > div > .value {
+  text-align: right;
+}
+
+.body > .overview > .chart-explain > div > div > .show {
+  text-align: center;
+  margin-top: -6px;
+}
+
+.body > .overview > .chart-explain > div > div > .show > button > a {
+  color: black;
+}
+
+.body > .overview > .chart-explain > div > div:hover {
+  background-color: #ececec;
+  transition: 0.5s ease-in;
+}
+
+.body > .category {
+  padding: 30px 50px;
+}
+
+.body > .category > div {
+  margin: 0 auto;
+  border-width: 4px !important;
+}
+
+.body > .category > div > .title > h2 {
+  padding-top: 10px;
+}
+
+.body > .category > div > .title > h5 {
+  margin-bottom: 0;
+  color: grey;
 }
 
 .body > h4 {
@@ -379,16 +291,6 @@
   padding-left: 50px;
 }
 
-.body > .filter2 > .show > .btn {
-  font-size: 16px;
-  background-color: #fc9a55;
-  color: white;
-}
-
-.body > .filter2 > .show > .btn:hover {
-  background-color: rgba(255, 108, 0, 0.6);
-}
-
 .body > .filter2 > .show > h6, .body > .filter2 > .show select {
   float: left;
 }
@@ -410,8 +312,7 @@
 }
 
 .body > .filter2 > .search {
-  padding-right: 0;
-  margin-right: 15px;
+  padding-right: 45px;
 }
 
 .body > .filter2 > .search > h6, .body > .filter2 > .search input {
@@ -430,7 +331,7 @@
 }
 
 .body > .transaction-table {
-  margin: 25px auto;
+  margin: 15px auto;
   width: 95%;
   text-align: center;
 }
@@ -485,11 +386,7 @@
   transform: scale(1.5);
   position: absolute;
   bottom: 42px;
-  right: 30px;
-}
-
-.modal-dialog > .modal-content > form > .modal-body > div > .form-group > .reminder {
-  bottom: 90px !important;
+  right: 40px;
 }
 
 .modal-dialog > .modal-content > form > .modal-footer > .btn-primary {
@@ -500,16 +397,6 @@
 .modal-dialog > .modal-content > form > .modal-footer > .btn-primary:hover {
   background-color: #f88837 !important;
   border-color: #fc9a55 !important;
-}
-
-.modal-dialog > .modal-content > form > .modal-footer > .delete {
-  background-color: #ff6767 !important;
-  border-color: #ff6767 !important;
-}
-
-.modal-dialog > .modal-content > form > .modal-footer > .delete:hover {
-  background-color: red !important;
-  border-color: red !important;
 }
 
 .modal-dialog > .modal-content > .modal-footer > form > .btn-primary {
@@ -532,4 +419,12 @@ label.error {
 
 #delete-row p {
   margin-bottom: 0;
+}
+
+#cate-overall, #categoryTransactionTable {
+  visibility: hidden;
+}
+
+#cate-overall {
+  display: none;
 }
