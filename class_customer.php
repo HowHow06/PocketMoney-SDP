@@ -74,15 +74,30 @@ class Customer
      * @param String $columnName
      * the name of the specific column
      * 
+     * @param String $groupBy
+     * the group by clause
+     * 
+     * @param String $orderBy
+     * the order by clause
+     * 
+     * @param String $order
+     * the order sequence 'asc' or 'desc'
+     * 
      * @return array|NULL
      * 
      */
-    function getData($tablename, $columnName = "*")
+    function getData($tablename, $columnName = "*", $groupBy = NULL, $orderby = NULL, $order = 'asc')
     {
         $db = MysqliDb::getInstance();
         if (!empty($this->id)) {
             $id = $this->id;
             $db->where('cusID', $id);
+            if (!is_null($groupBy)) { //if the groupBy clause is not null
+                $db->groupBy($groupBy);
+            }
+            if (!is_null($orderby)) {
+                $db->orderBy($orderby, $order);
+            }
             $result = $db->get($tablename, null, $columnName);
             return $result;
         }
@@ -1001,38 +1016,111 @@ class Customer
 
 
     /** 
-     * Return JSON format of category value only
+     * Return JSON format of THE SPECIFIC FIELD groupby query
+     * @param String $tablename
+     * table name
+     * 
+     * @param String $columnName
+     * the column name after SELECT
+     * 
+     * 
+     * @param String $fieldToGetInJSON
+     * the name of field to get in JSON
+     * 
+     * @param boolean $isNumeric
+     * is the field to get a numeric value
+     * 
+     * @param String $groupBy
+     * the amount group by which field
+     * 
+     * @param String $where
+     * the where clause
+     * 
+     * 
      * @return JSON|NULL
      * 
      * 
      */
-    function getLiabCategoryAmountJSON($cate, $cusID, $month, $year)
+    function getJSON($tablename, $columnName, $fieldToGetInJSON, $isNumeric = false, $groupBy = NULL, $where = NULL)
     {
         $db = MysqliDb::getInstance();
         if (!empty($this->id)) {
-            $data = $this->getInvestTypesAndAmount();
-            $investAmountArr = array_map('floatval', $data['amount']);
-            $investAmountJSON = json_encode($investAmountArr);
-            return $investAmountJSON;
+            $result = $this->getData($tablename, $columnName, $groupBy, $where);
+            $finalResult = array();
+            foreach ($result as $row => $data) {
+                array_push($finalResult, $data[$fieldToGetInJSON]);
+            }
+            if ($isNumeric) { #convert the value to float data type if it is amount
+                $finalResult = array_map('floatval', $finalResult);
+            }
+            $resultJSON = json_encode($finalResult);
+            return $resultJSON;
         }
         return NULL;
     }
 
     /** 
-     * Return JSON format of category value only
+     * Return JSON format of either amount / field for a sum + groupby query
+     * @param String $rawquery
+     * the query
+     * 
+     * @param String $fieldToGetInJSON
+     * the name of field to get in JSON
+     * 
+     * @param boolean $isNumeric
+     * is the field to get a numeric value
+     * 
      * @return JSON|NULL
      * 
      * 
      */
-    function getLiabCategoryNameJSON($cate, $cusID, $month, $year)
+    function getJSONbyRawQuery($rawquery, $fieldToGetInJSON, $isNumeric = false)
     {
         $db = MysqliDb::getInstance();
-        $id = $cusID;
-        if (!empty($id)) {
-            $data = $this->getCategoryAmountByMonth($cate, $cusID, $month, $year);
-            $amountArr = array_map('floatval', $data['value']);
-            $amountJSON = json_encode($amountArr);
-            return $amountJSON;
+        if (!empty($this->id)) {
+            $result = $this->getDataByQuery($rawquery);
+            $finalResult = array();
+            foreach ($result as $row => $data) {
+                array_push($finalResult, $data[$fieldToGetInJSON]);
+            }
+            if ($isNumeric) { #convert the value to float data type if it is amount
+                $finalResult = array_map('floatval', $finalResult);
+            }
+            $resultJSON = json_encode($finalResult);
+            return $resultJSON;
+        }
+        return NULL;
+    }
+
+    /** 
+     * @param String $frequency
+     * 
+     * @param String $period
+     * 
+     * @return String date
+     * 
+     * @uses $dateString = $customer->getDateByFrequency($frequency,$period);
+     * 
+     * 
+     */
+    function getDateByFrequency($frequency, $period)
+    {
+        if ($frequency == "M") {
+            $day = date("d");
+            if ($day <= $period) { //current month
+                $newdatestamp = strtotime(date('Y') . '-' . date('m') . '-' . $period);
+            } else { //else will be on next month
+                $newdatestamp = strtotime(date('Y') . '-' . date('m', strtotime('+1 month')) . '-' . $period);
+            }
+            return date("Y-m-d", $newdatestamp);
+        } elseif ($frequency == "Y") {
+            $month = date("m");
+            if ($month < $period) { //current year
+                $newdatestamp = strtotime(date('Y') . '-' . $period . '-1');
+            } else {
+                $newdatestamp = strtotime(date('Y', strtotime('+1 year')) . '-' . $period . '-1');
+            }
+            return date("Y-m-d", $newdatestamp);
         }
         return NULL;
     }
