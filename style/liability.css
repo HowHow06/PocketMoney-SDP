@@ -41,7 +41,6 @@
 
 .navbar > ul > li:hover, .navbar > ul .active {
   background-color: rgba(255, 255, 255, 0.6);
-  -webkit-transition: 0.2s ease-in;
   transition: 0.2s ease-in;
 }
 
@@ -63,52 +62,46 @@
 
 .background {
   min-height: 100vh;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   background-color: #f7e0b5;
   padding: 70px 100px;
 }
 
 #category1 {
-  background-color: #FF6C00;
+  background-color: #FE6E63;
 }
 
 #category2 {
-  background-color: #DC8600;
+  background-color: #FE9850;
 }
 
 #category3 {
-  background-color: #A1756C;
+  background-color: #FFD042;
 }
 
 #category4 {
-  background-color: #54433A;
+  background-color: #FEE801;
 }
 
 #category5 {
-  background-color: #BCA79D;
+  background-color: #BEE647;
 }
 
 #category6 {
-  background-color: #AD7267;
+  background-color: #74D072;
 }
 
 #category7 {
-  background-color: #754C44;
+  background-color: #68E8DB;
 }
 
 #category8 {
-  background-color: #FF6C00;
+  background-color: #68E8DB;
 }
 
 .background {
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-circle {
@@ -123,17 +116,24 @@
   bottom: 5%;
   right: 2%;
   background-color: #fc9a55;
-  -webkit-box-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
-          box-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
 }
 
 .body {
-  -webkit-box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
-          box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
   padding: 0;
   background-color: white;
   border-radius: 12px;
   font-family: 'Open Sans', sans-serif;
+}
+
+.body #liabilityNames-donut-chart {
+  padding-left: 11%;
+}
+
+.body .go-to {
+  padding-top: 0.4rem;
+  text-align: center;
 }
 
 .body > nav {
@@ -148,26 +148,23 @@
 }
 
 .body > .overall {
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
-.body > .overall > div {
+.body > .overall > a {
   background-color: #fc9a55;
   width: 200px;
-  height: 75px;
+  height: 1.7rem;
   border-radius: 25px;
   color: white;
-  margin: 50px auto;
+  margin: 10px auto;
   text-align: center;
-  padding: 14px;
+  padding: 0;
+  font-size: 0.8rem;
 }
 
-.body > .overall > div > h5 {
+.body > .overall > a > h5 {
   margin-bottom: 0;
 }
 
@@ -217,9 +214,10 @@
 }
 
 .body > .liability-overview > div > .liability-row > .row > .col-9 > .progress > .progress-bar {
-  width: 16%;
+  width: 30%;
   background-color: #fc9a55 !important;
   border-radius: 8px;
+  transition: 0.3s ease-in-out;
 }
 
 .body > .liability-overview > div > .liability-row > .row > .col-9 > .progress > h6 {
@@ -252,110 +250,70 @@
   margin-bottom: 0 !important;
 }
 
-.body > .upcoming-payment > .pie-chart {
-  padding: 10px 0px 10px 50px;
+.body > .upcoming-payment {
+  margin: 0 2.5%;
 }
 
-.body > .upcoming-payment > .pie-chart > div {
-  width: 700px;
-  height: 500px;
+.body > .upcoming-payment .chart-display {
+  padding: 20px 2%;
+}
+
+.body > .upcoming-payment .pie-chart {
+  border-width: 4px !important;
+}
+
+.body > .upcoming-payment .left-div {
+  padding-right: 7.5px;
+}
+
+.body > .upcoming-payment .right-div {
+  padding-left: 7.5px;
+}
+
+.body > .upcoming-payment > div > div {
+  padding: 0 1.5%;
+}
+
+.body > .upcoming-payment div {
   margin: 0 auto;
   border-width: 4px !important;
 }
 
-.body > .upcoming-payment > .chart-explain {
-  padding: 10px 5px 10px 20px;
-}
-
-.body > .upcoming-payment > .chart-explain > div {
-  width: 900px;
-  height: 500px;
-  margin: 0 auto;
-  border-width: 4px !important;
-}
-
-.body > .upcoming-payment > .chart-explain > div > form > label {
-  color: white;
-  position: absolute;
-  bottom: 105px;
-  right: 370px;
-  font-size: 22px;
-}
-
-.body > .upcoming-payment > .chart-explain > div > form > label::before {
-  width: 20px;
-  height: 20px;
-  border-radius: 11px;
-  background-color: transparent;
-  content: '';
-  visibility: visible;
-  border: 2px solid white;
-  position: absolute;
-  right: 80px;
-  bottom: 6px;
-}
-
-.body > .upcoming-payment > .chart-explain > div > form > .year {
-  right: 270px !important;
-}
-
-.body > .upcoming-payment > .chart-explain > div > form > .year::before {
-  right: 58px !important;
-}
-
-.body > .upcoming-payment > .chart-explain > div > form > input[type=radio]:checked + label::after {
-  width: 12px;
-  height: 12px;
-  border-radius: 11px;
-  background-color: white;
-  content: '';
+.body > .upcoming-payment .transaction-table {
+  height: 60vh;
+  overflow-y: auto;
   display: block;
-  position: absolute;
-  right: 84px;
-  bottom: 10px;
-}
-
-.body > .upcoming-payment > .chart-explain > div > form > input[type=radio]:checked + .year::after {
-  right: 62px !important;
-}
-
-.body > .upcoming-payment > .chart-explain > div > form > input[type=radio] {
-  display: none;
-}
-
-.body > .upcoming-payment > .chart-explain > div > form > .transaction-table {
   margin: 20px auto;
-  width: 95%;
   text-align: center;
 }
 
-.body > .upcoming-payment > .chart-explain > div > form > .transaction-table > thead {
+.body > .upcoming-payment .transaction-table th {
+  width: 100vw;
+}
+
+.body > .upcoming-payment .transaction-table thead {
   background-color: #fc9a55;
   color: white;
 }
 
-.body > .upcoming-payment > .chart-explain > div > form > .transaction-table > thead > tr > .title {
+.body > .upcoming-payment .transaction-table thead tr .title {
   text-align: left;
   font-size: 1.5rem;
   padding: 10px;
 }
 
-.body > .upcoming-payment > .chart-explain > div > form > .transaction-table > tbody .action {
+.body > .upcoming-payment .transaction-table tbody .action {
   width: 130px;
 }
 
-.body > .upcoming-payment > .chart-explain > div > form > .transaction-table > tbody .action > a {
+.body > .upcoming-payment .transaction-table tbody .action a {
   color: #FF6C00;
 }
 
 .body > .chart {
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  margin-top: 70px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
 }
 
 .body > .head {
@@ -409,12 +367,8 @@
 }
 
 .body > .filter {
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .body > .filter > div {
@@ -427,6 +381,16 @@
 
 .body > .filter2 > .show {
   padding-left: 50px;
+}
+
+.body > .filter2 > .show > .btn {
+  font-size: 16px;
+  background-color: #fc9a55;
+  color: white;
+}
+
+.body > .filter2 > .show > .btn:hover {
+  background-color: rgba(255, 108, 0, 0.6);
 }
 
 .body > .filter2 > .show > h6, .body > .filter2 > .show select {
@@ -522,8 +486,7 @@
 }
 
 .modal-dialog > .modal-content > form > .modal-body > div > .form-group > input[type=checkbox] {
-  -webkit-transform: scale(1.5);
-          transform: scale(1.5);
+  transform: scale(1.5);
   position: absolute;
   bottom: 42px;
   right: 30px;

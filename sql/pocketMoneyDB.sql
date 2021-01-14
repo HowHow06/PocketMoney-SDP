@@ -129,6 +129,7 @@ INSERT INTO `Category` (`categoryName`,`categoryType`,`preDefine`,`cusID`) VALUE
 ('other','budget',1, NULL),
 ('house loan','liability',1, NULL),
 ('car loan','liability',1, NULL),
+('personal loan','liability',1, NULL),
 ('credit card','liability',1, NULL),
 ('Stock','investment',1, NULL),
 ('ETF','investment',1, NULL),
@@ -179,21 +180,43 @@ CREATE TABLE IF NOT EXISTS `Liability` (
   `cusID` int(255) NOT NULL,
   `liabilityName` varchar(255) DEFAULT NULL,
   `liabilityType` varchar(255) NOT NULL,
-  `startDate` date NOT NULL,
-  `totalAmountToPay` decimal(20,2) NOT NULL,
-  `totalMonths` int(255) NOT NULL,
-  `paymentTime` varchar(255) NOT NULL,
-  `amountEachPayment` decimal(20,2) NOT NULL,
-  `amountPaid` decimal(20,2) NOT NULL,
-  `paymentReminder` TINYINT(1) NOT NULL,
-  `autoRecord` TINYINT(1) NOT NULL,
+  `startDate` date,
+  `totalAmountToPay` decimal(20,2),
+  `totalMonths` int(255) DEFAULT NULL,
+  `paymentTime` varchar(255) DEFAULT NULL,
+  `amountEachPayment` decimal(20,2) DEFAULT NULL,
+  `paymentReminder` TINYINT(1) DEFAULT NULL,
+  `autoRecord` TINYINT(1)DEFAULT NULL,
   PRIMARY KEY (`liabilityID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
-INSERT INTO `Liability` (`cusID`,`liabilityName`,`liabilityType`,`startDate`,`totalAmountToPay`,`totalMonths`,`paymentTime`,`amountEachPayment`,`amountPaid`,`paymentReminder`,`autoRecord`) VALUES 
-(1, 'VKA BlockA1', 'house loan', '2020-01-23', 550000, 240, '{"frequency": "M", "period": "5"}',1388.89,5000,1,1),
-(1, NULL, 'credit card', '2020-12-20', 200, 1, '{"frequency": "M", "period": "6"}',200,0,1,0);
+INSERT INTO `Liability` (`cusID`,`liabilityName`,`liabilityType`,`startDate`,`totalAmountToPay`,`totalMonths`,`paymentTime`,`amountEachPayment`,`paymentReminder`,`autoRecord`) VALUES 
+(1, 'VKA BlockA1', 'house loan', '2020-01-23', 550000, 240, '{"frequency": "M", "period": "5"}',1388.89,1,1),
+(1, 'CIMB', 'credit card', '2020-12-20', 200, 1, '{"frequency": "M", "period": "6"}',200,1,0),
+(1, 'Maybank', 'credit card', '2020-12-20', 5000, NULL,NULL,NULL,1,0),
+(1, 'MYVI 1M4U', 'car loan', '2020-12-20', 80000, 60, '{"frequency": "M", "period": "2"}',1000,1,0),
+(1, 'Jerry', 'personal loan', '2020-10-01', 1000, NULL, NULL,NULL,1,0),
+(1, 'From Samuel', 'personal loan', '2020-07-01', 1000, NULL, NULL,NULL,1,0);
+
+DROP TABLE IF EXISTS `DebtPayment`;
+CREATE TABLE IF NOT EXISTS `DebtPayment` (
+  `paymentID` int(255) NOT NULL AUTO_INCREMENT,
+  `cusID` int(255) NOT NULL,
+  `liabilityID` int(255) NOT NULL,
+  `amount` decimal(20,2) NOT NULL,
+  `paymentdate` date NOT NULL,
+  PRIMARY KEY (`paymentID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+INSERT INTO `DebtPayment` (`cusID`,`liabilityID`,`amount`,`paymentDate`) VALUES 
+(1, 1, 5000,'2020-01-23'),
+(1, 3, 2000,'2020-12-20'),
+(1, 4, 20000,'2020-12-20'),
+(1, 6, 200,'2020-10-20'),
+(1, 6, 300,'2020-11-20'),
+(1, 6, 500,'2020-12-20');
 
 
 

@@ -11,10 +11,64 @@ Financial Management System (Website)
 
 ## Work Progress
 
+### 2021-01-14
+> Moses's Part
+- Update ```income_trans.php``` and ```expense_trans.php``` and ```overall_trans.php```
+
+> Howard's Part
+- Update ```class.customer.php```
+
+### 2021-01-13
+> Moses's Part
+- Update ```expense_trans.php``` and ```overall_trans.php```
+- Rename ```income_trans.scss``` to ```transaction.scss```
+- Rename ```income_trans.js``` to ```transaction.js```
+- Both three transactions pages sharing same stylesheet and JavaScript, as well as PHP functions
+
+### 2021-01-12
+> Moses's Part
+- Update ```class.customer.php``` and ```income_trans.js```  and ```form_process.php``` mostly for income page
+- At this point 95% of income page done
+
+### 2021-01-11
+> Moses's Part
+- Update ```class.customer.php``` and ```income_trans.js```  and ```form_process.php``` mostly for income page
+- At this point 80% of income page done
+
+### 2021-01-10
+> Moses's Part
+- Update ```class.customer.php``` and ```income_trans.js``` mostly for income page
+- Create ```fusioncharts-suite-xt``` file
+- Fasioncharts can be used in php therefore is implemented in server side
+- These are the reference used for fasioncharts (another chart)
+```
+<script src="./fusioncharts-suite-xt/js/fusioncharts.js"></script>
+```
+```
+<script src="./fusioncharts-suite-xt/js/themes/fusioncharts.theme.fusion.js"></script>
+```
+```
+<?php include('./fusioncharts-suite-xt/integrations/php/fusioncharts-wrapper/fusioncharts.php') ?>
+```
+
+
+### 2021-01-08
+> Moses's Part
+- Update ```class.customer.php``` and ```income_trans.js``` and ```form_process.php``` mostly for income page
+
+### 2021-01-07
+> Moses's Part
+- Update ```class.customer.php``` mostly for income page
+
 ### 2021-01-06
 > Moses's Part
 - Fix bugs on ```.navbar.php```
 - Create ```liability.php```
+- Update ```dashboard.php```
+- Update transaction functions
+Backend Progress
+- Change abit layout of ```class.customer.php```
+- Create ```income_trans.js```
 
 ### 2021-01-05
 > Moses's Part

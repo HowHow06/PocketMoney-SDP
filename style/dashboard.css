@@ -41,7 +41,6 @@
 
 .navbar > ul > li:hover, .navbar > ul .active {
   background-color: rgba(255, 255, 255, 0.6);
-  -webkit-transition: 0.2s ease-in;
   transition: 0.2s ease-in;
 }
 
@@ -63,48 +62,45 @@
 
 .background {
   min-height: 100vh;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   background-color: #f7e0b5;
   padding: 70px 100px;
 }
 
 #category1 {
-  background-color: #FF6C00;
+  background-color: #FE6E63;
 }
 
 #category2 {
-  background-color: #DC8600;
+  background-color: #FE9850;
 }
 
 #category3 {
-  background-color: #A1756C;
+  background-color: #FFD042;
 }
 
 #category4 {
-  background-color: #54433A;
+  background-color: #FEE801;
 }
 
 #category5 {
-  background-color: #BCA79D;
+  background-color: #BEE647;
 }
 
 #category6 {
-  background-color: #AD7267;
+  background-color: #74D072;
 }
 
 #category7 {
-  background-color: #754C44;
+  background-color: #68E8DB;
 }
 
 #category8 {
-  background-color: #FF6C00;
+  background-color: #68E8DB;
 }
 
 .body {
-  -webkit-box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
-          box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
   padding: 0;
   background-color: white;
   border-radius: 12px;
@@ -230,12 +226,8 @@
 .snapshot > .row {
   padding-bottom: 10px;
   margin: 0;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .snapshot > .row > div {
@@ -254,12 +246,8 @@
 }
 
 .investment > .chart {
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .investment > .institution-table {
@@ -272,4 +260,72 @@
 .investment > .institution-table > thead {
   background-color: #fc9a55;
   color: white;
+}
+
+.liability > .liability-overview > .liability-row > .row > .col-3 {
+  margin-top: 9px;
+  margin-bottom: 5px;
+}
+
+.liability > .liability-overview > .liability-row > .row > .col-3 > div {
+  height: 35px;
+}
+
+.liability > .liability-overview > .liability-row > .row > .col-3 > div > sub {
+  bottom: -1.25em;
+  color: grey;
+}
+
+.liability > .liability-overview > .liability-row > .row > .col-3 p {
+  margin-bottom: 0;
+  font-size: 14px;
+}
+
+.liability > .liability-overview > .liability-row > .row > .col-9 {
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+
+.liability > .liability-overview > .liability-row > .row > .col-9 > .progress {
+  height: 25px;
+  border-radius: 8px !important;
+}
+
+.liability > .liability-overview > .liability-row > .row > .col-9 > .progress > .progress-bar {
+  width: 16%;
+  background-color: #fc9a55 !important;
+  border-radius: 8px;
+}
+
+.liability > .liability-overview > .liability-row > .row > .col-9 > .progress > h6 {
+  position: absolute;
+  right: 30px;
+  bottom: 28px;
+  font-size: 12px;
+}
+
+.liability > .liability-overview > .liability-row > .row > .col-9 > .row {
+  padding-top: 7px;
+}
+
+.liability > .liability-overview > .liability-row > .row > .col-9 > .row > .col-6 {
+  padding: 0;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.liability > .liability-overview > .liability-row > .row > .col-9 > .row > .col-6 > .paid {
+  float: left;
+  color: #fc9a55;
+  font-size: 14px;
+}
+
+.liability > .liability-overview > .liability-row > .row > .col-9 > .row > .col-6 > .target {
+  float: right;
+  font-size: 14px;
+}
+
+.liability > .liability-overview > .liability-row hr {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
 }

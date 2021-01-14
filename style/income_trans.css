@@ -1,33 +1,33 @@
 #category1 {
-  background-color: #FF6C00;
+  background-color: #FE6E63;
 }
 
 #category2 {
-  background-color: #DC8600;
+  background-color: #FE9850;
 }
 
 #category3 {
-  background-color: #A1756C;
+  background-color: #FFD042;
 }
 
 #category4 {
-  background-color: #54433A;
+  background-color: #FEE801;
 }
 
 #category5 {
-  background-color: #BCA79D;
+  background-color: #BEE647;
 }
 
 #category6 {
-  background-color: #AD7267;
+  background-color: #74D072;
 }
 
 #category7 {
-  background-color: #754C44;
+  background-color: #68E8DB;
 }
 
 #category8 {
-  background-color: #FF6C00;
+  background-color: #68E8DB;
 }
 
 .navbar {
@@ -152,30 +152,27 @@
   cursor: default;
 }
 
-.body > div > .left > form {
+.body > div > .left > .row {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   padding-left: 20px;
   padding-top: 20px;
 }
 
-.body > div > .left > form > div {
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.body > div > .left > form > div > button {
+.body > div > .left > .row > form > button {
   width: 50px;
   height: 65px;
 }
 
-.body > div > .left > form > div > button > i {
+.body > div > .left > .row > form > button > i {
   color: #FF6C00;
   font-size: 24px;
 }
 
-.body > div > .left > form > div > h6 {
+.body > div > .left > .row > label {
   font-size: 20px;
-  margin-bottom: 0;
+  margin-bottom: 5px;
 }
 
 .body > div > .right > form {
@@ -204,19 +201,20 @@
 }
 
 .body > div > .pie-chart > div {
-  width: 600px;
-  height: 418px;
+  padding-top: 10px;
+  width: 650px;
+  height: 500px;
   margin: 0 auto;
   border-width: 4px !important;
 }
 
 .body > div > .chart-explain {
-  padding: 10px 20px 10px 20px;
+  padding: 10px 0px 10px 20px;
 }
 
 .body > div > .chart-explain > div {
-  width: 900px;
-  height: 418px;
+  width: 850px;
+  height: 500px;
   margin: 0 auto;
   border-width: 4px !important;
 }
@@ -256,9 +254,12 @@
   margin-top: -6px;
 }
 
+.body > div > .chart-explain > div > div > .show > button > a {
+  color: black;
+}
+
 .body > div > .chart-explain > div > div:hover {
   background-color: #ececec;
-  cursor: pointer;
   -webkit-transition: 0.5s ease-in;
   transition: 0.5s ease-in;
 }
@@ -301,21 +302,13 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  padding: 50px 0;
 }
 
 .body > .filter > div {
-  margin: 0 auto;
+  padding: 50px 100px;
 }
 
-.body > .filter > div > div > h5 {
-  margin-left: 35px;
-  padding-right: 20px;
-}
-
-.body > .filter > div > div > select {
-  margin-top: -7px;
-  padding-left: 15px;
+.body > .filter > div > select {
   width: 200px;
 }
 

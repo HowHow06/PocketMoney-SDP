@@ -10,7 +10,7 @@
 
 <body>
     <?php
-    $activePage = "investments"; 
+    $activePage = "investments";
     include(".navbar.php");
 
     //update the investment transaction
@@ -110,7 +110,7 @@
                 <a href="#" class="navbar-brand">INVESTMENTS</a>
             </nav>
 
-            <div class="container-fluid row overall">
+            <div class=" row overall">
                 <div>
                     <h5>Total Amount</h5>
                     <p>
@@ -332,6 +332,7 @@
                 </div>
 
                 <div class="col-6 search">
+                    <input type="hidden" name="cusID" id="cusID" value="<?php echo ($customer->getId()) ?>">
                     <input type="text" name="" id="search-transaction" placeholder="  Apple eg.">
                     <h6>Search:</h6>
                 </div>

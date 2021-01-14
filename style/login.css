@@ -1,52 +1,45 @@
 #category1 {
-  background-color: #FF6C00;
+  background-color: #FE6E63;
 }
 
 #category2 {
-  background-color: #DC8600;
+  background-color: #FE9850;
 }
 
 #category3 {
-  background-color: #A1756C;
+  background-color: #FFD042;
 }
 
 #category4 {
-  background-color: #54433A;
+  background-color: #FEE801;
 }
 
 #category5 {
-  background-color: #BCA79D;
+  background-color: #BEE647;
 }
 
 #category6 {
-  background-color: #AD7267;
+  background-color: #74D072;
 }
 
 #category7 {
-  background-color: #754C44;
+  background-color: #68E8DB;
 }
 
 #category8 {
-  background-color: #FF6C00;
+  background-color: #68E8DB;
 }
 
 body {
   min-height: 100vh;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  align-items: center;
+  justify-content: center;
   background-color: rgba(255, 255, 255, 0.05);
 }
 
 .container {
-  -webkit-box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
-          box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
   margin: 0;
   padding: 0;
   background-color: white;
