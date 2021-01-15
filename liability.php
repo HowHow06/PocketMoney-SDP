@@ -28,11 +28,19 @@
             </div>
             <div class="row chart">
                 <!-- pie chart -->
-                <?php $query = "SELECT (l.totalAmountToPay - (SELECT SUM(amount) FROM debtpayment debt WHERE debt.liabilityID = l.liabilityID) ) as remainder, l.liabilityName
-                        FROM liability l, debtpayment dp
-                        WHERE l.liabilityID = dp.liabilityID
-                        AND (SELECT SUM(amount) FROM debtpayment debt WHERE debt.liabilityID = l.liabilityID) < l.totalAmountToPay 
-                        GROUP BY l.liabilityName"; ?>
+                <?php $query = "SELECT
+                                CASE
+                                    WHEN (l.totalAmountToPay - (SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID))) IS NOT NULL THEN  (l.totalAmountToPay - (SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)))
+                                    ELSE l.totalAmountToPay
+                                END as remainder, l.liabilityName
+                                FROM liability l
+                                LEFT JOIN transaction tr
+                                ON l.liabilityName = tr.description
+                                AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID)
+                                WHERE
+                                ((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)) IS NULL 
+                                OR (SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)) < l.totalAmountToPay)
+                                GROUP BY l.liabilityName"; ?>
                 <!-- pie chart -->
                 <input type="hidden" id="amountsOfInvestmentByName" name="amountsOfInvestmentByName" value='<?php echo ($customer->getJSONbyRawQuery($query, 'remainder', true)); ?>'>
                 <input type="hidden" id="nameOfInvestment" name="nameOfInvestment" value='<?php echo ($customer->getJSONbyRawQuery($query, 'liabilityName')); ?>'>
@@ -45,7 +53,21 @@
                     <div class="col-12">
                         <h4>DEBTS OVERVIEW</h4>
                     </div>
-                    <?php $query = "SELECT (l.totalAmountToPay - (SELECT SUM(amount) FROM debtpayment debt WHERE debt.liabilityID = l.liabilityID) ) as remainder,l.liabilityName, l.totalAmountToPay as total, (SELECT SUM(amount) FROM debtpayment debt WHERE debt.liabilityID = l.liabilityID) as paidAmount, l.liabilityType FROM liability l, debtpayment dp WHERE l.liabilityID = dp.liabilityID AND (SELECT SUM(amount) FROM debtpayment debt WHERE debt.liabilityID = l.liabilityID) < l.totalAmountToPay GROUP BY l.liabilityName";
+                    <?php $query = "SELECT CASE
+                                            WHEN (l.totalAmountToPay - (SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID))) IS NOT NULL THEN  (l.totalAmountToPay - (SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)))
+                                            ELSE l.totalAmountToPay
+                                        END as remainder,
+                                        l.liabilityName, 
+                                        l.totalAmountToPay as total,
+                                        (SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)) as paidAmount, l.liabilityType 
+                                        FROM liability l
+                                        LEFT JOIN transaction tr
+                                        ON l.liabilityName = tr.description
+                                        AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID)
+                                        WHERE 
+                                        ((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)) IS NULL 
+                                        OR (SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)) < l.totalAmountToPay)
+                                        GROUP BY l.liabilityName";
                     $result = $customer->getDataByQuery($query);
                     foreach ($result as $data) {
                         # code...
@@ -72,10 +94,10 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-6">
-                                            <h6 class="paid">RM <?php echo ($data['paidAmount']); ?></h6>
+                                            <h6 class="paid">RM <?php echo (number_format($data['paidAmount'] * 1.0, 2)); ?></h6>
                                         </div>
                                         <div class="col-6">
-                                            <h6 class="target">RM <?php echo ($data['remainder']); ?></h6>
+                                            <h6 class="target">RM <?php echo (number_format($data['remainder'], 2)); ?></h6>
                                         </div>
                                     </div>
                                 </div>
@@ -107,10 +129,14 @@
                             <tbody id="investmentTransactionTableBody">
 
                                 <?php
-                                $query = "SELECT (l.totalAmountToPay - (SELECT SUM(amount) FROM debtpayment debt WHERE debt.liabilityID = l.liabilityID) ) as remainder, l.liabilityName, l.liabilityType, l.totalAmountToPay, (SELECT MAX(debt.paymentdate) FROM debtpayment debt WHERE debt.liabilityID = l.liabilityID) as endDate
-                                FROM liability l, debtpayment dp
-                                WHERE l.liabilityID = dp.liabilityID
-                                AND (SELECT SUM(amount) FROM debtpayment debt WHERE debt.liabilityID = l.liabilityID) >= l.totalAmountToPay 
+                                $query = "SELECT 
+                                (l.totalAmountToPay - (SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID))  ) as remainder, 
+                                l.liabilityName, l.liabilityType, l.totalAmountToPay, 
+                                DATE((SELECT MAX(tran.date) FROM transaction tran WHERE tran.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tran.categoryID))) as endDate
+                                FROM liability l, transaction tr
+                                WHERE l.liabilityName = tr.description
+                                AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID)
+                                AND (SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)) >= l.totalAmountToPay 
                                 GROUP BY l.liabilityName
                                 ";
                                 $datarow = $customer->getDataByQuery($query);
@@ -135,8 +161,6 @@
                 <div class="col-7 chart-explain right-div">
                     <div class="border rounded" id="mark-upcoming-payment">
                         <!-- table -->
-
-
                         <table class="table table-bordered table-hover transaction-table table-sm" id="investmentTransactionTable">
                             <thead>
                                 <tr>
@@ -154,9 +178,13 @@
 
                                 <?php
                                 $query = "SELECT l.liabilityName, l.liabilityType, l.amountEachPayment, l.paymentTime
-                                FROM liability l, debtpayment dp
-                                WHERE l.liabilityID = dp.liabilityID
-                                AND (SELECT SUM(amount) FROM debtpayment debt WHERE debt.liabilityID = l.liabilityID) < l.totalAmountToPay
+                                FROM liability l 
+                                LEFT JOIN transaction tr
+                                ON l.liabilityName = tr.description
+                                AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID)
+                                WHERE 
+                                ((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)) IS NULL 
+                                OR (SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)) < l.totalAmountToPay)
                                 AND l.paymentTime IS NOT NULL
                                 ";
                                 $datarow = $customer->getDataByQuery($query);
