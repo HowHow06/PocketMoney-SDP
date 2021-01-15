@@ -514,16 +514,17 @@
                 <tbody id="investmentTransactionTableBody">
 
                     <?php
-                    $query = "SELECT * FROM debtpayment db, liability l
-                    WHERE l.liabilityID = db.liabilityID
-                    ORDER BY DB.paymentdate DESC";
+                    $query = "SELECT *, DATE(date) as paymentdate FROM transaction tr, liability l
+                    WHERE l.liabilityName = tr.description
+                    AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID)
+                    ORDER BY tr.date DESC";
                     $datarow = $customer->getDataByQuery($query);
 
                     if (!empty($datarow)) {
                         for ($i = 0; $i < sizeof($datarow); $i++) {
                     ?>
                             <tr>
-                                <input type="hidden" class="investmentID" value='<?php echo ($datarow[$i]['paymentID']); ?>'></input>
+                                <input type="hidden" class="investmentID" value='<?php echo ($datarow[$i]['transactionID']); ?>'></input>
                                 <th scope="row"><?php echo (($i + 1)); ?></th>
                                 <td class="investDate"><?php echo ($datarow[$i]['paymentdate']); ?></td>
                                 <td class="investName"><?php echo ($datarow[$i]['liabilityName']); ?></td>
@@ -850,10 +851,18 @@
                 <tbody id="investmentTransactionTableBody">
 
                     <?php
-                    $query = "SELECT *, (SELECT SUM(amount) FROM debtpayment debt WHERE debt.liabilityID = l.liabilityID) as amountPaid
-                    FROM liability l, debtpayment dp
-                    WHERE l.liabilityID = dp.liabilityID
-                    GROUP BY l.liabilityID";
+                    $query = "SELECT *, CASE
+                    WHEN (l.totalAmountToPay - (SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID))) IS NOT NULL THEN  (l.totalAmountToPay - (SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)))
+                    ELSE l.totalAmountToPay
+                    END as remainder,
+                    l.liabilityName, 
+                    l.totalAmountToPay as total,
+                    (SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)) as paidAmount, l.liabilityType 
+                    FROM liability l
+                    LEFT JOIN transaction tr
+                    ON l.liabilityName = tr.description
+                    AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID)
+                    GROUP BY l.liabilityName";
                     $datarow = $customer->getDataByQuery($query);
                     if (!empty($datarow)) {
                         for ($i = 0; $i < sizeof($datarow); $i++) {
@@ -865,8 +874,8 @@
                                 <td class="investName"><?php echo ($datarow[$i]['liabilityName']); ?></td>
                                 <td class="investType"><?php echo ($datarow[$i]['liabilityType']); ?></td>
                                 <td class="investAmount"><?php echo ($datarow[$i]['totalAmountToPay']); ?></td>
-                                <td class="investAmount"><?php echo ($datarow[$i]['amountPaid']); ?></td>
-                                <td class="investAmount"><?php echo ($datarow[$i]['totalAmountToPay'] - $datarow[$i]['amountPaid']); ?></td>
+                                <td class="investAmount"><?php echo (number_format($datarow[$i]['paidAmount'] * 1.0, 2, ".", "")); ?></td>
+                                <td class="investAmount"><?php echo ($datarow[$i]['remainder']); ?></td>
                                 <td class="action">
                                     <a href="#" class="edit-investment-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
                                     <span> | </span>
