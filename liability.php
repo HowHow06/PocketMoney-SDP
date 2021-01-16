@@ -212,6 +212,150 @@
                 </div>
             </div>
 
+
+            <!-- new-payment modal -->
+            <div class="modal fade new-modal" id="new-payment" tabindex="-1" role="dialog" aria-labelledby="new-payment-title" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="new-payment-title">New Payment</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form action="" method="POST" id="new-payment-form" onsubmit="return validateform(this);">
+                            <div class="modal-body">
+                                <div class="container">
+                                    <input type="hidden" id="new-payment-liabilityID" name="new-payment-liabilityID"></input>
+                                    <div class="form-group row">
+                                        <label class="col-5" for="">Name:</label>
+                                        <select class="col-6" name="new-payment-name" id="new-payment-name" onchange="//showsearch('')" required>
+                                            <?php
+                                            $data = $customer->getData('Liability', "DISTINCT liabilityName");
+                                            foreach ($data as $row => $value) {
+                                            ?>
+                                                <option value="<?php echo ($value['liabilityName']); ?>"><?php echo ($value['liabilityName']); ?></option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </select>
+                                        <label class="error" for="new-payment-name">Please enter a valid name</label>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-5" for="">Category:</label>
+                                        <select class="col-6" name="new-payment-category" id="new-payment-category" onchange="//showsearch('')" disabled>
+                                            <?php
+                                            $data = $customer->getData('Liability', "DISTINCT liabilityType");
+                                            foreach ($data as $row => $value) {
+                                            ?>
+                                                <option value="<?php echo ($value['liabilityType']); ?>"><?php echo ($value['liabilityType']); ?></option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </select>
+                                        <label class="error" for="new-payment-category">Please enter a valid category</label>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-5" for="new-payment-date">Date:</label>
+                                        <input class="col-6 form-startDate" type="date" id="new-payment-date" name="new-payment-date" required />
+                                        <label class="error" for="new-payment-date">Please enter a valid date</label>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-5" for="">Amount Paid:</label>
+                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="new-payment-amount" name="new-payment-amount" required />
+                                        <label class="error" for="new-payment-amount">Please enter a valid amount</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" name="new-payment-submit" class="btn btn-primary">Add new</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- edit-payment modal -->
+            <div class="modal fade edit-modal" id="edit-payment" tabindex="-1" role="dialog" aria-labelledby="edit-payment-title" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="edit-payment-title">Edit Payment</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form action="" method="POST" id="edit-payment-form" onsubmit="//return validateform(this);">
+                            <div class="modal-body">
+                                <div class="container">
+                                    <input type="hidden" id="edit-payment-liabilityID" name="edit-payment-liabilityID"></input>
+                                    <div class="form-group row">
+                                        <label class="col-5" for="">Name:</label>
+                                        <select class="col-6" name="edit-payment-name" id="edit-payment-name" onchange="//showsearch('')" required>
+                                            <?php
+                                            $data = $customer->getData('Liability', "DISTINCT liabilityName");
+                                            foreach ($data as $row => $value) {
+                                            ?>
+                                                <option value="<?php echo ($value['liabilityName']); ?>"><?php echo ($value['liabilityName']); ?></option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </select>
+                                        <label class="error" for="edit-payment-name">Please enter a valid name</label>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-5" for="">Category:</label>
+                                        <select class="col-6" name="edit-payment-category" id="edit-payment-category" onchange="//showsearch('')" disabled>
+                                            <?php
+                                            $data = $customer->getData('Liability', "DISTINCT liabilityType");
+                                            foreach ($data as $row => $value) {
+                                            ?>
+                                                <option value="<?php echo ($value['liabilityType']); ?>"><?php echo ($value['liabilityType']); ?></option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </select>
+                                        <label class="error" for="edit-payment-category">Please enter a valid category</label>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-5" for="edit-payment-date">Date:</label>
+                                        <input class="col-6 form-startDate" type="date" id="edit-payment-date" name="edit-payment-date" required />
+                                        <label class="error" for="edit-payment-date">Please enter a valid date</label>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-5" for="">Amount Paid:</label>
+                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="edit-payment-amount" name="edit-payment-amount" required />
+                                        <label class="error" for="edit-payment-amount">Please enter a valid amount</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="reset" class="btn btn-success" onclick="resetEdit()">Reset</button>
+                                <button type="submit" name="edit-payment-submit" class="btn btn-primary">Save changes</button>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- delete-payment modal -->
+            <div class="modal fade edit-modal" id="delete-payment" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <p>Are you sure want to Delete this payment?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <form action="" method="POST">
+                                <input type="hidden" id="delete-payment-liabilityID" name="delete-payment-liabilityID"></input>
+                                <button type="submit" class="btn btn-primary" name="delete-payment-submit">Delete</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <h4 id="mark-payment-history">PAYMENT HISTORY</h4>
             <hr>
             <div class="container-fluid row filter">
@@ -242,6 +386,7 @@
             <div class="container-fluid row filter2">
                 <div class="col-6 row show">
                     <a class="btn" href="#" role="button">View All</a>
+                    <button class="btn" data-toggle="modal" data-target="#new-payment">New</button>
                 </div>
                 <div class="col-6 search">
                     <input type="text" name="" id="search-transaction" placeholder="  Apple eg.">
@@ -249,257 +394,7 @@
                 </div>
             </div>
 
-            <!-- new-row modal -->
-            <div class="modal fade new-modal" id="new-row" tabindex="-1" role="dialog" aria-labelledby="new-title" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="new-title">New Debt</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <form action="" method="POST" id="testing" onsubmit="return validateform(this);">
-                            <div class="modal-body">
-                                <div class="container">
-                                    <div class="form-group row">
-                                        <label class="col-5" for="">Date:</label>
-                                        <input class="col-6 form-startDate" type="date" id="new_startDate" name="new_startDate" required />
-                                        <label class="error" for="new_startDate">Please enter a valid date</label>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="">Name:</label>
-                                        <input id="new_investmentName" class="col-6 form-investmentName" list="new_investmentNameList" name="new_investmentName" required />
-                                        <datalist id="new_investmentNameList">
-                                            <?php
-                                            $data = $customer->getData('Investment', "DISTINCT investmentName");
-                                            foreach ($data as $row => $value) {
-                                            ?>
-                                                <option value="<?php echo ($value['investmentName']); ?>"><?php echo ($value['investmentName']); ?></option>
-                                            <?php
-                                            }
-                                            ?>
-                                        </datalist>
-                                        <label class="error" for="new_investmentName">Please enter a valid name</label>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="">Category:</label>
-                                        <input id="new_investmentType" class="col-6 form-investmentType" list="new_investmentTypeList" name="new_investmentType" required />
-                                        <datalist id="new_investmentTypeList">
-                                            <?php
-                                            $data = $customer->getData('Investment', "DISTINCT investmentType");
-                                            foreach ($data as $row => $value) {
-                                            ?>
-                                                <option id="type<?php echo ($value['investmentType']); ?>" value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
-                                            <?php
-                                            }
-                                            ?>
-                                        </datalist>
-                                        <label class="error" for="new_investmentType">Please enter a valid category</label>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="">Total Amount To Pay:</label>
-                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="new_amountInvested" name="new_amountInvested" required />
-                                        <label class="error" for="new_amountInvested">Please enter a valid amount</label>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="">Amount Paid:</label>
-                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="new_amountInvested" name="new_amountInvested" required />
-                                        <label class="error" for="new_amountInvested">Please enter a valid amount</label>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="">Amount Left:</label>
-                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="new_amountInvested" name="new_amountInvested" required disabled />
-                                        <label class="error" for="new_amountInvested">Please enter a valid amount</label>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="">Each Payment:</label>
-                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="new_amountInvested" name="new_amountInvested" required disabled />
-                                        <label class="error" for="new_amountInvested">Please enter a valid amount</label>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="">Time Needed:</label>
-                                        <input class="col-6 form-ratePerAnnum" type="number" step='0.01' id="new_ratePerAnnum" name="new_ratePerAnnum" required />
-                                        <label class="error" for="new_ratePerAnnum">Please enter a valid rate</label>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="">Reminder:</label>
-                                        <input id="new_investmentType" class="col-6 form-investmentType" list="new_investmentTypeList" name="new_investmentType" disabled />
-                                        <datalist id="new_investmentTypeList">
-                                            <?php
-                                            $data = $customer->getData('Investment', "DISTINCT investmentType");
-                                            foreach ($data as $row => $value) {
-                                            ?>
-                                                <option id="type<?php echo ($value['investmentType']); ?>" value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
-                                            <?php
-                                            }
-                                            ?>
-                                        </datalist>
-                                        <input class="reminder" type="checkbox" name="new_automate" id="new_automate">
-                                        <label class="error" for="new_investmentType">Please enter a valid category</label>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="">Repeat for:</label>
-                                        <input id="new_investmentType" class="col-6 form-investmentType" list="new_investmentTypeList" name="new_investmentType" disabled />
-                                        <datalist id="new_investmentTypeList">
-                                            <?php
-                                            $data = $customer->getData('Investment', "DISTINCT investmentType");
-                                            foreach ($data as $row => $value) {
-                                            ?>
-                                                <option id="type<?php echo ($value['investmentType']); ?>" value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
-                                            <?php
-                                            }
-                                            ?>
-                                        </datalist>
-                                        <input type="checkbox" name="new_automate" id="new_automate">
-                                        <label class="error" for="new_investmentType">Please enter a valid category</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" name="new_submit" class="btn btn-primary">Add new</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <!-- edit-row modal -->
-            <div class="modal fade edit-modal" id="edit-row" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="edit-title">Edit Debt</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <form action="" method="POST" id="edit-form" onsubmit="return validateform(this);">
-                            <div class="modal-body">
-                                <div class="container">
-                                    <input type="hidden" id="edit_investmentID" name="edit_investmentID"></input>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="edit_startDate">Date:</label>
-                                        <input class="col-6 form-startDate" type="date" id="edit_startDate" name="edit_startDate" required />
-                                        <label class="error" for="edit_startDate">Please enter a valid date</label>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="">Name:</label>
-                                        <input id="edit_investmentName" class="col-6 form-investmentName" list="edit_investmentNameList" name="edit_investmentName" required />
-                                        <datalist id="edit_investmentNameList">
-                                            <?php
-                                            $data = $customer->getData('Investment', "DISTINCT investmentName");
-                                            foreach ($data as $row => $value) {
-                                            ?>
-                                                <option value="<?php echo ($value['investmentName']); ?>"><?php echo ($value['investmentName']); ?></option>
-                                            <?php
-                                            }
-                                            ?>
-                                        </datalist>
-                                        <label class="error" for="edit_investmentName">Please enter a valid name</label>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="">Category:</label>
-                                        <input id="edit_investmentType" class="col-6 form-investmentType" list="edit_investmentTypeList" name="edit_investmentType" required />
-                                        <datalist id="edit_investmentTypeList">
-                                            <?php
-                                            $data = $customer->getData('Investment', "DISTINCT investmentType");
-                                            foreach ($data as $row => $value) {
-                                            ?>
-                                                <option id="type<?php echo ($value['investmentType']); ?>" value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
-                                            <?php
-                                            }
-                                            ?>
-                                        </datalist>
-                                        <label class="error" for="edit_investmentType">Please enter a valid category</label>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="">Total Amount To Pay:</label>
-                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="edit_amountInvested" name="edit_amountInvested" required />
-                                        <label class="error" for="edit_amountInvested">Please enter a valid amount</label>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="">Amount Paid:</label>
-                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="edit_amountInvested" name="edit_amountInvested" required />
-                                        <label class="error" for="edit_amountInvested">Please enter a valid amount</label>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="">Amount Left:</label>
-                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="edit_amountInvested" name="edit_amountInvested" required disabled />
-                                        <label class="error" for="edit_amountInvested">Please enter a valid amount</label>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="">Each Payment:</label>
-                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="edit_amountInvested" name="edit_amountInvested" required disabled />
-                                        <label class="error" for="edit_amountInvested">Please enter a valid amount</label>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="">Time Needed:</label>
-                                        <input class="col-6 form-ratePerAnnum" type="number" step='0.01' id="edit_ratePerAnnum" name="edit_ratePerAnnum" required />
-                                        <label class="error" for="edit_ratePerAnnum">Please enter a valid rate</label>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="">Reminder:</label>
-                                        <input id="new_investmentType" class="col-6 form-investmentType" list="new_investmentTypeList" name="new_investmentType" disabled />
-                                        <datalist id="new_investmentTypeList">
-                                            <?php
-                                            $data = $customer->getData('Investment', "DISTINCT investmentType");
-                                            foreach ($data as $row => $value) {
-                                            ?>
-                                                <option id="type<?php echo ($value['investmentType']); ?>" value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
-                                            <?php
-                                            }
-                                            ?>
-                                        </datalist>
-                                        <input class="reminder" type="checkbox" name="new_automate" id="new_automate">
-                                        <label class="error" for="new_investmentType">Please enter a valid category</label>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="">Repeat for:</label>
-                                        <input id="new_investmentType" class="col-6 form-investmentType" list="new_investmentTypeList" name="new_investmentType" disabled />
-                                        <datalist id="new_investmentTypeList">
-                                            <?php
-                                            $data = $customer->getData('Investment', "DISTINCT investmentType");
-                                            foreach ($data as $row => $value) {
-                                            ?>
-                                                <option id="type<?php echo ($value['investmentType']); ?>" value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
-                                            <?php
-                                            }
-                                            ?>
-                                        </datalist>
-                                        <input type="checkbox" name="new_automate" id="new_automate">
-                                        <label class="error" for="new_investmentType">Please enter a valid category</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="reset" class="btn btn-success" onclick="resetEdit()">Reset</button>
-                                <button type="submit" name="edit_submit" class="btn btn-primary">Save changes</button>
-
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <!-- delete-row modal -->
-            <div class="modal fade edit-modal" id="delete-row" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            <p>Are you sure want to Delete this Debt?</p>
-                        </div>
-                        <div class="modal-footer">
-                            <form action="" method="POST">
-                                <input type="hidden" id="delete_investmentID" name="delete_investmentID"></input>
-                                <button type="submit" class="btn btn-primary" name="delete_submit">Delete</button>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- table -->
+            <!-- payment table -->
             <table class="table table-bordered table-hover transaction-table" id="investmentTransactionTable">
                 <thead>
                     <tr>
@@ -511,7 +406,7 @@
                         <th scope="col">ACTION</th>
                     </tr>
                 </thead>
-                <tbody id="investmentTransactionTableBody">
+                <tbody id="payment-table-body">
 
                     <?php
                     $query = "SELECT *, DATE(date) as paymentdate FROM transaction tr, liability l
@@ -524,16 +419,16 @@
                         for ($i = 0; $i < sizeof($datarow); $i++) {
                     ?>
                             <tr>
-                                <input type="hidden" class="investmentID" value='<?php echo ($datarow[$i]['transactionID']); ?>'></input>
+                                <input type="hidden" class="paymentID" value='<?php echo ($datarow[$i]['transactionID']); ?>'></input>
                                 <th scope="row"><?php echo (($i + 1)); ?></th>
-                                <td class="investDate"><?php echo ($datarow[$i]['paymentdate']); ?></td>
-                                <td class="investName"><?php echo ($datarow[$i]['liabilityName']); ?></td>
-                                <td class="investType"><?php echo ($datarow[$i]['liabilityType']); ?></td>
-                                <td class="investAmount"><?php echo ($datarow[$i]['amount']); ?></td>
+                                <td class="paymentDate"><?php echo ($datarow[$i]['paymentdate']); ?></td>
+                                <td class="paymentName"><?php echo ($datarow[$i]['liabilityName']); ?></td>
+                                <td class="paymentType"><?php echo ($datarow[$i]['liabilityType']); ?></td>
+                                <td class="paymentAmount"><?php echo ($datarow[$i]['amount']); ?></td>
                                 <td class="action">
-                                    <a href="#" class="edit-investment-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
+                                    <a href="#" class="edit-investment-anchor" data-toggle="modal" data-target="#edit-payment">Edit</a>
                                     <span> | </span>
-                                    <a href="#" class="delete-investment-anchor" data-toggle="modal" data-target="#delete-row">Delete</a>
+                                    <a href="#" class="delete-investment-anchor" data-toggle="modal" data-target="#delete-payment">Delete</a>
                                 </td>
                             </tr>
                     <?php
