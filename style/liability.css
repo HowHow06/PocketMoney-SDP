@@ -136,6 +136,10 @@
   font-family: 'Open Sans', sans-serif;
 }
 
+.body div.show .btn {
+  margin: .25rem;
+}
+
 .body #liabilityNames-donut-chart {
   padding-left: 11%;
 }
