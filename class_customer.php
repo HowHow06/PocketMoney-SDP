@@ -563,7 +563,7 @@ class Customer
      *                                                                    *
      *********************************************************************/
 
-     /** 
+    /** 
      * Set flag in 0 or 1
      * @param int $bool
      * 0 -> Monthly
@@ -702,7 +702,7 @@ class Customer
             return $systemMonth;
         }
         // for query (0 -> Month)
-        if ($purpose==1 && $conditionFlag==0 && $yearlyFlag==1) {
+        if ($purpose == 1 && $conditionFlag == 0 && $yearlyFlag == 1) {
             return 0;
         }
         // for query (A string contain sql query -> monthly)
@@ -947,7 +947,7 @@ class Customer
      * @return int|NULL
      * 
      */
-    function getDateNumByMonth($month,$year)
+    function getDateNumByMonth($month, $year)
     {
         if (!empty($month)) {
             switch ($month) {
@@ -969,7 +969,7 @@ class Customer
                 case 2:
                     if ($year % 4 == 0) {
                         return 29;
-                    } else { 
+                    } else {
                         return 28;
                     }
                     break;
@@ -1001,42 +1001,42 @@ class Customer
         $db = MysqliDb::getInstance();
         $id = $cusID;
         if (!empty($id)) {
-            $categoryValueByMonth = array('value'=>array(),'month'=>array());
-            $monthArr = ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September','October', 'November', 'December'];
+            $categoryValueByMonth = array('value' => array(), 'month' => array());
+            $monthArr = ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             if (!empty($month)) {
-                $numOfDays = $this->getDateNumByMonth($month,$year);
-                for ($i=1; $i<=$numOfDays; $i++) {
-                    strlen($i) == 1 ? $days = "0".$i : $days = strval($i);
-                    strlen($month) == 1 ? $months = "0".$month : $months = $month;
-                    $date = "%".$year."-".$months."-".$days."%";
+                $numOfDays = $this->getDateNumByMonth($month, $year);
+                for ($i = 1; $i <= $numOfDays; $i++) {
+                    strlen($i) == 1 ? $days = "0" . $i : $days = strval($i);
+                    strlen($month) == 1 ? $months = "0" . $month : $months = $month;
+                    $date = "%" . $year . "-" . $months . "-" . $days . "%";
                     $db->join('transaction t', 'c.categoryID=t.categoryID', 'RIGHT');
                     $db->where('t.cusID', $id);
                     $db->where('c.categoryName', $cate);
-                    $db->where('t.date',$date,'LIKE');
+                    $db->where('t.date', $date, 'LIKE');
                     $db->groupBy("t.date");
                     $result = $db->get('category c', null, 'SUM(t.amount) AS amount');
                     if (!empty($result[0]['amount'])) {
-                        array_push($categoryValueByMonth['value'],$result[0]['amount']);
+                        array_push($categoryValueByMonth['value'], $result[0]['amount']);
                     } else {
-                        array_push($categoryValueByMonth['value'],0);
+                        array_push($categoryValueByMonth['value'], 0);
                     }
-                    array_push($categoryValueByMonth['month'],$days);
+                    array_push($categoryValueByMonth['month'], $days);
                 }
             } else {
-                for ($j=1; $j<=12; $j++) {
+                for ($j = 1; $j <= 12; $j++) {
                     $db->join('transaction t', 'c.categoryID=t.categoryID', 'RIGHT');
                     $db->where('t.cusID', $id);
                     $db->where('c.categoryName', $cate);
-                    $db->where('MONTH(t.date)',$j);
-                    $db->where('YEAR(t.date)',$year);
+                    $db->where('MONTH(t.date)', $j);
+                    $db->where('YEAR(t.date)', $year);
                     $db->groupBy("MONTH(t.date)");
                     $result = $db->get('category c', null, 'SUM(t.amount) AS amount');
                     if (!empty($result[0]['amount'])) {
-                        array_push($categoryValueByMonth['value'],$result[0]['amount']);
+                        array_push($categoryValueByMonth['value'], $result[0]['amount']);
                     } else {
-                        array_push($categoryValueByMonth['value'],0);
+                        array_push($categoryValueByMonth['value'], 0);
                     }
-                    array_push($categoryValueByMonth['month'],$monthArr[$j-1]);
+                    array_push($categoryValueByMonth['month'], $monthArr[$j - 1]);
                 }
             }
             return $categoryValueByMonth;
@@ -1234,31 +1234,41 @@ class Customer
     /** 
      * @param String $frequency
      * 
-     * @param String $period
+     * @param String $date
      * 
      * @return String date
      * 
-     * @uses $dateString = $customer->getDateByFrequency($frequency,$period);
+     * @uses $dateString = $customer->getDateByFrequency($frequency,$date);
      * 
      * 
      */
-    function getDateByFrequency($frequency, $period)
+    function getDateByFrequency($frequency, $date)
     {
+        $now = date('Y-m-d');
+        if ($now < $date) { //the paymentdate havent due yet
+            return $date;
+        }
+        if ($frequency == "") { //if there is no frequency then just go ahead, get the scheduled 
+            return $date;
+        }
+        $paymentDateStamp = strtotime($date);
+        $paymentDay = date('d', $paymentDateStamp);
         if ($frequency == "M") {
-            $day = date("d");
-            if ($day <= $period) { //current month
-                $newdatestamp = strtotime(date('Y') . '-' . date('m') . '-' . $period);
-            } else { //else will be on next month
-                $newdatestamp = strtotime(date('Y') . '-' . date('m', strtotime('+1 month')) . '-' . $period);
+            $lastdayofnextmonth = date('t', strtotime('+1 month')); //get the last day of month
+            if ($paymentDay > $lastdayofnextmonth) { //if the day exceed the last day
+                $paymentDay = $lastdayofnextmonth;
             }
+            $newdatestamp = strtotime(date('Y') . '-' . date('m', strtotime('+1 month')) . '-' . $paymentDay);
             return date("Y-m-d", $newdatestamp);
         } elseif ($frequency == "Y") {
-            $month = date("m");
-            if ($month < $period) { //current year
-                $newdatestamp = strtotime(date('Y') . '-' . $period . '-1');
-            } else {
-                $newdatestamp = strtotime(date('Y', strtotime('+1 year')) . '-' . $period . '-1');
+            $paymentMonth = date('m', $paymentDateStamp);
+            $newdatestamp = strtotime(date('Y', strtotime('+1 year')) . '-' . $paymentMonth . '-1'); //get the month in the next year
+            $lastdayofthemonth = date('t', $newdatestamp); //get the last day of month in next year
+            if ($paymentDay > $lastdayofthemonth) { //if the day exceed the last day
+                $paymentDay = $lastdayofthemonth;
             }
+            $newdatestamp = strtotime(date('Y', strtotime('+1 year', $paymentDateStamp)) . '-' . $paymentMonth . '-' . $paymentDay);
+
             return date("Y-m-d", $newdatestamp);
         }
         return NULL;

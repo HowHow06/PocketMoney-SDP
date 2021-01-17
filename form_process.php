@@ -13,6 +13,27 @@ if (isset($_GET['resetEditInvest'])) {
     echo ($dataJSON);
 }
 
+/**
+ * 
+ * echo the JSON format of fields within Liability Edit modal
+ */
+if (isset($_GET['editLiabilityID'])) {
+    $liability_id = $_GET['editLiabilityID'];
+    $query = "SELECT *, (l.totalAmountToPay - (l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)), 0)))
+    as remainder,
+    l.liabilityName, 
+    l.totalAmountToPay as total,
+    l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)), 0) as paidAmount, l.liabilityType 
+    FROM liability l
+    LEFT JOIN transaction tr
+    ON l.liabilityName = tr.description
+    AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID)
+    WHERE l.liabilityID = " . $liability_id . "
+    GROUP BY l.liabilityName";
+    $datarow = $customer->getDataByQuery($query);
+    $dataJSON = json_encode($datarow[0]);
+    echo ($dataJSON);
+}
 
 
 /**
@@ -136,8 +157,8 @@ if (isset($_GET['searchTransaction'])) {
     FROM Transaction t, Category c
     WHERE t.cusID = '" . $cusID . "'
     AND t.categoryID = c.categoryID"
-    . $query .
-    " AND t.description LIKE '%" . $searchname . "%'
+        . $query .
+        " AND t.description LIKE '%" . $searchname . "%'
     AND c.categoryType LIKE  '%" . $typeSQL . "%'
     AND c.categoryName LIKE  '%" . $cateFilter . "%'
     ORDER BY t.date DESC
@@ -154,9 +175,9 @@ if (isset($_GET['searchTransaction'])) {
                 <input type="hidden" class="transactionID" value="' . ($datarow[$i]['transactionID']) . '"></input>
                 <input type="hidden" class="transactionDateTime" value="' . ($datarow[$i]['date']) . '"></input>
                 <th scope="row">' . (($i + 1)) . '</th>
-                <td class="transactionDate">' . ($customer->getDate($datarow[$i]['transactionID'],$cusID)) . '</td>
-                <td class="transactionTime">' . ($customer->getTime($datarow[$i]['transactionID'],$cusID)) . '</td>
-                <td class="transactionAmount">' .($datarow[$i]['amount']) . '</td>
+                <td class="transactionDate">' . ($customer->getDate($datarow[$i]['transactionID'], $cusID)) . '</td>
+                <td class="transactionTime">' . ($customer->getTime($datarow[$i]['transactionID'], $cusID)) . '</td>
+                <td class="transactionAmount">' . ($datarow[$i]['amount']) . '</td>
                 <td class="transactionCategory">' . ($datarow[$i]['categoryName']) . '</td>
                 <td class="transactionName">' . ($description) . '</td>
                 <td class="transactionType">' . ($datarow[$i]['categoryType']) . '</td>
@@ -180,11 +201,10 @@ if (isset($_GET['cateName'])) {
     $cusID = $_GET['cusID'];
     $month = $_GET['date'];
     $year = $_GET['year'];
-    $data = $customer->getCategoryAmountJSON($cateName,$cusID,$month,$year);
-    $data1 = $customer->getCategoryMonthJSON($cateName,$cusID,$month,$year);
-    
-    if (!empty($month)) 
-    {  
+    $data = $customer->getCategoryAmountJSON($cateName, $cusID, $month, $year);
+    $data1 = $customer->getCategoryMonthJSON($cateName, $cusID, $month, $year);
+
+    if (!empty($month)) {
         // table
         $datarow = $customer->getDataByQuery("SELECT t.transactionID, c.categoryName AS category, t.date, t.amount, t.description AS name, c.categoryType AS type
                                                 FROM transaction t, category c
@@ -209,9 +229,9 @@ if (isset($_GET['cateName'])) {
                             <input type="hidden" class="transactionDateTime" value="' . ($datarow[$i]['date']) . '"></input>
                             <th style="display:none;" class="transactionCategory">' . ($datarow[$i]['category']) . '</th>
                             <th scope="row">' . (($i + 1)) . '</th>
-                            <td class="transactionDate">' . ($customer->getDate($datarow[$i]['transactionID'],$cusID)) . '</td>
-                            <td class="transactionTime">' . ($customer->getTime($datarow[$i]['transactionID'],$cusID)) . '</td>
-                            <td class="transactionAmount">' .($datarow[$i]['amount']) . '</td>
+                            <td class="transactionDate">' . ($customer->getDate($datarow[$i]['transactionID'], $cusID)) . '</td>
+                            <td class="transactionTime">' . ($customer->getTime($datarow[$i]['transactionID'], $cusID)) . '</td>
+                            <td class="transactionAmount">' . ($datarow[$i]['amount']) . '</td>
                             <td class="transactionName">' . ($description) . '</td>
                             <td class="transactionType">' . ($datarow[$i]['type']) . '</td>
                             <td class="action">
@@ -223,9 +243,7 @@ if (isset($_GET['cateName'])) {
                         ');
             }
         }
-    }
-    else 
-    {
+    } else {
         // table
         $datarow = $customer->getDataByQuery("SELECT t.transactionID, c.categoryName AS category, t.date, t.amount, t.description AS name, c.categoryType AS type
                                                 FROM transaction t, category c
@@ -249,9 +267,9 @@ if (isset($_GET['cateName'])) {
                             <input type="hidden" class="transactionDateTime" value="' . ($datarow[$i]['date']) . '"></input>
                             <th style="display:none;" class="transactionCategory">' . ($datarow[$i]['category']) . '</th>
                             <th scope="row">' . (($i + 1)) . '</th>
-                            <td class="transactionDate">' . ($customer->getDate($datarow[$i]['transactionID'],$cusID)) . '</td>
-                            <td class="transactionTime">' . ($customer->getTime($datarow[$i]['transactionID'],$cusID)) . '</td>
-                            <td class="transactionAmount">' .($datarow[$i]['amount']) . '</td>
+                            <td class="transactionDate">' . ($customer->getDate($datarow[$i]['transactionID'], $cusID)) . '</td>
+                            <td class="transactionTime">' . ($customer->getTime($datarow[$i]['transactionID'], $cusID)) . '</td>
+                            <td class="transactionAmount">' . ($datarow[$i]['amount']) . '</td>
                             <td class="transactionName">' . ($description) . '</td>
                             <td class="transactionType">' . ($datarow[$i]['type']) . '</td>
                             <td class="action">
@@ -264,10 +282,9 @@ if (isset($_GET['cateName'])) {
             }
         }
     }
-    
 
-    $arr = array(['amount'=>$data,'month'=>$data1,'datalist'=>$datalist]);
+
+    $arr = array(['amount' => $data, 'month' => $data1, 'datalist' => $datalist]);
     $dataJSON = json_encode($arr[0]);
     echo ($dataJSON);
 }
-
