@@ -8,6 +8,104 @@ $(document).ready(function () {
   });
 });
 
+//listener for edit payment button
+$(document).on("click", ".edit-payment-anchor", function () {
+  var paymentID = $(this).parent().parent().find(".paymentID").val();
+  var paymentDate = $(this).parent().parent().find(".paymentDate").text();
+  var paymentName = $(this).parent().parent().find(".paymentName").text();
+  var paymentType = $(this).parent().parent().find(".paymentType").text();
+  var paymentAmount = $(this).parent().parent().find(".paymentAmount").text();
+  var paymentRemainder = $(this)
+    .parent()
+    .parent()
+    .find(".paymentRemainder")
+    .val();
+
+  $("#edit-payment-remainder").val(paymentRemainder);
+  $("#edit-payment-transactionID").val(paymentID);
+  $("#edit-payment-date").val(paymentDate);
+  $("#edit-payment-amount").val(paymentAmount);
+  $("#edit-payment-name").val(paymentName);
+  $("#edit-payment-category").val(paymentType);
+});
+
+//listener for the delete payment button
+$(document).on("click", ".delete-payment-anchor", function () {
+  var paymentID = $(this).parent().parent().find(".paymentID").val();
+  $("#delete-payment-liabilityID").val(paymentID);
+});
+
+//listener for edit payment button
+$(document).on("click", ".edit-liability-anchor", function () {
+  var liabilityID = $(this).parent().parent().find(".liabilityID").val();
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      var data = JSON.parse(this.responseText);
+      var liabilityStartDate = data["startDate"];
+      var liabilityTotalAmount = data["totalAmountToPay"];
+      var liabilityAmountPaid = data["paidAmount"]; //MIGHT BE NULL
+      var liabilityName = data["liabilityName"];
+      var liabilityType = data["liabilityType"];
+      var liabilityPaymentDate = data["paymentDate"];
+      var liabilityPaymentAmount = data["amountEachPayment"];
+      var liabilityPaymentFrequency = data["paymentFrequency"];
+      if (!data["paidAmount"]) {
+        //if null
+        var liabilityAmountPaid = 0; //MIGHT BE NULL
+      } else {
+        var liabilityAmountPaid = data["paidAmount"]; //MIGHT BE NULL
+      }
+      $("#edit-liabilityID").val(liabilityID);
+      $("#edit-liability-startDate").val(liabilityStartDate);
+      $("#edit-liability-totalAmount").val(liabilityTotalAmount);
+      $("#edit-liability-amountPaid").val(liabilityAmountPaid);
+      $("#edit-liability-name").val(liabilityName);
+      $("#edit-liability-category").val(liabilityType);
+
+      if (!liabilityPaymentDate && !liabilityPaymentAmount) {
+        //if null, meaning not a scheduled
+        $("#edit-liability-scheduled").val("no");
+        $("#edit-liability-scheduled")
+          .parent()
+          .parent()
+          .find(".scheduled-div")
+          .css("display", "none");
+        $("#edit-liability-paymentDate").prop("disabled", true);
+        $("#edit-liability-paymentAmount").prop("disabled", true);
+        $("#edit-liability-paymentFrequency").prop("disabled", true);
+      } else {
+        $("#edit-liability-scheduled").val("yes");
+        $("#edit-liability-scheduled")
+          .parent()
+          .parent()
+          .find(".scheduled-div")
+          .css("display", "flex");
+        $("#edit-liability-paymentDate").prop("disabled", false);
+        $("#edit-liability-paymentAmount").prop("disabled", false);
+        $("#edit-liability-paymentFrequency").prop("disabled", false);
+        $("#edit-liability-paymentDate").val(liabilityPaymentDate);
+        $("#edit-liability-paymentAmount").val(liabilityPaymentAmount);
+        switch (liabilityPaymentFrequency) {
+          case "M":
+            liabilityPaymentFrequency = "monthly";
+            break;
+          case "Y":
+            liabilityPaymentFrequency = "yearly";
+            break;
+
+          default:
+            liabilityPaymentFrequency = "";
+            break;
+        }
+        $("#edit-liability-paymentFrequency").val(liabilityPaymentFrequency);
+      }
+    }
+  };
+  xmlhttp.open("GET", "form_process.php?editLiabilityID=" + liabilityID, true);
+  xmlhttp.send();
+});
+
 // var investmentName = $("#typesOfInvestments").val();
 // var investmentNameAmount = $("#amountsOfInvestments").val();
 // var typeJSON = JSON.parse(investmentName);
