@@ -6,6 +6,11 @@ $(document).ready(function () {
     progress_width = $(this).attr("aria-valuenow");
     $(this).css("width", progress_width + "%");
   });
+
+  $(window).resize(function () {
+    console.log("heloooo");
+    $("body").niceScroll().resize();
+  });
 });
 
 //listener for edit payment button
@@ -35,9 +40,27 @@ $(document).on("click", ".delete-payment-anchor", function () {
   $("#delete-payment-liabilityID").val(paymentID);
 });
 
-//listener for edit payment button
+//listener for the edit liability scheduled select
+$(document).on("change", ".liability-scheduled-select", function () {
+  me = $(this);
+  value = me.val();
+  toggleEditScheduledForm(value, me);
+});
+
+//listener for the delete liability button
+$(document).on("click", ".delete-liability-anchor", function () {
+  var liabilityID = $(this).parent().parent().find(".liabilityID").val();
+  $("#delete-liability-liabilityID").val(liabilityID);
+});
+
+//listener for edit liability button
 $(document).on("click", ".edit-liability-anchor", function () {
   var liabilityID = $(this).parent().parent().find(".liabilityID").val();
+  fillEditLiability(liabilityID);
+});
+
+//to fill in the edit liability form based on id
+function fillEditLiability(liabilityID) {
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
@@ -65,25 +88,12 @@ $(document).on("click", ".edit-liability-anchor", function () {
 
       if (!liabilityPaymentDate && !liabilityPaymentAmount) {
         //if null, meaning not a scheduled
-        $("#edit-liability-scheduled").val("no");
-        $("#edit-liability-scheduled")
-          .parent()
-          .parent()
-          .find(".scheduled-div")
-          .css("display", "none");
-        $("#edit-liability-paymentDate").prop("disabled", true);
-        $("#edit-liability-paymentAmount").prop("disabled", true);
-        $("#edit-liability-paymentFrequency").prop("disabled", true);
+        toggleEditScheduledForm("no", $("#edit-liability-scheduled"));
+        $("#edit-liability-paymentDate").val("");
+        $("#edit-liability-paymentAmount").val("");
+        $("#edit-liability-paymentFrequency").val("");
       } else {
-        $("#edit-liability-scheduled").val("yes");
-        $("#edit-liability-scheduled")
-          .parent()
-          .parent()
-          .find(".scheduled-div")
-          .css("display", "flex");
-        $("#edit-liability-paymentDate").prop("disabled", false);
-        $("#edit-liability-paymentAmount").prop("disabled", false);
-        $("#edit-liability-paymentFrequency").prop("disabled", false);
+        toggleEditScheduledForm("yes", $("#edit-liability-scheduled"));
         $("#edit-liability-paymentDate").val(liabilityPaymentDate);
         $("#edit-liability-paymentAmount").val(liabilityPaymentAmount);
         switch (liabilityPaymentFrequency) {
@@ -104,8 +114,50 @@ $(document).on("click", ".edit-liability-anchor", function () {
   };
   xmlhttp.open("GET", "form_process.php?editLiabilityID=" + liabilityID, true);
   xmlhttp.send();
-});
+}
 
+function toggleEditScheduledForm(status, ele) {
+  if (status == "yes") {
+    ele.val("yes");
+    ele.parent().parent().find(".scheduled-div").css("display", "flex");
+    $("#edit-liability-paymentDate").prop("disabled", false);
+    $("#edit-liability-paymentAmount").prop("disabled", false);
+    $("#edit-liability-paymentFrequency").prop("disabled", false);
+  } else if (status == "no") {
+    ele.val("no");
+    ele.parent().parent().find(".scheduled-div").css("display", "none");
+    $("#edit-liability-paymentDate").prop("disabled", true);
+    $("#edit-liability-paymentAmount").prop("disabled", true);
+    $("#edit-liability-paymentFrequency").prop("disabled", true);
+  }
+}
+
+//reset for edit payment form
+function resetEditPayment() {
+  var transactionID = $("#edit-payment-transactionID").val();
+  var tableRow = $('.paymentID[value="' + transactionID + '"]');
+
+  var paymentID = tableRow.parent().find(".paymentID").val();
+  var paymentDate = tableRow.parent().find(".paymentDate").text();
+  var paymentName = tableRow.parent().find(".paymentName").text();
+  var paymentType = tableRow.parent().find(".paymentType").text();
+  var paymentAmount = tableRow.parent().find(".paymentAmount").text();
+  var paymentRemainder = tableRow.parent().find(".paymentRemainder").val();
+
+  console.log(paymentType);
+  $("#edit-payment-remainder").val(paymentRemainder);
+  $("#edit-payment-transactionID").val(paymentID);
+  $("#edit-payment-date").val(paymentDate);
+  $("#edit-payment-amount").val(paymentAmount);
+  $("#edit-payment-name").val(paymentName);
+  $("#edit-payment-category").val(paymentType);
+}
+
+//reset for edit payment form
+function resetEditLiability() {
+  liabilityID = $("#edit-liabilityID").val();
+  fillEditLiability(liabilityID);
+}
 // var investmentName = $("#typesOfInvestments").val();
 // var investmentNameAmount = $("#amountsOfInvestments").val();
 // var typeJSON = JSON.parse(investmentName);

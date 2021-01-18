@@ -12,6 +12,46 @@
     <?php
     $activePage = "liabilities";
     include(".navbar.php");
+
+    //update the debt payment transaction
+    if (isset($_POST['edit-payment-submit'])) {
+        $params['tableName'] = 'Transaction';
+        $params['idName'] = 'transactionID';
+        $params['id'] = $_POST['edit-payment-transactionID'];
+        $params['data'] = array(
+            'date' => $_POST['edit-payment-date'],
+            'amount' => $_POST['edit-payment-amount']
+        );
+        $result = $customer->customerUpdate($params);
+        if ($result['status'] == 'ok') {
+            $customer->showAlert($result['statusMsg']);
+        } else {
+            $customer->showAlert($result['statusMsg']);
+        }
+        $customer->goTo('liability.php');
+    }
+
+    //new debt payment
+    if (isset($_POST['new-payment-submit'])) {
+        $params['tableName'] = 'Transaction';
+        $categoryName = $_POST['new-payment-category'];
+        $categoryType = 'liability';
+
+        $params['data'] = array(
+            'cusID' => $customer->getId(),
+            'categoryID' => $customer->getCategoryIDByNameType($categoryName, $categoryType),
+            'date' => $_POST['new-payment-date'],
+            'amount' => $_POST['new-payment-amount'],
+            'description' => $_POST['new-payment-name']
+        );
+        $result = $customer->customerInsert($params);
+        if ($result['status'] == 'ok') {
+            $customer->showAlert($result['statusMsg']);
+        } else {
+            $customer->showAlert($result['statusMsg']);
+        }
+        $customer->goTo('liability.php');
+    }
     ?>
 
     <div class="container-fluid background">
@@ -245,7 +285,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Category:</label>
-                                        <select class="col-6" name="new-payment-category" id="new-payment-category" onchange="//showsearch('')" disabled>
+                                        <select class="col-6" name="new-payment-category" id="new-payment-category" onchange="//showsearch('')" required>
                                             <?php
                                             $data = $customer->getData('Liability', "DISTINCT liabilityType");
                                             foreach ($data as $row => $value) {
@@ -338,7 +378,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="reset" class="btn btn-success" onclick="resetEdit()">Reset</button>
+                                <button type="button" class="btn btn-success" onclick="resetEditPayment()">Reset</button>
                                 <button type="submit" name="edit-payment-submit" class="btn btn-primary">Save changes</button>
 
                             </div>
@@ -392,7 +432,7 @@
 
             <div class="container-fluid row filter2">
                 <div class="col-6 row show">
-                    <a class="btn" href="#" role="button">View All</a>
+                    <!-- <a class="btn" href="#" role="button">View All</a> -->
                     <button class="btn" data-toggle="modal" data-target="#new-payment">New</button>
                 </div>
                 <div class="col-6 search">
@@ -479,7 +519,7 @@
 
             <div class="container-fluid row filter2">
                 <div class="col-6 row show">
-                    <a class="btn" href="#" role="button">View All</a>
+                    <!-- <a class="btn" href="#" role="button">View All</a> -->
                     <button class="btn" data-toggle="modal" data-target="#new-liability">New</button>
                 </div>
 
@@ -551,7 +591,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Scheduled Payment:</label>
-                                        <select class="col-6" name="new-liability-scheduled" id="new-liability-scheduled" required>
+                                        <select class="col-6 liability-scheduled-select" name="new-liability-scheduled" id="new-liability-scheduled" required>
                                             <option value="yes" selected>yes</option>
                                             <option value="no">no</option>
                                         </select>
@@ -649,7 +689,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Scheduled Payment:</label>
-                                        <select class="col-6" name="edit-liability-scheduled" id="edit-liability-scheduled" required>
+                                        <select class="col-6 liability-scheduled-select" name="edit-liability-scheduled" id="edit-liability-scheduled" required>
                                             <option value="yes" selected>yes</option>
                                             <option value="no">no</option>
                                         </select>
@@ -678,7 +718,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="reset" class="btn btn-success" onclick="resetEdit()">Reset</button>
+                                <button type="button" class="btn btn-success" onclick="resetEditLiability()">Reset</button>
                                 <button type="submit" name="edit-liability-submit" class="btn btn-primary">Save changes</button>
                             </div>
                         </form>
@@ -694,7 +734,7 @@
                         </div>
                         <div class="modal-footer">
                             <form action="" method="POST">
-                                <input type="hidden" id="delete_investmentID" name="delete_investmentID"></input>
+                                <input type="hidden" id="delete-liability-liabilityID" name="delete-liability-liabilityID"></input>
                                 <button type="submit" class="btn btn-primary" name="delete-liability-submit">Delete</button>
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                             </form>
@@ -761,7 +801,33 @@
         </div>
     </div>
 
-    <button type="button" class="btn btn-circle btn-xl" data-toggle="modal" data-target="#new-row">
+    <div class="modal fade new-modal" id="new-Selection" tabindex="-1" role="dialog" aria-labelledby="new-Selection-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="new-Selection-title">Add New</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="form-group row justify-content-center" id="new-selection-modal">
+                            <button type="button" class="col-4 btn" data-dismiss="modal" data-toggle="modal" data-target="#new-payment">New Payment</button>
+                            <button type="button" class="col-4 offset-2 btn" data-dismiss="modal" data-toggle="modal" data-target="#new-liability">New Debt</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-circle btn-xl" data-toggle="modal" data-target="#new-Selection">
         <i class="fas fa-plus"></i>
     </button>
 </body>
