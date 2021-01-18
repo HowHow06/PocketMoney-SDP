@@ -22,7 +22,20 @@
     box-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
 }
 
+#new-selection-modal{
+    > button {
+        font-size: 16px;
+        background-color: #fc9a55;
+        color: white;
+    }
+    > button:hover {
+        background-color: rgba($color: #FF6C00, $alpha: 0.6);
+    }
+}
+
 .body {
+
+    
 
     div.show{
         .btn{

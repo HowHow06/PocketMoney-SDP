@@ -1273,4 +1273,29 @@ class Customer
         }
         return NULL;
     }
+
+    /** 
+     * get category id by category name and type
+     * @param String $categoryName
+     * 
+     * @param String $categoryType
+     * 
+     * 
+     * @uses $dateString = $customer->getDateByFrequency($frequency,$date);
+     * 
+     * @return String|NULL 
+     * the category ID
+     * 
+     */
+    function getCategoryIDByNameType($categoryName, $categoryType)
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $db->where('categoryName', $categoryName);
+            $db->where('categoryType', $categoryType);
+            $result = $db->getOne("Category");
+            return $result['categoryID'];
+        }
+        return NULL;
+    }
 }
