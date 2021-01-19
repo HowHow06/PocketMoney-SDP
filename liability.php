@@ -2,7 +2,11 @@
 <html lang="en">
 
 <head>
-    <?php include(".head.php"); ?>
+    <?php
+
+    use function PHPUnit\Framework\isEmpty;
+
+    include(".head.php"); ?>
     <link rel="stylesheet" href="./style/liability.css">
 
     <title>PocketMoney | Debts</title>
@@ -34,7 +38,7 @@
     //new debt payment
     if (isset($_POST['new-payment-submit'])) {
         $params['tableName'] = 'Transaction';
-        $categoryName = $_POST['new-payment-category'];
+        $categoryName = $_POST['new-payment-categoryHidden'];
         $categoryType = 'liability';
 
         $params['data'] = array(
@@ -52,12 +56,176 @@
         }
         $customer->goTo('liability.php');
     }
+
+    //delete payment
+    if (isset($_POST['delete-payment-submit'])) {
+        $params['tableName'] = 'Transaction';
+        $params['idName'] = 'transactionID';
+        $params['id'] = $_POST['delete-payment-transactionID'];
+        $result = $customer->customerDelete($params);
+        if ($result['status'] == 'ok') {
+            $customer->showAlert($result['statusMsg']);
+        } else {
+            $customer->showAlert($result['statusMsg']);
+        }
+        $customer->goTo('liability.php');
+    }
+
+    //update liability
+    if (isset($_POST['edit-liability-submit'])) {
+        $newCate = intval($_POST['edit-liability-newCate']);
+        //create new category
+        if ($newCate == 1) {
+            $params['tableName'] = 'category';
+            $params['data'] = array(
+                'categoryName' => $_POST['edit-liability-category'],
+                'categoryType' => 'liability',
+                'preDefine' => 0,
+                'cusID' => 1
+            );
+            $result = $customer->customerInsert($params);
+        }
+
+        //update the transaction description
+        $liabilityName = $_POST['edit-liability-name'];
+        $liabilityOriName = $_POST['edit-liability-oriName'];
+        $cusID = $customer->getId();
+        $query = "UPDATE transaction tr
+        SET tr.description= '" . $liabilityName . "'
+        WHERE tr.description = '" . $liabilityOriName . "' 
+        AND tr.cusID ='" . $cusID . "'
+        AND (SELECT categoryType FROM category ct WHERE tr.categoryID = ct.categoryID) = 'liability'";
+
+        $customer->getDataByQuery($query);
+
+        $query = "UPDATE transaction tr
+        SET tr.categoryID= (SELECT categoryID from category ct WHERE ct.categoryName='" . $_POST['edit-liability-category'] . "' AND ct.categoryType = 'liability')
+        WHERE tr.description = '" . $liabilityName . "' 
+        AND tr.cusID ='" . $cusID . "'
+        AND (SELECT categoryType FROM category ct WHERE tr.categoryID = ct.categoryID) = 'liability'";
+
+        $customer->getDataByQuery($query);
+
+        $params['tableName'] = 'Liability';
+        $params['idName'] = 'liabilityID';
+        $params['id'] = $_POST['edit-liabilityID'];
+        $scheduled = $_POST['edit-liability-scheduled'];
+        $paymentDate = NULL;
+        $paymentAmount = NULL;
+        $paymentFrequency = NULL;
+        $paymentReminder = 1;
+        if ($scheduled == 'yes') {
+
+            //since these controls might be disabled, so need to check before assign
+            $paymentDate = $_POST['edit-liability-paymentDate'];
+            $paymentAmount = $_POST['edit-liability-paymentAmount'];
+            if (isset($_POST['edit-liability-paymentFrequency'])) {
+                $paymentFrequency = $_POST['edit-liability-paymentFrequency'];
+            }
+            if (isset($_POST['edit-liability-paymentReminder'])) {
+                $paymentReminder = $_POST['edit-liability-paymentReminder'];
+            }
+        }
+
+        $params['data'] = array(
+            'liabilityName' => $_POST['edit-liability-name'],
+            'liabilityType' => $_POST['edit-liability-category'],
+            'startDate' => $_POST['edit-liability-startDate'],
+            'totalAmountToPay' => $_POST['edit-liability-totalAmount'],
+            'initialPaidAmount' => $_POST['edit-liability-amountPaid'],
+            'paymentDate' => $paymentDate,
+            'paymentFrequency' => $paymentFrequency,
+            'amountEachPayment' => $paymentAmount,
+            'paymentReminder' => $paymentReminder
+        );
+        $result = $customer->customerUpdate($params);
+        if ($result['status'] == 'ok') {
+            $customer->showAlert($result['statusMsg']);
+        } else {
+            $customer->showAlert($result['statusMsg']);
+        }
+        $customer->goTo('liability.php');
+    }
+    //new liability
+    if (isset($_POST['new-liability-submit'])) {
+        $newCate = intval($_POST['new-liability-newCate']);
+        if ($newCate == 1) {
+            $params['tableName'] = 'category';
+            $params['data'] = array(
+                'categoryName' => $_POST['new-liability-category'],
+                'categoryType' => 'liability',
+                'preDefine' => 0,
+                'cusID' => 1
+            );
+            $result = $customer->customerInsert($params);
+        }
+
+        $params['tableName'] = 'Liability';
+        $scheduled = $_POST['new-liability-scheduled'];
+        $paymentDate = NULL;
+        $paymentAmount = NULL;
+        $paymentFrequency = NULL;
+        $paymentReminder = 1;
+
+        if ($scheduled == 'yes') {
+            //since these controls might be disabled, so need to check before assign
+            $paymentDate = $_POST['new-liability-paymentDate'];
+            $paymentAmount = $_POST['new-liability-paymentAmount'];
+            if (!empty($_POST['new-liability-paymentFrequency'])) {
+                $paymentFrequency = $_POST['new-liability-paymentFrequency'];
+            }
+            if (!empty($_POST['new-liability-paymentReminder'])) {
+                $paymentReminder = $_POST['new-liability-paymentReminder'];
+            }
+        }
+
+        $params['data'] = array(
+            'cusID' => $customer->getId(),
+            'liabilityName' => $_POST['new-liability-name'],
+            'liabilityType' => $_POST['new-liability-category'],
+            'startDate' => $_POST['new-liability-startDate'],
+            'totalAmountToPay' => $_POST['new-liability-totalAmount'],
+            'initialPaidAmount' => $_POST['new-liability-amountPaid'],
+            'paymentDate' => $paymentDate,
+            'paymentFrequency' => $paymentFrequency,
+            'amountEachPayment' => $paymentAmount,
+            'paymentReminder' => $paymentReminder
+        );
+        $result = $customer->customerInsert($params);
+        if ($result['status'] == 'ok') {
+            $customer->showAlert($result['statusMsg']);
+        } else {
+            $customer->showAlert($result['statusMsg']);
+        }
+        $customer->goTo('liability.php');
+    }
+
+    //delete liability
+    if (isset($_POST['delete-liability-submit'])) {
+        $query = "DELETE FROM transaction tr 
+        WHERE tr.description = (SELECT l.liabilityName FROM liability l WHERE l.liabilityID = '" . $_POST['delete-liability-liabilityID'] . "') 
+        AND tr.cusID = '" . $customer->getId() . "' 
+        AND (SELECT categoryType FROM category ct WHERE tr.categoryID = ct.categoryID) = 'liability';";
+        $customer->getDataByQuery($query);
+
+        $params['tableName'] = 'Liability';
+        $params['idName'] = 'liabilityID';
+        $params['id'] = $_POST['delete-liability-liabilityID'];
+        $result = $customer->customerDelete($params);
+        if ($result['status'] == 'ok') {
+            $customer->showAlert($result['statusMsg']);
+        } else {
+            $customer->showAlert($result['statusMsg']);
+        }
+        $customer->goTo('liability.php');
+    }
     ?>
 
     <div class="container-fluid background">
         <div class="container-fluid body">
             <nav class="navbar navbar-expand-lg">
                 <a href="#" class="navbar-brand">DEBTS</a>
+                <input type="hidden" id="cusID" value="<?php $customer->getID(); ?>">
             </nav>
             <h6 class="go-to">GO TO:</h6>
             <hr>
@@ -69,15 +237,15 @@
             <div class="row chart">
                 <!-- pie chart -->
                 <?php $query = "SELECT
-                                (l.totalAmountToPay - (l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)), 0)))
+                                (l.totalAmountToPay - (l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")))), 0)))
                                 as remainder, l.liabilityName,l.initialPaidAmount,
-                                 l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)), 0) as paid
+                                 l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")))), 0) as paid
                                 FROM liability l
                                 LEFT JOIN transaction tr
                                 ON l.liabilityName = tr.description
-                                AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID)
+                                AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")))
                                 WHERE
-                                l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)), 0) < l.totalAmountToPay
+                                l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")))), 0) < l.totalAmountToPay
                                 GROUP BY l.liabilityName"; ?>
                 <!-- pie chart -->
                 <input type="hidden" id="amountsOfInvestmentByName" name="amountsOfInvestmentByName" value='<?php echo ($customer->getJSONbyRawQuery($query, 'remainder', true)); ?>'>
@@ -91,17 +259,17 @@
                     <div class="col-12">
                         <h4>DEBTS OVERVIEW</h4>
                     </div>
-                    <?php $query = "SELECT (l.totalAmountToPay - (l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)), 0)))
+                    <?php $query = "SELECT (l.totalAmountToPay - (l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")))), 0)))
                                     as remainder,
                                     l.liabilityName, 
                                     l.totalAmountToPay as total,
-                                    l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)), 0) paidAmount, l.liabilityType 
+                                    l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")))), 0) paidAmount, l.liabilityType 
                                     FROM liability l
                                     LEFT JOIN transaction tr
                                     ON l.liabilityName = tr.description
-                                    AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID)
+                                    AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")) )
                                     WHERE 
-                                    l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)), 0) < l.totalAmountToPay
+                                    l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")))), 0) < l.totalAmountToPay
                                     GROUP BY l.liabilityName";
                     $result = $customer->getDataByQuery($query);
                     foreach ($result as $data) {
@@ -167,14 +335,14 @@
 
                                 <?php
                                 $query = "SELECT 
-                                (l.totalAmountToPay - (l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)), 0)))
+                                (l.totalAmountToPay - (l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")))), 0)))
                                 as remainder, 
                                 l.liabilityName, l.liabilityType, l.totalAmountToPay, 
                                 DATE((SELECT MAX(tran.date) FROM transaction tran WHERE tran.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tran.categoryID))) as endDate
                                 FROM liability l, transaction tr
                                 WHERE l.liabilityName = tr.description
-                                AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID)
-                                AND l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)), 0) >= l.totalAmountToPay 
+                                AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")) )
+                                AND l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")))), 0) >= l.totalAmountToPay 
                                 GROUP BY l.liabilityName
                                 ";
                                 $datarow = $customer->getDataByQuery($query);
@@ -182,7 +350,6 @@
                                     for ($i = 0; $i < sizeof($datarow); $i++) {
                                 ?>
                                         <tr>
-
                                             <th scope="row"><?php echo (($i + 1)); ?></th>
                                             <td class="investName"><?php echo ($datarow[$i]['liabilityName']); ?></td>
                                             <td class="investType"><?php echo ($datarow[$i]['liabilityType']); ?></td>
@@ -220,10 +387,12 @@
                                 FROM liability l 
                                 LEFT JOIN transaction tr
                                 ON l.liabilityName = tr.description
-                                AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID)
+                                AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")) )
                                 WHERE 
-                                l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)), 0) < l.totalAmountToPay
+                                l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")))), 0) < l.totalAmountToPay
                                 AND l.paymentDate IS NOT NULL
+                                AND paymentReminder = 1
+                                GROUP BY l.liabilityName
                                 ";
                                 $datarow = $customer->getDataByQuery($query);
                                 if (!empty($datarow)) {
@@ -260,19 +429,21 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form action="" method="POST" id="new-payment-form" onsubmit="return validateform(this);">
+                        <form action="" method="POST" id="new-payment-form" onsubmit="return validatePaymentform(this);">
                             <div class="modal-body">
                                 <div class="container">
                                     <input type="hidden" id="new-payment-liabilityID" name="new-payment-liabilityID"></input>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Name:</label>
                                         <select class="col-6" name="new-payment-name" id="new-payment-name" onchange="//showsearch('')" required>
+                                            <option value="" selected>Please select a debt</option>
                                             <?php
                                             $query = "SELECT * FROM liability l LEFT JOIN transaction tr
                                             ON l.liabilityName = tr.description
-                                            AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID)
-                                            WHERE (l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)), 0)) < l.totalAmountToPay 
-                                            ORDER BY tr.date DESC";
+                                            AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")) )
+                                            WHERE (l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")))), 0)) < l.totalAmountToPay 
+                                            GROUP BY l.liabilityName
+                                            ORDER BY tr.date DESC ";
                                             $data = $customer->getDataByQuery($query);
                                             foreach ($data as $row => $value) {
                                             ?>
@@ -285,17 +456,24 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Category:</label>
-                                        <select class="col-6" name="new-payment-category" id="new-payment-category" onchange="//showsearch('')" required>
+                                        <input type="hidden" name="new-payment-categoryHidden" id="new-payment-categoryHidden" value='' />
+                                        <select class="col-6" name="new-payment-category" id="new-payment-category" onchange="//showsearch('')" disabled>
+                                            <option value="" selected>Please select a debt</option>
                                             <?php
-                                            $data = $customer->getData('Liability', "DISTINCT liabilityType");
+                                            $query = "SELECT * FROM category ct WHERE ct.categoryType = 'liability' AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . "))";
+                                            $data = $customer->getDataByQuery($query);
                                             foreach ($data as $row => $value) {
                                             ?>
-                                                <option value="<?php echo ($value['liabilityType']); ?>"><?php echo ($value['liabilityType']); ?></option>
+                                                <option value="<?php echo ($value['categoryName']); ?>"><?php echo ($value['categoryName']); ?></option>
                                             <?php
                                             }
                                             ?>
                                         </select>
                                         <label class="error" for="new-payment-category">Please enter a valid category</label>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-5" for="">Payable Amount:</label>
+                                        <input type="text" class="col-6 form-payableAmount" id="new-payment-remainder" disabled></input>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="new-payment-date">Date:</label>
@@ -304,7 +482,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Amount Paid:</label>
-                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="new-payment-amount" name="new-payment-amount" required />
+                                        <input class="col-6 form-amount" type="number" step='0.01' id="new-payment-amount" name="new-payment-amount" required />
                                         <label class="error" for="new-payment-amount">Please enter a valid amount</label>
                                     </div>
                                 </div>
@@ -327,13 +505,13 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form action="" method="POST" id="edit-payment-form" onsubmit="//return validateform(this);">
+                        <form action="" method="POST" id="edit-payment-form" onsubmit="return validatePaymentform(this);">
                             <div class="modal-body">
                                 <div class="container">
                                     <input type="hidden" id="edit-payment-transactionID" name="edit-payment-transactionID"></input>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Payable Amount:</label>
-                                        <input type="text" class="col-6" id="edit-payment-remainder" disabled></input>
+                                        <input type="text" class="col-6 form-payableAmount" id="edit-payment-remainder" disabled></input>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Name:</label>
@@ -353,10 +531,11 @@
                                         <label class="col-5" for="">Category:</label>
                                         <select class="col-6" name="edit-payment-category" id="edit-payment-category" onchange="//showsearch('')" disabled required>
                                             <?php
-                                            $data = $customer->getData('Liability', "DISTINCT liabilityType");
+                                            $query = "SELECT * FROM category ct WHERE ct.categoryType = 'liability' AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . "))";
+                                            $data = $customer->getDataByQuery($query);
                                             foreach ($data as $row => $value) {
                                             ?>
-                                                <option value="<?php echo ($value['liabilityType']); ?>"><?php echo ($value['liabilityType']); ?></option>
+                                                <option value="<?php echo ($value['categoryName']); ?>"><?php echo ($value['categoryName']); ?></option>
                                             <?php
                                             }
                                             ?>
@@ -370,7 +549,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Amount Paid:</label>
-                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="edit-payment-amount" name="edit-payment-amount" required />
+                                        <input class="col-6 form-amount" type="number" step='0.01' id="edit-payment-amount" name="edit-payment-amount" required />
                                         <label class="error" for="edit-payment-amount">Please enter a valid amount</label>
                                     </div>
 
@@ -395,7 +574,7 @@
                         </div>
                         <div class="modal-footer">
                             <form action="" method="POST">
-                                <input type="hidden" id="delete-payment-liabilityID" name="delete-payment-liabilityID"></input>
+                                <input type="hidden" id="delete-payment-transactionID" name="delete-payment-transactionID"></input>
                                 <button type="submit" class="btn btn-primary" name="delete-payment-submit">Delete</button>
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                             </form>
@@ -408,7 +587,7 @@
             <div class="container-fluid row filter">
                 <div>
                     <h5>CATEGORY:</h5>
-                    <select name="filter-transaction-category" id="filter-transaction-category" class="custom-select" onchange="showsearch('')">
+                    <select class="filter-payment custom-select" name="filter-transaction-category" id="filter-transaction-category">
                         <option value="ALL" selected>ALL</option>
                         <?php
                         $data = $customer->getData('Liability', "DISTINCT liabilityType");
@@ -423,7 +602,7 @@
 
                 <div>
                     <h5>SORY BY:</h5>
-                    <select name="filter-transaction-time" id="filter-transaction-time" class="custom-select" onchange="showsearch('')">
+                    <select class="filter-payment custom-select" name="filter-transaction-time" id="filter-transaction-time">
                         <option value="payment-sort-date">DATE</option>
                         <option value="payment-sort-name">NAME</option>
                     </select>
@@ -432,11 +611,11 @@
 
             <div class="container-fluid row filter2">
                 <div class="col-6 row show">
-                    <!-- <a class="btn" href="#" role="button">View All</a> -->
+                    <a class="btn" href="liability_viewPayments.php" role="button">View All</a>
                     <button class="btn" data-toggle="modal" data-target="#new-payment">New</button>
                 </div>
                 <div class="col-6 search">
-                    <input type="text" name="" id="search-transaction" placeholder="  Apple eg.">
+                    <input class="filter-payment" type="text" name="" id="search-payment" placeholder="  Apple eg.">
                     <h6>Search:</h6>
                 </div>
             </div>
@@ -456,17 +635,19 @@
                 <tbody id="payment-table-body">
 
                     <?php
-                    $query = "SELECT *, DATE(date) as paymentdate, (l.totalAmountToPay - (l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)), 0))) + tr.amount
+                    $query = "SELECT *, DATE(date) as paymentdate, (l.totalAmountToPay - (l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")))), 0))) + tr.amount
                     as remainder FROM transaction tr, liability l
                     WHERE l.liabilityName = tr.description
-                    AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID)
+                    AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")) )
                     ORDER BY tr.date DESC";
                     $datarow = $customer->getDataByQuery($query);
 
                     if (!empty($datarow)) {
                         for ($i = 0; $i < sizeof($datarow); $i++) {
                     ?>
-                            <tr>
+                            <tr <?php if ($i >= 10) {
+                                    echo ('style="display:none;"');
+                                } ?>>
                                 <input type="hidden" class="paymentID" value='<?php echo ($datarow[$i]['transactionID']); ?>'></input>
                                 <input type="hidden" class="paymentRemainder" value='<?php echo ($datarow[$i]['remainder']); ?>'></input>
                                 <th scope="row"><?php echo (($i + 1)); ?></th>
@@ -495,7 +676,7 @@
             <div class="container-fluid row filter">
                 <div>
                     <h5>CATEGORY:</h5>
-                    <select name="filter-transaction-category" id="filter-transaction-category" class="custom-select" onchange="showsearch('')">
+                    <select class="filter-liability custom-select" name="filter-liability-category" id="filter-liability-category" class="custom-select">
                         <option value="ALL" selected>ALL</option>
                         <?php
                         $data = $customer->getData('Liability', "DISTINCT liabilityType");
@@ -510,21 +691,21 @@
 
                 <div>
                     <h5>SORY BY:</h5>
-                    <select name="filter-transaction-time" id="filter-transaction-time" class="custom-select" onchange="showsearch('')">
-                        <option value="payment-sort-date">DATE</option>
-                        <option value="payment-sort-name">NAME</option>
+                    <select class="filter-liability custom-select" name="filter-liability-time" id="filter-liability-time">
+                        <option value="liability-sort-date">DATE</option>
+                        <option value="liability-sort-name">NAME</option>
                     </select>
                 </div>
             </div>
 
             <div class="container-fluid row filter2">
                 <div class="col-6 row show">
-                    <!-- <a class="btn" href="#" role="button">View All</a> -->
+                    <a class="btn" href="liability_viewDebts.php" role="button">View All</a>
                     <button class="btn" data-toggle="modal" data-target="#new-liability">New</button>
                 </div>
 
                 <div class="col-6 search">
-                    <input type="text" name="" id="search-transaction" placeholder="  Apple eg.">
+                    <input class="filter-liability" type="text" name="" id="search-liability" placeholder="  Apple eg.">
                     <h6>Search:</h6>
                 </div>
             </div>
@@ -539,35 +720,27 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form action="" method="POST" id="new-liability-form" onsubmit="//return validateform(this);">
+                        <form action="" method="POST" id="new-liability-form" onsubmit="return validateLiabilityform(this);">
                             <div class="modal-body">
                                 <div class="container">
                                     <input type="hidden" id="new-liability" name="new-liability"></input>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Name:</label>
-                                        <input id="new-liability-name" class="col-6 form-investmentName" list="new-liability-nameList" name="new-liability-name" required />
-                                        <datalist id="new-liability-nameList">
-                                            <?php
-                                            $data = $customer->getData('liability', "DISTINCT liabilityName");
-                                            foreach ($data as $row => $value) {
-                                            ?>
-                                                <option value="<?php echo ($value['liabilityName']); ?>"><?php echo ($value['liabilityName']); ?></option>
-                                            <?php
-                                            }
-                                            ?>
-                                        </datalist>
+                                        <input type="text" id="new-liability-name" class="col-6 form-liabilityName" name="new-liability-name" required />
                                         <label class="error" for="new-liability-name">Please enter a valid name</label>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-5" for="">Category:</label>
-                                        <input id="new-liability-category" class="col-6 form-investmentType" list="new-liability-categoryList" name="new-liability-category" required />
+                                        <input type="hidden" id="new-liability-newCate" class="form-liability-newCate" name="new-liability-newCate" value="0" />
+                                        <input id="new-liability-category" class="col-6 form-liabilityType" list="new-liability-categoryList" name="new-liability-category" required />
                                         <datalist id="new-liability-categoryList">
                                             <?php
-                                            $data = $customer->getData('liability', "DISTINCT liabilityType");
+                                            $query = "SELECT * FROM category ct WHERE ct.categoryType = 'liability' AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . "))";
+                                            $data = $customer->getDataByQuery($query);
                                             foreach ($data as $row => $value) {
                                             ?>
-                                                <option id="type<?php echo ($value['liabilityType']); ?>" value="<?php echo ($value['liabilityType']); ?>"><?php echo ($value['liabilityType']); ?></option>
+                                                <option id="type<?php echo ($value['categoryName']); ?>" value="<?php echo ($value['categoryName']); ?>"><?php echo ($value['categoryName']); ?></option>
                                             <?php
                                             }
                                             ?>
@@ -581,12 +754,12 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Total Amount To Pay:</label>
-                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="new-liability-totalAmount" name="new-liability-totalAmount" required />
+                                        <input class="col-6 form-amountTotal" type="number" step='0.01' id="new-liability-totalAmount" name="new-liability-totalAmount" required />
                                         <label class="error" for="new-liability-totalAmount">Please enter a valid amount</label>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Amount Paid:</label>
-                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="new-liability-amountPaid" name="new-liability-amountPaid" required />
+                                        <input class="col-6 form-amountPaid" type="number" step='0.01' id="new-liability-amountPaid" name="new-liability-amountPaid" required />
                                         <label class="error" for="new-liability-amountPaid">Please enter a valid amount</label>
                                     </div>
                                     <div class="form-group row">
@@ -604,17 +777,25 @@
                                     </div>
                                     <div class="form-group row scheduled-div">
                                         <label class="col-5" for="">Payment Amount:</label>
-                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="new-liability-paymentAmount" name="new-liability-paymentAmount" required />
+                                        <input class="col-6 form-amountPayment" type="number" step='0.01' id="new-liability-paymentAmount" name="new-liability-paymentAmount" required />
                                         <label class="error" for="new-liability-paymentAmount">Please enter a valid amount</label>
                                     </div>
                                     <div class="form-group row scheduled-div">
                                         <label class="col-5" for="">Repeat:</label>
-                                        <select class="col-6" name="new-liability-paymentFrequency" id="new-liability-paymentFrequency" required>
+                                        <select class="col-6" name="new-liability-paymentFrequency" id="new-liability-paymentFrequency">
                                             <option value="" selected>no</option>
-                                            <option value="monthly">monthly</option>
-                                            <option value="yearly">yearly</option>
+                                            <option value="M">monthly</option>
+                                            <option value="Y">yearly</option>
                                         </select>
                                         <label class="error" for="new-liability-paymentFrequency">Please select one</label>
+                                    </div>
+                                    <div class="form-group row scheduled-div">
+                                        <label class="col-5" for="">Reminder:</label>
+                                        <select class="col-6" name="new-liability-paymentReminder" id="new-liability-paymentReminder" required>
+                                            <option value="1" selected>yes</option>
+                                            <option value="0">no</option>
+                                        </select>
+                                        <label class="error" for="new-liability-paymentReminder">Please select one</label>
                                     </div>
 
                                 </div>
@@ -637,35 +818,34 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form action="" method="POST" id="edit-liability-form" onsubmit="return validateform(this);">
+                        <form action="" method="POST" id="edit-liability-form" onsubmit="return validateLiabilityform(this);">
                             <div class="modal-body">
                                 <div class="container">
-                                    <input type="hidden" id="edit-liabilityID" name="edit-liability"></input>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="">Name:</label>
-                                        <input id="edit-liability-name" class="col-6 form-investmentName" list="edit-liability-nameList" name="edit-liability-name" required />
-                                        <datalist id="edit-liability-nameList">
-                                            <?php
-                                            $data = $customer->getData('liability', "DISTINCT liabilityName");
-                                            foreach ($data as $row => $value) {
-                                            ?>
-                                                <option value="<?php echo ($value['liabilityName']); ?>"><?php echo ($value['liabilityName']); ?></option>
-                                            <?php
-                                            }
-                                            ?>
-                                        </datalist>
-                                        <label class="error" for="edit-liability-name">Please enter a valid name</label>
-                                    </div>
+                                    <input type="hidden" id="edit-liabilityID" name="edit-liabilityID"></input>
+                                    <input class="form-liability-totalPaid" type="hidden" id="edit-liability-totalPaid" name="edit-liability-totalPaid"></input>
 
                                     <div class="form-group row">
+                                        <label class="col-5" for="">Payment Done:</label>
+                                        <input class="col-6 form-liability-paymentDone" type="number" step='0.01' id="edit-liability-paymentDone" name="edit-liability-paymentDone" disabled />
+                                        <label class="error" for="edit-liability-paymentDone">Please enter a valid amount</label>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-5" for="">Name:</label>
+                                        <input type="hidden" id="edit-liability-oriName" name="edit-liability-oriName" required />
+                                        <input type="text" id="edit-liability-name" class="col-6 form-liabilityName" name="edit-liability-name" required />
+                                        <label class="error" for="edit-liability-name">Please enter a valid name</label>
+                                    </div>
+                                    <div class="form-group row">
                                         <label class="col-5" for="">Category:</label>
-                                        <input id="edit-liability-category" class="col-6 form-investmentType" list="edit-liability-categoryList" name="edit-liability-category" required />
+                                        <input id="edit-liability-category" class="col-6 form-liabilityType" list="edit-liability-categoryList" name="edit-liability-category" required />
+                                        <input type="hidden" id="edit-liability-newCate" class="form-liability-newCate" name="edit-liability-newCate" value="0" />
                                         <datalist id="edit-liability-categoryList">
                                             <?php
-                                            $data = $customer->getData('liability', "DISTINCT liabilityType");
+                                            $query = "SELECT * FROM category ct WHERE ct.categoryType = 'liability' AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . "))";
+                                            $data = $customer->getDataByQuery($query);
                                             foreach ($data as $row => $value) {
                                             ?>
-                                                <option id="type<?php echo ($value['liabilityType']); ?>" value="<?php echo ($value['liabilityType']); ?>"><?php echo ($value['liabilityType']); ?></option>
+                                                <option value="<?php echo ($value['categoryName']); ?>"><?php echo ($value['categoryName']); ?></option>
                                             <?php
                                             }
                                             ?>
@@ -679,12 +859,12 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Total Amount To Pay:</label>
-                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="edit-liability-totalAmount" name="edit-liability-totalAmount" required />
+                                        <input class="col-6 form-amountTotal" type="number" step='0.01' id="edit-liability-totalAmount" name="edit-liability-totalAmount" required />
                                         <label class="error" for="edit-liability-totalAmount">Please enter a valid amount</label>
                                     </div>
                                     <div class="form-group row">
-                                        <label class="col-5" for="">Amount Paid:</label>
-                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="edit-liability-amountPaid" name="edit-liability-amountPaid" required />
+                                        <label class="col-5" for="">Initial Amount Paid:</label>
+                                        <input class="col-6 form-amountPaid" type="number" step='0.01' id="edit-liability-amountPaid" name="edit-liability-amountPaid" required />
                                         <label class="error" for="edit-liability-amountPaid">Please enter a valid amount</label>
                                     </div>
                                     <div class="form-group row">
@@ -702,17 +882,25 @@
                                     </div>
                                     <div class="form-group row scheduled-div">
                                         <label class="col-5" for="">Payment Amount:</label>
-                                        <input class="col-6 form-amountInvested" type="number" step='0.01' id="edit-liability-paymentAmount" name="edit-liability-paymentAmount" required />
+                                        <input class="col-6 form-amountPayment" type="number" step='0.01' id="edit-liability-paymentAmount" name="edit-liability-paymentAmount" required />
                                         <label class="error" for="edit-liability-paymentAmount">Please enter a valid amount</label>
                                     </div>
                                     <div class="form-group row scheduled-div">
                                         <label class="col-5" for="">Repeat:</label>
-                                        <select class="col-6" name="edit-liability-paymentFrequency" id="edit-liability-paymentFrequency" required>
+                                        <select class="col-6" name="edit-liability-paymentFrequency" id="edit-liability-paymentFrequency">
                                             <option value="" selected>no</option>
-                                            <option value="monthly">monthly</option>
-                                            <option value="yearly">yearly</option>
+                                            <option value="M">monthly</option>
+                                            <option value="Y">yearly</option>
                                         </select>
                                         <label class="error" for="edit-liability-paymentFrequency">Please select one</label>
+                                    </div>
+                                    <div class="form-group row scheduled-div">
+                                        <label class="col-5" for="">Reminder:</label>
+                                        <select class="col-6" name="edit-liability-paymentReminder" id="edit-liability-paymentReminder" required>
+                                            <option value="1" selected>yes</option>
+                                            <option value="0">no</option>
+                                        </select>
+                                        <label class="error" for="edit-liability-paymentReminder">Please select one</label>
                                     </div>
                                 </div>
                             </div>
@@ -730,7 +918,8 @@
                 <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
                     <div class="modal-content">
                         <div class="modal-body">
-                            <p>Are you sure want to Delete this Debt?</p>
+                            <p>Proceed to Delete this Debt? </p>
+                            <p>(Will delete all related payment)</p>
                         </div>
                         <div class="modal-footer">
                             <form action="" method="POST">
@@ -743,7 +932,7 @@
                 </div>
             </div>
             <!-- table -->
-            <table class="table table-bordered table-hover transaction-table" id="investmentTransactionTable">
+            <table class="table table-bordered table-hover transaction-table" id="liabilityTransactionTable">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -758,24 +947,26 @@
 
                     </tr>
                 </thead>
-                <tbody id="investmentTransactionTableBody">
+                <tbody id="liability-table-body">
 
                     <?php
-                    $query = "SELECT *, (l.totalAmountToPay - (l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)), 0)))
+                    $query = "SELECT *, (l.totalAmountToPay - (l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")))), 0)))
                     as remainder,
                     l.liabilityName, 
                     l.totalAmountToPay as total,
-                    l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)), 0) as paidAmount, l.liabilityType 
+                    l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")))), 0) as paidAmount, l.liabilityType 
                     FROM liability l
                     LEFT JOIN transaction tr
                     ON l.liabilityName = tr.description
-                    AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID)
+                    AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")) )
                     GROUP BY l.liabilityName";
                     $datarow = $customer->getDataByQuery($query);
                     if (!empty($datarow)) {
                         for ($i = 0; $i < sizeof($datarow); $i++) {
                     ?>
-                            <tr>
+                            <tr <?php if ($i >= 10) {
+                                    echo ('style="display:none;"');
+                                } ?>>
                                 <input type="hidden" class="liabilityID" value='<?php echo ($datarow[$i]['liabilityID']); ?>'></input>
                                 <th scope="row"><?php echo (($i + 1)); ?></th>
                                 <td class="liabilityDate"><?php echo ($datarow[$i]['startDate']); ?></td>

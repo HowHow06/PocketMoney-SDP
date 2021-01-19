@@ -17,23 +17,133 @@ if (isset($_GET['resetEditInvest'])) {
  * 
  * echo the JSON format of fields within Liability Edit modal
  */
-if (isset($_GET['editLiabilityID'])) {
-    $liability_id = $_GET['editLiabilityID'];
-    $query = "SELECT *, (l.totalAmountToPay - (l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)), 0)))
+if (isset($_GET['getDataLiabilityID'])) {
+    $liability_id = $_GET['getDataLiabilityID'];
+    $cusID = $_GET['cusID'];
+    $query = "SELECT *, (l.totalAmountToPay - (l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $cusID . ")))), 0)))
     as remainder,
     l.liabilityName, 
     l.totalAmountToPay as total,
-    l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID)), 0) as paidAmount, l.liabilityType 
+    l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $cusID . ")))), 0) as paidAmount, l.liabilityType 
     FROM liability l
     LEFT JOIN transaction tr
     ON l.liabilityName = tr.description
-    AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID)
+    AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $cusID . "))) 
     WHERE l.liabilityID = " . $liability_id . "
     GROUP BY l.liabilityName";
     $datarow = $customer->getDataByQuery($query);
     $dataJSON = json_encode($datarow[0]);
     echo ($dataJSON);
 }
+
+/**
+ * 
+ * @return String 
+ * the body of payment
+ */
+if (isset($_GET['searchPayment'])) {
+    $cusID = $_GET['cusID'];
+    $searchname = $_GET['searchPayment'];
+    $timeFilter = $_GET['time'];
+    $cateFilter = $_GET['cate'];
+    if ($timeFilter == "payment-sort-date") {
+        $orderSQL = "ORDER BY tr.date DESC";
+    } elseif ($timeFilter == "payment-sort-name") {
+        $orderSQL = "ORDER BY l.liabilityName ASC";
+    }
+    if ($cateFilter == 'ALL') {
+        $cateFilter = '';
+    }
+
+    $datarow = $customer->getDataByQuery("SELECT *, DATE(date) as paymentdate, (l.totalAmountToPay - (l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $cusID . ")))), 0))) + tr.amount
+    as remainder FROM transaction tr, liability l
+    WHERE l.liabilityName = tr.description
+    AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $cusID . ")) )
+    AND l.liabilityName LIKE '%" . $searchname . "%'
+    AND l.liabilityType LIKE '%" . $cateFilter . "%'
+    " . $orderSQL . "
+    ;
+    ");
+    if (!empty($datarow)) {
+        for ($i = 0; $i < sizeof($datarow); $i++) {
+            echo ('
+            <tr>
+                <input type="hidden" class="paymentID" value="' . $datarow[$i]['transactionID'] . '"></input>
+                <input type="hidden" class="paymentRemainder" value="' . $datarow[$i]['remainder'] . '"></input>
+                <th scope="row">' . ($i + 1) . '</th>
+                <td class="paymentDate">' . $datarow[$i]['paymentdate'] . '</td>
+                <td class="paymentName">' . $datarow[$i]['liabilityName'] . '</td>
+                <td class="paymentType">' . $datarow[$i]['liabilityType'] . '</td>
+                <td class="paymentAmount">' . $datarow[$i]['amount'] . '</td>
+                <td class="action">
+                    <a href="#" class="edit-payment-anchor" data-toggle="modal" data-target="#edit-payment">Edit</a>
+                    <span> | </span>
+                    <a href="#" class="delete-payment-anchor" data-toggle="modal" data-target="#delete-payment">Delete</a>
+                </td>
+            </tr>
+            ');
+        }
+    }
+}
+
+
+/**
+ * 
+ * @return String 
+ * the body of liability
+ */
+if (isset($_GET['searchLiability'])) {
+    $cusID = $_GET['cusID'];
+    $searchname = $_GET['searchLiability'];
+    $timeFilter = $_GET['time'];
+    $cateFilter = $_GET['cate'];
+    if ($timeFilter == "liability-sort-date") {
+        $orderSQL = "ORDER BY l.startDate DESC";
+    } elseif ($timeFilter == "liability-sort-name") {
+        $orderSQL = "ORDER BY l.liabilityName ASC";
+    }
+    if ($cateFilter == 'ALL') {
+        $cateFilter = '';
+    }
+    $datarow = $customer->getDataByQuery("SELECT *, (l.totalAmountToPay - (l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $cusID . ")))), 0)))
+    as remainder,
+    l.liabilityName, 
+    l.totalAmountToPay as total,
+    l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $cusID . ")))), 0) as paidAmount, l.liabilityType 
+    FROM liability l
+    LEFT JOIN transaction tr
+    ON l.liabilityName = tr.description
+    AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $cusID . ")) )
+    WHERE l.liabilityName LIKE '%" . $searchname . "%'
+    AND l.liabilityType LIKE '%" . $cateFilter . "%'
+    GROUP BY l.liabilityName
+    " . $orderSQL . "
+    ;
+    ");
+    if (!empty($datarow)) {
+        for ($i = 0; $i < sizeof($datarow); $i++) {
+            echo ('
+            <tr>
+            <input type="hidden" class="liabilityID" value="' . $datarow[$i]['liabilityID'] . '"></input>
+            <th scope="row">' . ($i + 1) . '</th>
+            <td class="liabilityDate">' . $datarow[$i]['startDate'] . '</td>
+            <td class="liabilityName">' . $datarow[$i]['liabilityName'] . '</td>
+            <td class="liabilityType">' . $datarow[$i]['liabilityType'] . '</td>
+            <td class="liabilityTotalAmount">' . $datarow[$i]['totalAmountToPay'] . '</td>
+            <td class="liabilityPaidAmount">' . number_format($datarow[$i]['paidAmount'] * 1.0, 2, ".", "") . '</td>
+            <td class="liabilityRemainder">' . $datarow[$i]['remainder'] . '</td>
+            <td class="liabilityInitialAmount">' . $datarow[$i]['initialPaidAmount'] . '</td>
+            <td class="action">
+                <a href="#" class="edit-liability-anchor" data-toggle="modal" data-target="#edit-liability">Edit</a>
+                <span> | </span>
+                <a href="#" class="delete-liability-anchor" data-toggle="modal" data-target="#delete-liability">Delete</a>
+            </td>
+        </tr>
+            ');
+        }
+    }
+}
+
 
 
 /**

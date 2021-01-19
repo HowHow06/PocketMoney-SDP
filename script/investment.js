@@ -147,7 +147,7 @@ function validDate(date) {
   var CurrentDate = new Date();
   GivenDate = new Date(GivenDate);
 
-  if (GivenDate >= CurrentDate) {
+  if (GivenDate > CurrentDate) {
     //the date is bigger then current date
     return false;
   } else {
