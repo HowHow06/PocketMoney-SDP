@@ -67,36 +67,43 @@ class Customer
 
 
     /** 
-     * Return the array of table data if the id is set before
+     * Return the array of table data if the id is set before, by default the cusID is put in the where clause
      * @param String $tablename
      * the name of the table
      * 
      * @param String $columnName
      * the name of the specific column
      * 
+     * @param Array $whereAnd
+     * '<whereProp>'=>'<whereValue>';
+     * 
+     * @param Array|String $orderBy
+     * '<orderProp>' => '<order>','asc' or 'desc'; 
+     * 
      * @param String $groupBy
-     * the group by clause
-     * 
-     * @param String $orderBy
-     * the order by clause
-     * 
-     * @param String $order
-     * the order sequence 'asc' or 'desc'
+     * group by clause
      * 
      * @return array|NULL
      * 
      */
-    function getData($tablename, $columnName = "*", $groupBy = NULL, $orderby = NULL, $order = 'asc')
+    function getData($tablename, $columnName = "*", $whereAnd = NULL, $orderby = NULL, $groupBy = NULL)
     {
         $db = MysqliDb::getInstance();
         if (!empty($this->id)) {
             $id = $this->id;
             $db->where('cusID', $id);
-            if (!is_null($groupBy)) { //if the groupBy clause is not null
-                $db->groupBy($groupBy);
+            if (!is_null($whereAnd)) { //if the groupBy clause is not null
+                foreach ($whereAnd as $prop => $value) {
+                    $db->where($prop, $value);
+                }
             }
             if (!is_null($orderby)) {
-                $db->orderBy($orderby, $order);
+                foreach ($orderby as $prop => $order) {
+                    $db->orderBy($prop, $order);
+                }
+            }
+            if (!is_null($groupBy)) { //if the groupBy clause is not null
+                $db->groupBy($groupBy);
             }
             $result = $db->get($tablename, null, $columnName);
             return $result;
@@ -141,6 +148,14 @@ class Customer
         $idName = $params['idName'];
         $id = $params['id'];
         $data = $params['data'];
+
+        if ($id == "") {
+            return array('status' => 'error', 'statusMsg' => 'data id is not defined');
+        }
+
+        if ($idName == "") {
+            return array('status' => 'error', 'statusMsg' => 'data property is not defined');
+        }
 
         $db->where($idName, $id);
 
@@ -195,6 +210,14 @@ class Customer
         $tablename = $params['tableName'];
         $idName = $params['idName'];
         $id = $params['id'];
+
+        if ($id == "") {
+            return array('status' => 'error', 'statusMsg' => 'data id is not defined');
+        }
+
+        if ($idName == "") {
+            return array('status' => 'error', 'statusMsg' => 'data property is not defined');
+        }
 
         $db->where($idName, $id);
         if ($db->delete($tablename)) {
