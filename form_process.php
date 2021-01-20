@@ -250,35 +250,37 @@ if (isset($_GET['searchTransaction'])) {
     $cateFilter = $_GET['cate'];
     $query = $_GET['query'];
     if ($typeFilter == "Income") {
-        $typeSQL = "income";
+        $typeQuery = "AND c.categoryType = 'income'";
     } elseif ($typeFilter == "Expenses") {
-        $typeSQL = "expenses";
+        $typeQuery = "AND c.categoryType = 'expenses'";
     } elseif ($typeFilter == "ALL") {
-        $typeSQL = '';
+        $typeQuery = "AND (c.categoryType = 'income' OR c.categoryType = 'expenses')";
     }
     if ($cateFilter == 'ALL') {
         $cateFilter = '';
     }
-    if (empty($searchname)) {
-        $searchname = '';
+    if (!empty($searchname)) {
+        $searchnameQuery = "AND (t.description LIKE '%" . $searchname . "%' OR c.categoryName LIKE '%" . $searchname . "%')";
+    } else {
+        $searchnameQuery = '';
     }
 
     $datarow = $customer->getDataByQuery("SELECT *
     FROM Transaction t, Category c
     WHERE t.cusID = '" . $cusID . "'
     AND t.categoryID = c.categoryID"
-        . $query .
-        " AND t.description LIKE '%" . $searchname . "%'
-    AND c.categoryType LIKE  '%" . $typeSQL . "%'
-    AND c.categoryName LIKE  '%" . $cateFilter . "%'
+    . $query . " " .
+    $searchnameQuery . " " .
+    $typeQuery . " " .
+    " AND c.categoryName LIKE  '%" . $cateFilter . "%'
     ORDER BY t.date DESC
     ;");
     if (!empty($datarow)) {
         for ($i = 0; $i < sizeof($datarow); $i++) {
-            if (empty($datarow[$i]['name'])) {
+            if (empty($datarow[$i]['description'])) {
                 $description = $datarow[$i]['categoryName'];
             } else {
-                $description = $datarow[$i]['name'];
+                $description = $datarow[$i]['description'];
             }
             echo ('
             <tr>

@@ -34,21 +34,21 @@
 }
 
 .body {
-
-    
-
     div.show{
         .btn{
             margin: .25rem;
         }
     }
-
     #liabilityNames-donut-chart{
         padding-left: 11%;
     }
     .go-to{
         padding-top: 0.4rem;
         text-align: center;
+        font-weight: bold;
+    }
+    hr {
+        margin-bottom: 10px !important;
     }
     @include cus-body;
     > .overall {
@@ -63,10 +63,8 @@
             margin: 10px auto;
             text-align: center;
             padding: 0;
+            padding-top: 3px;
             font-size: 0.8rem;
-            > h5 {
-                margin-bottom: 0;
-            }
         }
     }
 

@@ -28,6 +28,7 @@ $url = "http://localhost/SDP-Assignment/register_three.php?email=" . $email;
 ```
 - Create ```register_one.php``` and ```register_two.php``` and ```register_three.php```
 - Update ```register.scss``` and it is only available to above register.php
+- Fixing bugs in transaction pages
 
 ### 2021-01-14
 > Moses's Part
