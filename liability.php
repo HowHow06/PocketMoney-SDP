@@ -32,7 +32,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('liability.php');
+        $customer->goTo('liability.php?role=customer');
     }
 
     //new debt payment
@@ -54,7 +54,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('liability.php');
+        $customer->goTo('liability.php?role=customer');
     }
 
     //delete payment
@@ -68,7 +68,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('liability.php');
+        $customer->goTo('liability.php?role=customer');
     }
 
     //update liability
@@ -144,7 +144,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('liability.php');
+        $customer->goTo('liability.php?role=customer');
     }
     //new liability
     if (isset($_POST['new-liability-submit'])) {
@@ -197,7 +197,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('liability.php');
+        $customer->goTo('liability.php?role=customer');
     }
 
     //delete liability
@@ -217,7 +217,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('liability.php');
+        $customer->goTo('liability.php?role=customer');
     }
     ?>
 
@@ -611,7 +611,7 @@
 
             <div class="container-fluid row filter2">
                 <div class="col-6 row show">
-                    <a class="btn" href="liability_viewPayments.php" role="button">View All</a>
+                    <a class="btn" href="liability_viewPayments.php?role=customer" role="button">View All</a>
                     <button class="btn" data-toggle="modal" data-target="#new-payment">New</button>
                 </div>
                 <div class="col-6 search">
@@ -700,7 +700,7 @@
 
             <div class="container-fluid row filter2">
                 <div class="col-6 row show">
-                    <a class="btn" href="liability_viewDebts.php" role="button">View All</a>
+                    <a class="btn" href="liability_viewDebts.php?role=customer" role="button">View All</a>
                     <button class="btn" data-toggle="modal" data-target="#new-liability">New</button>
                 </div>
 

@@ -31,7 +31,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('investment.php');
+        $customer->goTo('investment.php?role=customer');
     }
 
 
@@ -46,7 +46,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('investment.php');
+        $customer->goTo('investment.php?role=customer');
     }
 
     //new transaction
@@ -67,7 +67,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('investment.php');
+        $customer->goTo('investment.php?role=customer');
     }
 
     //edit general investment
@@ -86,7 +86,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('investment.php');
+        $customer->goTo('investment.php?role=customer');
     }
 
     //delete general invesment
@@ -100,7 +100,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('investment.php');
+        $customer->goTo('investment.php?role=customer');
     }
 
     ?>

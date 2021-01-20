@@ -88,7 +88,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('liability_viewDebts.php');
+        $customer->goTo('liability_viewDebts.php?role=customer');
     }
     //update liability
     if (isset($_POST['edit-liability-submit'])) {
@@ -161,7 +161,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('liability.php');
+        $customer->goTo('liability.php?role=customer');
     }
 
     //delete liability
@@ -181,7 +181,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('liability_viewDebts.php');
+        $customer->goTo('liability_viewDebts.php?role=customer');
     }
     ?>
 

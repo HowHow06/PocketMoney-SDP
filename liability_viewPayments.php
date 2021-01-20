@@ -32,7 +32,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('liability_viewPayments.php');
+        $customer->goTo('liability_viewPayments.php?role=customer');
     }
 
     //new debt payment
@@ -54,7 +54,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('liability_viewPayments.php');
+        $customer->goTo('liability_viewPayments.php?role=customer');
     }
 
     //delete payment
@@ -68,7 +68,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('liability_viewPayments.php');
+        $customer->goTo('liability_viewPayments.php?role=customer');
     }
 
 
