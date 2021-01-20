@@ -189,7 +189,7 @@
         <div class="container-fluid body">
             <nav class="navbar navbar-expand-lg">
                 <a href="#" class="navbar-brand">DEBTS</a>
-                <input type="hidden" id="cusID" value="<?php $customer->getID(); ?>">
+                <input type="hidden" id="cusID" value="<?php echo $customer->getId(); ?>">
             </nav>
 
             <!-- payment table -->

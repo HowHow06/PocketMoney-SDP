@@ -60,11 +60,11 @@ switch ($activePage) {
         <li class="nav-item <?php echo $isActiveLiabilities ?> ">
             <a href="liability.php?role=customer" class="nav-link">Debts</a>
         </li>
-        <li class="nav-item <?php echo $isActiveFinancialGoals ?> ">
+        <!-- <li class="nav-item <?php //echo $isActiveFinancialGoals ?> ">
             <a href="#" class="nav-link">Financial Goals</a>
-        </li>
+        </li> -->
         <li class="nav-item <?php echo $isActiveReports ?> ">
-            <a href="#" class="nav-link">Reports</a>
+            <a href="reports.php?role=customer" class="nav-link">Reports</a>
         </li>
         <li class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown">Setting</a>
