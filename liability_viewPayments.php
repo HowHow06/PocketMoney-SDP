@@ -32,7 +32,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('liability_viewPayments.php');
+        $customer->goTo('liability_viewPayments.php?role=customer');
     }
 
     //new debt payment
@@ -54,7 +54,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('liability_viewPayments.php');
+        $customer->goTo('liability_viewPayments.php?role=customer');
     }
 
     //delete payment
@@ -68,7 +68,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('liability_viewPayments.php');
+        $customer->goTo('liability_viewPayments.php?role=customer');
     }
 
 
@@ -78,7 +78,7 @@
         <div class="container-fluid body">
             <nav class="navbar navbar-expand-lg">
                 <a href="#" class="navbar-brand">DEBTS</a>
-                <input type="hidden" id="cusID" value="<?php $customer->getID(); ?>">
+                <input type="hidden" id="cusID" value="<?php echo $customer->getId(); ?>">
             </nav>
 
 

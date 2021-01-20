@@ -68,7 +68,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('overall_trans.php');
+        $customer->goTo('overall_trans.php?role=customer');
     }
 
     //delete transaction
@@ -82,7 +82,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('overall_trans.php');
+        $customer->goTo('overall_trans.php?role=customer');
     }
 
     //new transaction
@@ -129,7 +129,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('overall_trans.php');
+        $customer->goTo('overall_trans.php?role=customer');
     }
 
     if (isset($_POST['filter-previous'])) {
@@ -183,6 +183,7 @@
                     <form action="overall_trans.php" method="get">
                         <div class="row">
                             <h6>Show:</h6>
+                            <input type="hidden" name="role" value="customer">
                             <select name="filter-month-year" id="filter-month-year" class="custom-select" onchange="this.form.submit()">
                                 <option value=""></option>
                                 <option value="Monthly">Monthly</option>

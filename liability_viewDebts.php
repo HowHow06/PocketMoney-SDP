@@ -88,7 +88,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('liability_viewDebts.php');
+        $customer->goTo('liability_viewDebts.php?role=customer');
     }
     //update liability
     if (isset($_POST['edit-liability-submit'])) {
@@ -161,7 +161,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('liability.php');
+        $customer->goTo('liability.php?role=customer');
     }
 
     //delete liability
@@ -181,7 +181,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('liability_viewDebts.php');
+        $customer->goTo('liability_viewDebts.php?role=customer');
     }
     ?>
 
@@ -189,7 +189,7 @@
         <div class="container-fluid body">
             <nav class="navbar navbar-expand-lg">
                 <a href="#" class="navbar-brand">DEBTS</a>
-                <input type="hidden" id="cusID" value="<?php $customer->getID(); ?>">
+                <input type="hidden" id="cusID" value="<?php echo $customer->getId(); ?>">
             </nav>
 
             <!-- payment table -->
