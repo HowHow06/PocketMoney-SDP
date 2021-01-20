@@ -60,7 +60,7 @@ body {
 .container > .right {
   font-family: 'Open Sans', sans-serif;
   padding-left: 50px;
-  padding-top: 50px;
+  padding: 50px;
   width: 698px;
 }
 
@@ -94,11 +94,7 @@ body {
   background-color: #FF6C00 !important;
 }
 
-.step1 {
-  display: block;
-}
-
-.step1 > h5 {
+.step1 h5 {
   padding-top: 20px;
 }
 
@@ -106,7 +102,7 @@ body {
   padding-top: 10px;
 }
 
-.step1 > form > .btn {
+.step1 > form > button {
   width: 400px;
   font-size: 16px;
   padding: 12px 0 12px 0;
@@ -114,13 +110,13 @@ body {
   color: white;
 }
 
-.step1 > form > .btn:hover {
+.step1 > form > button:hover {
   background-color: rgba(255, 108, 0, 0.6);
 }
 
 .step1 > form > .form-group {
   padding-top: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 40px;
 }
 
 .step1 > form > .form-group > input {
@@ -129,106 +125,37 @@ body {
   font-size: 14px;
 }
 
-.step1 > form > .form-check {
-  font-size: 14px;
-  padding-left: 0;
-  padding-bottom: 15px;
-  margin-bottom: 20px;
-}
-
-.step2 {
-  display: none;
-}
-
-.step2 > .back {
-  position: absolute;
-  margin: -35px 0px 0 -40px;
-  font-size: 14px;
-  color: #FF6C00;
-  font-weight: bold;
-}
-
-.step2 > .skip {
-  position: absolute;
-  margin: -35px 0px 0 568px;
-  font-size: 14px;
-  color: black;
-  font-weight: bold;
-}
-
-.step2 > h5 {
+.step2 h5 {
   padding-top: 20px;
 }
 
-.step2 > form {
-  padding-top: 10px;
+.step2 div {
+  padding-top: 35px;
+  color: grey;
 }
 
-.step2 > form > .btn {
-  width: 400px;
-  font-size: 16px;
-  padding: 12px 0 12px 0;
-  background-color: #FF6C00;
-  color: white;
+.step2 div h2, .step2 div h4, .step2 div a {
+  color: #FF6C00;
 }
 
-.step2 > form > .btn:hover {
-  background-color: rgba(255, 108, 0, 0.6);
+.step2 div h4 {
+  font-size: 20px;
+  margin-bottom: 0px;
 }
 
-.step2 > form > h5 {
-  margin-bottom: 0;
+.step2 div h5 {
+  color: grey;
 }
 
-.step2 > form > .form-group {
-  padding-top: 5px;
-}
-
-.step2 > form > .form-group > input {
-  padding: 10px 10px;
-  width: 400px;
-  font-size: 14px;
-}
-
-.step2 > form > .form-check {
-  font-size: 14px;
-  padding-left: 0;
-  padding-bottom: 15px;
-  padding-top: 10px;
-  margin-bottom: 20px;
-}
-
-.step2 > form > .form-row > .col-5 > select {
-  padding: 5px 10px;
-  font-size: 14px;
-}
-
-.step2 > form > .form-row > .col-3 > input {
-  padding: 5px 20px 5px 5px;
-  font-size: 14px;
+.step2 div p {
+  margin-bottom: 13px;
 }
 
 .step3 {
-  display: none;
+  padding-bottom: 0 !important;
 }
 
-.step3 > .back {
-  position: absolute;
-  margin: -35px 0px 0 -40px;
-  font-size: 14px;
-  color: #FF6C00;
-  font-weight: bold;
-}
-
-.step3 > .skip {
-  position: absolute;
-  margin: -35px 0px 0 568px;
-  font-size: 14px;
-  color: black;
-  font-weight: bold;
-}
-
-.step3 > h5 {
+.step3 h5 {
   padding-top: 20px;
   margin-bottom: 0;
 }
@@ -237,7 +164,7 @@ body {
   padding-top: 10px;
 }
 
-.step3 > form > .btn {
+.step3 > form > button {
   width: 400px;
   font-size: 16px;
   padding: 12px 0 12px 0;
@@ -245,7 +172,7 @@ body {
   color: white;
 }
 
-.step3 > form > .btn:hover {
+.step3 > form > button:hover {
   background-color: rgba(255, 108, 0, 0.6);
 }
 
@@ -274,8 +201,11 @@ body {
   font-size: 14px;
 }
 
-.step3 > form > button {
-  margin-top: 50px;
+.step3 > form > .form-check {
+  font-size: 14px;
+  padding-left: 0;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .step4 {

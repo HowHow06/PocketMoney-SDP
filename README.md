@@ -11,6 +11,24 @@ Financial Management System (Website)
 
 ## Work Progress
 
+### 2021-01-20
+> Moses's Part
+- Create ```phpmailer``` file
+- PHP Mailer is a plug-ins used to send email
+- Specific requirements can view in ```sendRegisterEmail()``` function
+- TO NOTE THAT: 
+1. kindly change your localhost address so that it match as below
+```
+http://localhost/SDP-Assignment/register_three.php?email=
+```
+2. When turn from localhost to live database, kindly change the url to respective website
+```
+//Content
+$url = "http://localhost/SDP-Assignment/register_three.php?email=" . $email;
+```
+- Create ```register_one.php``` and ```register_two.php``` and ```register_three.php```
+- Update ```register.scss``` and it is only available to above register.php
+
 ### 2021-01-14
 > Moses's Part
 - Update ```income_trans.php``` and ```expense_trans.php``` and ```overall_trans.php```
