@@ -71,9 +71,8 @@ switch ($activePage) {
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                 <a href="#" class="dropdown-item">Profile</a>
                 <a href="#" class="dropdown-item">Enquiry</a>
-                <a href="logout.php" class="dropdown-item">Logout</a>
+                <a href="logout.php?role=customer" class="dropdown-item">Logout</a>
             </div>
         </li>
     </ul>
-    <input type="hidden" id="cusID" value="<?php echo ($customer->getId()); ?>"></input>
 </nav>

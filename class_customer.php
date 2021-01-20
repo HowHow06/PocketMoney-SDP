@@ -9,7 +9,6 @@ use PHPMailer\PHPMailer\Exception;
 class Customer
 {
     private $id;
-    private $num;
     /**
      * Static instance of self
      *
@@ -19,12 +18,11 @@ class Customer
 
 
 
-    function __construct($id = null, $db = null, $num = null)
+    function __construct($id = null, $db = null)
     {
         // $this->db          = $db;
         require_once('MysqliDb.php');
         $this->$id = $id;
-        $this->$num = $num;
         // $this->db          = new MysqliDb("db4free.net", "pocketmoney", "m&nsuperdry", "pocketmoney", "3306"); //temporary
         $this->db          = new MysqliDb("localhost", "root", "", "pocketmoney", "3308"); //temporary
         //$this->validation  = $validation;
