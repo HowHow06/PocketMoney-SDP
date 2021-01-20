@@ -1286,38 +1286,6 @@ class Customer
         return NULL;
     }
 
-    /** 
-     * Return Array of table row count for transaction table only
-     * 
-     * @param int $month
-     * (12)
-     * 
-     * @param int $year
-     * (2020)
-     * 
-     * @return Array|NULL
-     * 
-     */
-    function getTableRowCount($month, $year)
-    {
-        $db = MysqliDb::getInstance();
-
-        if (!empty($this->id)) {
-            $id = $this->id;
-            $db->join('category c', 'c.categoryID=t.categoryID', 'LEFT');
-            $db->where('t.cusID', $id);
-            if (!empty($month)) {
-                $db->where('MONTH(t.date)', $month);
-                $db->where('YEAR(t.date)', $year);
-            } else {
-                $db->where('YEAR(t.date)', $year);
-            }
-            $result = $db->get('transaction t');
-            return $result;
-        }
-        return NULL;
-    }
-
     /*********************************************************************\
      *               Below Part are show liability page                   *
      *                       For extra functions                          *

@@ -157,6 +157,11 @@
 .body .go-to {
   padding-top: 0.4rem;
   text-align: center;
+  font-weight: bold;
+}
+
+.body hr {
+  margin-bottom: 10px !important;
 }
 
 .body > nav {
@@ -188,11 +193,8 @@
   margin: 10px auto;
   text-align: center;
   padding: 0;
+  padding-top: 3px;
   font-size: 0.8rem;
-}
-
-.body > .overall > a > h5 {
-  margin-bottom: 0;
 }
 
 .body > .liability-overview {
