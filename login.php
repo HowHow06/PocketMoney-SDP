@@ -2,7 +2,7 @@
 require_once('class_customer.php');
 $customer = new Customer();
 if ($customer->havesession()) {
-    header("location:dashboard.php?welcome=welcome"); //if the cookie or session is empty, go to dashboard
+    header("location:dashboard.php?"); //if the cookie or session is empty, go to dashboard
 }
 if ($_GET['role'] == 'customer') {
     $display = 'show';
@@ -10,6 +10,10 @@ if ($_GET['role'] == 'customer') {
 } elseif ($_GET['role'] == 'admin') {
     $display = 'hidden';
     $form = 'login.php?role=admin';
+}
+
+if ($_GET['welcome'] == 'welcome') {
+    $customer->showAlert('Successful register.');
 }
 
 if (isset($_POST['submitbtn'])) { //if the login form is submitted
@@ -43,7 +47,7 @@ if (isset($_POST['submitbtn'])) { //if the login form is submitted
                 //set adminData cookie here
             }
         }
-        header("Location:dashboard.php?welcome=welcome");
+        header("Location:dashboard.php?");
     }
 
     if ($result['status'] == 'error') { //wrong credential
@@ -114,7 +118,7 @@ if (isset($_POST['submitbtn'])) { //if the login form is submitted
                 $msg = '
                         <a href="#" class="forgot">Forgot password?</a>
                         <br>
-                        <a href="register.php" class="register">Don\'t have an account? Register here</a>
+                        <a href="register_one.php" class="register">Don\'t have an account? Register here</a>
                     ';
                 echo $msg;
             }

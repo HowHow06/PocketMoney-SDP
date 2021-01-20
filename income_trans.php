@@ -12,6 +12,7 @@
     $activePage = "transactions"; 
     include(".navbar.php"); 
 
+    // initialise
     $customer->setCurDate();
     $customer->setFlag(0);
 
