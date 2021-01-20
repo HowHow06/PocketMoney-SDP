@@ -12,8 +12,10 @@ if ($_GET['role'] == 'customer') {
     $form = 'login.php?role=admin';
 }
 
-if ($_GET['welcome'] == 'welcome') {
-    $customer->showAlert('Successful register.');
+if (isset($_GET['welcome'])) {
+    if ($_GET['welcome'] == 'welcome') {
+        $customer->showAlert('Successful register.');
+    }
 }
 
 if (isset($_POST['submitbtn'])) { //if the login form is submitted
