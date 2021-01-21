@@ -30,14 +30,13 @@
             'percentage' => $_POST['edit_budgetPercentage'],
             'categoryID' => $datarow[0]['categoryID']
         );
-		var_dump($params);
         $result = $customer->customerUpdate($params);
         if ($result['status'] == 'ok') {
             $customer->showAlert($result['statusMsg']);
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        //$customer->goTo('budget.php');
+        $customer->goTo('budget.php');
     }
 	
     //delete budget
