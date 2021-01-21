@@ -236,10 +236,10 @@
                             }
                     ?>
                             <tr>
-                                <input type="hidden" class="transactionID" value='<?php echo ($datarow[$i]['budgetID']); ?>'></input>
+                                <input type="hidden" class="budgetID" value='<?php echo ($datarow[$i]['budgetID']); ?>'></input>
                                 <th scope="row"><?php echo (($i + 1)); ?></th>
-                                <td class="transactionCategory"><?php echo ($datarow[$i]['category']); ?></td>
-								<td class="percentage"><?php echo ($datarow[$i]['percentage']); ?></td>
+                                <td class="budgetCategory"><?php echo ($datarow[$i]['category']); ?></td>
+								<td class="budgetPercentage"><?php echo ($datarow[$i]['percentage']); ?></td>
 								<td class="action">
                                     <a href="#" class="edit-transaction-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
                                     <span> | </span>
@@ -272,8 +272,8 @@
                                 <div class="container">
                                     <div class="form-group row">
                                         <label class="col-5" for="new_budgetCategory">Category:</label>
-                                        <input id="new_investmentType" class="col-6 form-investmentType" list="new_investmentTypeList" name="new_budgetCategory" required />
-                                        <datalist id="new_investmentTypeList">
+                                        <input id="new_budgetCategory" class="col-6 form-investmentType" list="new_budgetCategoryList" name="new_budgetCategory" required />
+                                        <datalist id="new_budgetCategoryList">
 											<?php
                                                 $data = $customer->getDataByQuery("SELECT categoryName FROM category
                                                                                     WHERE (categoryType = 'budget'
@@ -293,7 +293,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="new_budgetPercentage">Percentage:</label>
-                                        <input class="col-6 form-amountInvested" type="number" step='1.00' id="new_amountInvested" name="new_budgetPercentage" required />
+                                        <input class="col-6 form-amountInvested" type="number" step='1.00' id="new_budgetPercentage" name="new_budgetPercentage" required />
                                         <label class="error" for="new_budgetPercentage">Please enter a valid percentage</label>
                                     </div>
                                 </div>
@@ -322,8 +322,8 @@
                                     <input type="hidden" id="edit_budgetID" name="edit_budgetID"></input>
                                     <div class="form-group row">
                                         <label class="col-5" for="edit_budgetCategory">Category:</label>
-                                        <input id="edit_budgetCategory" class="col-6 form-investmentType" list="edit_investmentTypeList" name="edit_budgetCategory" required />
-                                        <datalist id="edit_investmentTypeList">
+                                        <input id="edit_budgetCategory" class="col-6 form-investmentType" list="edit_budgetCategoryList" name="edit_budgetCategory" required />
+                                        <datalist id="edit_budgetCategoryList">
                                             <?php
                                                 $data = $customer->getDataByQuery("SELECT categoryName FROM category
                                                                                     WHERE (categoryType = 'budget'
