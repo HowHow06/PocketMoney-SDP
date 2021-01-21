@@ -11,6 +11,13 @@ Financial Management System (Website)
 
 ## Work Progress
 
+### 2021-01-21
+> Law's Part
+- Update ```budget.php``` and ```budget.js```
+> Moses's Part
+- Fixing bugs
+- Update ```budget.scss```
+
 ### 2021-01-20
 > Moses's Part
 - Create ```phpmailer``` file

@@ -113,7 +113,7 @@ if (isset($_POST['submitbtn'])) { //if the login form is submitted
             ?>
             <form action="<?php echo ($form); ?>" method="post">
                 <div class="form-group">
-                    <input type="email" name="email" placeholder="Enter email address" required>
+                    <input type="text" name="email" placeholder="Enter email address or username" required>
                 </div>
                 <div class="form-group">
                     <input type="password" name="password" placeholder="Password" id="password" required>

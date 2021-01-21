@@ -364,6 +364,7 @@ function refreshchart(amount, month)
     monthJSON = JSON.parse(month);
     var lineOptions = {
         series: [{
+            name: 'amount',
             data: amountJSON
         }],
         chart: {
@@ -374,7 +375,7 @@ function refreshchart(amount, month)
                 color: '#000',
                 top: 18,
                 left: 7,
-                blur: 10,
+                blur: 5,
                 opacity: 0.2
             },
             toolbar: {
@@ -403,7 +404,7 @@ function refreshchart(amount, month)
         },
         yaxis: {
             min: function(min) {
-                return min - 100
+                return min - 10
             },
             max: function(max) {
                 return max + 100

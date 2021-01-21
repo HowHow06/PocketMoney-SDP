@@ -529,7 +529,8 @@
                     LEFT JOIN transaction tr
                     ON l.liabilityName = tr.description
                     AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")) )
-                    GROUP BY l.liabilityName";
+                    GROUP BY l.liabilityName
+                    ORDER BY l.startDate DESC";
                     $datarow = $customer->getDataByQuery($query);
                     if (!empty($datarow)) {
                         for ($i = 0; $i < sizeof($datarow); $i++) {

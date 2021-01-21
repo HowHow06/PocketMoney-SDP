@@ -175,6 +175,7 @@ if (isset($_GET['searchInvest'])) {
     AND investmentName LIKE  '%" . $searchname . "%'
     AND investmentType LIKE  '%" . $cateFilter . "%'
     " . $timeSQL . "
+    ORDER BY startDate DESC
     ;
     ");
     if (!empty($datarow)) {

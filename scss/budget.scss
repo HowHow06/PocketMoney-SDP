@@ -7,20 +7,20 @@
     justify-content: center;
 }
 
-.btn-circle {
-    width: 75px;
-    height: 75px;
-    border-radius: 120px;
-    text-align: center;
-    font-size: 24px;
-    line-height: 1.42857;
-    position: absolute;
-    right: 15px;
-    bottom: 15px;
-    background-color: #fc9a55;
-    color: white;
-    box-shadow: 2px 3px 5px 0px rgba(0, 0, 0, 0.2)
-}
+// .btn-circle {
+//     width: 75px;
+//     height: 75px;
+//     border-radius: 120px;
+//     text-align: center;
+//     font-size: 24px;
+//     line-height: 1.42857;
+//     position: absolute;
+//     right: 15px;
+//     bottom: 15px;
+//     background-color: #fc9a55;
+//     color: white;
+//     box-shadow: 2px 3px 5px 0px rgba(0, 0, 0, 0.2)
+// }
 
 .row {
     margin-left: 0 !important;
@@ -29,53 +29,6 @@
 
 .body {
     @include cus-body;
-    > div {
-        > .left {
-            > .row {
-                align-items: center;
-                padding-left: 20px;
-                padding-top: 20px;
-                > form {
-                    > button {
-                        width: 50px;
-                        height: 65px;
-                        > i {
-                            color: #FF6C00;
-                            font-size: 24px;
-                        }
-                    } 
-                        
-                }
-                > label {
-                    font-size: 20px;
-                    margin-bottom: 5px;
-                }  
-                
-            }
-        }
-        // > .left {
-        //     > form {
-        //         padding-left: 20px;
-        //         padding-top: 20px;
-        //         > div {
-        //             align-items: center;
-        //             > button {
-        //                 width: 50px;
-        //                 height: 65px;
-        //                 > i {
-        //                     color: #FF6C00;
-        //                     font-size: 24px;
-        //                 }
-        //             }
-        //             > h6 {
-        //                 font-size: 20px;
-        //                 margin-bottom: 0;
-        //             }
-        //         }
-        //     }
-        // }
-    }
-
     > .budget-overview {
         padding: 20px 50px;
         > div {
@@ -170,54 +123,10 @@
         > div {
             border-width: 4px !important;
             padding: 10px 0 0 0;
-            > .col-12 {
-                padding-bottom: 15px;
-            }
             > .row {
-                > .chart-explain {
-                    > div {
-                        > div {
-                            background-color: white;
-                            padding-top: 14px;
-                            > .col-1 {
-                                text-align: center;
-                                padding-left: 5px;
-                                > p {
-                                    width: 50px !important;
-                                    height: 30px;
-                                    border-radius: 8px;
-                                    background-color: #FF6C00;
-                                    color: white;
-                                    padding-top: 2px;
-                                    font-weight: bold;
-                                }
-                            }
-                            > .col-5 {
-                                text-align: left;
-                                padding-top: 2px;
-                            }
-                            > .value {
-                                text-align: right;
-                                padding-top: 2px;
-                            }
-                            > .action {
-                                width: 130px;
-                                margin-top: -2px;
-                                padding-left: 65px;
-                                > a {
-                                    color: #FF6C00;
-                                    font-size: 20px;
-                                    padding-right: 15px;
-                                }
-                                > .vl {
-                                    border-left: 2px solid grey;
-                                    height: 20px;
-                                    padding: 0 6px;
-                                    margin-top: 5px;
-                                }
-                            }
-                        }
-                    }
+                > .transaction-table {
+                    margin: 15px auto;
+                    width: 98%;
                 }
             }
         }
@@ -290,23 +199,6 @@
             }
         }
     }
-    > .transaction-table {
-        margin: 25px auto;
-        width: 95%;
-        text-align: center;
-        > thead {
-            background-color: #fc9a55;
-            color: white;
-        }
-        > tbody {
-            .action {
-                width: 130px;
-                > a {
-                    color: #FF6C00;
-                }
-            }
-        }
-    }
     > .filter3 {
         padding-top: 20px;
         > .show {
@@ -330,6 +222,24 @@
                         color: white;
                     }
                 }
+            }
+        }
+    }
+}
+
+.transaction-table {
+    margin: 25px auto;
+    width: 95%;
+    text-align: center;
+    > thead {
+        background-color: #fc9a55;
+        color: white;
+    }
+    > tbody {
+        .action {
+            width: 130px;
+            > a {
+                color: #FF6C00;
             }
         }
     }

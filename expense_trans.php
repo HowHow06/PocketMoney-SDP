@@ -133,8 +133,8 @@
     }
 
     if (isset($_POST['filter-previous'])) {
-        $date = strtotime($_POST['current-date']);
-        if (!preg_match("/^[0-9-]+$/", $_POST['current-date'])) {
+        $date = strtotime($_POST['current-previous-date']);
+        if (!preg_match("/^[0-9-]+$/", $_POST['current-previous-date'])) {
             $d = date("Y-m-d",$date);
             $customer->setCurDate(-1,$d);
         } else {
@@ -145,8 +145,8 @@
     }
 
     if (isset($_POST['filter-next'])) {
-        $date = strtotime($_POST['current-date']);
-        if (!preg_match("/^[0-9-]+$/", $_POST['current-date'])) {
+        $date = strtotime($_POST['current-next-date']);
+        if (!preg_match("/^[0-9-]+$/", $_POST['current-next-date'])) {
             $d = date("Y-m-d",$date);
             $customer->setCurDate(1,$d);
         } else {
@@ -168,11 +168,11 @@
                             <button class="btn" type="submit" id="filter-previous" name="filter-previous">
                                 <i class="fas fa-chevron-left"></i>
                             </button>
-                            <input type="hidden" id="current-date" name="current-date" value="<?php echo ($customer->getCurrentFilterTime(0,1,$customer->getFlag())); ?>"></input>
+                            <input type="hidden" id="current-previous-date" name="current-previous-date" value="<?php echo ($customer->getCurrentFilterTime(0,1,$customer->getFlag())); ?>"></input>
                         </form>
                         <label id="filter-current-date" name="filter-current-date"><?php echo ($customer->getCurrentFilterTime(0,0,$customer->getFlag())); ?></label>
                         <form action="" method="post">
-                            <input type="hidden" id="current-date" name="current-date" value="<?php echo ($customer->getCurrentFilterTime(0,1,$customer->getFlag())); ?>"></input>
+                            <input type="hidden" id="current-next-date" name="current-next-date" value="<?php echo ($customer->getCurrentFilterTime(0,1,$customer->getFlag())); ?>"></input>
                             <button class="btn" type="submit" id="filter-next" name="filter-next">
                                 <i class="fas fa-chevron-right"></i>
                             </button>
@@ -180,12 +180,11 @@
                     </div>
                 </div>
                 <div class="col-6 right">
-                    <form action="expense_trans.php\" method="get">
+                    <form action="expense_trans.php" method="get">
                         <div class="row">
                             <h6>Show:</h6>
                             <input type="hidden" name="role" value="customer">
                             <select name="filter-month-year" id="filter-month-year" class="custom-select" onchange="this.form.submit()">
-                                <option value=""></option>
                                 <option value="Monthly">Monthly</option>
                                 <option value="Yearly">Yearly</option>
                             </select>
@@ -426,12 +425,12 @@
                                         <label class="error" for="new_transactionName">Please enter a valid name</label>
                                     </div>
                                     <!-- Hold this first -->
-                                    <div class="form-group row">
+                                    <!-- <div class="form-group row">
                                         <label class="col-5" for="">Repeat for:</label>
                                         <input id="new_transactionRepeat" class="col-6 form-transactionRepeat" name="new_transactionRepeat" disabled />
                                         <input type="checkbox" name="new_automate" id="new_automate">
                                         <label class="error" for="new_investmentType">Please enter a valid category</label>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -528,12 +527,12 @@
                                         <label class="error" for="edit_transactionName">Please enter a valid name</label>
                                     </div>
                                     <!-- Hold this first -->
-                                    <div class="form-group row">
+                                    <!-- <div class="form-group row">
                                         <label class="col-5" for="">Repeat for:</label>
                                         <input id="new_transactionRepeat" class="col-6 form-transactionRepeat" name="new_transactionRepeat" disabled />
                                         <input type="checkbox" name="new_automate" id="new_automate">
                                         <label class="error" for="new_investmentType">Please enter a valid category</label>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                             <div class="modal-footer">

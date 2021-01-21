@@ -322,7 +322,7 @@
             <div class="container-fluid row filter2">
                 <div class="col-6 row show">
                     <h6>Showing:<span id="table-row-count">
-                            <?php $datarow = $customer->getData('Investment');
+                            <?php $datarow = $customer->getData('Investment','*',NULL,array('startDate' => 'desc'),NULL);
                             if (empty($datarow)) {
                                 echo (0);
                             } else {

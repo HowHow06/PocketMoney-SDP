@@ -406,8 +406,9 @@ class Customer
             $mail->send();
             echo '<script>window.location.href="register_two.php?email=' . $email . '";</script>';
         } catch (Exception $e) {
-            echo 'Message could not be sent.';
-            echo 'Mailer Error: ' . $mail->ErrorInfo;
+            return array('status' => 'error', 'statusMsg' => 'Message could not be sent. Mailer Error: ' . $mail->ErrorInfo);
+            // echo 'Message could not be sent.';
+            // echo 'Mailer Error: ' . $mail->ErrorInfo;
         }
     }
 
@@ -1191,7 +1192,7 @@ class Customer
                     $db->where('t.cusID', $id);
                     $db->where('c.categoryName', $cate);
                     $db->where('t.date', $date, 'LIKE');
-                    $db->groupBy("t.date");
+                    // $db->groupBy("t.date");
                     $result = $db->get('category c', null, 'SUM(t.amount) AS amount');
                     if (!empty($result[0]['amount'])) {
                         array_push($categoryValueByMonth['value'], $result[0]['amount']);
@@ -1441,6 +1442,53 @@ class Customer
             $db->where('categoryType', $categoryType);
             $result = $db->getOne("Category");
             return $result['categoryID'];
+        }
+        return NULL;
+    }
+
+    /*********************************************************************\
+     *               Below Part are show liability page                   *
+     *                       For extra functions                          *
+     *                                                                    *
+     *     *********    **      **   ******         ******    *********   *
+     *     **      **   **      **   **     **    ***         **          *
+     *     **      **   **      **   **      **   **          **          *
+     *     *********    **      **   **      **   **          *********   *
+     *     **      **   **      **   **      **   **    ***   **          *
+     *     **       **  **      **   **      **   **     **   **          *
+     *     **      **   **      **   **     **    ***    **   **          *
+     *     *********    **********   ******         *******   *********   *
+     *                                                                    *
+     *********************************************************************/
+
+    /** 
+     * Return Array of table row count for budget table only
+     * 
+     * @param int $month
+     * (12)
+     * 
+     * @param int $year
+     * (2020)
+     * 
+     * @return Array|NULL
+     * 
+     */
+    function getTableRowCount($month, $year)
+    {
+        $db = MysqliDb::getInstance();
+
+        if (!empty($this->id)) {
+            $id = $this->id;
+            $db->join('category c', 'c.categoryID=t.categoryID', 'LEFT');
+            $db->where('t.cusID', $id);
+            if (!empty($month)) {
+                $db->where('MONTH(t.date)', $month);
+                $db->where('YEAR(t.date)', $year);
+            } else {
+                $db->where('YEAR(t.date)', $year);
+            }
+            $result = $db->get('transaction t');
+            return $result;
         }
         return NULL;
     }
