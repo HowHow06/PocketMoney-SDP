@@ -68,7 +68,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('overall_trans.php');
+        $customer->goTo('overall_trans.php?role=customer');
     }
 
     //delete transaction
@@ -82,7 +82,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('overall_trans.php');
+        $customer->goTo('overall_trans.php?role=customer');
     }
 
     //new transaction
@@ -129,7 +129,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('overall_trans.php');
+        $customer->goTo('overall_trans.php?role=customer');
     }
 
     if (isset($_POST['filter-previous'])) {
@@ -183,6 +183,7 @@
                     <form action="overall_trans.php" method="get">
                         <div class="row">
                             <h6>Show:</h6>
+                            <input type="hidden" name="role" value="customer">
                             <select name="filter-month-year" id="filter-month-year" class="custom-select" onchange="this.form.submit()">
                                 <option value=""></option>
                                 <option value="Monthly">Monthly</option>
@@ -229,14 +230,24 @@
 
             <div class="container-fluid row filter2">
                 <div class="col-6 show">
-                    <h6>Showing:<span id="table-row-count">
-                            <?php $datarow = $customer->getTableRowCount($customer->getCurrentFilterTime(1,0,$customer->getFlag()),$customer->getCurrentFilterTime(1,1,$customer->getFlag()));
-                            if (empty($datarow)) {
-                                echo (0);
-                            } else {
-                                echo (sizeof($datarow));
-                            }
-                            ?> </span>entries</h6>
+                <h6>Showing:<span id="table-row-count">
+                        <?php
+                        $datarow = $customer->getDataByQuery("SELECT t.transactionID, c.categoryName AS category, t.date, t.amount, t.description AS name, c.categoryType AS type
+                                                        FROM transaction t
+                                                        RIGHT JOIN category c
+                                                        ON t.categoryID = c.categoryID
+                                                        WHERE t.cusID = " . $customer->getId() . " 
+                                                        AND (c.categoryType = 'income'
+                                                        OR c.categoryType = 'expenses')"
+                                                        . $customer->getCurrentFilterTime(1,2,$customer->getFlag()) .
+                                                        "ORDER BY date DESC;
+                                                        ");
+                        if (empty($datarow)) {
+                            echo (0);
+                        } else {
+                            echo (sizeof($datarow));
+                        }
+                    ?> </span>entries</h6>
                 </div>
 
                 <div class="col-6 search">
@@ -487,9 +498,12 @@
 
                     <?php 
                     $datarow = $customer->getDataByQuery("SELECT t.transactionID, c.categoryName AS category, t.date, t.amount, t.description AS name, c.categoryType AS type
-                                                            FROM transaction t, category c
+                                                            FROM transaction t
+                                                            RIGHT JOIN category c
+                                                            ON t.categoryID = c.categoryID
                                                             WHERE t.cusID = " . $customer->getId() . " 
-                                                            AND t.categoryID = c.categoryID "
+                                                            AND (c.categoryType = 'income'
+                                                            OR c.categoryType = 'expenses')"
                                                             . $customer->getCurrentFilterTime(1,2,$customer->getFlag()) .
                                                             "ORDER BY date DESC;
                                                             ");

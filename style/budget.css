@@ -41,6 +41,7 @@
 
 .navbar > ul > li:hover, .navbar > ul .active {
   background-color: rgba(255, 255, 255, 0.6);
+  -webkit-transition: 0.2s ease-in;
   transition: 0.2s ease-in;
 }
 
@@ -62,6 +63,8 @@
 
 .background {
   min-height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   background-color: #f7e0b5;
   padding: 70px 100px;
@@ -100,8 +103,12 @@
 }
 
 .background {
-  align-items: center;
-  justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
 .btn-circle {
@@ -116,7 +123,8 @@
   bottom: 15px;
   background-color: #fc9a55;
   color: white;
-  box-shadow: 2px 3px 5px 0px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 2px 3px 5px 0px rgba(0, 0, 0, 0.2);
+          box-shadow: 2px 3px 5px 0px rgba(0, 0, 0, 0.2);
 }
 
 .row {
@@ -125,7 +133,8 @@
 }
 
 .body {
-  box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
+          box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
   padding: 0;
   background-color: white;
   border-radius: 12px;
@@ -143,28 +152,27 @@
   cursor: default;
 }
 
-.body > div > .left > form {
+.body > div > .left > .row {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   padding-left: 20px;
   padding-top: 20px;
 }
 
-.body > div > .left > form > div {
-  align-items: center;
-}
-
-.body > div > .left > form > div > button {
+.body > div > .left > .row > form > button {
   width: 50px;
   height: 65px;
 }
 
-.body > div > .left > form > div > button > i {
+.body > div > .left > .row > form > button > i {
   color: #FF6C00;
   font-size: 24px;
 }
 
-.body > div > .left > form > div > h6 {
+.body > div > .left > .row > label {
   font-size: 20px;
-  margin-bottom: 0;
+  margin-bottom: 5px;
 }
 
 .body > .budget-overview {
@@ -212,6 +220,7 @@
   width: 50%;
   background-color: #fc9a55 !important;
   border-radius: 8px;
+  -webkit-transition: 0.3s ease-in-out;
   transition: 0.3s ease-in-out;
 }
 
@@ -266,6 +275,7 @@
 .body > .budget-overview > div > .budget-row:hover {
   cursor: pointer;
   background-color: #f8f8f8;
+  -webkit-transition: 1.5s ease-in-out;
   transition: 1.5s ease-in-out;
 }
 
@@ -345,8 +355,12 @@
 }
 
 .body > .filter {
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   padding: 50px 0;
 }
 

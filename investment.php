@@ -31,7 +31,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('investment.php');
+        $customer->goTo('investment.php?role=customer');
     }
 
 
@@ -46,7 +46,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('investment.php');
+        $customer->goTo('investment.php?role=customer');
     }
 
     //new transaction
@@ -67,7 +67,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('investment.php');
+        $customer->goTo('investment.php?role=customer');
     }
 
     //edit general investment
@@ -86,7 +86,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('investment.php');
+        $customer->goTo('investment.php?role=customer');
     }
 
     //delete general invesment
@@ -100,7 +100,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('investment.php');
+        $customer->goTo('investment.php?role=customer');
     }
 
     ?>
@@ -343,7 +343,7 @@
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="new-title">New Transaction</h5>
+                            <h5 class="modal-title" id="new-title">New Investment</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>

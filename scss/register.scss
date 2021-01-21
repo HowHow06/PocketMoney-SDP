@@ -12,7 +12,7 @@ body {
     }
     > .right {
         @include right-side;
-        padding-top: 50px;
+        padding: 50px;
         width: 698px;
     }
 }
@@ -30,87 +30,53 @@ body {
 }
 
 .step1 {
-    display: block;
-    > h5 {
+    h5 {
         padding-top: 20px;
     }
     > form {
-        @include button-a-wrap;
+        @include button-wrap;
         padding-top: 10px;
         > .form-group {
             padding-top: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 40px;
             > input {
                 @include input-wrap;
             }
-        }
-        > .form-check {
-            @include checkbox-wrap;
-            margin-bottom: 20px;
         }
     }
 }
 
 .step2 {
-    display: none;
-    > .back {
-        @include links(-40px, #FF6C00);
-    }
-    > .skip {
-        @include links(568px, black);
-    }
-    > h5 {
+    h5 {
         padding-top: 20px;
     }
-    > form {
-        @include button-a-wrap;
-        padding-top: 10px;
-        > h5 {
-            margin-bottom: 0;
+    div {
+        padding-top: 35px;
+        color: grey;
+        h2, h4, a {
+            color: #FF6C00;
         }
-        > .form-group {
-            padding-top: 5px;
-            // margin-bottom: 10px;
-            > input {
-                @include input-wrap;
-            }
+        h4 {
+            font-size: 20px;
+            margin-bottom: 0px;
         }
-        > .form-check {
-            @include checkbox-wrap;
-            padding-top: 10px;
-            margin-bottom: 20px;
+        h5 {
+            color: grey;
         }
-        > .form-row {
-            > .col-5 {
-                > select {
-                    padding: 5px 10px;
-                    font-size: 14px;
-                } 
-            }
-            > .col-3 {
-                > input {
-                    padding: 5px 20px 5px 5px;
-                    font-size: 14px;
-                }
-            }
+        p {
+            margin-bottom: 13px;
         }
     }
 }
 
 .step3 {
-    display: none;
-    > .back {
-        @include links(-40px, #FF6C00);
-    }
-    > .skip {
-        @include links(568px, black);
-    }
-    > h5 {
+    padding-bottom: 0 !important;
+    h5 {
         padding-top: 20px;
         margin-bottom: 0;
     }
     > form {
-        @include button-a-wrap;
+        @include button-wrap;
         padding-top: 10px;
         > .form-group {
             padding-top: 5px;
@@ -134,8 +100,9 @@ body {
                 }
             }
         }
-        > button {
-            margin-top: 50px;
+        > .form-check {
+            @include checkbox-wrap;
+            margin-bottom: 20px;
         }
     }
 }

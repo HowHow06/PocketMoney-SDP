@@ -10,7 +10,7 @@
 <body>
     <?php 
     $activePage = "dashboard";
-    include(".navbar.php")
+    include(".navbar.php");
     ?>
     
     <div class="container-fluid background">

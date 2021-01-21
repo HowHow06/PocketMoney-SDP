@@ -1,11 +1,14 @@
 <?php
 
 use function PHPUnit\Framework\isEmpty;
+// Import PHPMailer classes into the global namespace
+// These must be at the top of your script, not inside a function
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 class Customer
 {
     private $id;
-    private $num;
     /**
      * Static instance of self
      *
@@ -15,12 +18,11 @@ class Customer
 
 
 
-    function __construct($id = null, $db = null, $num = null)
+    function __construct($id = null, $db = null)
     {
         // $this->db          = $db;
         require_once('MysqliDb.php');
         $this->$id = $id;
-        $this->$num = $num;
         // $this->db          = new MysqliDb("db4free.net", "pocketmoney", "m&nsuperdry", "pocketmoney", "3306"); //temporary
         $this->db          = new MysqliDb("localhost", "root", "", "pocketmoney", "3308"); //temporary
         //$this->validation  = $validation;
@@ -67,22 +69,44 @@ class Customer
 
 
     /** 
-     * Return the array of table data if the id is set before
+     * Return the array of table data if the id is set before, by default the cusID is put in the where clause
      * @param String $tablename
      * the name of the table
      * 
      * @param String $columnName
      * the name of the specific column
      * 
+     * @param Array $whereAnd
+     * '<whereProp>'=>'<whereValue>';
+     * 
+     * @param Array|String $orderBy
+     * '<orderProp>' => '<order>','asc' or 'desc'; 
+     * 
+     * @param String $groupBy
+     * group by clause
+     * 
      * @return array|NULL
      * 
      */
-    function getData($tablename, $columnName = "*")
+    function getData($tablename, $columnName = "*", $whereAnd = NULL, $orderby = NULL, $groupBy = NULL)
     {
         $db = MysqliDb::getInstance();
         if (!empty($this->id)) {
             $id = $this->id;
             $db->where('cusID', $id);
+            if (!is_null($whereAnd)) { //if the groupBy clause is not null
+                foreach ($whereAnd as $prop => $value) {
+                    $db->where($prop, $value);
+                }
+            }
+            if (!is_null($orderby)) {
+                foreach ($orderby as $prop => $order) {
+                    $db->orderBy($prop, $order);
+                }
+            }
+            if (!is_null($groupBy)) { //if the groupBy clause is not null
+                $db->groupBy($groupBy);
+            }
             $result = $db->get($tablename, null, $columnName);
             return $result;
         }
@@ -126,6 +150,14 @@ class Customer
         $idName = $params['idName'];
         $id = $params['id'];
         $data = $params['data'];
+
+        if ($id == "") {
+            return array('status' => 'error', 'statusMsg' => 'data id is not defined');
+        }
+
+        if ($idName == "") {
+            return array('status' => 'error', 'statusMsg' => 'data property is not defined');
+        }
 
         $db->where($idName, $id);
 
@@ -181,6 +213,14 @@ class Customer
         $idName = $params['idName'];
         $id = $params['id'];
 
+        if ($id == "") {
+            return array('status' => 'error', 'statusMsg' => 'data id is not defined');
+        }
+
+        if ($idName == "") {
+            return array('status' => 'error', 'statusMsg' => 'data property is not defined');
+        }
+
         $db->where($idName, $id);
         if ($db->delete($tablename)) {
             return array('status' => 'ok', 'statusMsg' => 'Deleted successfully.');
@@ -217,6 +257,159 @@ class Customer
         </script>');
     }
 
+    /**
+     * Verifying customer new email.
+     *
+     * @param array $params
+     * 'email'-> String: new email of the customer;
+     * 
+     * @return array 
+     * 'status'-> String: 'ok' or 'error';
+     * 'statusMsg'-> String: the status msg;
+     *
+     */
+    function customerValidateEmail($params)
+    {
+        $db = MysqliDb::getInstance();
+
+        $email = $params["email"];
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return array('status' => 'error', 'statusMsg' => 'Wrong Email Structure');
+        }
+
+        $db->where('email', $email);
+        $result = $db->getOne('Customer');
+
+        if (!empty($result)) { //if the $result return something meaning the email is existed
+            return array('status' => 'error', 'statusMsg' => 'Email Has Been Used');
+        }
+
+        return array('status' => 'ok', 'statusMsg' => '');
+    }
+
+    /**
+     * Verifying customer new username.
+     *
+     * @param array $params
+     * 'username'-> String: new username of the customer;
+     * 
+     * @return array 
+     * 'status'-> String: 'ok' or 'error';
+     * 'statusMsg'-> String: the status msg;
+     *
+     */
+    function customerValidateUsername($params)
+    {
+        $db = MysqliDb::getInstance();
+        $username = $params['username'];
+        if (!preg_match('/^[a-zA-Z0-9_]{5,}$/', $username)) {
+            return array('status' => 'error', 'statusMsg' => 'Wrong Username Structure');
+        }
+
+        $db->where('username', $username);
+        $result = $db->getOne('Customer');
+
+        if (!empty($result)) { //if the $result return something meaning the username is existed
+            return array('status' => 'error', 'statusMsg' => 'Username Has Been Used');
+        }
+
+        return array('status' => 'ok', 'statusMsg' => '');
+    }
+
+    /**
+     * Verifying customer real name.
+     *
+     * @param array $params
+     * 'name'-> String: real name of the customer;
+     * 
+     * @return array 
+     * 'status'-> String: 'ok' or 'error';
+     * 'statusMsg'-> String: the status msg;
+     *
+     */
+    function customerValidateName($params)
+    {
+        $name = $params['name'];
+        if (!preg_match('/^[a-zA-Z ]{5,}$/', $name)) {
+            return array('status' => 'error', 'statusMsg' => 'Wrong Name Structure');
+        }
+        return array('status' => 'ok', 'statusMsg' => '');
+    }
+
+    /**
+     * Verifying customer password.
+     *
+     * @param array $params
+     * 'password'-> String: password of the customer;
+     * 
+     * @return array 
+     * 'status'-> String: 'ok' or 'error';
+     * 'statusMsg'-> String: the status msg;
+     *
+     */
+    function customerValidatePassword($params)
+    {
+        $password = $params['password'];
+        $passwordConf = $params['passwordConf'];
+        if (!preg_match('/^[^ ]{5,}$/', $password)) {
+            return array('status' => 'error', 'statusMsg' => 'Wrong Password Structure');
+        }
+        if ($password != $passwordConf) {
+            return array('status' => 'error', 'statusMsg' => 'Password Does Not Match');
+        }
+        return array('status' => 'ok', 'statusMsg' => '');
+    }
+
+    /**
+     * Verifying customer new email by sending email.
+     *
+     * @param String $email
+     * new email of the customer
+     *
+     */
+    function sendRegisterEmail($email)
+    {
+        // Send email to from company website to recipient
+        //Load composer's autoloader
+        require './phpmailer/vendor/autoload.php';
+
+        $mail = new PHPMailer(true);                                // Passing `true` enables exceptions
+        try {
+            //Server settings
+            $mail->isSMTP();                                        // Set mailer to use SMTP
+            $mail->Host = 'smtp.gmail.com';                         // Specify main and backup SMTP servers
+            $mail->SMTPAuth = true;                                 // Enable SMTP authentication
+            $mail->Username = 'sdppocketmoney2021@gmail.com';      // SMTP username
+            $mail->Password = 'SDPpocketmoney@2021';               // SMTP password
+            $mail->SMTPSecure = 'tls';                              // Enable TLS encryption, `ssl` also accepted
+            $mail->Port = 587;                                      // TCP port to connect to
+
+            //Recipients
+            $mail->setFrom('sdppocketmoney2021@gmail.com', 'Pocket Money Team');
+            $mail->addAddress($email);     // Add a recipient
+            $mail->addBCC('momolau2001@gmail.com');
+
+            //Content
+            $url = "http://localhost/SDP-Assignment/register_three.php?email=" . $email;
+
+            $subject = "[SIGN UP] Please verify your email";
+
+            $body = "<center>You are almost there!</center><br><br>
+            <center>Please <a href=" . $url . ">click here</a> to redirect back to fill up your information.</center><br><br>
+            <center>By POCKETMONEY</center>
+            <center>Terms and Conditions.</center>";
+
+            $mail->isHTML(true);                                     // Set email format to HTML
+            $mail->Subject = $subject;
+            $mail->Body    = $body;
+
+            $mail->send();
+            echo '<script>window.location.href="register_two.php?email=' . $email . '";</script>';
+        } catch (Exception $e) {
+            echo 'Message could not be sent.';
+            echo 'Mailer Error: ' . $mail->ErrorInfo;
+        }
+    }
 
     /**
      * Login via email/username and password. Session and cookie are not set.
@@ -548,7 +741,7 @@ class Customer
      *                                                                    *
      *********************************************************************/
 
-     /** 
+    /** 
      * Set flag in 0 or 1
      * @param int $bool
      * 0 -> Monthly
@@ -687,7 +880,7 @@ class Customer
             return $systemMonth;
         }
         // for query (0 -> Month)
-        if ($purpose==1 && $conditionFlag==0 && $yearlyFlag==1) {
+        if ($purpose == 1 && $conditionFlag == 0 && $yearlyFlag == 1) {
             return 0;
         }
         // for query (A string contain sql query -> monthly)
@@ -932,7 +1125,7 @@ class Customer
      * @return int|NULL
      * 
      */
-    function getDateNumByMonth($month,$year)
+    function getDateNumByMonth($month, $year)
     {
         if (!empty($month)) {
             switch ($month) {
@@ -954,7 +1147,7 @@ class Customer
                 case 2:
                     if ($year % 4 == 0) {
                         return 29;
-                    } else { 
+                    } else {
                         return 28;
                     }
                     break;
@@ -986,42 +1179,42 @@ class Customer
         $db = MysqliDb::getInstance();
         $id = $cusID;
         if (!empty($id)) {
-            $categoryValueByMonth = array('value'=>array(),'month'=>array());
-            $monthArr = ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September','October', 'November', 'December'];
+            $categoryValueByMonth = array('value' => array(), 'month' => array());
+            $monthArr = ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             if (!empty($month)) {
-                $numOfDays = $this->getDateNumByMonth($month,$year);
-                for ($i=1; $i<=$numOfDays; $i++) {
-                    strlen($i) == 1 ? $days = "0".$i : $days = strval($i);
-                    strlen($month) == 1 ? $months = "0".$month : $months = $month;
-                    $date = "%".$year."-".$months."-".$days."%";
+                $numOfDays = $this->getDateNumByMonth($month, $year);
+                for ($i = 1; $i <= $numOfDays; $i++) {
+                    strlen($i) == 1 ? $days = "0" . $i : $days = strval($i);
+                    strlen($month) == 1 ? $months = "0" . $month : $months = $month;
+                    $date = "%" . $year . "-" . $months . "-" . $days . "%";
                     $db->join('transaction t', 'c.categoryID=t.categoryID', 'RIGHT');
                     $db->where('t.cusID', $id);
                     $db->where('c.categoryName', $cate);
-                    $db->where('t.date',$date,'LIKE');
+                    $db->where('t.date', $date, 'LIKE');
                     $db->groupBy("t.date");
                     $result = $db->get('category c', null, 'SUM(t.amount) AS amount');
                     if (!empty($result[0]['amount'])) {
-                        array_push($categoryValueByMonth['value'],$result[0]['amount']);
+                        array_push($categoryValueByMonth['value'], $result[0]['amount']);
                     } else {
-                        array_push($categoryValueByMonth['value'],0);
+                        array_push($categoryValueByMonth['value'], 0);
                     }
-                    array_push($categoryValueByMonth['month'],$days);
+                    array_push($categoryValueByMonth['month'], $days);
                 }
             } else {
-                for ($j=1; $j<=12; $j++) {
+                for ($j = 1; $j <= 12; $j++) {
                     $db->join('transaction t', 'c.categoryID=t.categoryID', 'RIGHT');
                     $db->where('t.cusID', $id);
                     $db->where('c.categoryName', $cate);
-                    $db->where('MONTH(t.date)',$j);
-                    $db->where('YEAR(t.date)',$year);
+                    $db->where('MONTH(t.date)', $j);
+                    $db->where('YEAR(t.date)', $year);
                     $db->groupBy("MONTH(t.date)");
                     $result = $db->get('category c', null, 'SUM(t.amount) AS amount');
                     if (!empty($result[0]['amount'])) {
-                        array_push($categoryValueByMonth['value'],$result[0]['amount']);
+                        array_push($categoryValueByMonth['value'], $result[0]['amount']);
                     } else {
-                        array_push($categoryValueByMonth['value'],0);
+                        array_push($categoryValueByMonth['value'], 0);
                     }
-                    array_push($categoryValueByMonth['month'],$monthArr[$j-1]);
+                    array_push($categoryValueByMonth['month'], $monthArr[$j - 1]);
                 }
             }
             return $categoryValueByMonth;
@@ -1091,38 +1284,6 @@ class Customer
         return NULL;
     }
 
-    /** 
-     * Return Array of table row count for transaction table only
-     * 
-     * @param int $month
-     * (12)
-     * 
-     * @param int $year
-     * (2020)
-     * 
-     * @return Array|NULL
-     * 
-     */
-    function getTableRowCount($month, $year)
-    {
-        $db = MysqliDb::getInstance();
-
-        if (!empty($this->id)) {
-            $id = $this->id;
-            $db->join('category c', 'c.categoryID=t.categoryID', 'LEFT');
-            $db->where('t.cusID', $id);
-            if (!empty($month)) {
-                $db->where('MONTH(t.date)', $month);
-                $db->where('YEAR(t.date)', $year);
-            } else {
-                $db->where('YEAR(t.date)', $year);
-            }
-            $result = $db->get('transaction t');
-            return $result;
-        }
-        return NULL;
-    }
-
     /*********************************************************************\
      *               Below Part are show liability page                   *
      *                       For extra functions                          *
@@ -1140,38 +1301,146 @@ class Customer
 
 
     /** 
-     * Return JSON format of category value only
+     * Return JSON format of THE SPECIFIC FIELD groupby query
+     * @param String $tablename
+     * table name
+     * 
+     * @param String $columnName
+     * the column name after SELECT
+     * 
+     * 
+     * @param String $fieldToGetInJSON
+     * the name of field to get in JSON
+     * 
+     * @param boolean $isNumeric
+     * is the field to get a numeric value
+     * 
+     * @param String $groupBy
+     * the amount group by which field
+     * 
+     * @param String $where
+     * the where clause
+     * 
+     * 
      * @return JSON|NULL
      * 
      * 
      */
-    function getLiabCategoryAmountJSON($cate, $cusID, $month, $year)
+    function getJSON($tablename, $columnName, $fieldToGetInJSON, $isNumeric = false, $groupBy = NULL, $where = NULL)
     {
         $db = MysqliDb::getInstance();
         if (!empty($this->id)) {
-            $data = $this->getInvestTypesAndAmount();
-            $investAmountArr = array_map('floatval', $data['amount']);
-            $investAmountJSON = json_encode($investAmountArr);
-            return $investAmountJSON;
+            $result = $this->getData($tablename, $columnName, $groupBy, $where);
+            $finalResult = array();
+            foreach ($result as $row => $data) {
+                array_push($finalResult, $data[$fieldToGetInJSON]);
+            }
+            if ($isNumeric) { #convert the value to float data type if it is amount
+                $finalResult = array_map('floatval', $finalResult);
+            }
+            $resultJSON = json_encode($finalResult);
+            return $resultJSON;
         }
         return NULL;
     }
 
     /** 
-     * Return JSON format of category value only
+     * Return JSON format of either amount / field for a sum + groupby query
+     * @param String $rawquery
+     * the query
+     * 
+     * @param String $fieldToGetInJSON
+     * the name of field to get in JSON
+     * 
+     * @param boolean $isNumeric
+     * is the field to get a numeric value
+     * 
      * @return JSON|NULL
      * 
      * 
      */
-    function getLiabCategoryNameJSON($cate, $cusID, $month, $year)
+    function getJSONbyRawQuery($rawquery, $fieldToGetInJSON, $isNumeric = false)
     {
         $db = MysqliDb::getInstance();
-        $id = $cusID;
-        if (!empty($id)) {
-            $data = $this->getCategoryAmountByMonth($cate, $cusID, $month, $year);
-            $amountArr = array_map('floatval', $data['value']);
-            $amountJSON = json_encode($amountArr);
-            return $amountJSON;
+        if (!empty($this->id)) {
+            $result = $this->getDataByQuery($rawquery);
+            $finalResult = array();
+            foreach ($result as $row => $data) {
+                array_push($finalResult, $data[$fieldToGetInJSON]);
+            }
+            if ($isNumeric) { #convert the value to float data type if it is amount
+                $finalResult = array_map('floatval', $finalResult);
+            }
+            $resultJSON = json_encode($finalResult);
+            return $resultJSON;
+        }
+        return NULL;
+    }
+
+    /** 
+     * @param String $frequency
+     * 
+     * @param String $date
+     * 
+     * @return String date
+     * 
+     * @uses $dateString = $customer->getDateByFrequency($frequency,$date);
+     * 
+     * 
+     */
+    function getDateByFrequency($frequency, $date)
+    {
+        $now = date('Y-m-d');
+        if ($now < $date) { //the paymentdate havent due yet
+            return $date;
+        }
+        if ($frequency == "") { //if there is no frequency then just go ahead, get the scheduled 
+            return $date;
+        }
+        $paymentDateStamp = strtotime($date);
+        $paymentDay = date('d', $paymentDateStamp);
+        if ($frequency == "M") {
+            $lastdayofnextmonth = date('t', strtotime('+1 month')); //get the last day of month
+            if ($paymentDay > $lastdayofnextmonth) { //if the day exceed the last day
+                $paymentDay = $lastdayofnextmonth;
+            }
+            $newdatestamp = strtotime(date('Y') . '-' . date('m', strtotime('+1 month')) . '-' . $paymentDay);
+            return date("Y-m-d", $newdatestamp);
+        } elseif ($frequency == "Y") {
+            $paymentMonth = date('m', $paymentDateStamp);
+            $newdatestamp = strtotime(date('Y', strtotime('+1 year')) . '-' . $paymentMonth . '-1'); //get the month in the next year
+            $lastdayofthemonth = date('t', $newdatestamp); //get the last day of month in next year
+            if ($paymentDay > $lastdayofthemonth) { //if the day exceed the last day
+                $paymentDay = $lastdayofthemonth;
+            }
+            $newdatestamp = strtotime(date('Y', strtotime('+1 year', $paymentDateStamp)) . '-' . $paymentMonth . '-' . $paymentDay);
+
+            return date("Y-m-d", $newdatestamp);
+        }
+        return NULL;
+    }
+
+    /** 
+     * get category id by category name and type
+     * @param String $categoryName
+     * 
+     * @param String $categoryType
+     * 
+     * 
+     * @uses $dateString = $customer->getDateByFrequency($frequency,$date);
+     * 
+     * @return String|NULL 
+     * the category ID
+     * 
+     */
+    function getCategoryIDByNameType($categoryName, $categoryType)
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $db->where('categoryName', $categoryName);
+            $db->where('categoryType', $categoryType);
+            $result = $db->getOne("Category");
+            return $result['categoryID'];
         }
         return NULL;
     }
