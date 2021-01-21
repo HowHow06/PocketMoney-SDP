@@ -1,9 +1,9 @@
 <?php
-if ($_GET['role'] = 'customer') {
+if ($_GET['role'] == 'customer') {
     customerLogout();
 }
 
-if ($_GET['role'] = 'admin') {
+if ($_GET['role'] == 'admin') {
     adminLogout();
 }
 
@@ -26,7 +26,7 @@ function customerLogout()
     //     }
     //     header("Location: index.php");
     // }
-    header("Location: index.php?customer");
+    header("Location: index.php");
 }
 
 function adminLogout()
@@ -39,5 +39,5 @@ function adminLogout()
             setcookie("admin_password", null, time() - 3600 * 24 * 365);
         }
     }
-    header("Location: index.php?admin");
+    header("Location: index.php");
 }

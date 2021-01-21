@@ -36,7 +36,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('budget.php');
+        $customer->goTo('budget.php?role=customer');
     }
 	
     //delete budget
@@ -50,7 +50,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('budget.php');
+        $customer->goTo('budget.php?role=customer');
     }
 
     //new budget
@@ -73,14 +73,14 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('budget.php');
+        $customer->goTo('budget.php?role=customer');
     }
     ?>
 
     <div class="container-fluid background">
         <div class="container-fluid body">
             <nav class="navbar navbar-expand-lg">
-                <a href="#" class="navbar-brand">BUDGETS</a>
+                <a href="#" class="navbar-brand">BUDGET PLAN</a>
             </nav>
             <div class="container-fluid budget-overview">
                 <div class="container-fluid rounded border">
@@ -202,58 +202,59 @@
             
 			<br></br>
             <div class="container-fluid budget-manage">
+                <div class="border round">
                     <div class="col-12">
                         <h4>MANAGE BUDGET</h4>
                     </div>
                     <div class="row">
                         <table class="table table-bordered table-hover transaction-table" id="overallTransactionTable">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">CATEGORY</th>
-						<th scope="col">PERCENTAGE</th>
-						<th scope="col">ACTION</th>
-                    </tr>
-                </thead>
-                <tbody id="overallTransactionTableBody">
-
-                    <?php 
-                    $datarow = $customer->getDataByQuery("SELECT b.budgetID, c.categoryName AS category, 
-															c.categoryType AS type,
-															b.percentage AS percentage
-                                                            FROM budget b, category c
-                                                            WHERE b.cusID = " . $customer->getId() . " 
-                                                            AND b.categoryID = c.categoryID
-															ORDER BY categoryName DESC;
-                                                            ");
-                    if (!empty($datarow)) {
-                        for ($i = 0; $i < sizeof($datarow); $i++) {
-                            if (empty($datarow[$i]['name'])) {
-                                $description = $datarow[$i]['category'];
-                            } else {
-                                $description = $datarow[$i]['name'];
-                            }
-                    ?>
-                            <tr>
-                                <input type="hidden" class="budgetID" value='<?php echo ($datarow[$i]['budgetID']); ?>'></input>
-                                <th scope="row"><?php echo (($i + 1)); ?></th>
-                                <td class="budgetCategory"><?php echo ($datarow[$i]['category']); ?></td>
-								<td class="budgetPercentage"><?php echo ($datarow[$i]['percentage']); ?></td>
-								<td class="action">
-                                    <a href="#" class="edit-transaction-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
-                                    <span> | </span>
-                                    <a href="#" class="delete-transaction-anchor" data-toggle="modal" data-target="#delete-row">Delete</a>
-                                </td>
-                            </tr>
-                    <?php
-                        }
-                    } ?>
-                </tbody>
-            </table>
-            </div>
-					<button type="button" class="btn btn-circle btn-xl" data-toggle="modal" data-target="#new-budget">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">CATEGORY</th>
+                                    <th scope="col">PERCENTAGE</th>
+                                    <th scope="col">ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody id="overallTransactionTableBody">
+                                <?php 
+                                $datarow = $customer->getDataByQuery("SELECT b.budgetID, c.categoryName AS category, 
+                                                                        c.categoryType AS type,
+                                                                        b.percentage AS percentage
+                                                                        FROM budget b, category c
+                                                                        WHERE b.cusID = " . $customer->getId() . " 
+                                                                        AND b.categoryID = c.categoryID
+                                                                        ORDER BY categoryName DESC;
+                                                                        ");
+                                if (!empty($datarow)) {
+                                    for ($i = 0; $i < sizeof($datarow); $i++) {
+                                        if (empty($datarow[$i]['name'])) {
+                                            $description = $datarow[$i]['category'];
+                                        } else {
+                                            $description = $datarow[$i]['name'];
+                                        }
+                                ?>
+                                        <tr>
+                                            <input type="hidden" class="budgetID" value='<?php echo ($datarow[$i]['budgetID']); ?>'></input>
+                                            <th scope="row"><?php echo (($i + 1)); ?></th>
+                                            <td class="budgetCategory"><?php echo ($datarow[$i]['category']); ?></td>
+                                            <td class="budgetPercentage"><?php echo ($datarow[$i]['percentage']); ?></td>
+                                            <td class="action">
+                                                <a href="#" class="edit-transaction-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
+                                                <span> | </span>
+                                                <a href="#" class="delete-transaction-anchor" data-toggle="modal" data-target="#delete-row">Delete</a>
+                                            </td>
+                                        </tr>
+                                <?php
+                                    }
+                                } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- <button type="button" class="btn btn-circle btn-xl" data-toggle="modal" data-target="#new-budget">
                     <i class="fas fa-plus"></i>
-                    </button>
+                    </button> -->
+                </div>
             </div>
 	
             <!-- new-budget modal -->

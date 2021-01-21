@@ -7,7 +7,10 @@ if (isset($_POST['submitbtn'])) { //if the form is submitted
     $result = $customer->customerValidateEmail($params);
 
     if ($result['status'] == 'ok') { //the email is not been used and it is usable
-        $customer->sendRegisterEmail($email);
+        $result = $customer->sendRegisterEmail($email);
+        if ($result['status'] == 'error') { // mailing got problem
+            $error = true;
+        }
     }
 
     if ($result['status'] == 'error') { //wrong credential

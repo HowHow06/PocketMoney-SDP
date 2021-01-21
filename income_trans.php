@@ -425,12 +425,12 @@
                                         <label class="error" for="new_transactionName">Please enter a valid name</label>
                                     </div>
                                     <!-- Hold this first -->
-                                    <div class="form-group row">
+                                    <!-- <div class="form-group row">
                                         <label class="col-5" for="">Repeat for:</label>
                                         <input id="new_transactionRepeat" class="col-6 form-transactionRepeat" name="new_transactionRepeat" disabled />
                                         <input type="checkbox" name="new_automate" id="new_automate">
                                         <label class="error" for="new_investmentType">Please enter a valid category</label>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -527,12 +527,12 @@
                                         <label class="error" for="edit_transactionName">Please enter a valid name</label>
                                     </div>
                                     <!-- Hold this first -->
-                                    <div class="form-group row">
+                                    <!-- <div class="form-group row">
                                         <label class="col-5" for="">Repeat for:</label>
                                         <input id="new_transactionRepeat" class="col-6 form-transactionRepeat" name="new_transactionRepeat" disabled />
                                         <input type="checkbox" name="new_automate" id="new_automate">
                                         <label class="error" for="new_investmentType">Please enter a valid category</label>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                             <div class="modal-footer">
