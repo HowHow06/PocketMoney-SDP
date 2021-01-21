@@ -229,7 +229,7 @@ function showsearch(query) {
 
 function resetEdit() {
     var xmlhttp = new XMLHttpRequest();
-    var transactionID = document.getElementById("edit_transactionID").value;
+    var transactionID = document.getElementById("edit_budgetID").value;
     var cusID = document.getElementById("cusID").value;
     xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
