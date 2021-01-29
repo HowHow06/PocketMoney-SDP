@@ -3,7 +3,7 @@
 include('checkSessionCookie.php');
 
 ?>
-
+<link rel="stylesheet" href="./style/modalbox.css">
 <nav class="navbar navbar-expand-lg navbar-light">
     <a href="#" class="navbar-brand"><img src="./img/logo_i.png" width="50px" height="50px"> POCKETMONEY</a>
     <ul class="navbar-nav ml-auto">
@@ -14,12 +14,13 @@ include('checkSessionCookie.php');
             <a href="admin_feedback.php?role=admin" class="nav-link">Feedback Studio</a>
         </li>
         <li class="nav-item dropdown">
+
             <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown">Setting</a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <a href="#" class="dropdown-item">Profile</a>
+                <a href="admin_profile.php?role=admin" class="dropdown-item" id="updatebtn">Profile</a>
                 <a href="#" class="dropdown-item">Enquiry</a>
                 <a href="logout.php?role=admin" class="dropdown-item">Logout</a>
-            </div>
+            </div> 
         </li>
     </ul>
 </nav>

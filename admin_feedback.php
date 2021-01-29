@@ -25,28 +25,32 @@
                         <th scope="col">ACTION</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row">1</th>
-                        <td>1/1/2021</td>
-                        <td>Ali</td>
-                        <td>Haha</td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                        <th scope="row">2</th>
-                        <td>1/1/2021</td>
-                        <td>Ah Kau</td>
-                        <td>Haha</td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                        <th scope="row">3</th>
-                        <td>1/1/2021</td>
-                        <td>Muthu</td>
-                        <td>Haha</td>
-                        <td></td>
-                      </tr>
+                    <tbody id="feedbackstudio">
+                    
+                    <?php 
+                    
+                    $query = $admin->getDataByQuery("SELECT * FROM feedback");
+                    
+                    if (!empty($query)) {
+                    for($i = 0; $i < sizeof($query); $i++) {
+
+                      //loop
+                    ?> 
+                  
+                    <tr>
+                    <th scope = "row"><?php echo ($i +1 ); ?></th>
+                    <td class="feedback_date"><?php print_r($query[$i]['sent_date']); ?></td>
+                    <td class="feedback_customer"><?php echo ($query[$i]['customer_name']); ?></td>
+                    <td class="feedback_content"><?php echo ($query[$i]['content']); ?></td>
+                    <td class="action">
+                                      <a href="#" class="edit-announcement-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
+                                      <span> | </span>
+                                      <a href="#" class="delete-announcement-anchor" data-toggle="modal" data-target="#delete-row">Delete</a>
+                                  </td>
+                    </tr> 
+                    <?php }
+                   } ?>
+
                     </tbody>
                   </table>
                     <br><br>

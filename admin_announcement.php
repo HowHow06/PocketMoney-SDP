@@ -8,6 +8,24 @@
     <title>PockeyMoney | Dashboard</title>
 </head>
 <body>
+      <?php
+      //delete transaction
+          if (isset($_POST['delete_submit'])) {
+              $params['tableName'] = 'announcement';
+              $params['idName'] = 'announcementID';
+              $params['id'] = $_POST['delete_announcementID'];
+              $result = $admin->adminDelete($params);
+              if ($result['status'] == 'ok') {
+                  $admin->showAlert($result['statusMsg']);
+              } else {
+                  $admin->showAlert($result['statusMsg']);
+              }
+              $admin->goTo('admin_announcement.php');
+          }
+      ?>
+
+
+
     <?php include("AD_navbar.php"); ?>
     <div class="container-fluid background">
       <div class="container-fluid">
@@ -15,6 +33,23 @@
               <nav class="navbar navbar-expand-lg">
                     <a href="#" class="navbar-brand">ANNOUNCEMENT STATUS</a>
                   </nav>
+                  <div class="modal fade edit-modal" id="delete-row" tabindex="-1" role="dialog" aria-labelledby="delete-title" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+                      <div class="modal-content">
+                        <div class="modal-body">
+                            <p>Are you sure want to Delete this transaction?</p>
+                        </div>
+                           <div class="modal-footer">
+                            <form action="" method="POST">
+                                <input type="hidden" id="delete_announcementID" name="delete_announcementID"></input>
+                                <button type="submit" class="btn btn-primary" name="delete_submit">Delete</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            </form>
+                          </div>
+                      </div>
+                   </div>
+                </div>
+
 
                   <table class="table announcement-table">
                     <thead class="thead-light">
@@ -26,49 +61,53 @@
                         <th scope="col">ACTION</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row">1</th>
-                        <td>1/1/2021</td>
-                        <td>Title 1</td>
-                        <td>Haha</td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                        <th scope="row">2</th>
-                        <td>1/1/2021</td>
-                        <td>Title 2</td>
-                        <td>Haha</td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                        <th scope="row">3</th>
-                        <td>1/1/2021</td>
-                        <td>Title 3</td>
-                        <td>Haha</td>
-                        <td></td>
-                      </tr>
+                    <tbody id ="announcementbody">
+
+                    <?php 
+                    
+                    $query = $admin->getDataByQuery("SELECT announcementID, adminID, announcement_date, title, content FROM announcement");
+                    
+                    if (!empty($query)) {
+                    for($i = 0; $i < sizeof($query); $i++) {
+
+                      //loop
+                    ?> 
+                  
+                    <tr>
+                    <th scope = "row"><?php echo ($i +1 ); ?></th>
+                    <td class="ann_date"><?php print_r($query[$i]['announcement_date']); ?></td>
+                    <td class="ann_title"><?php echo ($query[$i]['title']); ?></td>
+                    <td class="ann_content"><?php echo ($query[$i]['content']); ?></td>
+                    <td class="action">
+                                      <a href="#" class="edit-announcement-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
+                                      <span> | </span>
+                                      <a href="#" class="delete-announcement-anchor" data-toggle="modal" data-target="#delete-row">Delete</a>
+                                  </td>
+                    </tr> 
+                    <?php }
+                   } ?>
+
                     </tbody>
                   </table>
                     <br><br>
                     <button type="button" id="myBtn" class="btn btn-outline-primary add-announcement">Add new announcement</button>
-                    <button type="button" class="btn btn-outline-primary editdel-announcement">Edit/Delete</button>
                     <div id="AnnouncementModal" class="modal">
                       <div class="modal-content">
                         <span class="close">&times;</span>
                         <label for="title"><b>Title</b></label>
-                        <input type="text" placeholder="Title " name="ann_title" required>
+                        <input type="text" placeholder="Title " id="new_title" required>
 
                         <label for="content"><b>Content</b></label>
-                        <input type="text" placeholder="Announcement Content" name="ann_content" required>
+                        <input type="text" placeholder="Announcement Content" id="new_content" required>
 
                         <label for="date"><b>Post Date</b></label>
-                        <input type="date" placeholder="Announcement Date" name="ann_date" required>
+                        <input type="date" placeholder="Announcement Date" id="new_date" required>
 
                         <button type="submit" class="btn">Post Announcement</button>
 
                       </div>
                       <script src="./script/announcement.js"></script>
+                      <script src="./script/announcement_main.js"></script>
                 </div>
               </div>
             </div>
