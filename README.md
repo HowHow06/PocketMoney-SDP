@@ -10,7 +10,10 @@ Financial Management System (Website)
 - Howard Lim          TP055278
 
 ## Work Progress
-
+### 2021-01-21
+> Moses's Part
+- Create ```profile.php``` and ```enquiry.php```
+- Update ```dashboard.php```
 ### 2021-01-21
 > Law's Part
 - Update ```budget.php``` and ```budget.js```

@@ -11,6 +11,7 @@
     <?php 
     $activePage = "dashboard";
     include(".navbar.php");
+    $customer->setCurDate();
     ?>
     
     <div class="container-fluid background">
@@ -20,34 +21,50 @@
                     <a href="#" class="navbar-brand">RECENT TRANSACTIONS</a>
                 </nav>
                 <!-- table -->
-                <table class="table table-bordered table-hover transaction-table table-sm" id="investmentTransactionTable">
+                <table class="table table-bordered table-hover transaction-table table-sm" id="overallTransactionTable">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">DATE</th>
+                            <th scope="col">TIME</th>
                             <th scope="col">AMOUNT</th>
                             <th scope="col">CATEGORY</th>
                             <th scope="col">NAME</th>
-                            <th scope="col">DESCRIPTION</th>
                             <th scope="col">TYPE</th>
                         </tr>
                     </thead>
-                    <tbody id="investmentTransactionTableBody">
+                    <tbody id="overallTransactionTableBody">
 
                         <?php 
-                            $datarow = $customer->getData('Investment');
-                            if (!empty($datarow)) {
+                        $datarow = $customer->getDataByQuery("SELECT t.transactionID, c.categoryName AS category, t.date, t.amount, t.description AS name, c.categoryType AS type
+                                                                FROM transaction t
+                                                                RIGHT JOIN category c
+                                                                ON t.categoryID = c.categoryID
+                                                                WHERE t.cusID = " . $customer->getId() . " 
+                                                                AND (c.categoryType = 'income'
+                                                                OR c.categoryType = 'expenses')"
+                                                                . $customer->getCurrentDateQuery() .
+                                                                " ORDER BY date DESC
+                                                                LIMIT 15;
+                                                                ");
+                        if (!empty($datarow)) {
                             for ($i = 0; $i < sizeof($datarow); $i++) {
+                                if (empty($datarow[$i]['name'])) {
+                                    $description = $datarow[$i]['category'];
+                                } else {
+                                    $description = $datarow[$i]['name'];
+                                }
                         ?>
                                 <tr>
-                                    <input type="hidden" class="investmentID" value='<?php echo ($datarow[$i]['investmentID']); ?>'></input>
+                                    <input type="hidden" class="transactionID" value='<?php echo ($datarow[$i]['transactionID']); ?>'></input>
+                                    <input type="hidden" class="transactionDateTime" value='<?php echo ($datarow[$i]['date']); ?>'></input>
                                     <th scope="row"><?php echo (($i + 1)); ?></th>
-                                    <td class="investDate"><?php echo ($datarow[$i]['startDate']); ?></td>
-                                    <td class="investAmount"><?php echo ($datarow[$i]['amountInvested']); ?></td>
-                                    <td class="investType"><?php echo ($datarow[$i]['investmentType']); ?></td>
-                                    <td class="investName"><?php echo ($datarow[$i]['investmentName']); ?></td>
-                                    <td class="investRate"><?php echo ($datarow[$i]['ratePerAnnum']); ?></td>
-                                    <td class="investType"><?php echo ($datarow[$i]['investmentType']); ?></td>
+                                    <td class="transactionDate"><?php print_r($customer->getDate($datarow[$i]['transactionID'])); ?></td>
+                                    <td class="transactionTime"><?php print_r($customer->getTime($datarow[$i]['transactionID'])); ?></td>
+                                    <td class="transactionAmount"><?php echo ($datarow[$i]['amount']); ?></td>
+                                    <td class="transactionCategory"><?php echo ($datarow[$i]['category']); ?></td>
+                                    <td class="transactionName"><?php echo ($description); ?></td>
+                                    <td class="transactionType"><?php echo ($datarow[$i]['type']); ?></td>
                                 </tr>
                         <?php
                             }
@@ -177,7 +194,7 @@
                 </div>
             </div>
 
-            <div class="container-fluid body">
+            <!-- <div class="container-fluid body">
                 <nav class="navbar navbar-expand-lg">
                     <a href="#" class="navbar-brand">FINANCIAL GOALS</a>
                 </nav>
@@ -189,7 +206,7 @@
                     <a href="#" class="navbar-brand">BALANCE SHEET</a>
                 </nav>
 
-            </div>
+            </div> -->
         </div>
 
         <div class="col-6 right-body">
@@ -197,40 +214,40 @@
                 <nav class="navbar navbar-expand-lg">
                     <a href="#" class="navbar-brand">SNAPSHOT</a>
                 </nav>
+                <?php
+                    $curMonth = $customer->getCurrentMonthValue();
+                    $curYear = $customer->getCurrentYearValue();
+                ?>
                 <div class="container-fluid row">
                     <div>
-                        <h5>Expenses</h5>
-                        <p>RM50,000.00</p>
-                    </div>
-                    <div>
                         <h5>Income</h5>
-                        <p>RM3,000.00</p>
+                        <p>RM<?php echo ($customer->getTotalValueInMonth($curMonth, $curYear, 0)); ?></p>
                     </div>
+                    <h3>-</h3>
                     <div>
-                        <h5>Net Flow</h5>
-                        <p>-RM47,000.00</p>
+                        <h5>Expenses</h5>
+                        <p>RM<?php echo ($customer->getTotalValueInMonth($curMonth, $curYear, 1)); ?></p>
                     </div>
+                    <h3>=</h3>
                     <div>
                         <h5>Balance</h5>
-                        <p>RM132,050.00</p>
+                        <p><?php echo ($customer->getNetIncomeInMonth($curMonth, $curYear)); ?></p>
                     </div>
                 </div>
                 <div class="container-fluid row">
                     <div>
-                        <h5>Debts</h5>
-                        <p>RM4,000.00</p>
-                    </div>
-                    <div>
                         <h5>Investments</h5>
-                        <p>RM3,200.00</p>
+                        <p>RM<?php echo ($customer->getTotalInvestmentAmount()); ?></p>
                     </div>
+                    <h3>-</h3>
                     <div>
-                        <h5>Assets</h5>
-                        <p>RM10,000.00</p>
+                        <h5>Debts</h5>
+                        <p>RM<?php echo ($customer->getTotalDebtAmount()); ?></p>
                     </div>
+                    <h3>=</h3>
                     <div>
                         <h5>Net Worth</h5>
-                        <p>RM6,000.00</p>
+                        <p><?php echo ($customer->getNetWorth()); ?></p>
                     </div>
                 </div>
             </div>
@@ -240,55 +257,49 @@
                     <a href="#" class="navbar-brand">INVESTMENTS</a>
                 </nav>
                 <div class="container-fluid row chart">
-                    <!-- horizontal bar chart -->
-                    <div class="col-7 horizontal-chart" id="horizontal-chart"></div>
                     <!-- pie chart -->
-                    <div class="col-5 donut-chart" id="donut-chart"></div>
+                    <input type="hidden" id="amountsOfInvestments" name="amountsOfInvestments" value='<?php echo ($customer->getTypeAmountsJSON()); ?>'></input>
+                    <input type="hidden" id="typesOfInvestments" name="typesOfInvestments" value='<?php echo ($customer->getInvestTypesJSON()); ?>'></input>
+                    <div class="col-6 horizontal-chart" id="investmentTypes-donut-chart"></div>
+                    <!-- pie chart -->
+                    <input type="hidden" id="amountsOfInvestmentByName" name="amountsOfInvestmentByName" value='<?php echo ($customer->getNameAmountsJSON()); ?>'>
+                    <input type="hidden" id="nameOfInvestment" name="nameOfInvestment" value='<?php echo ($customer->getInvestNameJSON()); ?>'>
+                    <div class="col-6 donut-chart" id="investmentNames-donut-chart"></div>
                 </div>
+                <!-- table -->
                 <table class="table table-bordered table-hover institution-table table-sm">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">INSTITUTION</th>
-                            <th scope="col">DESCRIPTION</th>
-                            <th scope="col">TYPE</th>
-                            <th scope="col">PRICE</th>
-                            <th scope="col">RATE PER ANNUM</th>
-                            <th scope="col">PROFIT</th>
-                            <th scope="col">CURRENT VALUE</th>
+                            <th scope="col">NAME</th>
+                            <th scope="col">CATEGORY</th>
+                            <th scope="col">TOTAL AMOUNT</th>
+                            <th scope="col">AVG ANNUAL RATE</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Company ABC</td>
-                            <td>Self-Developed Company</td>
-                            <td>Holding</td>
-                            <td>850.00</td>
-                            <td>1.05</td>
-                            <td>500.00</td>
-                            <td>1350.00</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Apple</td>
-                            <td>Phone Electronic Company</td>
-                            <td>Holding</td>
-                            <td>1682.00</td>
-                            <td>1.25</td>
-                            <td>350.00</td>
-                            <td>2032.00</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Samsung</td>
-                            <td>Phone Electronic Company</td>
-                            <td>Holding</td>
-                            <td>310.00</td>
-                            <td>1.05</td>
-                            <td>10.00</td>
-                            <td>320.10</td>
-                        </tr>
+                        <?php
+                        $datarow = $customer->getDataByQuery("SELECT investmentID, investmentName, investmentType, SUM(amountInvested) AS sumAmount, CAST(AVG(ratePerAnnum) AS DECIMAL(10,2)) AS avgRate 
+                                                                FROM Investment 
+                                                                WHERE cusID = '" . $customer->getId() . "'
+                                                                GROUP BY investmentName
+                                                                ORDER BY sumAmount DESC;
+                                                                ");
+                        if (!empty($datarow)) {
+                            for ($i = 0; $i < sizeof($datarow); $i++) {
+                        ?>
+                                <tr>
+                                    <input type="hidden" class="investmentID" value='<?php echo ($datarow[$i]['investmentID']); ?>'></input>
+                                    <th scope="row"><?php echo (($i + 1)); ?></th>
+                                    <td class="investName"><?php echo ($datarow[$i]['investmentName']); ?></td>
+                                    <td class="investType"><?php echo ($datarow[$i]['investmentType']); ?></td>
+                                    <td class="investAmount"><?php echo ($datarow[$i]['sumAmount']); ?></td>
+                                    <td class="investRate"><?php echo ($datarow[$i]['avgRate']); ?></td>
+                                </tr>
+                        <?php
+                            }
+                        } ?>
+
                     </tbody>
                 </table>
                 <br>
@@ -296,176 +307,68 @@
 
             <div class="container-fluid body liability">
                 <nav class="navbar navbar-expand-lg">
-                    <a href="#" class="navbar-brand">LIABILITIES</a>
+                    <a href="#" class="navbar-brand">DEBTS</a>
                 </nav>
+                <!-- the pecentage bar -->
                 <div class="container-fluid liability-overview">
-                    <div class="liability-row">
-                        <div class="row">
-                            <div class="col-3">
-                                <div>
-                                    <sub>Proton Car Loan</sub>
-                                </div>
-                                <p>RM 57000.00</p>
-                            </div>
-                            <div class="col-9">
-                                <!-- bar -->
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="16" aria-valuemin="0" aria-valuemax="100" id="progress-bar-liability"></div>
-                                    <h6>16%</h6>
-                                </div>
+                    <div class="container-fluid">
+                        <?php $query = "SELECT (l.totalAmountToPay - (l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")))), 0)))
+                                        as remainder,
+                                        l.liabilityName, 
+                                        l.totalAmountToPay as total,
+                                        l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")))), 0) paidAmount, l.liabilityType 
+                                        FROM liability l
+                                        LEFT JOIN transaction tr
+                                        ON l.liabilityName = tr.description
+                                        AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")) )
+                                        WHERE 
+                                        l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")))), 0) < l.totalAmountToPay
+                                        GROUP BY l.liabilityName";
+                        $result = $customer->getDataByQuery($query);
+                        foreach ($result as $data) {
+                            # code...
+
+                        ?>
+                            <div class="liability-row">
                                 <div class="row">
-                                    <div class="col-6">
-                                        <h6 class="paid">RM 4200.00</h6>
+                                    <div class="col-3">
+                                        <div>
+                                            <sub>
+                                                <?php echo ($data['liabilityName']); ?> | <?php echo ($data['liabilityType']); ?>
+                                            </sub>
+                                        </div>
+                                        <p>RM <?php echo ($data['total']); ?></p>
                                     </div>
-                                    <div class="col-6">
-                                        <h6 class="target">RM 52800.00</h6>
+                                    <div class="col-9">
+                                        <!-- bar -->
+                                        <div class="progress">
+                                            <?php $percent = round(($data['paidAmount'] / $data['total']) * 100.0, 1);
+                                            ?>
+
+                                            <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo ($percent); ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                                            <h6><?php echo ($percent); ?>%</h6>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <h6 class="paid">RM <?php echo (number_format($data['paidAmount'] * 1.0, 2)); ?></h6>
+                                            </div>
+                                            <div class="col-6">
+                                                <h6 class="target">RM <?php echo (number_format($data['remainder'], 2)); ?></h6>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+                                <hr>
                             </div>
-                        </div>
-                        <hr>
-                    </div>
-                    <div class="liability-row">
-                        <div class="row">
-                            <div class="col-3">
-                                <div>
-                                    <sub>PTPTN</sub>
-                                </div>
-                                <p>RM 120000.00</p>
-                            </div>
-                            <div class="col-9">
-                                <!-- bar -->
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="32" aria-valuemin="0" aria-valuemax="100" id="progress-bar-liability"></div>
-                                    <h6>32%</h6>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <h6 class="paid">RM 12000.00</h6>
-                                    </div>
-                                    <div class="col-6">
-                                        <h6 class="target">RM 91800.00</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
-                    </div>
-                    <div class="liability-row">
-                        <div class="row">
-                            <div class="col-3">
-                                <div>
-                                    <sub>VKB-A1 House Loan</sub>
-                                </div>
-                                <p>RM 110000.00</p>
-                            </div>
-                            <div class="col-9">
-                                <!-- bar -->
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="58" aria-valuemin="0" aria-valuemax="100" id="progress-bar-liability"></div>
-                                    <h6>58%</h6>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <h6 class="paid">RM 56000.00</h6>
-                                    </div>
-                                    <div class="col-6">
-                                        <h6 class="target">RM 52800.00</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
+                        <?php
+                        }
+                        ?>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </body>
-<script>
-    var horizontalOptions = {
-        series: [{
-            name: 'Institution Invest Amount',
-            data: [{
-                x: 'Company ABC',
-                y: 1350.00
-            }, {
-                x: 'Apple',
-                y: 2032.00
-            }, {
-                x: 'Samsung',
-                y: 320.10
-            }]
-        }],
-        chart: {
-            type: 'bar',
-            height: 250,
-            dropShadow: {
-                enabled: true,
-                top: 0,
-                left: 0,
-                blur: 2,
-                opacity: 0.2
-            }
-        },
-        plotOptions: {
-            bar: {
-                horizontal: true,
-                barHeight: '40%'
-            }
-        },
-        dataLabels: {
-            enabled: true
-        },
-        theme: {
-            monochrome: {
-                enabled: true,
-                color: '#F89542',
-                shadeIntensity: 0.65
-            }
-        },
-        xaxis: {
-            categories: ['Company ABC', 'Apple', 'Samsung']
-        }
-    };
-
-    var horizontalChart = new ApexCharts(document.querySelector("#horizontal-chart"), horizontalOptions);
-    horizontalChart.render();
-
-    var donutOptions = {
-        series: [1350.00, 2032.00, 320.10],
-        labels: ['Company ABC', 'Apple', 'Samsung'],
-        chart: {
-            type: 'donut',
-        },
-        plotOptions: {
-            pie: {
-                customScale: 0.85,
-                donut: {
-                    size: '55%'
-                }
-            }
-        },
-        responsive: [{
-            breakpoint: 480,
-            options: {
-                chart: {
-                    width: 400
-                },
-                legend: {
-                    position: 'bottom'
-                }
-            }
-        }],
-        colors: ['#D08F78', '#F89542', '#FFB07C']
-    };
-
-    var donutChart = new ApexCharts(document.querySelector("#donut-chart"), donutOptions);
-    donutChart.render();
-
-    $(document).ready(function() {
-        $("body").niceScroll();
-    });
-</script>
+<script src="./script/dashboard.js"></script>
 
 </html>
