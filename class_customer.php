@@ -1447,7 +1447,7 @@ class Customer
     }
 
     /*********************************************************************\
-     *               Below Part are show liability page                   *
+     *               Below Part are show budget page                   *
      *                       For extra functions                          *
      *                                                                    *
      *     *********    **      **   ******         ******    *********   *
@@ -1491,5 +1491,189 @@ class Customer
             return $result;
         }
         return NULL;
+    }
+
+    
+    /*********************************************************************\
+     *               Below Part are show dashboard page                   *
+     *                       For extra functions                          *
+     *                                                                    *
+     *     *********    **      **   ******         ******    *********   *
+     *     **      **   **      **   **     **    ***         **          *
+     *     **      **   **      **   **      **   **          **          *
+     *     *********    **      **   **      **   **          *********   *
+     *     **      **   **      **   **      **   **    ***   **          *
+     *     **       **  **      **   **      **   **     **   **          *
+     *     **      **   **      **   **     **    ***    **   **          *
+     *     *********    **********   ******         *******   *********   *
+     *                                                                    *
+     *********************************************************************/
+
+
+    /** 
+     * Return String format of month
+     * 
+     * 
+     * @return String |NULL
+     * 
+     */
+    function getCurrentMonthValue()
+    {
+        $d = strtotime($this->getCurDate());
+        $systemMonth = date('m', $d);
+        return $systemMonth;
+    }
+
+    /** 
+     * Return String format of year
+     * 
+     * 
+     * @return String |NULL
+     * 
+     */
+    function getCurrentYearValue()
+    {
+        $d = strtotime($this->getCurDate());
+        $systemYear = date('Y', $d);
+        return $systemYear;
+    }
+
+    /** 
+     * Return String format of query for month and date
+     * 
+     * 
+     * @return String |NULL
+     * 
+     */
+    function getCurrentDateQuery()
+    {
+        $d = strtotime($this->getCurDate());
+        $systemMonth = date("m", $d);
+        $systemYear = date("Y", $d);
+        $output = " AND MONTH(t.date) = " . $systemMonth . " AND YEAR(t.date) = " . $systemYear . " ";
+        return $output;
+    }
+
+    /** 
+     * Return String format of amount
+     * 
+     * 
+     * @return String |NULL
+     * 
+     */
+    function getTotalValueInMonth($month, $year, $isExpense=0)
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $id = $this->id;
+            $db->join('transaction t', 'c.categoryID=t.categoryID', 'LEFT');
+            $db->where('t.cusID', $id);
+            if (empty($isExpense)) {
+                $db->where('c.categoryType', 'income');
+            } else {
+                $db->where('c.categoryType', 'expenses');
+            }
+            $db->where('MONTH(t.date)', $month);
+            $db->where('YEAR(t.date)', $year);
+            $result = $db->get('category c', null, 'c.categoryName, SUM(t.amount) AS amount');
+            if (!empty($result)) {
+                $value = (float) $result[0]['amount'];
+                return number_format($value, 2, '.', '');
+            }
+        }
+        return NULL;
+    }
+
+    /** 
+     * Return String format of net income
+     * 
+     * 
+     * @return String
+     * 
+     */
+    function getNetIncomeInMonth($month, $year) {
+        $income = floatval($this->getTotalValueInMonth($month, $year, 0));
+        $expense = floatval($this->getTotalValueInMonth($month, $year, 1));
+        
+        $net =  $income - $expense;
+        if ($net < 0) {
+            $output = "-RM". number_format($net, 2, '.', '');
+        }
+        else {
+            $output = "RM". number_format($net, 2, '.', '');
+        }
+
+        return $output;
+    }
+
+    /** 
+     * Return the total invested amount if the id is set before
+     * @return String|NULL
+     * 
+     */
+    function getTotalInvestmentAmount()
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $id = $this->id;
+            $db->where('cusID', $id);
+            $result = $db->getOne('Investment', "SUM(amountInvested) AS SUM");
+            $value = (float) $result['SUM'];
+            $output = number_format($value, 2, '.', '');
+            return $output;
+        }
+        return NULL;
+    }
+
+    /** 
+     * Return the total debts amount
+     * @return String|NULL
+     * 
+     */
+    function getTotalDebtAmount()
+    {
+        if (!empty($this->id)) {
+            $id = $this->id;
+            $result = $this->getDataByQuery("SELECT
+            (l.totalAmountToPay - (l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $id . ")))), 0)))
+            as remainder, l.liabilityName,l.initialPaidAmount,
+             l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $id . ")))), 0) as paid
+            FROM liability l
+            LEFT JOIN transaction tr
+            ON l.liabilityName = tr.description
+            AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $id . ")))
+            WHERE
+            l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $id . ")))), 0) < l.totalAmountToPay
+            GROUP BY l.liabilityName");
+
+            $total = 0;
+            foreach ($result as $data) {
+                $total += (float) $data['remainder'];
+            }       
+            $output = number_format($total, 2, '.', '');     
+            return $output;
+        }
+        return NULL;
+    }
+
+    /** 
+     * Return String format of net worth
+     * 
+     * 
+     * @return String
+     * 
+     */
+     function getNetWorth() {
+        $investment = floatval($this->getTotalInvestmentAmount());
+        $debt = floatval($this->getTotalDebtAmount());
+        $net =  $investment - $debt;
+        if ($net < 0) {
+            $net *= -1;
+            $output = "-RM". number_format($net, 2, '.', '');
+        }
+        else {
+            $output = "RM". number_format($net, 2, '.', '');
+        }
+        return $output;
     }
 }

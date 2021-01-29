@@ -54,4 +54,11 @@
                     <br>
                 </div>
 
+<script>
+$(document).ready(function () {
+    $("body").niceScroll();
+    $(".transaction-table").niceScroll();
+});
+</script>
 </html>
+
