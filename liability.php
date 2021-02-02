@@ -96,8 +96,10 @@
         AND tr.cusID ='" . $cusID . "'
         AND (SELECT categoryType FROM category ct WHERE tr.categoryID = ct.categoryID) = 'liability'";
 
+
         $customer->getDataByQuery($query);
 
+        //update the transaction categoryID
         $query = "UPDATE transaction tr
         SET tr.categoryID= (SELECT categoryID from category ct WHERE ct.categoryName='" . $_POST['edit-liability-category'] . "' AND ct.categoryType = 'liability')
         WHERE tr.description = '" . $liabilityName . "' 
@@ -115,7 +117,6 @@
         $paymentFrequency = NULL;
         $paymentReminder = 1;
         if ($scheduled == 'yes') {
-
             //since these controls might be disabled, so need to check before assign
             $paymentDate = $_POST['edit-liability-paymentDate'];
             $paymentAmount = $_POST['edit-liability-paymentAmount'];
@@ -144,7 +145,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('liability.php?role=customer');
+        // $customer->goTo('liability.php?role=customer');
     }
     //new liability
     if (isset($_POST['new-liability-submit'])) {

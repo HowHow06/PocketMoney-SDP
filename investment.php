@@ -2,7 +2,11 @@
 <html lang="en">
 
 <head>
-    <?php include(".head.php"); ?>
+    <?php
+
+    use phpDocumentor\Reflection\Types\Array_;
+
+    include(".head.php"); ?>
     <link rel="stylesheet" href="./style/investment.css">
 
     <title>PocketMoney | Investments</title>
@@ -15,6 +19,34 @@
 
     //update the investment transaction
     if (isset($_POST['edit_submit'])) {
+        // $query = "SELECT * FROM category WHERE categoryType = 'investment' AND categoryName ='" . $_POST["edit_investmentType"] . "' AND cusID IS NULL";
+        // $cateTest1 = $customer->getDataByQuery($query);
+        // $cateTest2 = $customer->getData("Category", "*", array("categoryName" => $_POST['edit_investmentType'], "categoryType" => "investment"));
+        // if (empty($cateTest1) && empty($cateTest2)) { //both empty meaning category is new 
+        //     //create new category in category table
+        //     $params['tableName'] = 'category';
+        //     $params['data'] = array(
+        //         'categoryName' => $_POST['edit_investmentType'],
+        //         'categoryType' => 'investment',
+        //         'preDefine' => 0,
+        //         'cusID' => 1
+        //     );
+        //     $result = $customer->customerInsert($params);
+        // }
+
+        // //update the transaction description and category ID
+        // $cusID = $customer->getId();
+        // $query = "UPDATE transaction tr
+        // SET tr.description= '" . $_POST['edit_investmentName'] . "' , 
+        //     tr.categoryID = '" . $customer->getCategoryIDByNameType($_POST['edit_investmentType'], "investment") . "'
+        // WHERE tr.description = '" .  $_POST['edit_oriInvestmentName'] . "' 
+        // AND tr.cusID ='" . $cusID . "'
+        // AND (SELECT categoryType FROM category ct WHERE tr.categoryID = ct.categoryID) = 'investment'";
+        // $customer->getDataByQuery($query);
+
+
+
+
         $params['tableName'] = 'Investment';
         $params['idName'] = 'investmentID';
         $params['id'] = $_POST['edit_investmentID'];
@@ -37,6 +69,12 @@
 
     //delete transaction
     if (isset($_POST['delete_submit'])) {
+        $query = "DELETE FROM transaction tr 
+        WHERE tr.description = (SELECT i.investmentName FROM investment i WHERE i.investmentID= '" . $_POST['delete_investmentID'] . "') 
+        AND tr.cusID = '" . $customer->getId() . "' 
+        AND (SELECT categoryType FROM category ct WHERE tr.categoryID = ct.categoryID) = 'investment';";
+        $customer->getDataByQuery($query);
+
         $params['tableName'] = 'Investment';
         $params['idName'] = 'investmentID';
         $params['id'] = $_POST['delete_investmentID'];
@@ -51,6 +89,35 @@
 
     //new transaction
     if (isset($_POST['new_submit'])) {
+        $query = "SELECT * FROM category WHERE categoryType = 'investment' AND categoryName ='" . $_POST["new_investmentType"] . "' AND cusID IS NULL";
+        $cateTest1 = $customer->getDataByQuery($query);
+        $cateTest2 = $customer->getData("Category", "*", array("categoryName" => $_POST['new_investmentType'], "categoryType" => "investment"));
+
+
+        if (empty($cateTest1) && empty($cateTest2)) { //both empty meaning category is new 
+            //create new category in category table
+            $params['tableName'] = 'category';
+            $params['data'] = array(
+                'categoryName' => $_POST['new_investmentType'],
+                'categoryType' => 'investment',
+                'preDefine' => 0,
+                'cusID' => 1
+            );
+            $result = $customer->customerInsert($params);
+        }
+
+        //create new transaction
+        $params['tableName'] = 'Transaction';
+        $params['data'] = array(
+            'cusID' => $customer->getId(),
+            'categoryID' => $customer->getCategoryIDByNameType($_POST['new_investmentType'], "investment"),
+            'date' => $_POST['new_startDate'],
+            'amount' => $_POST['new_amountInvested'],
+            'description' => $_POST['new_investmentName']
+        );
+        $result = $customer->customerInsert($params);
+
+        //new investment
         $params['tableName'] = 'Investment';
         $params['data'] = array(
             'cusID' => $customer->getId(),
@@ -72,6 +139,33 @@
 
     //edit general investment
     if (isset($_POST['edit-general-submit'])) {
+        $query = "SELECT * FROM category WHERE categoryType = 'investment' AND categoryName ='" . $_POST["edit_investmentType"] . "' AND cusID IS NULL";
+        $cateTest1 = $customer->getDataByQuery($query);
+        $cateTest2 = $customer->getData("Category", "*", array("categoryName" => $_POST['edit-general-investmentType'], "categoryType" => "investment"));
+        if (empty($cateTest1) && empty($cateTest2)) { //both empty meaning category is new 
+            //create new category in category table
+            $params['tableName'] = 'category';
+            $params['data'] = array(
+                'categoryName' => $_POST['edit-general-investmentType'],
+                'categoryType' => 'investment',
+                'preDefine' => 0,
+                'cusID' => 1
+            );
+            $result = $customer->customerInsert($params);
+        }
+
+        //update the transaction description and category ID
+        $cusID = $customer->getId();
+        $query = "UPDATE transaction tr
+        SET tr.description= '" . $_POST['edit-general-newName'] . "' , 
+            tr.categoryID = '" . $customer->getCategoryIDByNameType($_POST['edit-general-investmentType'], "investment") . "'
+        WHERE tr.description = '" .  $_POST['edit-general-name'] . "' 
+        AND tr.cusID ='" . $cusID . "'
+        AND (SELECT categoryType FROM category ct WHERE tr.categoryID = ct.categoryID) = 'investment'";
+        $customer->getDataByQuery($query);
+
+
+
         $params['tableName'] = 'Investment';
         $params['idName'] = 'investmentName';
         $params['id'] = $_POST['edit-general-name'];
@@ -214,18 +308,22 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Name:</label>
-                                        <input class="col-6 form-investmentName" type="text" id="edit-general-newName" name="edit-general-newName" required disabled>
+                                        <input class="col-6 form-investmentName" type="text" id="edit-general-newName" name="edit-general-newName" required>
                                         <label class="error" for="edit-general-newName">Please enter a valid name</label>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Category:</label>
-                                        <input id="edit-general-investmentType" class="col-6 form-investmentType" list="edit-general-investmentTypeList" name="edit-general-investmentType" required disabled />
+                                        <input id="edit-general-investmentType" class="col-6 form-investmentType" list="edit-general-investmentTypeList" name="edit-general-investmentType" required />
                                         <datalist id="edit-general-investmentTypeList">
                                             <?php
-                                            $data = $customer->getData('Investment', "DISTINCT investmentType");
+                                            $query = "SELECT *
+                                             FROM Category cate
+                                             WHERE cate.categoryType = 'investment'
+                                             AND (cate.cusID IS NULL OR cate.cusID = '" . $customer->getId() . "')";
+                                            $data = $customer->getDataByQuery($query);
                                             foreach ($data as $row => $value) {
                                             ?>
-                                                <option id="type<?php echo ($value['investmentType']); ?>" value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
+                                                <option id="type<?php echo ($value['categoryName']); ?>" value="<?php echo ($value['categoryName']); ?>"><?php echo ($value['categoryName']); ?></option>
                                             <?php
                                             }
                                             ?>
@@ -241,7 +339,6 @@
                                         <label class="col-5" for="">Total Amount:</label>
                                         <input class="col-6" id="edit-general-totalAmount" type="number" step='0.01' value="" disabled>
                                     </div>
-
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -322,7 +419,7 @@
             <div class="container-fluid row filter2">
                 <div class="col-6 row show">
                     <h6>Showing:<span id="table-row-count">
-                            <?php $datarow = $customer->getData('Investment','*',NULL,array('startDate' => 'desc'),NULL);
+                            <?php $datarow = $customer->getData('Investment', '*', NULL, array('startDate' => 'desc'), NULL);
                             if (empty($datarow)) {
                                 echo (0);
                             } else {
@@ -339,7 +436,7 @@
             </div>
 
             <!-- new-row modal -->
-            <div class="modal fade new-modal" id="new-row" tabindex="-1" role="dialog" aria-labelledby="new-title" aria-hidden="true">
+            <div class="modal fade new-modal row-modal" id="new-row" tabindex="-1" role="dialog" aria-labelledby="new-title" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -381,10 +478,14 @@
                                         <input id="new_investmentType" class="col-6 form-investmentType" list="new_investmentTypeList" name="new_investmentType" required />
                                         <datalist id="new_investmentTypeList">
                                             <?php
-                                            $data = $customer->getData('Investment', "DISTINCT investmentType");
+                                            $query = "SELECT *
+                                            FROM Category cate
+                                            WHERE cate.categoryType = 'investment'
+                                            AND (cate.cusID IS NULL OR cate.cusID = '" . $customer->getId() . "')";
+                                            $data = $customer->getDataByQuery($query);
                                             foreach ($data as $row => $value) {
                                             ?>
-                                                <option id="type<?php echo ($value['investmentType']); ?>" value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
+                                                <option id="type<?php echo ($value['categoryName']); ?>" value="<?php echo ($value['categoryName']); ?>"><?php echo ($value['categoryName']); ?></option>
                                             <?php
                                             }
                                             ?>
@@ -433,7 +534,8 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Name:</label>
-                                        <input id="edit_investmentName" class="col-6 form-investmentName" list="edit_investmentNameList" name="edit_investmentName" required />
+                                        <input id="edit_oriInvestmentName" class="col-6" type="hidden" name="edit_oriInvestmentName" value="" />
+                                        <input id="edit_investmentName" class="col-6 form-investmentName" list="edit_investmentNameList" name="edit_investmentName" required disabled />
                                         <datalist id="edit_investmentNameList">
                                             <?php
                                             $data = $customer->getData('Investment', "DISTINCT investmentName");
@@ -448,13 +550,17 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Category:</label>
-                                        <input id="edit_investmentType" class="col-6 form-investmentType" list="edit_investmentTypeList" name="edit_investmentType" required />
+                                        <input id="edit_investmentType" class="col-6 form-investmentType" list="edit_investmentTypeList" name="edit_investmentType" required disabled />
                                         <datalist id="edit_investmentTypeList">
                                             <?php
-                                            $data = $customer->getData('Investment', "DISTINCT investmentType");
+                                            $query = "SELECT *
+                                            FROM Category cate
+                                            WHERE cate.categoryType = 'investment'
+                                            AND (cate.cusID IS NULL OR cate.cusID = '" . $customer->getId() . "')";
+                                            $data = $customer->getDataByQuery($query);
                                             foreach ($data as $row => $value) {
                                             ?>
-                                                <option id="type<?php echo ($value['investmentType']); ?>" value="<?php echo ($value['investmentType']); ?>"><?php echo ($value['investmentType']); ?></option>
+                                                <option id="type<?php echo ($value['categoryName']); ?>" value="<?php echo ($value['categoryName']); ?>"><?php echo ($value['categoryName']); ?></option>
                                             <?php
                                             }
                                             ?>
