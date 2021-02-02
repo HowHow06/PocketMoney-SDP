@@ -94,9 +94,14 @@ class Customer
         if (!empty($this->id)) {
             $id = $this->id;
             $db->where('cusID', $id);
+
             if (!is_null($whereAnd)) { //if the groupBy clause is not null
                 foreach ($whereAnd as $prop => $value) {
-                    $db->where($prop, $value);
+                    if (empty($value)) {
+                        $db->where($prop, $value, "IS");
+                    } else {
+                        $db->where($prop, $value);
+                    }
                 }
             }
             if (!is_null($orderby)) {
@@ -107,6 +112,7 @@ class Customer
             if (!is_null($groupBy)) { //if the groupBy clause is not null
                 $db->groupBy($groupBy);
             }
+
             $result = $db->get($tablename, null, $columnName);
             return $result;
         }
@@ -257,6 +263,18 @@ class Customer
         </script>');
     }
 
+    /**
+     * show console log
+     *
+     * @param String $msg
+     * the msg to show in alert box
+     * 
+     */
+    public function consoleLog($msg)
+    {
+        echo ('<script>console.log(\"' . $msg . '\");
+        </script>');
+    }
     /**
      * Verifying customer new email.
      *
@@ -1493,7 +1511,7 @@ class Customer
         return NULL;
     }
 
-    
+
     /*********************************************************************\
      *               Below Part are show dashboard page                   *
      *                       For extra functions                          *
@@ -1561,7 +1579,7 @@ class Customer
      * @return String |NULL
      * 
      */
-    function getTotalValueInMonth($month, $year, $isExpense=0)
+    function getTotalValueInMonth($month, $year, $isExpense = 0)
     {
         $db = MysqliDb::getInstance();
         if (!empty($this->id)) {
@@ -1591,16 +1609,16 @@ class Customer
      * @return String
      * 
      */
-    function getNetIncomeInMonth($month, $year) {
+    function getNetIncomeInMonth($month, $year)
+    {
         $income = floatval($this->getTotalValueInMonth($month, $year, 0));
         $expense = floatval($this->getTotalValueInMonth($month, $year, 1));
-        
+
         $net =  $income - $expense;
         if ($net < 0) {
-            $output = "-RM". number_format($net, 2, '.', '');
-        }
-        else {
-            $output = "RM". number_format($net, 2, '.', '');
+            $output = "-RM" . number_format($net, 2, '.', '');
+        } else {
+            $output = "RM" . number_format($net, 2, '.', '');
         }
 
         return $output;
@@ -1649,8 +1667,8 @@ class Customer
             $total = 0;
             foreach ($result as $data) {
                 $total += (float) $data['remainder'];
-            }       
-            $output = number_format($total, 2, '.', '');     
+            }
+            $output = number_format($total, 2, '.', '');
             return $output;
         }
         return NULL;
@@ -1663,16 +1681,16 @@ class Customer
      * @return String
      * 
      */
-     function getNetWorth() {
+    function getNetWorth()
+    {
         $investment = floatval($this->getTotalInvestmentAmount());
         $debt = floatval($this->getTotalDebtAmount());
         $net =  $investment - $debt;
         if ($net < 0) {
             $net *= -1;
-            $output = "-RM". number_format($net, 2, '.', '');
-        }
-        else {
-            $output = "RM". number_format($net, 2, '.', '');
+            $output = "-RM" . number_format($net, 2, '.', '');
+        } else {
+            $output = "RM" . number_format($net, 2, '.', '');
         }
         return $output;
     }
