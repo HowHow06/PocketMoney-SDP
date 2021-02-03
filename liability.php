@@ -743,7 +743,7 @@
                                     <div class="form-group row">
                                         <label class="col-5" for="">Category:</label>
                                         <input type="hidden" id="new-liability-newCate" class="form-liability-newCate" name="new-liability-newCate" value="0" />
-                                        <input id="new-liability-category" class="col-6 form-liabilityType" list="new-liability-categoryList" name="new-liability-category" required />
+                                        <input id="new-liability-category" class="col-6 form-liabilityType" list="new-liability-categoryList" name="new-liability-category" autocomplete="off" required />
                                         <datalist id="new-liability-categoryList">
                                             <?php
                                             $query = "SELECT * FROM category ct WHERE ct.categoryType = 'liability' AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . "))";
@@ -847,7 +847,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Category:</label>
-                                        <input id="edit-liability-category" class="col-6 form-liabilityType" list="edit-liability-categoryList" name="edit-liability-category" required />
+                                        <input id="edit-liability-category" class="col-6 form-liabilityType" list="edit-liability-categoryList" name="edit-liability-category" autocomplete="off" required />
                                         <input type="hidden" id="edit-liability-newCate" class="form-liability-newCate" name="edit-liability-newCate" value="0" />
                                         <datalist id="edit-liability-categoryList">
                                             <?php
