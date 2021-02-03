@@ -247,6 +247,7 @@
                     </div>
                 </div>
             </div>
+            <span class="float-left backbtn"><a href="liability.php?role=customer"><i class="fas fa-angle-left"></i></a></span>
             <h4 id="mark-payment-history">PAYMENT HISTORY</h4>
             <hr>
             <div class="container-fluid row filter">
