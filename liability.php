@@ -736,7 +736,7 @@
                                     <input type="hidden" id="new-liability" name="new-liability"></input>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Name:</label>
-                                        <input type="text" id="new-liability-name" class="col-6 form-liabilityName" name="new-liability-name" required />
+                                        <input type="text" id="new-liability-name" class="col-6 form-liabilityName" name="new-liability-name" autocomplete="off" required />
                                         <label class="error" for="new-liability-name">Please enter a valid name</label>
                                     </div>
 

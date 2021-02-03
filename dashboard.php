@@ -26,7 +26,7 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">DATE</th>
-                            <th scope="col">TIME</th>
+                            <!-- <th scope="col">TIME</th> -->
                             <th scope="col">AMOUNT</th>
                             <th scope="col">CATEGORY</th>
                             <th scope="col">NAME</th>
@@ -69,7 +69,8 @@
                                     <input type="hidden" class="transactionDateTime" value='<?php echo ($datarow[$i]['date']); ?>'></input>
                                     <th scope="row"><?php echo (($i + 1)); ?></th>
                                     <td class="transactionDate"><?php print_r($customer->getDate($datarow[$i]['transactionID'])); ?></td>
-                                    <td class="transactionTime"><?php print_r($customer->getTime($datarow[$i]['transactionID'])); ?></td>
+                                    <!-- <td class="transactionTime"><?php //print_r($customer->getTime($datarow[$i]['transactionID'])); 
+                                                                        ?></td> -->
                                     <td class="transactionAmount"><?php echo ($datarow[$i]['amount']); ?></td>
                                     <td class="transactionCategory"><?php echo ($datarow[$i]['category']); ?></td>
                                     <td class="transactionName"><?php echo ($description); ?></td>
