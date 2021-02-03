@@ -8,12 +8,12 @@
 </head>
 
 <body>
-    <?php 
+    <?php
     $activePage = "dashboard";
     include(".navbar.php");
     $customer->setCurDate();
     ?>
-    
+
     <div class="container-fluid background">
         <div class="col-6 left-body">
             <div class="container-fluid body transaction">
@@ -35,18 +35,27 @@
                     </thead>
                     <tbody id="overallTransactionTableBody">
 
-                        <?php 
-                        $datarow = $customer->getDataByQuery("SELECT t.transactionID, c.categoryName AS category, t.date, t.amount, t.description AS name, c.categoryType AS type
-                                                                FROM transaction t
-                                                                RIGHT JOIN category c
-                                                                ON t.categoryID = c.categoryID
-                                                                WHERE t.cusID = " . $customer->getId() . " 
-                                                                AND (c.categoryType = 'income'
-                                                                OR c.categoryType = 'expenses')"
-                                                                . $customer->getCurrentDateQuery() .
-                                                                " ORDER BY date DESC
-                                                                LIMIT 15;
+                        <?php
+                        // $datarow = $customer->getDataByQuery("SELECT t.transactionID, c.categoryName AS category, t.date, t.amount, t.description AS name, c.categoryType AS type
+                        //                                         FROM transaction t
+                        //                                         RIGHT JOIN category c
+                        //                                         ON t.categoryID = c.categoryID
+                        //                                         WHERE t.cusID = " . $customer->getId() . " 
+                        //                                         AND (c.categoryType = 'income'
+                        //                                         OR c.categoryType = 'expenses')"
+                        //     . $customer->getCurrentDateQuery() .
+                        //     " ORDER BY date DESC
+                        //                                         LIMIT 15;
+                        //                                         ");
+                        $datarow = $customer->getDataByQuery("SELECT t.transactionID, c.categoryName AS category, t.date, t.amount, t.description AS name, c.categoryType AS type 
+                        FROM transaction t 
+                        RIGHT JOIN category c 
+                        ON t.categoryID = c.categoryID 
+                        WHERE t.cusID = " . $customer->getId() . " 
+                        ORDER BY date DESC 
+                        LIMIT 15;
                                                                 ");
+
                         if (!empty($datarow)) {
                             for ($i = 0; $i < sizeof($datarow); $i++) {
                                 if (empty($datarow[$i]['name'])) {
@@ -102,7 +111,7 @@
                                         <h6 class="target">RM 650.00</h6>
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
                         <hr>
@@ -158,7 +167,7 @@
                                         <h6 class="target">RM 250.00</h6>
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
                         <hr>
@@ -186,7 +195,7 @@
                                         <h6 class="target">RM 75.00</h6>
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
                         <hr>
@@ -215,39 +224,60 @@
                     <a href="#" class="navbar-brand">SNAPSHOT</a>
                 </nav>
                 <?php
-                    $curMonth = $customer->getCurrentMonthValue();
-                    $curYear = $customer->getCurrentYearValue();
+                $curMonth = $customer->getCurrentMonthValue();
+                $curYear = $customer->getCurrentYearValue();
+
+                $totalIncome = $customer->getTotalIncome();
+                $totalExpenses = $customer->getTotalExpenses();
+                $totalDebtPaid = $customer->getTotalDebtPaid();
+                $totalExpensesAndDebtPaid = $totalExpenses + $totalDebtPaid;
+                $totalBalance = $totalIncome - $totalExpensesAndDebtPaid;
+                $totalInvestment = $customer->getTotalInvestmentAmount();
+                $totalAsset = $totalInvestment + $totalBalance;
+                $totalDebtToPay = $customer->getTotalDebtToPay();
+                $totalNetWorth = $totalAsset - $totalDebtToPay;
                 ?>
                 <div class="container-fluid row">
                     <div>
-                        <h5>Income</h5>
-                        <p>RM<?php echo ($customer->getTotalValueInMonth($curMonth, $curYear, 0)); ?></p>
+                        <h5>Total Income</h5>
+                        <!-- <p>RM<?php //echo ($customer->getTotalValueInMonth($curMonth, $curYear, 0)); 
+                                    ?></p> -->
+                        <p>RM<?php echo ($totalIncome); ?></p>
                     </div>
                     <h3>-</h3>
                     <div>
-                        <h5>Expenses</h5>
-                        <p>RM<?php echo ($customer->getTotalValueInMonth($curMonth, $curYear, 1)); ?></p>
+                        <h5>Total Expenses</h5>
+                        <!-- <p>RM<?php //echo ($customer->getTotalValueInMonth($curMonth, $curYear, 1)); 
+                                    ?></p> -->
+                        <p>RM<?php echo ($totalExpensesAndDebtPaid); ?></p>
                     </div>
                     <h3>=</h3>
                     <div>
-                        <h5>Balance</h5>
-                        <p><?php echo ($customer->getNetIncomeInMonth($curMonth, $curYear)); ?></p>
+                        <h5>Total Balance</h5>
+                        <!-- <p><?php //echo ($customer->getNetIncomeInMonth($curMonth, $curYear)); 
+                                ?></p> -->
+                        <p>RM<?php echo ($totalBalance); ?></p>
                     </div>
                 </div>
                 <div class="container-fluid row">
                     <div>
-                        <h5>Investments</h5>
-                        <p>RM<?php echo ($customer->getTotalInvestmentAmount()); ?></p>
+                        <h5>Asset</h5>
+                        <!-- <p>RM<?php //echo ($customer->getTotalInvestmentAmount()); 
+                                    ?></p> -->
+                        <p>RM<?php echo ($totalAsset); ?></p>
                     </div>
                     <h3>-</h3>
                     <div>
-                        <h5>Debts</h5>
-                        <p>RM<?php echo ($customer->getTotalDebtAmount()); ?></p>
+                        <h5>Debt To Pay</h5>
+                        <!-- <p>RM<?php// echo ($customer->getTotalDebtAmount()); ?></p> -->
+                        <p>RM<?php echo ($totalDebtToPay); ?></p>
                     </div>
                     <h3>=</h3>
                     <div>
                         <h5>Net Worth</h5>
-                        <p><?php echo ($customer->getNetWorth()); ?></p>
+                        <!-- <p><?php //echo ($customer->getNetWorth()); 
+                                ?></p> -->
+                        <p>RM<?php echo ($totalNetWorth); ?></p>
                     </div>
                 </div>
             </div>
