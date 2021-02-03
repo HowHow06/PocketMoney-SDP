@@ -166,7 +166,7 @@ class Customer
         }
 
         $db->where($idName, $id);
-
+        $db->where("cusID", $this->getId());
         if ($db->update($tablename, $data)) {
             return array('status' => 'ok', 'statusMsg' => $db->count . ' records were updated');
         } else {
@@ -228,6 +228,7 @@ class Customer
         }
 
         $db->where($idName, $id);
+        $db->where("cusID", $this->getId());
         if ($db->delete($tablename)) {
             return array('status' => 'ok', 'statusMsg' => 'Deleted successfully.');
         } else {
