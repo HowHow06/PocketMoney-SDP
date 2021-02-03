@@ -30,6 +30,7 @@ if (isset($_GET['getDataLiabilityID'])) {
     ON l.liabilityName = tr.description
     AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $cusID . "))) 
     WHERE l.liabilityID = " . $liability_id . "
+    AND l.cusID = " . $cusID . "
     GROUP BY l.liabilityName";
     $datarow = $customer->getDataByQuery($query);
     $dataJSON = json_encode($datarow[0]);
@@ -61,6 +62,7 @@ if (isset($_GET['searchPayment'])) {
     AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $cusID . ")) )
     AND l.liabilityName LIKE '%" . $searchname . "%'
     AND l.liabilityType LIKE '%" . $cateFilter . "%'
+    AND l.cusID = " . $cusID . "
     " . $orderSQL . "
     ;
     ");
@@ -116,6 +118,7 @@ if (isset($_GET['searchLiability'])) {
     AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $cusID . ")) )
     WHERE l.liabilityName LIKE '%" . $searchname . "%'
     AND l.liabilityType LIKE '%" . $cateFilter . "%'
+    AND l.cusID = " . $cusID . "
     GROUP BY l.liabilityName
     " . $orderSQL . "
     ;
@@ -270,10 +273,10 @@ if (isset($_GET['searchTransaction'])) {
     FROM Transaction t, Category c
     WHERE t.cusID = '" . $cusID . "'
     AND t.categoryID = c.categoryID"
-    . $query . " " .
-    $searchnameQuery . " " .
-    $typeQuery . " " .
-    " AND c.categoryName LIKE  '%" . $cateFilter . "%'
+        . $query . " " .
+        $searchnameQuery . " " .
+        $typeQuery . " " .
+        " AND c.categoryName LIKE  '%" . $cateFilter . "%'
     ORDER BY t.date DESC
     ;");
     if (!empty($datarow)) {

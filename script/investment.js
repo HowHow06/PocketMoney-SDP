@@ -293,7 +293,7 @@ var donutOptions = {
     },
   },
   noData: {
-    text: "Loading...",
+    text: "No investment available",
   },
   responsive: [
     {
@@ -388,6 +388,9 @@ var donutOptions = {
         },
       },
     },
+  },
+  noData: {
+    text: "No investment available",
   },
   responsive: [
     {
