@@ -318,7 +318,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Category:</label>
-                                        <input id="edit-general-investmentType" class="col-6 form-investmentType" list="edit-general-investmentTypeList" name="edit-general-investmentType" required disabled />
+                                        <input id="edit-general-investmentType" class="col-6 form-investmentType" list="edit-general-investmentTypeList" name="edit-general-investmentType" autocomplete="off" required disabled />
                                         <datalist id="edit-general-investmentTypeList">
                                             <?php
                                             $query = "SELECT *
@@ -465,7 +465,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Name:</label>
-                                        <input id="new_investmentName" class="col-6 form-investmentName" list="new_investmentNameList" name="new_investmentName" required />
+                                        <input id="new_investmentName" class="col-6 form-investmentName" list="new_investmentNameList" name="new_investmentName" autocomplete="off" required />
                                         <datalist id="new_investmentNameList">
                                             <?php
                                             $data = $customer->getData('Investment', "DISTINCT investmentName");
@@ -480,7 +480,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Category:</label>
-                                        <input id="new_investmentType" class="col-6 form-investmentType" list="new_investmentTypeList" name="new_investmentType" required />
+                                        <input id="new_investmentType" class="col-6 form-investmentType" list="new_investmentTypeList" name="new_investmentType" autocomplete="off" required />
                                         <datalist id="new_investmentTypeList">
                                             <?php
                                             $query = "SELECT *
@@ -541,7 +541,7 @@
                                     <div class="form-group row">
                                         <label class="col-5" for="">Name:</label>
                                         <input id="edit_oriInvestmentName" class="col-6" type="hidden" name="edit_oriInvestmentName" value="" />
-                                        <input id="edit_investmentName" class="col-6 form-investmentName" list="edit_investmentNameList" name="edit_investmentName" required />
+                                        <input id="edit_investmentName" class="col-6 form-investmentName" list="edit_investmentNameList" name="edit_investmentName" autocomplete="off" required />
                                         <datalist id="edit_investmentNameList">
                                             <?php
                                             $data = $customer->getData('Investment', "DISTINCT investmentName");
@@ -556,7 +556,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Category:</label>
-                                        <input id="edit_investmentType" class="col-6 form-investmentType" list="edit_investmentTypeList" name="edit_investmentType" required />
+                                        <input id="edit_investmentType" class="col-6 form-investmentType" list="edit_investmentTypeList" name="edit_investmentType" autocomplete="off" required />
                                         <datalist id="edit_investmentTypeList">
                                             <?php
                                             $query = "SELECT *
