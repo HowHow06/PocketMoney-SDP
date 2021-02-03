@@ -166,7 +166,7 @@ class Customer
         }
 
         $db->where($idName, $id);
-
+        $db->where("cusID", $this->getId());
         if ($db->update($tablename, $data)) {
             return array('status' => 'ok', 'statusMsg' => $db->count . ' records were updated');
         } else {
@@ -228,6 +228,7 @@ class Customer
         }
 
         $db->where($idName, $id);
+        $db->where("cusID", $this->getId());
         if ($db->delete($tablename)) {
             return array('status' => 'ok', 'statusMsg' => 'Deleted successfully.');
         } else {
@@ -620,6 +621,7 @@ class Customer
             AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $id . ")))
             WHERE
             l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $id . ")))), 0) < l.totalAmountToPay
+            AND l.cusID = " . $id . "
             GROUP BY l.liabilityName";
             $data = $db->rawQuery($query);
             $remainder = 0;
@@ -679,7 +681,8 @@ class Customer
             $db->orderBy("total", "Desc");
             $db->groupBy("investmentName");
             $result = $db->getOne('Investment', "SUM(amountInvested) AS total, investmentName");
-            return strval($result['investmentName']);
+            if ($result)
+                return strval($result['investmentName']);
         }
         return NULL;
     }

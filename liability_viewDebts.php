@@ -211,6 +211,7 @@
                     as remainder FROM transaction tr, liability l
                     WHERE l.liabilityName = tr.description
                     AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")) )
+                    AND l.cusID = " . $customer->getId() . "
                     ORDER BY tr.date DESC";
                     $datarow = $customer->getDataByQuery($query);
 
@@ -249,7 +250,7 @@
                     <select class="filter-liability custom-select" name="filter-liability-category" id="filter-liability-category" class="custom-select">
                         <option value="ALL" selected>ALL</option>
                         <?php
-                        $data = $customer->getData('Liability', "DISTINCT liabilityType");
+                        $data = $customer->getData('Liability', "DISTINCT liabilityType", array("cusID" => $customer->getId()));
                         foreach ($data as $row => $value) {
                         ?>
                             <option value="<?php echo ($value['liabilityType']); ?>"><?php echo ($value['liabilityType']); ?></option>
@@ -529,6 +530,7 @@
                     LEFT JOIN transaction tr
                     ON l.liabilityName = tr.description
                     AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")) )
+                    WHERE l.cusID = " . $customer->getId() . "
                     GROUP BY l.liabilityName
                     ORDER BY l.startDate DESC";
                     $datarow = $customer->getDataByQuery($query);
