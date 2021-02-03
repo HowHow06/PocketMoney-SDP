@@ -745,6 +745,8 @@ class Customer
         return NULL;
     }
 
+
+
     /*********************************************************************\
      *               Below Part are show transaction page                 *
      *                       For extra functions                          *

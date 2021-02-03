@@ -19,32 +19,32 @@
 
     //update the investment transaction
     if (isset($_POST['edit_submit'])) {
-        // $query = "SELECT * FROM category WHERE categoryType = 'investment' AND categoryName ='" . $_POST["edit_investmentType"] . "' AND cusID IS NULL";
-        // $cateTest1 = $customer->getDataByQuery($query);
-        // $cateTest2 = $customer->getData("Category", "*", array("categoryName" => $_POST['edit_investmentType'], "categoryType" => "investment"));
-        // if (empty($cateTest1) && empty($cateTest2)) { //both empty meaning category is new 
-        //     //create new category in category table
-        //     $params['tableName'] = 'category';
-        //     $params['data'] = array(
-        //         'categoryName' => $_POST['edit_investmentType'],
-        //         'categoryType' => 'investment',
-        //         'preDefine' => 0,
-        //         'cusID' => 1
-        //     );
-        //     $result = $customer->customerInsert($params);
-        // }
+        $query = "SELECT * FROM category WHERE categoryType = 'investment' AND categoryName ='" . $_POST["edit_investmentType"] . "' AND cusID IS NULL";
+        $cateTest1 = $customer->getDataByQuery($query);
+        $cateTest2 = $customer->getData("Category", "*", array("categoryName" => $_POST['edit_investmentType'], "categoryType" => "investment"));
+        if (empty($cateTest1) && empty($cateTest2)) { //both empty meaning category is new 
+            //create new category in category table
+            $params['tableName'] = 'category';
+            $params['data'] = array(
+                'categoryName' => $_POST['edit_investmentType'],
+                'categoryType' => 'investment',
+                'preDefine' => 0,
+                'cusID' => 1
+            );
+            $result = $customer->customerInsert($params);
+        }
 
-        // //update the transaction description and category ID
-        // $cusID = $customer->getId();
-        // $query = "UPDATE transaction tr
-        // SET tr.description= '" . $_POST['edit_investmentName'] . "' , 
-        //     tr.categoryID = '" . $customer->getCategoryIDByNameType($_POST['edit_investmentType'], "investment") . "'
-        // WHERE tr.description = '" .  $_POST['edit_oriInvestmentName'] . "' 
-        // AND tr.cusID ='" . $cusID . "'
-        // AND (SELECT categoryType FROM category ct WHERE tr.categoryID = ct.categoryID) = 'investment'";
-        // $customer->getDataByQuery($query);
-
-
+        //update the transaction description and category ID
+        $params['tableName'] = 'Transaction';
+        $params['idName'] = 'transactionID';
+        $params['id'] = $_POST['edit_transactionID'];
+        $params['data'] = array(
+            'categoryID' => $customer->getCategoryIDByNameType($_POST['edit_investmentType'], "investment"),
+            'date' => $_POST['edit_startDate'],
+            'amount' => $_POST['edit_amountInvested'],
+            'description' => $_POST['edit_investmentName']
+        );
+        $result = $customer->customerUpdate($params);
 
 
         $params['tableName'] = 'Investment';
@@ -69,11 +69,10 @@
 
     //delete transaction
     if (isset($_POST['delete_submit'])) {
-        $query = "DELETE FROM transaction tr 
-        WHERE tr.description = (SELECT i.investmentName FROM investment i WHERE i.investmentID= '" . $_POST['delete_investmentID'] . "') 
-        AND tr.cusID = '" . $customer->getId() . "' 
-        AND (SELECT categoryType FROM category ct WHERE tr.categoryID = ct.categoryID) = 'investment';";
-        $customer->getDataByQuery($query);
+        $params['tableName'] = 'Transaction';
+        $params['idName'] = 'transactionID';
+        $params['id'] = $_POST['delete_transactionID'];
+        $result = $customer->customerDelete($params);
 
         $params['tableName'] = 'Investment';
         $params['idName'] = 'investmentID';
@@ -117,6 +116,11 @@
         );
         $result = $customer->customerInsert($params);
 
+
+        //get the last transaction ID
+        $data = $customer->getData("transaction", "transactionID", NULL, array("transactionID" => "DESC"));
+        $transactionID = $data[0]["transactionID"];
+
         //new investment
         $params['tableName'] = 'Investment';
         $params['data'] = array(
@@ -125,7 +129,8 @@
             'investmentType' => $_POST['new_investmentType'],
             'startDate' => $_POST['new_startDate'],
             'amountInvested' => $_POST['new_amountInvested'],
-            'ratePerAnnum' => $_POST['new_ratePerAnnum']
+            'ratePerAnnum' => $_POST['new_ratePerAnnum'],
+            'transactionID' => $transactionID
         );
         $result = $customer->customerInsert($params);
 
@@ -139,7 +144,7 @@
 
     //edit general investment
     if (isset($_POST['edit-general-submit'])) {
-        $query = "SELECT * FROM category WHERE categoryType = 'investment' AND categoryName ='" . $_POST["edit_investmentType"] . "' AND cusID IS NULL";
+        $query = "SELECT * FROM category WHERE categoryType = 'investment' AND categoryName ='" . $_POST["edit-general-investmentType"] . "' AND cusID IS NULL";
         $cateTest1 = $customer->getDataByQuery($query);
         $cateTest2 = $customer->getData("Category", "*", array("categoryName" => $_POST['edit-general-investmentType'], "categoryType" => "investment"));
         if (empty($cateTest1) && empty($cateTest2)) { //both empty meaning category is new 
@@ -308,12 +313,12 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Name:</label>
-                                        <input class="col-6 form-investmentName" type="text" id="edit-general-newName" name="edit-general-newName" required>
+                                        <input class="col-6 form-investmentName" type="text" id="edit-general-newName" name="edit-general-newName" required disabled>
                                         <label class="error" for="edit-general-newName">Please enter a valid name</label>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Category:</label>
-                                        <input id="edit-general-investmentType" class="col-6 form-investmentType" list="edit-general-investmentTypeList" name="edit-general-investmentType" required />
+                                        <input id="edit-general-investmentType" class="col-6 form-investmentType" list="edit-general-investmentTypeList" name="edit-general-investmentType" required disabled />
                                         <datalist id="edit-general-investmentTypeList">
                                             <?php
                                             $query = "SELECT *
@@ -509,7 +514,7 @@
                 </div>
             </div>
             <!-- edit-row modal -->
-            <div class="modal fade edit-modal" id="edit-row" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
+            <div class="modal fade edit-modal row-modal" id="edit-row" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -522,6 +527,7 @@
                             <div class="modal-body">
                                 <div class="container">
                                     <input type="hidden" id="edit_investmentID" name="edit_investmentID"></input>
+                                    <input type="hidden" id="edit_transactionID" name="edit_transactionID"></input>
                                     <div class="form-group row">
                                         <label class="col-5" for="edit_startDate">Date:</label>
                                         <input class="col-6 form-startDate" type="date" id="edit_startDate" name="edit_startDate" required />
@@ -535,7 +541,7 @@
                                     <div class="form-group row">
                                         <label class="col-5" for="">Name:</label>
                                         <input id="edit_oriInvestmentName" class="col-6" type="hidden" name="edit_oriInvestmentName" value="" />
-                                        <input id="edit_investmentName" class="col-6 form-investmentName" list="edit_investmentNameList" name="edit_investmentName" required disabled />
+                                        <input id="edit_investmentName" class="col-6 form-investmentName" list="edit_investmentNameList" name="edit_investmentName" required />
                                         <datalist id="edit_investmentNameList">
                                             <?php
                                             $data = $customer->getData('Investment', "DISTINCT investmentName");
@@ -550,7 +556,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Category:</label>
-                                        <input id="edit_investmentType" class="col-6 form-investmentType" list="edit_investmentTypeList" name="edit_investmentType" required disabled />
+                                        <input id="edit_investmentType" class="col-6 form-investmentType" list="edit_investmentTypeList" name="edit_investmentType" required />
                                         <datalist id="edit_investmentTypeList">
                                             <?php
                                             $query = "SELECT *
@@ -594,6 +600,7 @@
                         <div class="modal-footer">
                             <form action="" method="POST">
                                 <input type="hidden" id="delete_investmentID" name="delete_investmentID"></input>
+                                <input type="hidden" id="delete_transactionID" name="delete_transactionID"></input>
                                 <button type="submit" class="btn btn-primary" name="delete_submit">Delete</button>
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                             </form>
@@ -621,6 +628,7 @@
                     ?>
                             <tr>
                                 <input type="hidden" class="investmentID" value='<?php echo ($datarow[$i]['investmentID']); ?>'></input>
+                                <input type="hidden" class="transactionID" value='<?php echo ($datarow[$i]['transactionID']); ?>'></input>
                                 <th scope="row"><?php echo (($i + 1)); ?></th>
                                 <td class="investDate"><?php echo ($datarow[$i]['startDate']); ?></td>
                                 <td class="investAmount"><?php echo ($datarow[$i]['amountInvested']); ?></td>

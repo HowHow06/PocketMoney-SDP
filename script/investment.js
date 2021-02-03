@@ -235,11 +235,11 @@ function resetEdit() {
       $("#edit_investmentName").val(investName);
       $("#edit_investmentType").val(investType);
       $("#edit_ratePerAnnum").val(investRate);
-      // $("#edit_investmentType").prop("readonly", true);
-      // $("#edit_investmentType").css(
-      //   "background-color",
-      //   "rgba(59, 59, 59, 0.1)"
-      // );
+      $("#edit_investmentType").prop("readonly", true);
+      $("#edit_investmentType").css(
+        "background-color",
+        "rgba(59, 59, 59, 0.1)"
+      );
     }
   };
   xmlhttp.open("GET", "form_process.php?resetEditInvest=" + investID, true);
@@ -433,15 +433,17 @@ $(document).on("click", ".edit-investment-anchor", function () {
   var investName = $(this).parent().parent().find(".investName").text();
   var investType = $(this).parent().parent().find(".investType").text();
   var investRate = $(this).parent().parent().find(".investRate").text();
+  var transactionID = $(this).parent().parent().find(".transactionID").val();
 
   $("#edit_investmentID").val(investID);
+  $("#edit_transactionID").val(transactionID);
   $("#edit_startDate").val(investDate);
   $("#edit_amountInvested").val(investAmount);
   $("#edit_investmentName").val(investName);
   $("#edit_oriInvestmentName").val(investName);
   $("#edit_investmentType").val(investType);
-  // $("#edit_investmentType").prop("readonly", true);
-  // $("#edit_investmentType").css("background-color", "rgba(59, 59, 59, 0.1)");
+  $("#edit_investmentType").prop("readonly", true);
+  $("#edit_investmentType").css("background-color", "rgba(59, 59, 59, 0.1)");
   $("#edit_ratePerAnnum").val(investRate);
 });
 
@@ -497,7 +499,9 @@ $(document).on("input", ".row-modal .form-investmentName", function () {
 
 $(document).on("click", ".delete-investment-anchor", function () {
   var investID = $(this).parent().parent().find(".investmentID").val();
+  var transactionID = $(this).parent().parent().find(".transactionID").val();
   $("#delete_investmentID").val(investID);
+  $("#delete_transactionID").val(transactionID);
 });
 
 $(document).on("change", ".delete-investment-anchor", function () {
