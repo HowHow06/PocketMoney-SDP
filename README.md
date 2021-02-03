@@ -10,6 +10,21 @@ Financial Management System (Website)
 - Howard Lim          TP055278
 
 ## Work Progress
+
+### 2021-02-03
+> Howard's Part For Dashboard
+- Update ```dashboard.php```
+- The recent transaction table updated, shouldnt be retricted by date and month, since it is "most recent"
+- The snap shot formula is revised:
+    income == all income
+    expenses == all expenses + debt paid (money out as well)
+    balance == income - expenses
+
+    asset == balance + investment made
+    debt to pay == total debt amount - debt paid
+    networth == asset - debt to pay
+
+
 ### 2021-01-21
 > Moses's Part
 - Create ```profile.php``` and ```enquiry.php```

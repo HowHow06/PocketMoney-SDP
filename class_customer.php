@@ -531,6 +531,108 @@ class Customer
         session_write_close();
     }
 
+    /** 
+     * Return the total income amount if the id is set before
+     * @return int|NULL
+     * 
+     */
+    function getTotalIncome()
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $id = $this->id;
+            //get the category ID using subquery
+            $cateIds = $db->subQuery();
+            $cateIds->where("categoryType", "income");
+            $test = $cateIds->get("category", NULL, "categoryID");
+
+            $db->where('cusID', $id, '=');
+            $db->where('categoryID', $cateIds, 'IN'); //put the subquery into where clause, using IN operator
+            $result = $db->getOne('transaction', "SUM(amount) AS SUM");
+            return intval($result['SUM']);
+        }
+        return NULL;
+    }
+
+    /** 
+     * Return the total expense amount if the id is set before
+     * @return int|NULL
+     * 
+     */
+    function getTotalExpenses()
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $id = $this->id;
+            //get the category ID using subquery
+            $cateIds = $db->subQuery();
+            $cateIds->where("categoryType", "expenses");
+            $test = $cateIds->get("category", NULL, "categoryID");
+
+            $db->where('cusID', $id, '=');
+            $db->where('categoryID', $cateIds, 'IN');
+            $result = $db->getOne('transaction', "SUM(amount) AS SUM");
+            return intval($result['SUM']);
+        }
+        return NULL;
+    }
+
+    /** 
+     * Return the total paid debt amount if the id is set before
+     * @return int|NULL
+     * 
+     */
+    function getTotalDebtPaid()
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $id = $this->id;
+            //get the category ID using subquery
+            $cateIds = $db->subQuery();
+            $cateIds->where("categoryType", "liability");
+            $test = $cateIds->get("category", NULL, "categoryID");
+
+            $db->where('cusID', $id, '=');
+            $db->where('categoryID', $cateIds, 'IN');
+            $result = $db->getOne('transaction', "SUM(amount) AS SUM");
+            return intval($result['SUM']);
+        }
+        return NULL;
+    }
+
+    /** 
+     * Return the total amount of debt to pay if the id is set before
+     * @return int|NULL
+     * 
+     */
+    function getTotalDebtToPay()
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $id = $this->id;
+            $query = "SELECT
+            (l.totalAmountToPay - (l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $id . ")))), 0)))
+            as remainder, l.liabilityName,l.initialPaidAmount,
+             l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $id . ")))), 0) as paid
+            FROM liability l
+            LEFT JOIN transaction tr
+            ON l.liabilityName = tr.description
+            AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $id . ")))
+            WHERE
+            l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $id . ")))), 0) < l.totalAmountToPay
+            GROUP BY l.liabilityName";
+            $data = $db->rawQuery($query);
+            $remainder = 0;
+            for ($i = 0; $i < sizeof($data); $i++) {
+                $remainder += intval($data[$i]['remainder']);
+            }
+
+            return intval($remainder);
+        }
+        return NULL;
+    }
+
+
     /*************************************************************************\
      *                   Below Part are show investment page                  *
      *                           For extra functions                          *
