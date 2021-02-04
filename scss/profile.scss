@@ -46,16 +46,13 @@
 .modal-dialog {
     > .modal-content {
         > .modal-footer {
-            > form {  
-                padding: 0;
-                > .btn-primary {
-                    background-color: #fc9a55 !important;
-                    border-color: #fc9a55 !important;
-                }
-                > .btn-primary:hover {
-                    background-color: #f88837 !important;
-                    border-color: #fc9a55 !important;
-                }
+            > .btn-primary {
+                background-color: #fc9a55 !important;
+                border-color: #fc9a55 !important;
+            }
+            > .btn-primary:hover {
+                background-color: #f88837 !important;
+                border-color: #fc9a55 !important;
             }
         }
     }

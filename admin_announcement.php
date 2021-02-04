@@ -175,10 +175,16 @@
                         <button type="submit" name="new_submit" id="new_submit" class="btn btn-primary">Add new</button>
                     </form>
                     </div>
-                    <script src="./script/announcement.js"></script>
                 </div>
             </div>
         </div>
     </div>
 </body>
+<script>
+$(document).ready(function () {
+    $("body").niceScroll();
+    $(".transaction-table").niceScroll();
+});
+</script>
+<script src="./script/announcement.js"></script>
 </html>

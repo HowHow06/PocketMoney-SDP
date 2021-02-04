@@ -9,23 +9,21 @@
 <body>
     <?php include("AD_navbar.php"); ?>
     <div class="container-fluid background">
-      <div class="container-fluid">
-          <div class="container-fluid body feedback">
-              <nav class="navbar navbar-expand-lg">
-                    <a href="#" class="navbar-brand">FEEDBACK STUDIO</a>
-                  </nav>
-
-                  <table class="table feedback-table">
-                    <thead class="thead-light">
-                      <tr>
-                        <th scope="col">Feedback ID</th>
-                        <th scope="col">Sent Date</th>
-                        <th scope="col">Sender Name</th>
-                        <th scope="col">Content</th>
-                        <th scope="col">ACTION</th>
-                      </tr>
-                    </thead>
-                    <tbody id="feedbackstudio">
+      	<div class="container-fluid">
+          	<div class="container-fluid body feedback">
+				<nav class="navbar navbar-expand-lg">
+					<a href="#" class="navbar-brand">FEEDBACK STUDIO</a>
+				</nav>
+        <thead class="thead-light">
+              <tr>
+                  <th scope="col">Announcement ID</th>
+                  <th scope="col">Post Date</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Content</th>
+                  <th scope="col">ACTION</th>
+              </tr>
+        </thead>
+				<tbody id="feedbackstudio">
                     
                     <?php 
                     
@@ -51,11 +49,13 @@
                     <?php }
                    } ?>
 
-                    </tbody>
-                  </table>
-                    <br><br>
-                    <button type="button" class="btn btn-outline-primary reply-feedback">Reply</button>
-                    <br>
-                </div>
+				</tbody>
+				<br><br>
+				<button type="button" class="btn btn-outline-primary reply-feedback">Reply</button>
+				<br>	
+			</div>
+		</div>
+	</div>
+</body>
 
 </html>
