@@ -14,7 +14,9 @@ Financial Management System (Website)
 ### 2021-02-04
 > Moses's Part
 - Update ```profile.php``` and ```enquiry.php```
-- Add DDL for feedback and announcement
+- Add DDL for feedback and announcement.
+- Fixing naming error on budget entity.
+- Update transaction page to accept investment and liability data.
 
 ### 2021-02-03
 > Howard's Part For Dashboard

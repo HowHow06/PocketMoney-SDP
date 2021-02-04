@@ -257,8 +257,12 @@ if (isset($_GET['searchTransaction'])) {
         $typeQuery = "AND c.categoryType = 'income'";
     } elseif ($typeFilter == "Expenses") {
         $typeQuery = "AND c.categoryType = 'expenses'";
+    } elseif ($typeFilter == "Investment") {
+        $typeQuery = "AND c.categoryType = 'investment'";
+    } elseif ($typeFilter == "Liability") {
+        $typeQuery = "AND c.categoryType = 'liability'";
     } elseif ($typeFilter == "ALL") {
-        $typeQuery = "AND (c.categoryType = 'income' OR c.categoryType = 'expenses')";
+        $typeQuery = "AND (c.categoryType = 'income' OR c.categoryType = 'expenses' OR c.categoryType = 'investment' OR c.categoryType = 'liability')";
     }
     if ($cateFilter == 'ALL') {
         $cateFilter = '';
