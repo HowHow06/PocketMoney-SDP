@@ -11,6 +11,11 @@ Financial Management System (Website)
 
 ## Work Progress
 
+### 2021-02-04
+> Moses's Part
+- Update ```profile.php``` and ```enquiry.php```
+- Add DDL for feedback and announcement
+
 ### 2021-02-03
 > Howard's Part For Dashboard
 - Update ```dashboard.php```

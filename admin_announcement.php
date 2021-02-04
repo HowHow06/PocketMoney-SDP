@@ -128,11 +128,16 @@
 
                         <button type="submit" class="btn">Post Announcement</button>
                     </div>
-                    <script src="./script/announcement.js"></script>
-                    <script src="./script/announcement_main.js"></script>
                 </div>
             </div>
         </div>
     </div>
 </body>
+<script>
+$(document).ready(function () {
+    $("body").niceScroll();
+    $(".transaction-table").niceScroll();
+});
+</script>
+<script src="./script/announcement.js"></script>
 </html>

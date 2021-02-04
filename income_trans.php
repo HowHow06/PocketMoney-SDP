@@ -233,7 +233,13 @@
                                 </div>
                                 <div class="col-1 show forshowDetail">
                                     <button class="btn">
-                                        <a href="#<?php echo ($datarow[$i]['categoryName']); ?>" id="showDetail<?php echo ($datarow[$i]['categoryName']); ?>" name="showDetail" data-toggle="row-hover" data-text="Show more" onclick="showdetail('<?php echo ($datarow[$i]['categoryName']); ?>',<?php echo ($customer->getCurrentFilterTime(1,0,$customer->getFlag())) ?>,<?php echo ($customer->getCurrentFilterTime(1,1,$customer->getFlag())) ?>)">
+                                        <?php 
+                                        $cateName = $datarow[$i]['categoryName'];
+                                        $m = $customer->getCurrentFilterTime(1,0,$customer->getFlag());
+                                        $y = $customer->getCurrentFilterTime(1,1,$customer->getFlag());
+                                        ?>
+                                        <a href="#<?php echo ($cateName); ?>" id="showDetail<?php echo ($cateName); ?>" name="showDetail" data-toggle="row-hover" data-text="Show more" 
+                                            onclick="showdetail('<?php echo ($cateName); ?>',<?php echo ($m) ?>,<?php echo ($y) ?>)">
                                             <i class="fas fa-chevron-right"></i>
                                         </a>
                                     </button>

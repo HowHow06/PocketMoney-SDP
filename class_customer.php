@@ -287,7 +287,7 @@ class Customer
      * 'statusMsg'-> String: the status msg;
      *
      */
-    function customerValidateEmail($params)
+    function customerValidateEmail($params,$flag=0)
     {
         $db = MysqliDb::getInstance();
 
@@ -299,7 +299,7 @@ class Customer
         $db->where('email', $email);
         $result = $db->getOne('Customer');
 
-        if (!empty($result)) { //if the $result return something meaning the email is existed
+        if (!empty($result) && $flag==0) { //if the $result return something meaning the email is existed
             return array('status' => 'error', 'statusMsg' => 'Email Has Been Used');
         }
 
@@ -317,7 +317,7 @@ class Customer
      * 'statusMsg'-> String: the status msg;
      *
      */
-    function customerValidateUsername($params)
+    function customerValidateUsername($params,$flag=0)
     {
         $db = MysqliDb::getInstance();
         $username = $params['username'];
@@ -328,7 +328,7 @@ class Customer
         $db->where('username', $username);
         $result = $db->getOne('Customer');
 
-        if (!empty($result)) { //if the $result return something meaning the username is existed
+        if (!empty($result) && $flag==0) { //if the $result return something meaning the username is existed
             return array('status' => 'error', 'statusMsg' => 'Username Has Been Used');
         }
 

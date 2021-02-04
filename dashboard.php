@@ -270,7 +270,7 @@
                     <h3>-</h3>
                     <div>
                         <h5>Debt To Pay</h5>
-                        <!-- <p>RM<?php// echo ($customer->getTotalDebtAmount()); ?></p> -->
+                        <!-- <p>RM<?php // echo ($customer->getTotalDebtAmount()); ?></p> -->
                         <p>RM<?php echo ($totalDebtToPay); ?></p>
                     </div>
                     <h3>=</h3>
