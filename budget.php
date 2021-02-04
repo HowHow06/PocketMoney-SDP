@@ -93,10 +93,30 @@
                     // $customer = new Customer();
                     $query = "SELECT * FROM budget b, category c WHERE b.categoryID = c.categoryID AND b.cusID = " . $customer->getId();
                     $data = $customer->getDataByQuery($query);
+                    for ($i = 0; $i < sizeof($data); $i++) {
+                        if ($data[$i]['categoryName'] == 'other') {
+                            $rowOfOthers = $data[$i];
+                            unset($data[$i]);
+                            break;
+                        }
+                    }
+                    array_push($data, $rowOfOthers);
                     foreach ($data as $row) {
                         $totalIncome = $customer->getTotalIncome();
                         $totalAmount = floatval($row['percentage']) / 100.0 * $totalIncome * 1.0;
-                        $amountResults = $customer->getData("Transaction", "SUM(amount) as usedAmount", array('categoryID' => $row['categoryID'], 'cusID' => $customer->getId()));
+                        if ($row['categoryName'] == "other") {
+                            $getCateTypeSubQuery = "SELECT categoryType FROM Category WHERE categoryID = tr.categoryID";
+                            $cateIdsSubQuery = "SELECT b.categoryID FROM budget b WHERE b.cusID = " . $customer->getId(); //get all categoryID in budget
+                            $query = "SELECT SUM(tr.amount) as usedAmount 
+                            FROM Transaction tr 
+                            WHERE tr.cusID = 1 
+                            AND (" . $getCateTypeSubQuery . ") <> 'income'
+                            AND tr.categoryID NOT IN (" . $cateIdsSubQuery . ")"; //select amount of those categories that are not in budget
+
+                            $amountResults = $customer->getDataByQuery($query);
+                        } else {
+                            $amountResults = $customer->getData("Transaction", "SUM(amount) as usedAmount", array('categoryID' => $row['categoryID'], 'cusID' => $customer->getId()));
+                        }
                         $amountUsed = $amountResults[0]['usedAmount']; //the amount used
                         if (!$amountUsed)
                             $amountUsed = 0; //if the record is not found in transaction table, the budget is not used at all
