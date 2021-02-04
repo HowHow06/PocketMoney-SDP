@@ -82,6 +82,7 @@
         }
         > .chart-explain {
             > div {
+                // overflow-y: scroll;
                 height: 500px;
                 margin: 0 auto;
                 border-width: 4px !important;
