@@ -40,7 +40,7 @@ INSERT INTO `advisor` (`username`, `password`, `name`, `email`) VALUES
 -- Dumping data for table `budget`
 --
 
-INSERT INTO `budget` (`cudID`, `categoryID`, `percentage`) VALUES
+INSERT INTO `budget` (`cusID`, `categoryID`, `percentage`) VALUES
 (1, 6, '10.00'),
 (1, 5, '20.00'),
 (1, 9, '10.00'),

@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `advisor` (
 DROP TABLE IF EXISTS `budget`;
 CREATE TABLE IF NOT EXISTS `budget` (
   `budgetID` int(255) NOT NULL AUTO_INCREMENT,
-  `cudID` int(255) NOT NULL,
+  `cusID` int(255) NOT NULL,
   `categoryID` int(255) NOT NULL,
   `percentage` decimal(20,2) NOT NULL,
   PRIMARY KEY (`budgetID`)
