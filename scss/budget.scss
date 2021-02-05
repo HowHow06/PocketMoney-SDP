@@ -28,6 +28,25 @@
 }
 
 .body {
+    #edit-percentage-error{
+        display: none;
+        color: red;
+    }
+
+    .budget-delete-icon:hover{
+        cursor: pointer;
+    }
+
+    #btn-edit {
+        background-color: #fc9a55 !important;
+        border-color: #fc9a55 !important;
+    }
+    #btn-edit:hover {
+        background-color: #f88837 !important;
+        border-color: #fc9a55 !important;
+    }
+
+
     @include cus-body;
     > .budget-overview {
         padding: 20px 50px;

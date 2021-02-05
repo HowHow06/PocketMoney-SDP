@@ -12,6 +12,23 @@
         $activePage = "settings";
         include(".navbar.php");
 
+        if (isset($_POST['edit_password'])) { //if the form is submitted
+            $hashPassword = password_hash($_POST['new_pass'], PASSWORD_BCRYPT);
+                        $params['tableName'] = 'Customer';
+                        $params['idName'] = 'cusID';
+                        $params['id'] = $_POST['cusID'];
+                        $params['data'] = array(
+                            'password' => $hashPassword 
+                        );
+                        $result = $customer->customerUpdate($params);
+                        if ($result['status'] == 'ok') {
+                            $customer->showAlert($result['statusMsg']);
+                        } else {
+                            $customer->showAlert($result['statusMsg']);
+                        }
+                        $customer->goTo('profile.php?role=customer');
+                    }
+
 
         if (isset($_POST['cusID'])) { //if the form is submitted
             $params = array(
@@ -41,7 +58,7 @@
                         $params['data'] = array(
                             'name' => $_POST['name'], 
                             'username' => $_POST['username'], 
-                            'email' => $_POST['email']
+                            'email' => $_POST['email'],
                         );
                         $result = $customer->customerUpdate($params);
                         if ($result['status'] == 'ok') {
@@ -136,7 +153,7 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     <label class="form-control-label" for="username">Username</label>
-                                    <input type="text" id="username" name="username" class="form-control form-control-alternative" value="<?php echo($username); ?>" required>
+                                    <input type="text" id="username" name="username" class="form-control form-control-alternative" value="<?php echo($username); ?>" readonly>
                                 </div>
                             </div>
                         </div>
@@ -148,11 +165,7 @@
                                 </div>
                             </div>
                         </div>
-                    </form>
-                </div>
-
-                <hr>
-
+                     <hr>
                 <div>
                     <div class="row">
                         <h4 class="col-6">PASSWORD SETTING</h4>

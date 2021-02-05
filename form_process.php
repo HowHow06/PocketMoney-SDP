@@ -2,6 +2,64 @@
 require_once('class_customer.php');
 $customer = new Customer();
 
+
+
+
+if (isset($_GET['budgetEditData'])) {
+    $cusID = $_GET['cusID'];
+    $query = "SELECT b.*, c.categoryName FROM budget b, category c WHERE b.categoryID = c.categoryID AND b.cusID = " . $cusID;
+    $data = $customer->getDataByQuery($query);
+    echo ('<div class="row">
+            <div class="col-12">
+            <span id="edit-percentage-error">This is error mesg<br></span>
+            </div>
+            </div>
+    ');
+    if ($data) {
+        for ($i = 0; $i < sizeof($data); $i++) {
+            if ($data[$i]['categoryName'] == 'other') {
+                $rowOfOthers = $data[$i];
+                unset($data[$i]);
+                break;
+            }
+        }
+        array_push($data, $rowOfOthers);
+        $totalPercentage = 0;
+        foreach ($data as $budgetRow) {
+            $totalPercentage += $budgetRow['percentage'];
+            echo (' 
+                    <input type="hidden" class="edit-budgetID" value="' . $budgetRow['budgetID'] . '">
+                    <div class="form-group row">
+                       <label class="col-5" for="edit_budgetCategory">Category:</label>
+                       <input value="' . $budgetRow['categoryName'] . '" class="col-6 form-budgetName" list="edit_budgetCategoryList" name="edit_budgetCategory" autocomplete="off" required />
+                       <label class="error" for="edit_budgetCategory">Please enter a valid category</label>
+                       <i class="fas fa-trash col-1 align-self-center budget-delete-icon"></i>
+                   </div>
+                   <div class="form-group row">
+                       <label class="col-5" for="edit_budgetPercentage">Percentage:</label>
+                       <input class="col-6 form-budgetPercentage" type="number" step=\'1.00\' name="edit_budgetPercentage" value="' . $budgetRow['percentage'] . '" required />
+                       <label class="error" for="edit_budgetPercentage">Total Percentage must not be larger than 100</label>
+                   </div><hr>');
+        }
+        //below is the creation of datalist, all datalist input are using the same datalist
+        echo ('<datalist id="edit_budgetCategoryList">');
+        $data = $customer->getDataByQuery("SELECT categoryName, categoryID FROM category
+                                           WHERE categoryType <> 'income'
+                                           AND categoryName <> 'other'
+                                           AND (preDefine = 1 OR
+                                           cusID = " . $cusID . ")
+                                           ORDER BY categoryName ASC;
+                                           ");
+        foreach ($data as $row) {
+            echo ('<option id="type' . $row['categoryName'] . '" value="' . $row['categoryName'] . '">' . $row['categoryName'] . '</option>');
+        }
+        echo ('</datalist>
+                <input type="hidden" id="budget-data" value="">
+               <input type="hidden" id="budget-percentage" value="' . $totalPercentage . '">');
+    }
+}
+
+
 /**
  * 
  * echo the JSON format of fields within Investment Edit modal

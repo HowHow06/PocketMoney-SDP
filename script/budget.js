@@ -19,9 +19,9 @@ $(document).ready(function () {
     $(this).css("width", progress_width + "%");
   });
 
-  var numofbudget = $('#numOfBudget').val();
-  for (var i = 0; i<parseFloat(numofbudget); i++) {
-    var progressvalue = $('#progress-bar'+i).attr('aria-valuenow');
+  var numofbudget = $("#numOfBudget").val();
+  for (var i = 0; i < parseFloat(numofbudget); i++) {
+    var progressvalue = $("#progress-bar" + i).attr("aria-valuenow");
     if (parseFloat(progressvalue) > 100) {
       $('#progress-bar'+i).addClass('excess-bar');
       $('#progress-bar'+i).parent().find('h6').addClass('excess-value');
@@ -439,24 +439,26 @@ function refreshchart(amount, month) {
   lineChart.render();
 }
 
-$(document).on("click", ".edit-transaction-anchor", function () {
-  var budgetID = $(this).parent().parent().find(".budgetID").val();
-  //var transactionDateTime = $(this).parent().parent().find(".transactionDateTime").val();
-  var budgetPercentage = $(this)
-    .parent()
-    .parent()
-    .find(".budgetPercentage")
-    .text();
-  //var transactionCategory = $(this).parent().parent().find(".transactionCategory").text();
-  //var transactionName = $(this).parent().parent().find(".transactionName").text();
-  var budgetCategory = $(this).parent().parent().find(".budgetCategory").text();
-
-  $("#edit_budgetID").val(budgetID);
-  //$("#edit_transactionDateTime").val(formattedDateTime);
-  $("#edit_budgetPercentage").val(budgetPercentage);
-  $("#edit_budgetCategory").val(budgetCategory);
-  //$("#edit_transactionName").val(transactionName);
-  //$("#edit_transactionType").val(transactionType);
+$(document).on("click", ".edit-budget-btn", function () {
+  var cusID = document.getElementById("cusID");
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      $("#edit-body-data").html(this.responseText);
+      // document.getElementById(
+      //   "overallTransactionTableBody"
+      // ).innerHTML = this.responseText;
+      // var rowCount = $("#overallTransactionTableBody tr").length;
+      // $("#table-row-count").html(" " + rowCount + " ");
+      $("body").niceScroll().resize();
+    }
+  };
+  xmlhttp.open(
+    "GET",
+    "form_process.php?&budgetEditData=" + 1 + "&cusID=" + cusID.value,
+    true
+  );
+  xmlhttp.send();
 });
 
 $(document).on("click", ".delete-transaction-anchor", function () {
