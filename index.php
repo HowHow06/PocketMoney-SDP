@@ -128,6 +128,7 @@
                         It’s free, ease of use, and more!
                         We hope you can enjoy using this webapp.
                     </p>
+                    <sub>**please use it, please.</sub>
                 </div>
             </div>
             <div class="card col-3" id="about2">

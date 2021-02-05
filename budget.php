@@ -101,6 +101,7 @@
                         }
                     }
                     array_push($data, $rowOfOthers);
+                    $count = 0;
                     foreach ($data as $row) {
                         $totalIncome = $customer->getTotalIncome();
                         $totalAmount = floatval($row['percentage']) / 100.0 * $totalIncome * 1.0;
@@ -134,8 +135,8 @@
                                 <div class="col-9">
                                     <!-- bar -->
                                     <div class="progress">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo (number_format($amountUsedPercentage * 1.0, 2, ".", "")); ?>" aria-valuemin="0" aria-valuemax="100" id="progress-bar"></div>
-                                        <h6><?php echo (number_format($amountUsedPercentage * 1.0, 2, ".", "")); ?>%</h6>
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo (number_format($amountUsedPercentage * 1.0, 2, ".", "")); ?>" aria-valuemin="0" aria-valuemax="100" id="progress-bar<?php echo ($count); ?>"></div>
+                                        <h6 class=""><?php echo (number_format($amountUsedPercentage * 1.0, 2, ".", "")); ?>%</h6>
                                     </div>
                                     <div class="row">
                                         <div class="col-6">
@@ -151,9 +152,10 @@
                             <hr>
                         </div>
                     <?php
+                        $count++;
                     }
                     ?>
-
+                    <input type="hidden" name="numOfBudget" id="numOfBudget" value="<?php echo (sizeof($data)); ?>">
 
                 </div>
             </div>

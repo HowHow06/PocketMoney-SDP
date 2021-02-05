@@ -67,3 +67,7 @@
 .modal-content .btn:hover, .open-button:hover {
   opacity: 1;
 }
+
+.modal-backdrop {
+  z-index: 0 !important;
+}

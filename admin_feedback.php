@@ -75,6 +75,7 @@
                     <th scope = "row"><?php echo ($i +1 ); ?></th>
                     <td class="feedback_date"><?php print_r($query[$i]['sent_date']); ?></td>
                     <td class="feedback_customer"><?php echo ($query[$i]['customer_name']); ?></td>
+                    <td class="feedback_customer"><?php echo ($query[$i]['customer_email']); ?></td>
                     <td class="feedback_content"><?php echo ($query[$i]['content']); ?></td>
                     <td class="action">
                                       <a href="#" class="edit-announcement-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>

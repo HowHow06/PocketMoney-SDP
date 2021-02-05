@@ -23,7 +23,7 @@ if (isset($_POST['edit_password'])) { //if the form is submitted
 }
 
 ?>
-<link rel="stylesheet" href="./style/modalbox.css">
+<!-- <link rel="stylesheet" href="./style/modalbox.css"> -->
 <nav class="navbar navbar-expand-lg navbar-light">
     <a href="#" class="navbar-brand"><img src="./img/logo_i.png" width="50px" height="50px"> POCKETMONEY</a>
     <ul class="navbar-nav ml-auto">
@@ -34,7 +34,7 @@ if (isset($_POST['edit_password'])) { //if the form is submitted
             <a href="admin_feedback.php?role=admin" class="nav-link">Feedback Studio</a>
         </li>
         <li class="nav-item">
-            <a href="#" class="nav-link profile" data-toggle="modal" data-target="#edit-row">Profile</a>
+            <a href="#" class="nav-link profile" data-toggle="modal" data-target="#profile">Profile</a>
         </li>
         <li class="nav-item">
             <a href="logout.php?role=admin" class="nav-link">Logout</a>
@@ -49,7 +49,7 @@ if (isset($_POST['edit_password'])) { //if the form is submitted
 ?>
 
 <!--Profile modal-->
-<div class="modal fade edit-modal" id="edit-row" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
+<div class="modal fade edit-modal" id="profile" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <span class="close">&times;</span>

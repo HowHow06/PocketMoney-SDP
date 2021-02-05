@@ -69,7 +69,7 @@
                                 transition: 0.3s ease-in-out;
                             }
                             > .excess-bar {
-                                width: 100%; 
+                                // width: 100%; 
                                 background-color: #ff6767 !important;
                             }
                             > .excess-value {
@@ -110,11 +110,11 @@
                     margin-bottom: 0 !important;
                 }
             }
-            > .budget-row:hover {
-                cursor: pointer;
-                background-color: #f8f8f8;
-                transition: 1.5s ease-in-out;
-            }
+            // > .budget-row:hover {
+            //     cursor: pointer;
+            //     background-color: #f8f8f8;
+            //     transition: 1.5s ease-in-out;
+            // }
         }
     }
 

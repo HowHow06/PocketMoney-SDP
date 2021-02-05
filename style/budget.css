@@ -186,7 +186,6 @@
 }
 
 .body > .budget-overview > div > .budget-row > .row > .col-9 > .progress > .excess-bar, .body > .budget-overview > div .budget-row-head > .row > .col-9 > .progress > .excess-bar {
-  width: 100%;
   background-color: #ff6767 !important;
 }
 
@@ -231,13 +230,6 @@
 .body > .budget-overview > div > .budget-row hr, .body > .budget-overview > div .budget-row-head hr {
   margin-top: 0 !important;
   margin-bottom: 0 !important;
-}
-
-.body > .budget-overview > div > .budget-row:hover {
-  cursor: pointer;
-  background-color: #f8f8f8;
-  -webkit-transition: 1.5s ease-in-out;
-  transition: 1.5s ease-in-out;
 }
 
 .body > .budget-manage {
