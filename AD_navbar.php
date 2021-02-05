@@ -2,6 +2,26 @@
 
 include('checkSessionCookie.php');
 
+if (isset($_POST['edit_password'])) { //if the form is submitted
+    $hashPassword = password_hash($_POST['newPass'], PASSWORD_BCRYPT);
+    $params['tableName'] = 'admin';
+    $params['idName'] = 'adminID';
+    $params['id'] = $_POST['getadminID'];
+    $params['data'] = array(
+        'adminID' => $admin->getId(),
+        'username' => $_POST['newusername'],
+        'email' => $_POST['newemail'],
+        'password' => $hashPassword,
+    );
+    $result = $admin->adminUpdate($params);
+    if ($result['status'] == 'ok') {
+        $admin->showAlert($result['statusMsg']);
+    } else {
+        $admin->showAlert($result['statusMsg']);
+    }
+    $admin->goTo('admin_announcement.php?role=admin');
+}
+
 ?>
 <link rel="stylesheet" href="./style/modalbox.css">
 <nav class="navbar navbar-expand-lg navbar-light">
@@ -13,17 +33,20 @@ include('checkSessionCookie.php');
         <li class="nav-item">
             <a href="admin_feedback.php?role=admin" class="nav-link">Feedback Studio</a>
         </li>
-        <li class="nav-item dropdown">
-
-            <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown">Setting</a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <a href="admin_profile.php?role=admin" class="dropdown-item" id="updatebtn">Profile</a>
-                <a href="#" class="dropdown-item">Enquiry</a>
-                <a href="logout.php?role=admin" class="dropdown-item">Logout</a>
-            </div> 
+        <li class="nav-item">
+            <a href="#" class="nav-link profile" data-toggle="modal" data-target="#edit-row">Profile</a>
+        </li>
+        <li class="nav-item">
+            <a href="logout.php?role=admin" class="nav-link">Logout</a>
         </li>
     </ul>
 </nav>
+
+<?php
+    $result = $admin->getData("Admin"); 
+    $username = $result[0]['username'];
+    $email = $result[0]['email'];
+?>
 
 <!--Profile modal-->
 <div class="modal fade edit-modal" id="edit-row" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
@@ -33,35 +56,42 @@ include('checkSessionCookie.php');
             <section class="mb-5 text-center">
                 <h4>Profile</h4>
                 <hr>
-                <form action="#!">
+                <form action="" method="post" id="profile_form">
+                    <input type="hidden" id="getadminID" name="getadminID" value="<?php echo($admin->getID()); ?>"></input>
                     <div class="md-form md-outline">
-                    <label class="form-control-label" for="email">Email</label>
-                    <input type="text" id="email" name="email" class="form-control" placeholder="email" required>
+                    <label class="form-control-label">Email</label>
+                    <input type="text" id="newemail" name="newemail" class="form-control" value="<?php echo($email); ?>" required>
                     </div>
 
                     <div class="md-form md-outline">
-                    <label class="form-control-label" for="username">Username</label>
-                    <input type="text" id="username" name="username" class="form-control form-control-alternative" placeholder="username" readonly>
+                    <label class="form-control-label">Username</label>
+                    <input type="text" id="newusername" name="newusername" class="form-control form-control-alternative" placeholder="username" value="<?php echo($username); ?>" readonly>
                     </div>
                     <br>
                     <h4>Set a new password</h4>
                     <hr>
                     <div class="md-form md-outline">
-                    <label class="form-control-label" for="newPass">New password</label>
-                    <input type="password" id="newPass" class="form-control">
-                    </div>
-
-                    <div class="md-form md-outline">
-                    <label class="form-control-label" for="newPassConfirm">Confirm password</label>
-                    <input type="password" id="newPassConfirm" class="form-control">
+                    <label class="form-control-label">New password</label>
+                    <input type="password" id="newPass" name="newPass" class="form-control">
                     </div>
                     <br>
-                    <button type="submit" class="btn btn-primary mb-4">Change password</button>
+                    <button type="submit" id=edit_password name="edit_password" class="btn btn-primary mb-4">Change password</button>
                 </form>
             </section>
         </div>
     </div>
 </div>
+<script>
+$(document).ready(function () {
+    $("body").niceScroll();
+    $(".transaction-table").niceScroll();
+});
+
+var form = document.getElementById("profile_form");
+document.getElementById("edit_submit").addEventListener("click", function () {
+  form.submit();
+});
+</script>
                 
                 
                 
