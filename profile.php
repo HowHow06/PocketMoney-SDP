@@ -54,9 +54,40 @@
                 }
             }
         }
+
+        if (isset($_POST['conf_pass'])) {
+            // $customer->showAlert($_POST['conf_pass']);
+            $params = array(
+                'current' => $_POST['cur_pass'], 
+                'new' => $_POST['new_pass'], 
+                'confirm' => $_POST['conf_pass']
+            );
+            $result = $customer->customerResetPassword($params);
+            if (!empty($result)) {
+                if ($result['status'] == 'error') { //format wrong
+                    $customer->showAlert($result['statusMsg']);
+                } else {
+                    // update password
+                    $encrypted_password = $customer->getEncryptedPassword($_POST['conf_pass']);
+                    $params['tableName'] = 'Customer';
+                    $params['idName'] = 'cusID';
+                    $params['id'] = $customer->getId();
+                    $params['data'] = array(
+                        'password' => $encrypted_password
+                    ); 
+                    $result = $customer->customerUpdate($params);
+                    if ($result['status'] == 'ok') {
+                        $customer->showAlert($result['statusMsg']);
+                    } else {
+                        $customer->showAlert($result['statusMsg']);
+                    }
+                    $customer->goTo('profile.php?role=customer');
+                }
+            }
+        }
     ?>
     <div class="container-fluid background">
-        <div class="container-fluid body">
+        <div class="container-fluid body" style="max-width: 1250px">
             <nav class="navbar navbar-expand-lg">
                 <a href="#" class="navbar-brand">USER PROFILE</a>
             </nav>
@@ -125,30 +156,37 @@
                 <div>
                     <div class="row">
                         <h4 class="col-6">PASSWORD SETTING</h4>
+                        <div class="col-6">
+                            <a href="#" class="btn edit" onclick="submitform();">RESET PASSWORD</a>
+                        </div>
                     </div>
 
-                    <form action="" method="">
+                    <form action="" method="post" id="reset_form">
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group focused">
                                     <label class="form-control-label" for="cur_pass">Current Password</label>
-                                    <input type="password" id="cur_pass" name="cur_pass" class="form-control form-control-alternative">
+                                    <input type="password" id="cur_pass" name="cur_pass" class="form-control form-control-alternative" required>
                                 </div>
                             </div>
 
                             <div class="col-4">
                                 <div class="form-group focused">
                                     <label class="form-control-label" for="new_pass">New Password</label>
-                                    <input type="password" id="new_pass" name="new_pass" class="form-control form-control-alternative">
+                                    <input type="password" id="new_pass" name="new_pass" class="form-control form-control-alternative" required>
                                 </div>
                             </div>
 
                             <div class="col-4">
                                 <div class="form-group">
                                     <label class="form-control-label" for="conf_pass">Confirm Password</label>
-                                    <input type="password" id="conf_pass" name="conf_pass" class="form-control form-control-alternative">
+                                    <input type="password" id="conf_pass" name="conf_pass" class="form-control form-control-alternative" required>
                                 </div>
                             </div>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" name="showPass" id="showPass" onchange="showpass()">
+                            <label for="showPass" class="form-check-label">Show Password</label>
                         </div>
                     </form>
 
@@ -164,9 +202,44 @@ $(document).ready(function () {
     $(".transaction-table").niceScroll();
 });
 
+function showpass() {
+    var x = document.getElementById("cur_pass");
+    var y = document.getElementById("new_pass");
+    var z = document.getElementById("conf_pass");
+    if (x.type === "password") {
+        x.type = "text";
+        y.type = "text";
+        z.type = "text";
+    } else {
+        x.type = "password";
+        y.type = "password";
+        z.type = "password";
+    }
+}
+
 var form = document.getElementById("profile_form");
 document.getElementById("edit_submit").addEventListener("click", function () {
-  form.submit();
+  var realname = $("#name").val();
+  var username = $("#username").val();
+  var email = $("#email").val();
+  if (realname != "" && username != "" && email != "") {
+    form.submit();
+  } else {
+    alert("Please fill all the details in user information!");
+    $('.modal').modal('hide');
+  }
 });
+
+function submitform() {
+  var realname = $("#cur_pass").val();
+  var username = $("#new_pass").val();
+  var email = $("#conf_pass").val();
+  if (realname != "" && username != "" && email != "") {
+    var form = document.getElementById("reset_form");
+    form.submit();
+  } else {
+    alert("Please fill all the details in password setting!");
+  }
+}
 </script>
 </html>

@@ -164,6 +164,12 @@
   height: 350px;
 }
 
+.body > div form .form-check {
+  font-size: 14px;
+  padding-left: 0;
+  padding-bottom: 15px;
+}
+
 .modal-dialog > .modal-content > .modal-footer > .btn-primary {
   background-color: #fc9a55 !important;
   border-color: #fc9a55 !important;

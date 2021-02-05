@@ -218,7 +218,7 @@
                                                                 ORDER BY amount DESC
                                                             ");
                         if (!empty($datarow)) {
-                            $percentageArray = $customer->getPercentage($customer->getCurrentFilterTime(1,0,$customer->getFlag()),$customer->getCurrentFilterTime(1,1,$customer->getFlag()));
+                            $percentageArray = $customer->getIncomePercentage($customer->getCurrentFilterTime(1,0,$customer->getFlag()),$customer->getCurrentFilterTime(1,1,$customer->getFlag()));
                             for ($i = 0; $i < sizeof($datarow); $i++) {
                         ?>
                             <div class="container-fluid row category">
