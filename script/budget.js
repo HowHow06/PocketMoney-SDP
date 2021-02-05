@@ -441,6 +441,42 @@ function refreshchart(amount, month) {
   lineChart.render();
 }
 
+$(document).on("click", ".budget-delete-icon", function () {
+  divToDelete = $(this).parent().parent();
+  divToDelete.html("");
+});
+
+$(document).on("click", ".new-budgetItem-btn", function () {
+  flag = false;
+  inputs = $(".form-budgetName").each(function () {
+    if ($(this).val() == "") flag = true;
+  });
+  if (!flag) {
+    divOfData = $("#edit-body-data");
+    content = divOfData.html();
+    content += displayNewBudgetItem();
+    divOfData.html(content);
+  }
+});
+
+function displayNewBudgetItem() {
+  newitem =
+    '<div class="budget-data">\
+  <input type="hidden" class="edit-budgetID" ">\
+  <div class="form-group row">\
+     <label class="col-5" for="edit_budgetCategory">Category:</label>\
+     <input class="col-6 form-budgetName" list="edit_budgetCategoryList" name="edit_budgetCategory" autocomplete="off" required />\
+     <label class="error" for="edit_budgetCategory">Please enter a valid category</label>\
+     <i class="fas fa-trash col-1 align-self-center budget-delete-icon"></i>\
+ </div>\
+ <div class="form-group row">\
+     <label class="col-5" for="edit_budgetPercentage">Percentage:</label>\
+     <input class="col-6 form-budgetPercentage" type="number" step=\'1.00\' name="edit_budgetPercentage" required />\
+     <label class="error" for="edit_budgetPercentage">Total Percentage must not be larger than 100</label>\
+ </div><hr>\
+ </div>';
+  return newitem;
+}
 $(document).on("click", ".edit-budget-btn", function () {
   var cusID = document.getElementById("cusID");
   var xmlhttp = new XMLHttpRequest();

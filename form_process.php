@@ -15,6 +15,7 @@ if (isset($_GET['budgetEditData'])) {
             </div>
             </div>
     ');
+    $totalPercentage = 0;
     if ($data) {
         for ($i = 0; $i < sizeof($data); $i++) {
             if ($data[$i]['categoryName'] == 'other') {
@@ -24,39 +25,57 @@ if (isset($_GET['budgetEditData'])) {
             }
         }
         array_push($data, $rowOfOthers);
-        $totalPercentage = 0;
         foreach ($data as $budgetRow) {
             $totalPercentage += $budgetRow['percentage'];
-            echo (' 
+            echo (' <div class="budget-data">
                     <input type="hidden" class="edit-budgetID" value="' . $budgetRow['budgetID'] . '">
                     <div class="form-group row">
                        <label class="col-5" for="edit_budgetCategory">Category:</label>
-                       <input value="' . $budgetRow['categoryName'] . '" class="col-6 form-budgetName" list="edit_budgetCategoryList" name="edit_budgetCategory" autocomplete="off" required />
+                       <input value="' . $budgetRow['categoryName'] . '" class="col-6 form-budgetName" list="edit_budgetCategoryList" name="edit_budgetCategory[]" autocomplete="off" required />
                        <label class="error" for="edit_budgetCategory">Please enter a valid category</label>
                        <i class="fas fa-trash col-1 align-self-center budget-delete-icon"></i>
                    </div>
                    <div class="form-group row">
                        <label class="col-5" for="edit_budgetPercentage">Percentage:</label>
-                       <input class="col-6 form-budgetPercentage" type="number" step=\'1.00\' name="edit_budgetPercentage" value="' . $budgetRow['percentage'] . '" required />
+                       <input class="col-6 form-budgetPercentage" type="number" step=\'1.00\' name="edit_budgetPercentage[]" value="' . $budgetRow['percentage'] . '" required />
                        <label class="error" for="edit_budgetPercentage">Total Percentage must not be larger than 100</label>
-                   </div><hr>');
+                   </div><hr>
+                   </div>');
         }
-        //below is the creation of datalist, all datalist input are using the same datalist
-        echo ('<datalist id="edit_budgetCategoryList">');
-        $data = $customer->getDataByQuery("SELECT categoryName, categoryID FROM category
-                                           WHERE categoryType <> 'income'
-                                           AND categoryName <> 'other'
-                                           AND (preDefine = 1 OR
-                                           cusID = " . $cusID . ")
-                                           ORDER BY categoryName ASC;
-                                           ");
-        foreach ($data as $row) {
-            echo ('<option id="type' . $row['categoryName'] . '" value="' . $row['categoryName'] . '">' . $row['categoryName'] . '</option>');
-        }
-        echo ('</datalist>
-                <input type="hidden" id="budget-data" value="">
-               <input type="hidden" id="budget-percentage" value="' . $totalPercentage . '">');
+    } else {
+        echo (' <div class="budget-data">
+                    <input type="hidden" class="edit-budgetID" ">
+                    <div class="form-group row">
+                       <label class="col-5" for="edit_budgetCategory">Category:</label>
+                       <input class="col-6 form-budgetName" list="edit_budgetCategoryList" name="edit_budgetCategory" autocomplete="off" required />
+                       <label class="error" for="edit_budgetCategory">Please enter a valid category</label>
+                       <i class="fas fa-trash col-1 align-self-center budget-delete-icon"></i>
+                   </div>
+                   <div class="form-group row">
+                       <label class="col-5" for="edit_budgetPercentage">Percentage:</label>
+                       <input class="col-6 form-budgetPercentage" type="number" step=\'1.00\' name="edit_budgetPercentage" required />
+                       <label class="error" for="edit_budgetPercentage">Total Percentage must not be larger than 100</label>
+                   </div><hr>
+                   </div>');
     }
+
+    //the hiddent input to get the data and percentage
+    echo ('<input type="hidden" id="budget-data" value="">
+               <input type="hidden" id="budget-percentage" value="' . $totalPercentage . '">');
+
+    //below is the creation of datalist, all datalist input are using the same datalist
+    echo ('<datalist id="edit_budgetCategoryList">');
+    $data = $customer->getDataByQuery("SELECT categoryName, categoryID FROM category
+                                       WHERE categoryType <> 'income'
+                                       AND categoryName <> 'other'
+                                       AND (preDefine = 1 OR
+                                       cusID = " . $cusID . ")
+                                       ORDER BY categoryName ASC;
+                                       ");
+    foreach ($data as $row) {
+        echo ('<option id="type' . $row['categoryName'] . '" value="' . $row['categoryName'] . '">' . $row['categoryName'] . '</option>');
+    }
+    echo ('</datalist>');
 }
 
 
