@@ -71,7 +71,7 @@
                 <nav class="navbar navbar-expand-lg">
                     <a href="#" class="navbar-brand">ANNOUNCEMENT STATUS</a>
                 </nav>
-                    <!--Delete Modal-->
+                <!--Delete Modal-->
 
                 <div class="modal fade edit-modal" id="delete-row" tabindex="-1" role="dialog" aria-labelledby="delete-title" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
@@ -122,17 +122,17 @@
                     <thead class="thead-light">
                         <tr>
                             <th scope="col">Announcement ID</th>
-                            <th scope="col">Post Date</th>
-                            <th scope="col">Title</th>
+                            <th scope="col" style="min-width: 120px;">Post Date</th>
+                            <th scope="col" style="min-width: 300px;">Title</th>
                             <th scope="col">Content</th>
-                            <th scope="col">ACTION</th>
+                            <th scope="col" style="min-width: 180px;">ACTION</th>
                         </tr>
                     </thead>
                     <tbody id ="announcementbody">
 
                     <?php 
                     
-                    $query = $admin->getDataByQuery("SELECT announcementID, adminID, announcement_date, title, content FROM announcement");
+                    $query = $admin->getDataByQuery("SELECT announcementID, adminID, announcement_date, title, content FROM announcement ORDER BY announcement_date DESC");
                     
                     if (!empty($query)) {
                     for($i = 0; $i < sizeof($query); $i++) {

@@ -6,6 +6,7 @@
 .body {
     @include cus-body;
     margin-bottom: 40px;
+    min-height: 100px;
     > nav {
         margin-bottom: 10px;
     }

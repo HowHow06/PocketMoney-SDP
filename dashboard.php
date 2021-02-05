@@ -93,36 +93,37 @@
                     // $customer = new Customer();
                     $query = "SELECT * FROM budget b, category c WHERE b.categoryID = c.categoryID AND b.cusID = " . $customer->getId();
                     $data = $customer->getDataByQuery($query);
-                    for ($i = 0; $i < sizeof($data); $i++) {
-                        if ($data[$i]['categoryName'] == 'other') {
-                            $rowOfOthers = $data[$i];
-                            unset($data[$i]);
-                            break;
+                    if (!empty($data)) {
+                        for ($i = 0; $i < sizeof($data); $i++) {
+                            if ($data[$i]['categoryName'] == 'other') {
+                                $rowOfOthers = $data[$i];
+                                unset($data[$i]);
+                                break;
+                            }
                         }
-                    }
-                    array_push($data, $rowOfOthers);
-                    $count = 0;
-                    foreach ($data as $row) {
-                        $totalIncome = $customer->getTotalIncome();
-                        $totalAmount = floatval($row['percentage']) / 100.0 * $totalIncome * 1.0;
-                        if ($row['categoryName'] == "other") {
-                            $getCateTypeSubQuery = "SELECT categoryType FROM Category WHERE categoryID = tr.categoryID";
-                            $cateIdsSubQuery = "SELECT b.categoryID FROM budget b WHERE b.cusID = " . $customer->getId(); //get all categoryID in budget
-                            $query = "SELECT SUM(tr.amount) as usedAmount 
-                            FROM Transaction tr 
-                            WHERE tr.cusID = 1 
-                            AND (" . $getCateTypeSubQuery . ") <> 'income'
-                            AND tr.categoryID NOT IN (" . $cateIdsSubQuery . ")"; //select amount of those categories that are not in budget
+                        array_push($data, $rowOfOthers);
+                        $count = 0;
+                        foreach ($data as $row) {
+                            $totalIncome = $customer->getTotalIncome();
+                            $totalAmount = floatval($row['percentage']) / 100.0 * $totalIncome * 1.0;
+                            if ($row['categoryName'] == "other") {
+                                $getCateTypeSubQuery = "SELECT categoryType FROM Category WHERE categoryID = tr.categoryID";
+                                $cateIdsSubQuery = "SELECT b.categoryID FROM budget b WHERE b.cusID = " . $customer->getId(); //get all categoryID in budget
+                                $query = "SELECT SUM(tr.amount) as usedAmount 
+                                FROM Transaction tr 
+                                WHERE tr.cusID = 1 
+                                AND (" . $getCateTypeSubQuery . ") <> 'income'
+                                AND tr.categoryID NOT IN (" . $cateIdsSubQuery . ")"; //select amount of those categories that are not in budget
 
-                            $amountResults = $customer->getDataByQuery($query);
-                        } else {
-                            $amountResults = $customer->getData("Transaction", "SUM(amount) as usedAmount", array('categoryID' => $row['categoryID'], 'cusID' => $customer->getId()));
-                        }
-                        $amountUsed = $amountResults[0]['usedAmount']; //the amount used
-                        if (!$amountUsed)
-                            $amountUsed = 0; //if the record is not found in transaction table, the budget is not used at all
-                        $amountUsedPercentage = floatval($amountUsed) / $totalAmount * 100.0;
-                        $amountLeft = $totalAmount - $amountUsed;
+                                $amountResults = $customer->getDataByQuery($query);
+                            } else {
+                                $amountResults = $customer->getData("Transaction", "SUM(amount) as usedAmount", array('categoryID' => $row['categoryID'], 'cusID' => $customer->getId()));
+                            }
+                            $amountUsed = $amountResults[0]['usedAmount']; //the amount used
+                            if (!$amountUsed)
+                                $amountUsed = 0; //if the record is not found in transaction table, the budget is not used at all
+                            $amountUsedPercentage = floatval($amountUsed) / $totalAmount * 100.0;
+                            $amountLeft = $totalAmount - $amountUsed;
                     ?>
                         <div class="budget-row">
                             <div class="row">
@@ -152,7 +153,10 @@
                             <hr>
                         </div>
                     <?php
-                        $count++;
+                            $count++;
+                        }
+                    } else {
+                        echo ('<p class="text-center" style="color: grey;">No data shown.</p>');
                     }
                     ?>
                     <input type="hidden" name="numOfBudget" id="numOfBudget" value="<?php echo (sizeof($data)); ?>">
@@ -309,10 +313,12 @@
                                         AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")) )
                                         WHERE 
                                         l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")))), 0) < l.totalAmountToPay
+                                        AND l.cusID = " . $customer->getId() . "
                                         GROUP BY l.liabilityName";
                         $result = $customer->getDataByQuery($query);
-                        foreach ($result as $data) {
-                            # code...
+                        if (!empty($result)) {
+                            foreach ($result as $data) {
+                                # code...
 
                         ?>
                             <div class="liability-row">
@@ -347,6 +353,9 @@
                                 <hr>
                             </div>
                         <?php
+                            }
+                        } else {
+                            echo ('<p class="text-center" style="color: grey;">No data shown.</p>');
                         }
                         ?>
                     </div>
