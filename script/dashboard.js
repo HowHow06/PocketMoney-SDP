@@ -5,6 +5,15 @@ $(document).ready(function () {
     progress_width = $(this).attr("aria-valuenow");
     $(this).css("width", progress_width + "%");
   });
+
+  var numofbudget = $('#numOfBudget').val();
+  for (var i = 0; i<parseFloat(numofbudget); i++) {
+    var progressvalue = $('#progress-bar'+i).attr('aria-valuenow');
+    if (parseFloat(progressvalue) > 100) {
+      $('#progress-bar'+i).addClass('excess-bar');
+      $('#progress-bar'+i).parent().find('h6').addClass('excess-value');
+    }
+  }
 });
 
 var investmentTypes = $("#typesOfInvestments").val();

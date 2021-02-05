@@ -72,14 +72,15 @@
                     ?> 
                   
                     <tr>
-                    <input type="hidden" class="feedbackID" value='<?php echo ($query[$i]['feedbackID']); ?>'></input>
                     <th scope = "row"><?php echo ($i +1 ); ?></th>
                     <td class="feedback_date"><?php print_r($query[$i]['sent_date']); ?></td>
                     <td class="feedback_customer"><?php echo ($query[$i]['customer_name']); ?></td>
-                    <td class="feedback_email"><?php echo ($query[$i])['customer_email']; ?></td>
+                    <td class="feedback_customer"><?php echo ($query[$i]['customer_email']); ?></td>
                     <td class="feedback_content"><?php echo ($query[$i]['content']); ?></td>
                     <td class="action">
-                                      <a href="#" class="delete-feedback-anchor" data-toggle="modal" data-target="#delete-row">Delete</a>
+                                      <a href="#" class="edit-announcement-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
+                                      <span> | </span>
+                                      <a href="#" class="delete-announcement-anchor" data-toggle="modal" data-target="#delete-row">Delete</a>
                                   </td>
                     </tr> 
                     <?php }

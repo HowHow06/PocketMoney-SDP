@@ -89,118 +89,73 @@
                     <a href="#" class="navbar-brand">BUDGETS</a>
                 </nav>
                 <div class="container-fluid budget-overview">
-                    <div class="budget-row">
-                        <div class="row">
-                            <div class="col-3">
-                                <div>
-                                    <sub>Total Budget</sub>
-                                </div>
-                                <p>RM 1000.00</p>
-                            </div>
-                            <div class="col-9">
-                                <!-- bar -->
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" id="progress-bar"></div>
-                                    <h6>50%</h6>
-                                    <div class="vl" data-toggle="vl-hover" data-text="Today"></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <h6 class="spent">RM 350.00</h6>
-                                    </div>
-                                    <div class="col-6">
-                                        <h6 class="target">RM 650.00</h6>
-                                    </div>
-                                </div>
+                <?php
+                    // $customer = new Customer();
+                    $query = "SELECT * FROM budget b, category c WHERE b.categoryID = c.categoryID AND b.cusID = " . $customer->getId();
+                    $data = $customer->getDataByQuery($query);
+                    for ($i = 0; $i < sizeof($data); $i++) {
+                        if ($data[$i]['categoryName'] == 'other') {
+                            $rowOfOthers = $data[$i];
+                            unset($data[$i]);
+                            break;
+                        }
+                    }
+                    array_push($data, $rowOfOthers);
+                    $count = 0;
+                    foreach ($data as $row) {
+                        $totalIncome = $customer->getTotalIncome();
+                        $totalAmount = floatval($row['percentage']) / 100.0 * $totalIncome * 1.0;
+                        if ($row['categoryName'] == "other") {
+                            $getCateTypeSubQuery = "SELECT categoryType FROM Category WHERE categoryID = tr.categoryID";
+                            $cateIdsSubQuery = "SELECT b.categoryID FROM budget b WHERE b.cusID = " . $customer->getId(); //get all categoryID in budget
+                            $query = "SELECT SUM(tr.amount) as usedAmount 
+                            FROM Transaction tr 
+                            WHERE tr.cusID = 1 
+                            AND (" . $getCateTypeSubQuery . ") <> 'income'
+                            AND tr.categoryID NOT IN (" . $cateIdsSubQuery . ")"; //select amount of those categories that are not in budget
 
-                            </div>
-                        </div>
-                        <hr>
-                    </div>
-                    <!-- When a row is being clicked, it will direct to expense transaction page, with a bookmark category there  -->
-                    <div class="budget-row">
-                        <div class="row">
-                            <div class="col-3">
-                                <div>
-                                    <sub>Food</sub>
-                                </div>
-                                <p>RM 400.00</p>
-                            </div>
-                            <div class="col-9">
-                                <!-- bar -->
-                                <div class="progress">
-                                    <div class="progress-bar excess-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" id="progress-bar"></div>
-                                    <h6 class="excess-value">110%</h6>
-                                    <div class="vl" data-toggle="vl-hover" data-text="Today"></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <h6 class="spent excess">RM 550.00</h6>
+                            $amountResults = $customer->getDataByQuery($query);
+                        } else {
+                            $amountResults = $customer->getData("Transaction", "SUM(amount) as usedAmount", array('categoryID' => $row['categoryID'], 'cusID' => $customer->getId()));
+                        }
+                        $amountUsed = $amountResults[0]['usedAmount']; //the amount used
+                        if (!$amountUsed)
+                            $amountUsed = 0; //if the record is not found in transaction table, the budget is not used at all
+                        $amountUsedPercentage = floatval($amountUsed) / $totalAmount * 100.0;
+                        $amountLeft = $totalAmount - $amountUsed;
+                    ?>
+                        <div class="budget-row">
+                            <div class="row">
+                                <div class="col-3">
+                                    <div>
+                                        <sub><?php echo ($row['categoryName']); ?></sub>
                                     </div>
-                                    <div class="col-6">
-                                        <h6 class="target">Excess RM -110.00</h6>
+                                    <p>RM <?php echo (number_format($totalAmount * 1.0, 2, ".", "")); ?></p>
+                                </div>
+                                <div class="col-9">
+                                    <!-- bar -->
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo (number_format($amountUsedPercentage * 1.0, 2, ".", "")); ?>" aria-valuemin="0" aria-valuemax="100" id="progress-bar<?php echo ($count); ?>"></div>
+                                        <h6 class=""><?php echo (number_format($amountUsedPercentage * 1.0, 2, ".", "")); ?>%</h6>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
-                    </div>
-                    <div class="budget-row">
-                        <div class="row">
-                            <div class="col-3">
-                                <div>
-                                    <sub>Transportation</sub>
-                                </div>
-                                <p>RM 350.00</p>
-                            </div>
-                            <div class="col-9">
-                                <!-- bar -->
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" id="progress-bar"></div>
-                                    <h6>30%</h6>
-                                    <div class="vl" data-toggle="vl-hover" data-text="Today"></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <h6 class="spent">RM 100.00</h6>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <h6 class="spent">RM <?php echo (number_format($amountUsed, 2, ".", "")); ?></h6>
+                                        </div>
+                                        <div class="col-6">
+                                            <h6 class="target">RM <?php echo (number_format($amountLeft, 2, ".", "")); ?></h6>
+                                        </div>
                                     </div>
-                                    <div class="col-6">
-                                        <h6 class="target">RM 250.00</h6>
-                                    </div>
-                                </div>
 
+                                </div>
                             </div>
+                            <hr>
                         </div>
-                        <hr>
-                    </div>
-                    <div class="budget-row">
-                        <div class="row">
-                            <div class="col-3">
-                                <div>
-                                    <sub>Fashion</sub>
-                                </div>
-                                <p>RM 150.00</p>
-                            </div>
-                            <div class="col-9">
-                                <!-- bar -->
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" id="progress-bar"></div>
-                                    <h6>50%</h6>
-                                    <div class="vl" data-toggle="vl-hover" data-text="Today"></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <h6 class="spent">RM 75.00</h6>
-                                    </div>
-                                    <div class="col-6">
-                                        <h6 class="target">RM 75.00</h6>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <hr>
-                    </div>
+                    <?php
+                        $count++;
+                    }
+                    ?>
+                    <input type="hidden" name="numOfBudget" id="numOfBudget" value="<?php echo (sizeof($data)); ?>">
                 </div>
             </div>
 

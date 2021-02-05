@@ -175,7 +175,6 @@
 }
 
 .budget > .budget-overview > .budget-row > .row > .col-9 > .progress > .excess-bar {
-  width: 100%;
   background-color: #ff6767 !important;
 }
 
