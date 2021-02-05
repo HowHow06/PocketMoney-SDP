@@ -242,7 +242,8 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="reset" class="btn btn-success edit-budget-btn">Reset</button>
+                                <button type="button" class="btn btn-success new-budgetItem-btn">Add Item</button>
+                                <button type="button" class="btn btn-success edit-budget-btn">Reset</button>
                                 <button type="submit" name="edit_submit" class="btn btn-primary">Save changes</button>
                             </div>
                         </form>
