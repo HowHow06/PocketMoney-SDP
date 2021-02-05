@@ -12,6 +12,23 @@
         $activePage = "settings";
         include(".navbar.php");
 
+        if (isset($_POST['edit_password'])) { //if the form is submitted
+            $hashPassword = password_hash($_POST['new_pass'], PASSWORD_BCRYPT);
+                        $params['tableName'] = 'Customer';
+                        $params['idName'] = 'cusID';
+                        $params['id'] = $_POST['cusID'];
+                        $params['data'] = array(
+                            'password' => $hashPassword 
+                        );
+                        $result = $customer->customerUpdate($params);
+                        if ($result['status'] == 'ok') {
+                            $customer->showAlert($result['statusMsg']);
+                        } else {
+                            $customer->showAlert($result['statusMsg']);
+                        }
+                        $customer->goTo('profile.php?role=customer');
+                    }
+
 
         if (isset($_POST['cusID'])) { //if the form is submitted
             $params = array(
@@ -41,7 +58,7 @@
                         $params['data'] = array(
                             'name' => $_POST['name'], 
                             'username' => $_POST['username'], 
-                            'email' => $_POST['email']
+                            'email' => $_POST['email'],
                         );
                         $result = $customer->customerUpdate($params);
                         if ($result['status'] == 'ok') {
@@ -54,6 +71,8 @@
                 }
             }
         }
+
+    
     ?>
     <div class="container-fluid background">
         <div class="container-fluid body">
@@ -105,7 +124,7 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     <label class="form-control-label" for="username">Username</label>
-                                    <input type="text" id="username" name="username" class="form-control form-control-alternative" value="<?php echo($username); ?>" required>
+                                    <input type="text" id="username" name="username" class="form-control form-control-alternative" value="<?php echo($username); ?>" readonly>
                                 </div>
                             </div>
                         </div>
@@ -117,40 +136,21 @@
                                 </div>
                             </div>
                         </div>
-                    </form>
-                </div>
-
-                <hr>
-
+                     <hr>
                 <div>
                     <div class="row">
                         <h4 class="col-6">PASSWORD SETTING</h4>
                     </div>
-
-                    <form action="" method="">
-                        <div class="row">
-                            <div class="col-4">
-                                <div class="form-group focused">
-                                    <label class="form-control-label" for="cur_pass">Current Password</label>
-                                    <input type="password" id="cur_pass" name="cur_pass" class="form-control form-control-alternative">
-                                </div>
-                            </div>
-
+                        <form  action="" method="post">
                             <div class="col-4">
                                 <div class="form-group focused">
                                     <label class="form-control-label" for="new_pass">New Password</label>
                                     <input type="password" id="new_pass" name="new_pass" class="form-control form-control-alternative">
+                                    <br>
+                                    <button type="submit" id=edit_password name="edit_password" class="btn btn-primary mb-4">Change password</button>
                                 </div>
                             </div>
-
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label class="form-control-label" for="conf_pass">Confirm Password</label>
-                                    <input type="password" id="conf_pass" name="conf_pass" class="form-control form-control-alternative">
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                        </form>
 
                     <br><br>
                 </div>
