@@ -380,6 +380,59 @@ class Customer
     }
 
     /**
+     * get encrypted password.
+     *
+     * @param String $password
+     * 
+     * @return hash
+     *
+     */
+    function getEncryptedPassword($password)
+    {
+        return password_hash($password, PASSWORD_BCRYPT);
+    }
+
+    /**
+     * Verifying customer password.
+     *
+     * @param array $params
+     * 'password'-> String: password of the customer;
+     * 
+     * @return array 
+     * 'status'-> String: 'ok' or 'error';
+     * 'statusMsg'-> String: the status msg;
+     *
+     */
+    function customerResetPassword($params)
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $current_password = $params['current'];
+            $new_password = $params['new'];
+            $confirm_password = $params['confirm'];
+
+            $id = $this->id;
+            $db->where("cusID",$id);
+            $result = $db->get('Customer',null,'password');
+
+            if (!empty($result)) {
+                $db_password = $result[0]['password'];
+                if (!password_verify($current_password,$db_password)) {
+                    return array('status' => 'error', 'statusMsg' => 'Wrong Current Password');
+                }
+                if (!preg_match('/^[^ ]{5,}$/', $new_password)) {
+                    return array('status' => 'error', 'statusMsg' => 'Wrong Password Structure');
+                }
+                if ($new_password != $confirm_password) {
+                    return array('status' => 'error', 'statusMsg' => 'Password Does Not Match');
+                }
+                return array('status' => 'ok', 'statusMsg' => '');
+            }
+        }
+        return NULL;
+    }
+
+    /**
      * Verifying customer new email by sending email.
      *
      * @param String $email
@@ -1216,7 +1269,7 @@ class Customer
      * @return Array|NULL
      * 
      */
-    function getPercentage($month, $year, $isExpense = 0)
+    function getIncomePercentage($month, $year, $isExpense = 0)
     {
         $db = MysqliDb::getInstance();
         if (!empty($this->id)) {
@@ -1254,6 +1307,36 @@ class Customer
             }
 
             return $incomeTypesToValue;
+        }
+
+        return NULL;
+    }
+
+    /** 
+     * Return Array format of expense categoryName + totalAmount + percentage
+     * 
+     * @param Array $array
+     *  
+     * @return Array|NULL
+     * 
+     */
+    function getExpensesPercentage($array)
+    {
+        if (!empty($array)) {
+            $expnesesTypesToValue = array();
+            $total = 0;
+            foreach ($array as $row => $data) {
+                $tempValue = (float) $data['amount'];
+                $total += $tempValue;
+                array_push($expnesesTypesToValue, ['label' => $data['categoryName'], 'value' => $tempValue, 'percentage' => '']);
+            }
+
+            for ($i = 0; $i < sizeof($expnesesTypesToValue); $i++) {
+                $percentage = $expnesesTypesToValue[$i]['value'] / $total * 100.00;
+                $expnesesTypesToValue[$i]['percentage'] = strval(round($percentage)) . '%';
+            }
+
+            return $expnesesTypesToValue;
         }
 
         return NULL;

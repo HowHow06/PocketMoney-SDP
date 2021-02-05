@@ -11,6 +11,11 @@ Financial Management System (Website)
 
 ## Work Progress
 
+### 2021-02-05
+> Moses's Part
+- Fixing bugs
+- Create ```announcement.php``` for customer to view announcement.
+- Add DML for announcement.
 ### 2021-02-04
 > Moses's Part
 - Update ```profile.php``` and ```enquiry.php```

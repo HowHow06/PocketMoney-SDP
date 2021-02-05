@@ -75,6 +75,7 @@ switch ($activePage) {
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                 <a href="profile.php?role=customer" class="dropdown-item">Profile</a>
                 <a href="enquiry.php?role=customer" class="dropdown-item">Enquiry</a>
+                <a href="announcement.php?role=customer" class="dropdown-item">Announcements</a>
                 <a href="logout.php?role=customer" class="dropdown-item">Logout</a>
             </div>
         </li>

@@ -39,6 +39,9 @@
             textarea {
                 height: 350px;
             }
+            .form-check { 
+                @include checkbox-wrap;
+            }
         }
     }
 }
