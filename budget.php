@@ -161,10 +161,17 @@
             </div>
 
             <br></br>
+
+            <!-- the manage budget section -->
             <div class="container-fluid budget-manage">
                 <div class="border round">
-                    <div class="col-12">
-                        <h4>MANAGE BUDGET</h4>
+                    <div class="row">
+                        <div class="col-6">
+                            <h4>MANAGE BUDGET</h4>
+                        </div>
+                        <div class="col-6">
+                            <button type="button" class="btn btn-secondary float-right edit-budget-btn" id="btn-edit" data-toggle="modal" data-target="#edit-row">Edit / Add New</button>
+                        </div>
                     </div>
                     <div class="row">
                         <table class="table table-bordered table-hover transaction-table" id="overallTransactionTable">
@@ -173,7 +180,7 @@
                                     <th scope="col">#</th>
                                     <th scope="col">CATEGORY</th>
                                     <th scope="col">PERCENTAGE</th>
-                                    <th scope="col">ACTION</th>
+                                    <!-- <th scope="col">ACTION</th> -->
                                 </tr>
                             </thead>
                             <tbody id="overallTransactionTableBody">
@@ -199,118 +206,39 @@
                                             <th scope="row"><?php echo (($i + 1)); ?></th>
                                             <td class="budgetCategory"><?php echo ($datarow[$i]['category']); ?></td>
                                             <td class="budgetPercentage"><?php echo ($datarow[$i]['percentage']); ?></td>
-                                            <td class="action">
-                                                <a href="#" class="edit-transaction-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
-                                                <span> | </span>
-                                                <a href="#" class="delete-transaction-anchor" data-toggle="modal" data-target="#delete-row">Delete</a>
-                                            </td>
                                         </tr>
                                 <?php
                                     }
+                                } else {
+                                    echo ("<p>You have not setup your budget plan, please click 'Edit / Add New' button to create one</p>");
                                 } ?>
                             </tbody>
                         </table>
                     </div>
-                    <!-- <button type="button" class="btn btn-circle btn-xl" data-toggle="modal" data-target="#new-budget">
-                    <i class="fas fa-plus"></i>
-                    </button> -->
                 </div>
             </div>
 
-            <!-- new-budget modal -->
-            <div class="modal fade new-modal" id="new-budget" tabindex="-1" role="dialog" aria-labelledby="new-title" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="new-title">New Budget</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <form action="" method="POST" id="testing" onsubmit="return validateform(this);">
-                            <div class="modal-body">
-                                <div class="container">
-                                    <div class="form-group row">
-                                        <label class="col-5" for="new_budgetCategory">Category:</label>
-                                        <input id="new_budgetCategory" class="col-6 form-investmentType" list="new_budgetCategoryList" name="new_budgetCategory" required />
-                                        <datalist id="new_budgetCategoryList">
-                                            <?php
-                                            $data = $customer->getDataByQuery("SELECT categoryName FROM category
-                                                                                    WHERE (categoryType = 'budget'
-                                                                                    OR categoryType = 'expenses')
-                                                                                    AND (preDefine = 1 OR
-																					cusID = " . $customer->getId() . ")
-                                                                                    ORDER BY categoryName ASC;
-                                                                                    ");
-                                            foreach ($data as $row => $value) {
-                                            ?>
-                                                <option id="type<?php echo ($value['categoryName']); ?>" value="<?php echo ($value['categoryName']); ?>"><?php echo ($value['categoryName']); ?></option>
-                                            <?php
-                                            }
-                                            ?>
-                                        </datalist>
-                                        <label class="error" for="new_budgetCategory">Please enter a valid category</label>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="new_budgetPercentage">Percentage:</label>
-                                        <input class="col-6 form-amountInvested" type="number" step='1.00' id="new_budgetPercentage" name="new_budgetPercentage" required />
-                                        <label class="error" for="new_budgetPercentage">Please enter a valid percentage</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" name="new_submit" class="btn btn-primary">Add new</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+
             <!-- edit-budget modal -->
             <div class="modal fade edit-modal" id="edit-row" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="edit-title">Edit Budget</h5>
+                            <h5 class="modal-title" id="edit-title">Edit / Add New Budget</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form action="" method="POST" id="edit-form" onsubmit="return validateform(this);">
+                        <form action="" method="POST" id="edit-form" onsubmit="return false;">
                             <div class="modal-body">
-                                <div class="container">
-                                    <input type="hidden" id="edit_budgetID" name="edit_budgetID"></input>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="edit_budgetCategory">Category:</label>
-                                        <input id="edit_budgetCategory" class="col-6 form-investmentType" list="edit_budgetCategoryList" name="edit_budgetCategory" required />
-                                        <datalist id="edit_budgetCategoryList">
-                                            <?php
-                                            $data = $customer->getDataByQuery("SELECT categoryName FROM category
-                                                                                    WHERE (categoryType = 'budget'
-                                                                                    OR categoryType = 'expenses')
-                                                                                    AND (preDefine = 1 OR
-																					cusID = " . $customer->getId() . ")
-                                                                                    ORDER BY categoryName ASC;
-                                                                                    ");
-                                            foreach ($data as $row => $value) {
-                                            ?>
-                                                <option id="type<?php echo ($value['categoryName']); ?>" value="<?php echo ($value['categoryName']); ?>"><?php echo ($value['categoryName']); ?></option>
-                                            <?php
-                                            }
-                                            ?>
-                                        </datalist>
-                                        <label class="error" for="edit_budgetCategory">Please enter a valid category</label>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-5" for="edit_budgetPercentage">Percentage:</label>
-                                        <input class="col-6 form-amountInvested" type="number" step='1.00' id="edit_budgetPercentage" name="edit_budgetPercentage" required />
-                                        <label class="error" for="edit_budgetPercentage">Please enter a valid percentage</label>
-                                    </div>
+                                <div class="container" id="edit-body-data">
+                                    <!-- ajax in php will handle this part -->
                                 </div>
+
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="reset" class="btn btn-success" onclick="resetEdit()">Reset</button>
+                                <button type="reset" class="btn btn-success edit-budget-btn">Reset</button>
                                 <button type="submit" name="edit_submit" class="btn btn-primary">Save changes</button>
                             </div>
                         </form>
