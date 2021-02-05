@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <?php include(".head.php"); ?>
     <link rel="stylesheet" href="./style/budget.css">
 
     <title>PocketMoney | Budgets</title>
 </head>
+
 <body>
-    <?php 
-    $activePage = "budgets"; 
-    include(".navbar.php"); 
+    <?php
+    $activePage = "budgets";
+    include(".navbar.php");
 
     $customer->setCurDate();
     $customer->setFlag(0);
@@ -26,7 +28,7 @@
                                                 ');
 
         $params['data'] = array(
-			'cusID' => $customer->getId(),
+            'cusID' => $customer->getId(),
             'percentage' => $_POST['edit_budgetPercentage'],
             'categoryID' => $datarow[0]['categoryID']
         );
@@ -36,9 +38,9 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('budget.php');
+        $customer->goTo('budget.php?role=customer');
     }
-	
+
     //delete budget
     if (isset($_POST['delete_submit'])) {
         $params['tableName'] = 'Budget';
@@ -50,7 +52,7 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('budget.php');
+        $customer->goTo('budget.php?role=customer');
     }
 
     //new budget
@@ -73,189 +75,148 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('budget.php');
+        $customer->goTo('budget.php?role=customer');
     }
     ?>
 
     <div class="container-fluid background">
         <div class="container-fluid body">
             <nav class="navbar navbar-expand-lg">
-                <a href="#" class="navbar-brand">BUDGETS</a>
+                <a href="#" class="navbar-brand">BUDGET PLAN</a>
             </nav>
             <div class="container-fluid budget-overview">
                 <div class="container-fluid rounded border">
                     <div class="col-12">
                         <h4>BUDGET OVERVIEW</h4>
                     </div>
-                    <div class="budget-row-head">
-                        <div class="row">
-                            <div class="col-3">
-                                <div>
-                                    <sub>Total Budget</sub>
-                                </div>
-                                <p>RM 1000.00</p>
-                            </div>
-                            <div class="col-9">
-                                <!-- bar -->
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" id="progress-bar"></div>
-                                    <h6>50%</h6>
-                                    <div class="vl" data-toggle="vl-hover" data-text="Today"></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <h6 class="spent">RM 350.00</h6>
+                    <?php
+                    // $customer = new Customer();
+                    $query = "SELECT * FROM budget b, category c WHERE b.categoryID = c.categoryID AND b.cusID = " . $customer->getId();
+                    $data = $customer->getDataByQuery($query);
+                    for ($i = 0; $i < sizeof($data); $i++) {
+                        if ($data[$i]['categoryName'] == 'other') {
+                            $rowOfOthers = $data[$i];
+                            unset($data[$i]);
+                            break;
+                        }
+                    }
+                    array_push($data, $rowOfOthers);
+                    $count = 0;
+                    foreach ($data as $row) {
+                        $totalIncome = $customer->getTotalIncome();
+                        $totalAmount = floatval($row['percentage']) / 100.0 * $totalIncome * 1.0;
+                        if ($row['categoryName'] == "other") {
+                            $getCateTypeSubQuery = "SELECT categoryType FROM Category WHERE categoryID = tr.categoryID";
+                            $cateIdsSubQuery = "SELECT b.categoryID FROM budget b WHERE b.cusID = " . $customer->getId(); //get all categoryID in budget
+                            $query = "SELECT SUM(tr.amount) as usedAmount 
+                            FROM Transaction tr 
+                            WHERE tr.cusID = 1 
+                            AND (" . $getCateTypeSubQuery . ") <> 'income'
+                            AND tr.categoryID NOT IN (" . $cateIdsSubQuery . ")"; //select amount of those categories that are not in budget
+
+                            $amountResults = $customer->getDataByQuery($query);
+                        } else {
+                            $amountResults = $customer->getData("Transaction", "SUM(amount) as usedAmount", array('categoryID' => $row['categoryID'], 'cusID' => $customer->getId()));
+                        }
+                        $amountUsed = $amountResults[0]['usedAmount']; //the amount used
+                        if (!$amountUsed)
+                            $amountUsed = 0; //if the record is not found in transaction table, the budget is not used at all
+                        $amountUsedPercentage = floatval($amountUsed) / $totalAmount * 100.0;
+                        $amountLeft = $totalAmount - $amountUsed;
+                    ?>
+                        <div class="budget-row">
+                            <div class="row">
+                                <div class="col-3">
+                                    <div>
+                                        <sub><?php echo ($row['categoryName']); ?></sub>
                                     </div>
-                                    <div class="col-6">
-                                        <h6 class="target">RM 650.00</h6>
-                                    </div>
+                                    <p>RM <?php echo (number_format($totalAmount * 1.0, 2, ".", "")); ?></p>
                                 </div>
-                                
+                                <div class="col-9">
+                                    <!-- bar -->
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo (number_format($amountUsedPercentage * 1.0, 2, ".", "")); ?>" aria-valuemin="0" aria-valuemax="100" id="progress-bar<?php echo ($count); ?>"></div>
+                                        <h6 class=""><?php echo (number_format($amountUsedPercentage * 1.0, 2, ".", "")); ?>%</h6>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <h6 class="spent">RM <?php echo (number_format($amountUsed, 2, ".", "")); ?></h6>
+                                        </div>
+                                        <div class="col-6">
+                                            <h6 class="target">RM <?php echo (number_format($amountLeft, 2, ".", "")); ?></h6>
+                                        </div>
+                                    </div>
+
+                                </div>
                             </div>
+                            <hr>
                         </div>
-                        <hr>
-                    </div>
-                    <!-- When a row is being clicked, it will direct to expense transaction page, with a bookmark category there  -->
-                    <div class="budget-row">
-                        <div class="row">
-                            <div class="col-3">
-                                <div>
-                                    <sub>Food</sub>
-                                </div>
-                                <p>RM 400.00</p>
-                            </div>
-                            <div class="col-9">
-                                <!-- bar -->
-                                <div class="progress">
-                                    <div class="progress-bar excess-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" id="progress-bar"></div>
-                                    <h6 class="excess-value">110%</h6>
-                                    <div class="vl" data-toggle="vl-hover" data-text="Today"></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <h6 class="spent excess">RM 550.00</h6>
-                                    </div>
-                                    <div class="col-6">
-                                        <h6 class="target">Excess RM -110.00</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
-                    </div>
-                    <div class="budget-row">
-                        <div class="row">
-                            <div class="col-3">
-                                <div>
-                                    <sub>Transportation</sub>
-                                </div>
-                                <p>RM 350.00</p>
-                            </div>
-                            <div class="col-9">
-                                <!-- bar -->
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" id="progress-bar"></div>
-                                    <h6>30%</h6>
-                                    <div class="vl" data-toggle="vl-hover" data-text="Today"></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <h6 class="spent">RM 100.00</h6>
-                                    </div>
-                                    <div class="col-6">
-                                        <h6 class="target">RM 250.00</h6>
-                                    </div>
-                                </div>
-                                
-                            </div>
-                        </div>
-                        <hr>
-                    </div>
-                    <div class="budget-row">
-                        <div class="row">
-                            <div class="col-3">
-                                <div>
-                                    <sub>Fashion</sub>
-                                </div>
-                                <p>RM 150.00</p>
-                            </div>
-                            <div class="col-9">
-                                <!-- bar -->
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" id="progress-bar"></div>
-                                    <h6>50%</h6>
-                                    <div class="vl" data-toggle="vl-hover" data-text="Today"></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <h6 class="spent">RM 75.00</h6>
-                                    </div>
-                                    <div class="col-6">
-                                        <h6 class="target">RM 75.00</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <?php
+                        $count++;
+                    }
+                    ?>
+                    <input type="hidden" name="numOfBudget" id="numOfBudget" value="<?php echo (sizeof($data)); ?>">
+
                 </div>
             </div>
-            
-			<br></br>
+
+            <br></br>
             <div class="container-fluid budget-manage">
+                <div class="border round">
                     <div class="col-12">
                         <h4>MANAGE BUDGET</h4>
                     </div>
                     <div class="row">
                         <table class="table table-bordered table-hover transaction-table" id="overallTransactionTable">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">CATEGORY</th>
-						<th scope="col">PERCENTAGE</th>
-						<th scope="col">ACTION</th>
-                    </tr>
-                </thead>
-                <tbody id="overallTransactionTableBody">
-
-                    <?php 
-                    $datarow = $customer->getDataByQuery("SELECT b.budgetID, c.categoryName AS category, 
-															c.categoryType AS type,
-															b.percentage AS percentage
-                                                            FROM budget b, category c
-                                                            WHERE b.cusID = " . $customer->getId() . " 
-                                                            AND b.categoryID = c.categoryID
-															ORDER BY categoryName DESC;
-                                                            ");
-                    if (!empty($datarow)) {
-                        for ($i = 0; $i < sizeof($datarow); $i++) {
-                            if (empty($datarow[$i]['name'])) {
-                                $description = $datarow[$i]['category'];
-                            } else {
-                                $description = $datarow[$i]['name'];
-                            }
-                    ?>
-                            <tr>
-                                <input type="hidden" class="budgetID" value='<?php echo ($datarow[$i]['budgetID']); ?>'></input>
-                                <th scope="row"><?php echo (($i + 1)); ?></th>
-                                <td class="budgetCategory"><?php echo ($datarow[$i]['category']); ?></td>
-								<td class="budgetPercentage"><?php echo ($datarow[$i]['percentage']); ?></td>
-								<td class="action">
-                                    <a href="#" class="edit-transaction-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
-                                    <span> | </span>
-                                    <a href="#" class="delete-transaction-anchor" data-toggle="modal" data-target="#delete-row">Delete</a>
-                                </td>
-                            </tr>
-                    <?php
-                        }
-                    } ?>
-                </tbody>
-            </table>
-            </div>
-					<button type="button" class="btn btn-circle btn-xl" data-toggle="modal" data-target="#new-budget">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">CATEGORY</th>
+                                    <th scope="col">PERCENTAGE</th>
+                                    <th scope="col">ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody id="overallTransactionTableBody">
+                                <?php
+                                $datarow = $customer->getDataByQuery("SELECT b.budgetID, c.categoryName AS category, 
+                                                                        c.categoryType AS type,
+                                                                        b.percentage AS percentage
+                                                                        FROM budget b, category c
+                                                                        WHERE b.cusID = " . $customer->getId() . " 
+                                                                        AND b.categoryID = c.categoryID
+                                                                        ORDER BY categoryName DESC;
+                                                                        ");
+                                if (!empty($datarow)) {
+                                    for ($i = 0; $i < sizeof($datarow); $i++) {
+                                        if (empty($datarow[$i]['name'])) {
+                                            $description = $datarow[$i]['category'];
+                                        } else {
+                                            $description = $datarow[$i]['name'];
+                                        }
+                                ?>
+                                        <tr>
+                                            <input type="hidden" class="budgetID" value='<?php echo ($datarow[$i]['budgetID']); ?>'></input>
+                                            <th scope="row"><?php echo (($i + 1)); ?></th>
+                                            <td class="budgetCategory"><?php echo ($datarow[$i]['category']); ?></td>
+                                            <td class="budgetPercentage"><?php echo ($datarow[$i]['percentage']); ?></td>
+                                            <td class="action">
+                                                <a href="#" class="edit-transaction-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
+                                                <span> | </span>
+                                                <a href="#" class="delete-transaction-anchor" data-toggle="modal" data-target="#delete-row">Delete</a>
+                                            </td>
+                                        </tr>
+                                <?php
+                                    }
+                                } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- <button type="button" class="btn btn-circle btn-xl" data-toggle="modal" data-target="#new-budget">
                     <i class="fas fa-plus"></i>
-                    </button>
+                    </button> -->
+                </div>
             </div>
-	
+
             <!-- new-budget modal -->
             <div class="modal fade new-modal" id="new-budget" tabindex="-1" role="dialog" aria-labelledby="new-title" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -273,19 +234,19 @@
                                         <label class="col-5" for="new_budgetCategory">Category:</label>
                                         <input id="new_budgetCategory" class="col-6 form-investmentType" list="new_budgetCategoryList" name="new_budgetCategory" required />
                                         <datalist id="new_budgetCategoryList">
-											<?php
-                                                $data = $customer->getDataByQuery("SELECT categoryName FROM category
+                                            <?php
+                                            $data = $customer->getDataByQuery("SELECT categoryName FROM category
                                                                                     WHERE (categoryType = 'budget'
                                                                                     OR categoryType = 'expenses')
                                                                                     AND (preDefine = 1 OR
 																					cusID = " . $customer->getId() . ")
                                                                                     ORDER BY categoryName ASC;
                                                                                     ");
-                                                foreach ($data as $row => $value) {
-                                                ?>
-                                                    <option id="type<?php echo ($value['categoryName']); ?>" value="<?php echo ($value['categoryName']); ?>"><?php echo ($value['categoryName']); ?></option>
-                                                <?php
-                                                }
+                                            foreach ($data as $row => $value) {
+                                            ?>
+                                                <option id="type<?php echo ($value['categoryName']); ?>" value="<?php echo ($value['categoryName']); ?>"><?php echo ($value['categoryName']); ?></option>
+                                            <?php
+                                            }
                                             ?>
                                         </datalist>
                                         <label class="error" for="new_budgetCategory">Please enter a valid category</label>
@@ -324,18 +285,18 @@
                                         <input id="edit_budgetCategory" class="col-6 form-investmentType" list="edit_budgetCategoryList" name="edit_budgetCategory" required />
                                         <datalist id="edit_budgetCategoryList">
                                             <?php
-                                                $data = $customer->getDataByQuery("SELECT categoryName FROM category
+                                            $data = $customer->getDataByQuery("SELECT categoryName FROM category
                                                                                     WHERE (categoryType = 'budget'
                                                                                     OR categoryType = 'expenses')
                                                                                     AND (preDefine = 1 OR
 																					cusID = " . $customer->getId() . ")
                                                                                     ORDER BY categoryName ASC;
                                                                                     ");
-                                                foreach ($data as $row => $value) {
-                                                ?>
-                                                    <option id="type<?php echo ($value['categoryName']); ?>" value="<?php echo ($value['categoryName']); ?>"><?php echo ($value['categoryName']); ?></option>
-                                                <?php
-                                                }
+                                            foreach ($data as $row => $value) {
+                                            ?>
+                                                <option id="type<?php echo ($value['categoryName']); ?>" value="<?php echo ($value['categoryName']); ?>"><?php echo ($value['categoryName']); ?></option>
+                                            <?php
+                                            }
                                             ?>
                                         </datalist>
                                         <label class="error" for="edit_budgetCategory">Please enter a valid category</label>
@@ -374,14 +335,14 @@
                 </div>
             </div>
 
-			<!-- dont touch anything from here -->
+            <!-- dont touch anything from here -->
             <h4>ALL EXPENSES TRANSACTIONS</h4>
             <hr>
 
             <div class="container-fluid row filter">
                 <div>
                     <h5>CATEGORY:</h5>
-                    <select name="filter-transaction-category" id="filter-transaction-category" class="custom-select" onchange="showsearch('<?php echo ($customer->getCurrentFilterTime(1,2,$customer->getFlag())); ?>')">
+                    <select name="filter-transaction-category" id="filter-transaction-category" class="custom-select" onchange="showsearch('<?php echo ($customer->getCurrentFilterTime(1, 2, $customer->getFlag())); ?>')">
                         <option value="ALL" selected>ALL</option>
                         <?php
                         $data = $customer->getDataByQuery("SELECT categoryName FROM category
@@ -401,7 +362,7 @@
             <div class="container-fluid row filter2">
                 <div class="col-6 show">
                     <h6>Showing:<span id="table-row-count">
-                            <?php $datarow = $customer->getTableRowCount($customer->getCurrentFilterTime(1,0,$customer->getFlag()),$customer->getCurrentFilterTime(1,1,$customer->getFlag()));
+                            <?php $datarow = $customer->getTableRowCount($customer->getCurrentFilterTime(1, 0, $customer->getFlag()), $customer->getCurrentFilterTime(1, 1, $customer->getFlag()));
                             if (empty($datarow)) {
                                 echo (0);
                             } else {
@@ -412,12 +373,12 @@
 
                 <div class="col-6 search">
                     <input type="hidden" name="cusID" id="cusID" value="<?php echo ($customer->getId()) ?>">
-                    <input type="hidden" name="filter-query" id="filter-query" value="<?php echo ($customer->getCurrentFilterTime(1,2,$customer->getFlag())); ?>">
+                    <input type="hidden" name="filter-query" id="filter-query" value="<?php echo ($customer->getCurrentFilterTime(1, 2, $customer->getFlag())); ?>">
                     <input type="text" name="" id="search-transaction" placeholder="  Transaction Name">
                     <h6>Search:</h6>
                 </div>
             </div>
-	
+
             <!-- table -->
             <table class="table table-bordered table-hover transaction-table" id="overallTransactionTable">
                 <thead>
@@ -433,13 +394,13 @@
                 </thead>
                 <tbody id="overallTransactionTableBody">
 
-                    <?php 
+                    <?php
                     $datarow = $customer->getDataByQuery("SELECT t.transactionID, c.categoryName AS category, t.date, t.amount, t.description AS name, c.categoryType AS type
                                                             FROM transaction t, category c
                                                             WHERE t.cusID = " . $customer->getId() . " 
                                                             AND t.categoryID = c.categoryID "
-                                                            . $customer->getCurrentFilterTime(1,2,$customer->getFlag()) .
-                                                            "
+                        . $customer->getCurrentFilterTime(1, 2, $customer->getFlag()) .
+                        "
 															ORDER BY date DESC;
                                                             ");
                     if (!empty($datarow)) {
@@ -497,4 +458,5 @@
     </div>
 </body>
 <script src="./script/budget.js"></script>
+
 </html>

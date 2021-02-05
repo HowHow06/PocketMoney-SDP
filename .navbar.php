@@ -10,6 +10,7 @@ $isActiveInvestments = "";
 $isActiveLiabilities = "";
 $isActiveFinancialGoals = "";
 $isActiveReports = "";
+$isActiveSetting = "";
 
 switch ($activePage) {
     case "dashboard":
@@ -31,6 +32,9 @@ switch ($activePage) {
         $isActiveFinancialGoals = "active";
         break;
     case "reports":
+        $isActiveReports = "active";
+        break;
+    case "settings":
         $isActiveReports = "active";
         break;
 }
@@ -63,14 +67,14 @@ switch ($activePage) {
         <!-- <li class="nav-item <?php //echo $isActiveFinancialGoals ?> ">
             <a href="#" class="nav-link">Financial Goals</a>
         </li> -->
-        <li class="nav-item <?php echo $isActiveReports ?> ">
+        <!-- <li class="nav-item <?php // echo $isActiveReports ?> ">
             <a href="reports.php?role=customer" class="nav-link">Reports</a>
-        </li>
-        <li class="nav-item dropdown">
+        </li> -->
+        <li class="nav-item dropdown <?php echo $isActiveSetting ?>">
             <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown">Setting</a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <a href="#" class="dropdown-item">Profile</a>
-                <a href="#" class="dropdown-item">Enquiry</a>
+                <a href="profile.php?role=customer" class="dropdown-item">Profile</a>
+                <a href="enquiry.php?role=customer" class="dropdown-item">Enquiry</a>
                 <a href="logout.php?role=customer" class="dropdown-item">Logout</a>
             </div>
         </li>

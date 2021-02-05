@@ -1,0 +1,175 @@
+.navbar {
+  padding: 0px 25px 0px 15px;
+  background-color: #f7802b;
+}
+
+.navbar > a {
+  font-size: 35px;
+  font-family: 'Nerko One', cursive;
+  color: white !important;
+  letter-spacing: 7px;
+}
+
+.navbar > a > img {
+  margin-top: -14px;
+}
+
+.navbar > ul {
+  padding-right: 50px;
+}
+
+.navbar > ul > li {
+  padding: 0 10px 0 10px;
+}
+
+.navbar > ul > li > a {
+  font-size: 16px;
+  color: white !important;
+}
+
+.navbar > ul > li > .dropdown-menu {
+  padding: 0;
+}
+
+.navbar > ul > li > .dropdown-menu > .dropdown-item {
+  padding: 10px 0 10px 10px !important;
+}
+
+.navbar > ul > li > .dropdown-menu > .dropdown-item:hover {
+  background-color: rgba(237, 233, 225, 0.6);
+}
+
+.navbar > ul > li:hover, .navbar > ul .active {
+  background-color: rgba(255, 255, 255, 0.6);
+  -webkit-transition: 0.2s ease-in;
+  transition: 0.2s ease-in;
+}
+
+.navbar > ul > li:hover > a, .navbar > ul .active > a {
+  color: rgba(0, 0, 0, 0.699) !important;
+}
+
+.body > nav {
+  border-radius: 12px 12px 0 0;
+  height: 45px;
+  margin-bottom: 10px;
+}
+
+.body > nav > a {
+  font-size: 24px;
+  letter-spacing: 2px;
+  cursor: default;
+}
+
+.background {
+  min-height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: #f7e0b5;
+  padding: 70px 100px;
+}
+
+#category1 {
+  background-color: #FE6E63;
+}
+
+#category2 {
+  background-color: #FE9850;
+}
+
+#category3 {
+  background-color: #FFD042;
+}
+
+#category4 {
+  background-color: #FEE801;
+}
+
+#category5 {
+  background-color: #BEE647;
+}
+
+#category6 {
+  background-color: #74D072;
+}
+
+#category7 {
+  background-color: #68E8DB;
+}
+
+#category8 {
+  background-color: #68E8DB;
+}
+
+.background {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.body {
+  -webkit-box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
+          box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
+  padding: 0;
+  background-color: white;
+  border-radius: 12px;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.body > nav {
+  border-radius: 12px 12px 0 0;
+  height: 45px;
+}
+
+.body > nav > a {
+  font-size: 24px;
+  letter-spacing: 2px;
+  cursor: default;
+}
+
+.body > div {
+  padding: 0 15px;
+}
+
+.body > div > form > div .row h4 {
+  padding: 15px 15px 0 15px;
+}
+
+.body > div > form > div .row div {
+  padding-top: 15px;
+}
+
+.body > div > form > div .row a {
+  float: right;
+  color: white;
+  background-color: #fc9a55;
+  border-color: #fc9a55;
+}
+
+.body > div > form > div .row a:hover {
+  color: white;
+  background-color: rgba(252, 154, 85, 0.65);
+  border-color: rgba(252, 154, 85, 0.65);
+}
+
+.body > div > form > div .row .form-group {
+  margin: 0 50px;
+}
+
+.body > div > form > div .row .form-group textarea {
+  height: 350px;
+}
+
+.modal-dialog > .modal-content > .modal-footer > .btn-primary {
+  background-color: #fc9a55 !important;
+  border-color: #fc9a55 !important;
+}
+
+.modal-dialog > .modal-content > .modal-footer > .btn-primary:hover {
+  background-color: #f88837 !important;
+  border-color: #fc9a55 !important;
+}

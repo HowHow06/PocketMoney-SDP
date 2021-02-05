@@ -133,8 +133,8 @@
     }
 
     if (isset($_POST['filter-previous'])) {
-        $date = strtotime($_POST['current-date']);
-        if (!preg_match("/^[0-9-]+$/", $_POST['current-date'])) {
+        $date = strtotime($_POST['current-previous-date']);
+        if (!preg_match("/^[0-9-]+$/", $_POST['current-previous-date'])) {
             $d = date("Y-m-d",$date);
             $customer->setCurDate(-1,$d);
         } else {
@@ -145,8 +145,8 @@
     }
 
     if (isset($_POST['filter-next'])) {
-        $date = strtotime($_POST['current-date']);
-        if (!preg_match("/^[0-9-]+$/", $_POST['current-date'])) {
+        $date = strtotime($_POST['current-next-date']);
+        if (!preg_match("/^[0-9-]+$/", $_POST['current-next-date'])) {
             $d = date("Y-m-d",$date);
             $customer->setCurDate(1,$d);
         } else {
@@ -168,11 +168,11 @@
                             <button class="btn" type="submit" id="filter-previous" name="filter-previous">
                                 <i class="fas fa-chevron-left"></i>
                             </button>
-                            <input type="hidden" id="current-date" name="current-date" value="<?php echo ($customer->getCurrentFilterTime(0,1,$customer->getFlag())); ?>"></input>
+                            <input type="hidden" id="current-previous-date" name="current-previous-date" value="<?php echo ($customer->getCurrentFilterTime(0,1,$customer->getFlag())); ?>"></input>
                         </form>
                         <label id="filter-current-date" name="filter-current-date"><?php echo ($customer->getCurrentFilterTime(0,0,$customer->getFlag())); ?></label>
                         <form action="" method="post">
-                            <input type="hidden" id="current-date" name="current-date" value="<?php echo ($customer->getCurrentFilterTime(0,1,$customer->getFlag())); ?>"></input>
+                            <input type="hidden" id="current-next-date" name="current-next-date" value="<?php echo ($customer->getCurrentFilterTime(0,1,$customer->getFlag())); ?>"></input>
                             <button class="btn" type="submit" id="filter-next" name="filter-next">
                                 <i class="fas fa-chevron-right"></i>
                             </button>
@@ -185,7 +185,6 @@
                             <h6>Show:</h6>
                             <input type="hidden" name="role" value="customer">
                             <select name="filter-month-year" id="filter-month-year" class="custom-select" onchange="this.form.submit()">
-                                <option value=""></option>
                                 <option value="Monthly">Monthly</option>
                                 <option value="Yearly">Yearly</option>
                             </select>
@@ -207,6 +206,8 @@
                         $data = $customer->getDataByQuery("SELECT categoryName FROM category
                                                             WHERE categoryType = 'income' AND preDefine = 1 OR categoryType = 'income' AND cusID = " . $customer->getId() . "
                                                             OR categoryType = 'expenses' AND preDefine = 1 OR categoryType = 'expenses' AND cusID = " . $customer->getId() . "
+                                                            OR categoryType = 'investment' AND preDefine = 1 OR categoryType = 'investment' AND cusID = " . $customer->getId() . "
+                                                            OR categoryType = 'liability' AND preDefine = 1 OR categoryType = 'liability' AND cusID = " . $customer->getId() . "
                                                             ORDER BY categoryName ASC;
                                                             ");
                         foreach ($data as $row => $value) {
@@ -224,6 +225,8 @@
                         <option value="ALL">ALL</option>
                         <option value="Income">Income</option>
                         <option value="Expenses">Expenses</option>
+                        <option value="Investment">Investment</option>
+                        <option value="Liability">Liability</option>
                     </select>
                 </div>
             </div>
@@ -238,7 +241,9 @@
                                                         ON t.categoryID = c.categoryID
                                                         WHERE t.cusID = " . $customer->getId() . " 
                                                         AND (c.categoryType = 'income'
-                                                        OR c.categoryType = 'expenses')"
+                                                        OR c.categoryType = 'expenses'
+                                                        OR c.categoryType = 'investment'
+                                                        OR c.categoryType = 'liability')"
                                                         . $customer->getCurrentFilterTime(1,2,$customer->getFlag()) .
                                                         "ORDER BY date DESC;
                                                         ");
@@ -273,26 +278,28 @@
                                 <div class="container">
                                     <div class="form-group row">
                                         <label class="col-5" for="new_transactionDateTime">Date & Time:</label>
-                                        <input style="max-width: 57%" class="col-6 form-transactionDateTime" step="1" type="datetime-local" id="new_transactionDateTime" name="new_transactionDateTime" required />
+                                        <input style="max-width: 57%" class="col-6 form-transactionDateTime" step="1" type="datetime-local" id="new_transactionDateTime" name="new_transactionDateTime" autocomplete="off" required />
                                         <label class="error" for="new_transactionDateTime">Please enter a valid date and time</label>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="new_transactionAmount">Amount:</label>
-                                        <input class="col-6 form-transactionAmount" type="number" step='0.01' id="new_transactionAmount" name="new_transactionAmount" required />
+                                        <input class="col-6 form-transactionAmount" type="number" step='0.01' id="new_transactionAmount" name="new_transactionAmount" autocomplete="off" required />
                                         <label class="error" for="new_transactionAmount">Please enter a valid amount</label>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Type:</label>
-                                        <input id="new_transactionType" class="col-6 form-transactionType" list="new_transactionTypeList" name="new_transactionType" required />
+                                        <input id="new_transactionType" class="col-6 form-transactionType" list="new_transactionTypeList" name="new_transactionType" autocomplete="off" required />
                                         <datalist id="new_transactionTypeList">
                                             <option id="typeIncome" value="income">income</option>
                                             <option id="typeExpense" value="expenses">expenses</option>
+                                            <option id="typeInvestment" value="investment">investment</option>
+                                            <option id="typeLiability" value="liability">liability</option>
                                         </datalist>
                                         <label class="error" for="new_transactionType">Please enter a valid type</label>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" id="new_transactionCategoryLabel">Category:</label>
-                                        <input id="new_transactionCategory" class="col-6 form-transactionCategory" list="" name="new_transactionCategory" required />
+                                        <input id="new_transactionCategory" class="col-6 form-transactionCategory" list="" name="new_transactionCategory" autocomplete="off" required />
                                         <datalist id="new_transactionCategoryIncomeList">
                                             <?php
                                                 $data = $customer->getDataByQuery("SELECT categoryName FROM category
@@ -325,11 +332,43 @@
                                                 }
                                             ?>
                                         </datalist>
+                                        <datalist id="new_transactionCategoryInvestmentList">
+                                            <?php
+                                                $data = $customer->getDataByQuery("SELECT categoryName FROM category
+                                                                                    WHERE categoryType = 'investment'
+                                                                                    AND preDefine = 1
+                                                                                    OR categoryType = 'investment'
+                                                                                    AND cusID = " . $customer->getId() . "
+                                                                                    ORDER BY categoryName ASC;
+                                                                                    ");
+                                                foreach ($data as $row => $value) {
+                                                ?>
+                                                    <option id="type<?php echo ($value['categoryName']); ?>" value="<?php echo ($value['categoryName']); ?>"><?php echo ($value['categoryName']); ?></option>
+                                                <?php
+                                                }
+                                            ?>
+                                        </datalist>
+                                        <datalist id="new_transactionCategoryLiabilityList">
+                                            <?php
+                                                $data = $customer->getDataByQuery("SELECT categoryName FROM category
+                                                                                    WHERE categoryType = 'liability'
+                                                                                    AND preDefine = 1
+                                                                                    OR categoryType = 'liability'
+                                                                                    AND cusID = " . $customer->getId() . "
+                                                                                    ORDER BY categoryName ASC;
+                                                                                    ");
+                                                foreach ($data as $row => $value) {
+                                                ?>
+                                                    <option id="type<?php echo ($value['categoryName']); ?>" value="<?php echo ($value['categoryName']); ?>"><?php echo ($value['categoryName']); ?></option>
+                                                <?php
+                                                }
+                                            ?>
+                                        </datalist>
                                         <label class="error" for="new_transactionCategory">Please enter a valid category</label>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Name:</label>
-                                        <input id="new_transactionName" class="col-6 form-transactionName" list="new_transactionNameList" name="new_transactionName"/>
+                                        <input id="new_transactionName" class="col-6 form-transactionName" list="new_transactionNameList" name="new_transactionName" autocomplete="off"/>
                                         <datalist id="new_transactionNameList">
                                             <?php
                                             $data = $customer->getData('Transaction', "DISTINCT description");
@@ -343,12 +382,12 @@
                                         <label class="error" for="new_transactionName">Please enter a valid name</label>
                                     </div>
                                     <!-- Hold this first -->
-                                    <div class="form-group row">
+                                    <!-- <div class="form-group row">
                                         <label class="col-5" for="">Repeat for:</label>
                                         <input id="new_transactionRepeat" class="col-6 form-transactionRepeat" name="new_transactionRepeat" disabled />
                                         <input type="checkbox" name="new_automate" id="new_automate">
                                         <label class="error" for="new_investmentType">Please enter a valid category</label>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -375,26 +414,28 @@
                                     <input type="hidden" id="edit_transactionID" name="edit_transactionID"></input>
                                     <div class="form-group row">
                                         <label class="col-5" for="edit_transactionDateTime">Date & Time:</label>
-                                        <input style="max-width: 57%" class="col-6 form-transactionDateTime" step="1" type="datetime-local" id="edit_transactionDateTime" name="edit_transactionDateTime" required />
+                                        <input style="max-width: 57%" class="col-6 form-transactionDateTime" step="1" type="datetime-local" id="edit_transactionDateTime" name="edit_transactionDateTime" autocomplete="off" required />
                                         <label class="error" for="edit_transactionDateTime">Please enter a valid date and time</label>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Amount:</label>
-                                        <input class="col-6 form-transactionAmount" type="number" step='0.01' id="edit_transactionAmount" name="edit_transactionAmount" required />
+                                        <input class="col-6 form-transactionAmount" type="number" step='0.01' id="edit_transactionAmount" name="edit_transactionAmount" autocomplete="off" required />
                                         <label class="error" for="edit_transactionAmount">Please enter a valid amount</label>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Type:</label>
-                                        <input id="edit_transactionType" class="col-6 form-transactionType" list="edit_transactionTypeList" name="edit_transactionType" required />
+                                        <input id="edit_transactionType" class="col-6 form-transactionType" list="edit_transactionTypeList" name="edit_transactionType" autocomplete="off" required />
                                         <datalist id="edit_transactionTypeList">
                                             <option id="typeIncome" value="income">income</option>
                                             <option id="typeExpense" value="expenses">expenses</option>
+                                            <option id="typeInvestment" value="investment">investment</option>
+                                            <option id="typeLiability" value="liability">liability</option>
                                         </datalist>
                                         <label class="error" for="edit_transactionType">Please enter a valid type</label>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" id="edit_transactionCategoryLabel">Category:</label>
-                                        <input id="edit_transactionCategory" class="col-6 form-transactionCategory" list="" name="edit_transactionCategory" required />
+                                        <input id="edit_transactionCategory" class="col-6 form-transactionCategory" list="" name="edit_transactionCategory" autocomplete="off" required />
                                         <datalist id="edit_transactionCategoryIncomeList">
                                             <?php
                                                 $data = $customer->getDataByQuery("SELECT categoryName FROM category
@@ -427,11 +468,43 @@
                                                 }
                                             ?>
                                         </datalist>
+                                        <datalist id="edit_transactionCategoryInvestmentList">
+                                            <?php
+                                                $data = $customer->getDataByQuery("SELECT categoryName FROM category
+                                                                                    WHERE categoryType = 'investment'
+                                                                                    AND preDefine = 1
+                                                                                    OR categoryType = 'investment'
+                                                                                    AND cusID = " . $customer->getId() . "
+                                                                                    ORDER BY categoryName ASC;
+                                                                                    ");
+                                                foreach ($data as $row => $value) {
+                                                ?>
+                                                    <option id="type<?php echo ($value['categoryName']); ?>" value="<?php echo ($value['categoryName']); ?>"><?php echo ($value['categoryName']); ?></option>
+                                                <?php
+                                                }
+                                            ?>
+                                        </datalist>
+                                        <datalist id="edit_transactionCategoryLiabilityList">
+                                            <?php
+                                                $data = $customer->getDataByQuery("SELECT categoryName FROM category
+                                                                                    WHERE categoryType = 'liability'
+                                                                                    AND preDefine = 1
+                                                                                    OR categoryType = 'liability'
+                                                                                    AND cusID = " . $customer->getId() . "
+                                                                                    ORDER BY categoryName ASC;
+                                                                                    ");
+                                                foreach ($data as $row => $value) {
+                                                ?>
+                                                    <option id="type<?php echo ($value['categoryName']); ?>" value="<?php echo ($value['categoryName']); ?>"><?php echo ($value['categoryName']); ?></option>
+                                                <?php
+                                                }
+                                            ?>
+                                        </datalist>
                                         <label class="error" for="edit_transactionCategory">Please enter a valid category</label>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Name:</label>
-                                        <input id="edit_transactionName" class="col-6 form-transactionName" list="edit_transactionNameList" name="edit_transactionName"/>
+                                        <input id="edit_transactionName" class="col-6 form-transactionName" list="edit_transactionNameList" name="edit_transactionName" autocomplete="off"/>
                                         <datalist id="edit_transactionNameList">
                                             <?php
                                             $data = $customer->getData('Transaction', "DISTINCT description");
@@ -445,12 +518,12 @@
                                         <label class="error" for="edit_transactionName">Please enter a valid name</label>
                                     </div>
                                     <!-- Hold this first -->
-                                    <div class="form-group row">
+                                    <!-- <div class="form-group row">
                                         <label class="col-5" for="">Repeat for:</label>
                                         <input id="new_transactionRepeat" class="col-6 form-transactionRepeat" name="new_transactionRepeat" disabled />
                                         <input type="checkbox" name="new_automate" id="new_automate">
                                         <label class="error" for="new_investmentType">Please enter a valid category</label>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -503,7 +576,9 @@
                                                             ON t.categoryID = c.categoryID
                                                             WHERE t.cusID = " . $customer->getId() . " 
                                                             AND (c.categoryType = 'income'
-                                                            OR c.categoryType = 'expenses')"
+                                                            OR c.categoryType = 'expenses'
+                                                            OR c.categoryType = 'investment'
+                                                            OR c.categoryType = 'liability')"
                                                             . $customer->getCurrentFilterTime(1,2,$customer->getFlag()) .
                                                             "ORDER BY date DESC;
                                                             ");

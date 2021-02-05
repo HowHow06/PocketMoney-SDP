@@ -128,6 +128,7 @@
                         It’s free, ease of use, and more!
                         We hope you can enjoy using this webapp.
                     </p>
+                    <sub>**please use it, please.</sub>
                 </div>
             </div>
             <div class="card col-3" id="about2">
@@ -136,9 +137,9 @@
                     <hr>
                     <p class="card-text" id="tp_num">TP054890</p>
                     <p class="card-text">
-                        I'm a paragraph.
-                        Click here to add your own text and edit me. It’s easy.
-                        Just click “Edit Text” or double click me to add your own content and make changes to the font.
+                    Hi! Lim Zhi Hao here! 
+                    Tired of always jotting down and calculating about your incomes, expenses. 
+                    Let's us help you with managing all of your money usage!
                     </p>
                 </div>
             </div>
@@ -148,9 +149,8 @@
                     <hr>
                     <p class="card-text" id="tp_num">TP055278</p>
                     <p class="card-text">
-                        I'm a paragraph.
-                        Click here to add your own text and edit me. It’s easy.
-                        Just click “Edit Text” or double click me to add your own content and make changes to the font.
+                        I'm a Howard. Please use our system, thou maybe its goodn't, but it took half of my life. So yea.
+                        Lorem, ipsum dolor sit amet consectetur adipisicing elit.
                     </p>
                 </div>
             </div>

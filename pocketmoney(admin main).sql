@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.2
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3308
--- Generation Time: Jan 16, 2021 at 01:29 PM
--- Server version: 8.0.18
--- PHP Version: 7.4.0
+-- Generation Time: Feb 05, 2021 at 05:29 AM
+-- Server version: 5.7.31
+-- PHP Version: 7.3.21
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -31,18 +30,18 @@ SET time_zone = "+00:00";
 DROP TABLE IF EXISTS `admin`;
 CREATE TABLE IF NOT EXISTS `admin` (
   `adminID` int(255) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`adminID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `admin`
 --
 
 INSERT INTO `admin` (`adminID`, `username`, `password`, `email`) VALUES
-(1, 'admin1', '$2y$10$sk3.6iF6nXtMEzV/ClwA4uYMJ7iTwe93H/zJ9qONEnNsyGtWcHYh.', 'howard_bb@hotmail.com');
+(1, 'admin1', '$2y$10$oH43xR6TqCKW5Nm4Wavj/e35HANdpcff27LANvMltOWF2CKAbZ3y.', 'howard_bb@hotmail.com');
 
 -- --------------------------------------------------------
 
@@ -53,12 +52,12 @@ INSERT INTO `admin` (`adminID`, `username`, `password`, `email`) VALUES
 DROP TABLE IF EXISTS `advisor`;
 CREATE TABLE IF NOT EXISTS `advisor` (
   `advisorID` int(255) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`advisorID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `advisor`
@@ -66,6 +65,31 @@ CREATE TABLE IF NOT EXISTS `advisor` (
 
 INSERT INTO `advisor` (`advisorID`, `username`, `password`, `name`, `email`) VALUES
 (1, 'advisor1', '$2y$10$sk3.6iF6nXtMEzV/ClwA4uYMJ7iTwe93H/zJ9qONEnNsyGtWcHYh.', 'Dacin Wong', 'advisor1@mail.com');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `announcement`
+--
+
+DROP TABLE IF EXISTS `announcement`;
+CREATE TABLE IF NOT EXISTS `announcement` (
+  `announcementID` int(255) NOT NULL AUTO_INCREMENT,
+  `adminID` int(100) NOT NULL,
+  `announcement_date` date NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `content` varchar(1000) NOT NULL,
+  PRIMARY KEY (`announcementID`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `announcement`
+--
+
+INSERT INTO `announcement` (`announcementID`, `adminID`, `announcement_date`, `title`, `content`) VALUES
+(3, 1, '2021-02-09', 'TESR', '222'),
+(2, 1, '2021-02-17', 'System Alpha Test -2', '33'),
+(4, 1, '2021-02-09', 'TEST 3', 'TEST 3');
 
 -- --------------------------------------------------------
 
@@ -79,12 +103,12 @@ CREATE TABLE IF NOT EXISTS `automatedtransaction` (
   `cusID` int(255) NOT NULL,
   `categoryID` int(255) NOT NULL,
   `amount` decimal(20,2) NOT NULL,
-  `recordTime` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `recordTime` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `autoRecord` tinyint(1) NOT NULL,
   `paymentReminder` tinyint(1) NOT NULL,
-  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`aTransactionID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `automatedtransaction`
@@ -105,17 +129,17 @@ INSERT INTO `automatedtransaction` (`aTransactionID`, `cusID`, `categoryID`, `am
 DROP TABLE IF EXISTS `budget`;
 CREATE TABLE IF NOT EXISTS `budget` (
   `budgetID` int(255) NOT NULL AUTO_INCREMENT,
-  `cudID` int(255) NOT NULL,
+  `cusID` int(255) NOT NULL,
   `categoryID` int(255) NOT NULL,
   `percentage` decimal(20,2) NOT NULL,
   PRIMARY KEY (`budgetID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `budget`
 --
 
-INSERT INTO `budget` (`budgetID`, `cudID`, `categoryID`, `percentage`) VALUES
+INSERT INTO `budget` (`budgetID`, `cusID`, `categoryID`, `percentage`) VALUES
 (1, 1, 6, '10.00'),
 (2, 1, 5, '20.00'),
 (3, 1, 9, '10.00'),
@@ -131,12 +155,12 @@ INSERT INTO `budget` (`budgetID`, `cudID`, `categoryID`, `percentage`) VALUES
 DROP TABLE IF EXISTS `category`;
 CREATE TABLE IF NOT EXISTS `category` (
   `categoryID` int(255) NOT NULL AUTO_INCREMENT,
-  `categoryName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `categoryType` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `categoryName` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `categoryType` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `preDefine` tinyint(1) NOT NULL,
   `cusID` int(255) DEFAULT NULL,
   PRIMARY KEY (`categoryID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `category`
@@ -177,12 +201,12 @@ INSERT INTO `category` (`categoryID`, `categoryName`, `categoryType`, `preDefine
 DROP TABLE IF EXISTS `customer`;
 CREATE TABLE IF NOT EXISTS `customer` (
   `cusID` int(255) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`cusID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `customer`
@@ -191,6 +215,57 @@ CREATE TABLE IF NOT EXISTS `customer` (
 INSERT INTO `customer` (`cusID`, `username`, `password`, `name`, `email`) VALUES
 (1, 'customer1', '$2y$10$NQ3t1EhKqJuL0g11iX6N.OnrVMKU1cJW7emwy3uYqMADE8J4ggelO', 'Jerry Cus', 'howard_bb@hotmail.com'),
 (2, 'customer2', '$2y$10$NQ3t1EhKqJuL0g11iX6N.OnrVMKU1cJW7emwy3uYqMADE8J4ggelO', 'Jerry Two', 'jerry2@mail.com');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `debtpayment`
+--
+
+DROP TABLE IF EXISTS `debtpayment`;
+CREATE TABLE IF NOT EXISTS `debtpayment` (
+  `paymentID` int(255) NOT NULL AUTO_INCREMENT,
+  `cusID` int(255) NOT NULL,
+  `liabilityID` int(255) NOT NULL,
+  `amount` decimal(20,2) NOT NULL,
+  `paymentdate` date NOT NULL,
+  PRIMARY KEY (`paymentID`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `debtpayment`
+--
+
+INSERT INTO `debtpayment` (`paymentID`, `cusID`, `liabilityID`, `amount`, `paymentdate`) VALUES
+(1, 1, 1, '5000.00', '2020-01-23'),
+(2, 1, 3, '2000.00', '2020-12-20'),
+(3, 1, 4, '20000.00', '2020-12-20'),
+(4, 1, 6, '200.00', '2020-10-20'),
+(5, 1, 6, '300.00', '2020-11-20'),
+(6, 1, 6, '500.00', '2020-12-20');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `feedback`
+--
+
+DROP TABLE IF EXISTS `feedback`;
+CREATE TABLE IF NOT EXISTS `feedback` (
+  `feedbackID` int(11) NOT NULL AUTO_INCREMENT,
+  `sent_date` date NOT NULL,
+  `cusUsername` varchar(255) NOT NULL,
+  `cusEmail` text NOT NULL,
+  `content` varchar(1000) NOT NULL,
+  PRIMARY KEY (`feedbackID`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `feedback`
+--
+
+INSERT INTO `feedback` (`feedbackID`, `sent_date`, `cusUsername`, `cusEmail`, `content`) VALUES
+(1, '2021-01-20', 'Ali', 'ali@mail.com', 'Hahaha');
 
 -- --------------------------------------------------------
 
@@ -223,13 +298,13 @@ DROP TABLE IF EXISTS `investment`;
 CREATE TABLE IF NOT EXISTS `investment` (
   `investmentID` int(255) NOT NULL AUTO_INCREMENT,
   `cusID` int(255) NOT NULL,
-  `investmentName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `investmentType` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `investmentName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `investmentType` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `startDate` date NOT NULL,
   `amountInvested` decimal(20,2) NOT NULL,
   `ratePerAnnum` decimal(20,2) NOT NULL,
   PRIMARY KEY (`investmentID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `investment`
@@ -255,31 +330,29 @@ DROP TABLE IF EXISTS `liability`;
 CREATE TABLE IF NOT EXISTS `liability` (
   `liabilityID` int(255) NOT NULL AUTO_INCREMENT,
   `cusID` int(255) NOT NULL,
-  `liabilityName` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `liabilityType` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `liabilityName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `liabilityType` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `startDate` date DEFAULT NULL,
   `totalAmountToPay` decimal(20,2) DEFAULT NULL,
-  `initialPaidAmount` decimal(20,2) DEFAULT '0.00',
-  `paymentDate` date DEFAULT NULL,
-  `paymentFrequency` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `totalMonths` int(255) DEFAULT NULL,
+  `paymentTime` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `amountEachPayment` decimal(20,2) DEFAULT NULL,
   `paymentReminder` tinyint(1) DEFAULT NULL,
   `autoRecord` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`liabilityID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `liability`
 --
 
-INSERT INTO `liability` (`liabilityID`, `cusID`, `liabilityName`, `liabilityType`, `startDate`, `totalAmountToPay`, `initialPaidAmount`, `paymentDate`, `paymentFrequency`, `amountEachPayment`, `paymentReminder`, `autoRecord`) VALUES
-(1, 1, 'VKA BlockA1', 'house loan', '2020-01-23', '550000.00', '5000.00', '2020-01-05', 'M', '1400.80', 1, 1),
-(2, 1, 'CIMB', 'credit card', '2020-12-20', '200.00', '1.00', '2020-01-06', 'M', '200.00', 1, 0),
-(3, 1, 'Maybank', 'credit card', '2020-12-20', '5000.00', '0.00', '2020-02-20', NULL, '2000.00', 1, 0),
-(4, 1, 'MYVI 1M4U', 'car loan', '2020-12-20', '80000.00', '20000.00', '2020-03-02', 'M', '1000.00', 1, 0),
-(5, 1, 'Jerry', 'personal loan', '2020-10-01', '1000.00', '0.00', NULL, NULL, NULL, 1, 0),
-(6, 1, 'From Samuel', 'personal loan', '2020-07-01', '1000.00', '0.00', NULL, NULL, NULL, 1, 0),
-(7, 1, 'Lambo', 'car loan', '2020-12-08', '10000.00', '2000.00', '2020-01-08', 'M', '200.00', 1, 0);
+INSERT INTO `liability` (`liabilityID`, `cusID`, `liabilityName`, `liabilityType`, `startDate`, `totalAmountToPay`, `totalMonths`, `paymentTime`, `amountEachPayment`, `paymentReminder`, `autoRecord`) VALUES
+(1, 1, 'VKA BlockA1', 'house loan', '2020-01-23', '550000.00', 240, '{\"frequency\": \"M\", \"period\": \"5\"}', '1388.89', 1, 1),
+(2, 1, 'CIMB', 'credit card', '2020-12-20', '200.00', 1, '{\"frequency\": \"M\", \"period\": \"6\"}', '200.00', 1, 0),
+(3, 1, 'Maybank', 'credit card', '2020-12-20', '5000.00', NULL, NULL, NULL, 1, 0),
+(4, 1, 'MYVI 1M4U', 'car loan', '2020-12-20', '80000.00', 60, '{\"frequency\": \"M\", \"period\": \"2\"}', '1000.00', 1, 0),
+(5, 1, 'Jerry', 'personal loan', '2020-10-01', '1000.00', NULL, NULL, NULL, 1, 0),
+(6, 1, 'From Samuel', 'personal loan', '2020-07-01', '1000.00', NULL, NULL, NULL, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -293,8 +366,8 @@ CREATE TABLE IF NOT EXISTS `notification` (
   `senderID` int(255) DEFAULT NULL,
   `receiver` decimal(10,2) DEFAULT NULL,
   `date` datetime NOT NULL,
-  `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `notificationType` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `content` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `notificationType` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `receiverCusID` int(255) DEFAULT NULL,
   PRIMARY KEY (`notificationID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -312,9 +385,9 @@ CREATE TABLE IF NOT EXISTS `transaction` (
   `categoryID` int(255) NOT NULL,
   `date` datetime NOT NULL,
   `amount` decimal(20,2) NOT NULL,
-  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`transactionID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `transaction`
@@ -333,13 +406,7 @@ INSERT INTO `transaction` (`transactionID`, `cusID`, `categoryID`, `date`, `amou
 (10, 1, 10, '2020-12-05 10:07:23', '100.00', 'VKA BlockA1'),
 (11, 1, 7, '2020-12-02 10:07:23', '30.00', NULL),
 (12, 1, 9, '2020-12-15 10:07:23', '3000.00', NULL),
-(13, 1, 8, '2020-12-23 10:07:23', '200.00', NULL),
-(14, 1, 13, '2020-01-23 00:00:00', '1400.80', 'VKA BlockA1'),
-(15, 1, 16, '2020-12-20 00:00:00', '2000.00', 'Maybank'),
-(16, 1, 14, '2020-12-20 00:00:00', '1000.00', 'MYVI 1M4U'),
-(17, 1, 15, '2020-10-20 00:00:00', '200.00', 'From Samuel'),
-(18, 1, 15, '2020-11-20 00:00:00', '300.00', 'From Samuel'),
-(19, 1, 15, '2020-12-20 00:00:00', '500.00', 'From Samuel');
+(13, 1, 8, '2020-12-23 10:07:23', '200.00', NULL);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
