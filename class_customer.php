@@ -94,9 +94,14 @@ class Customer
         if (!empty($this->id)) {
             $id = $this->id;
             $db->where('cusID', $id);
+
             if (!is_null($whereAnd)) { //if the groupBy clause is not null
                 foreach ($whereAnd as $prop => $value) {
-                    $db->where($prop, $value);
+                    if (empty($value)) {
+                        $db->where($prop, $value, "IS");
+                    } else {
+                        $db->where($prop, $value);
+                    }
                 }
             }
             if (!is_null($orderby)) {
@@ -107,6 +112,7 @@ class Customer
             if (!is_null($groupBy)) { //if the groupBy clause is not null
                 $db->groupBy($groupBy);
             }
+
             $result = $db->get($tablename, null, $columnName);
             return $result;
         }
@@ -160,7 +166,7 @@ class Customer
         }
 
         $db->where($idName, $id);
-
+        $db->where("cusID", $this->getId());
         if ($db->update($tablename, $data)) {
             return array('status' => 'ok', 'statusMsg' => $db->count . ' records were updated');
         } else {
@@ -222,6 +228,7 @@ class Customer
         }
 
         $db->where($idName, $id);
+        $db->where("cusID", $this->getId());
         if ($db->delete($tablename)) {
             return array('status' => 'ok', 'statusMsg' => 'Deleted successfully.');
         } else {
@@ -258,6 +265,18 @@ class Customer
     }
 
     /**
+     * show console log
+     *
+     * @param String $msg
+     * the msg to show in alert box
+     * 
+     */
+    public function consoleLog($msg)
+    {
+        echo ('<script>console.log(\"' . $msg . '\");
+        </script>');
+    }
+    /**
      * Verifying customer new email.
      *
      * @param array $params
@@ -268,7 +287,7 @@ class Customer
      * 'statusMsg'-> String: the status msg;
      *
      */
-    function customerValidateEmail($params)
+    function customerValidateEmail($params,$flag=0)
     {
         $db = MysqliDb::getInstance();
 
@@ -280,7 +299,7 @@ class Customer
         $db->where('email', $email);
         $result = $db->getOne('Customer');
 
-        if (!empty($result)) { //if the $result return something meaning the email is existed
+        if (!empty($result) && $flag==0) { //if the $result return something meaning the email is existed
             return array('status' => 'error', 'statusMsg' => 'Email Has Been Used');
         }
 
@@ -298,7 +317,7 @@ class Customer
      * 'statusMsg'-> String: the status msg;
      *
      */
-    function customerValidateUsername($params)
+    function customerValidateUsername($params,$flag=0)
     {
         $db = MysqliDb::getInstance();
         $username = $params['username'];
@@ -309,7 +328,7 @@ class Customer
         $db->where('username', $username);
         $result = $db->getOne('Customer');
 
-        if (!empty($result)) { //if the $result return something meaning the username is existed
+        if (!empty($result) && $flag==0) { //if the $result return something meaning the username is existed
             return array('status' => 'error', 'statusMsg' => 'Username Has Been Used');
         }
 
@@ -406,8 +425,9 @@ class Customer
             $mail->send();
             echo '<script>window.location.href="register_two.php?email=' . $email . '";</script>';
         } catch (Exception $e) {
-            echo 'Message could not be sent.';
-            echo 'Mailer Error: ' . $mail->ErrorInfo;
+            return array('status' => 'error', 'statusMsg' => 'Message could not be sent. Mailer Error: ' . $mail->ErrorInfo);
+            // echo 'Message could not be sent.';
+            // echo 'Mailer Error: ' . $mail->ErrorInfo;
         }
     }
 
@@ -512,6 +532,109 @@ class Customer
         session_write_close();
     }
 
+    /** 
+     * Return the total income amount if the id is set before
+     * @return int|NULL
+     * 
+     */
+    function getTotalIncome()
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $id = $this->id;
+            //get the category ID using subquery
+            $cateIds = $db->subQuery();
+            $cateIds->where("categoryType", "income");
+            $test = $cateIds->get("category", NULL, "categoryID");
+
+            $db->where('cusID', $id, '=');
+            $db->where('categoryID', $cateIds, 'IN'); //put the subquery into where clause, using IN operator
+            $result = $db->getOne('transaction', "SUM(amount) AS SUM");
+            return intval($result['SUM']);
+        }
+        return NULL;
+    }
+
+    /** 
+     * Return the total expense amount if the id is set before
+     * @return int|NULL
+     * 
+     */
+    function getTotalExpenses()
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $id = $this->id;
+            //get the category ID using subquery
+            $cateIds = $db->subQuery();
+            $cateIds->where("categoryType", "expenses");
+            $test = $cateIds->get("category", NULL, "categoryID");
+
+            $db->where('cusID', $id, '=');
+            $db->where('categoryID', $cateIds, 'IN');
+            $result = $db->getOne('transaction', "SUM(amount) AS SUM");
+            return intval($result['SUM']);
+        }
+        return NULL;
+    }
+
+    /** 
+     * Return the total paid debt amount if the id is set before
+     * @return int|NULL
+     * 
+     */
+    function getTotalDebtPaid()
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $id = $this->id;
+            //get the category ID using subquery
+            $cateIds = $db->subQuery();
+            $cateIds->where("categoryType", "liability");
+            $test = $cateIds->get("category", NULL, "categoryID");
+
+            $db->where('cusID', $id, '=');
+            $db->where('categoryID', $cateIds, 'IN');
+            $result = $db->getOne('transaction', "SUM(amount) AS SUM");
+            return intval($result['SUM']);
+        }
+        return NULL;
+    }
+
+    /** 
+     * Return the total amount of debt to pay if the id is set before
+     * @return int|NULL
+     * 
+     */
+    function getTotalDebtToPay()
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $id = $this->id;
+            $query = "SELECT
+            (l.totalAmountToPay - (l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $id . ")))), 0)))
+            as remainder, l.liabilityName,l.initialPaidAmount,
+             l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $id . ")))), 0) as paid
+            FROM liability l
+            LEFT JOIN transaction tr
+            ON l.liabilityName = tr.description
+            AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $id . ")))
+            WHERE
+            l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $id . ")))), 0) < l.totalAmountToPay
+            AND l.cusID = " . $id . "
+            GROUP BY l.liabilityName";
+            $data = $db->rawQuery($query);
+            $remainder = 0;
+            for ($i = 0; $i < sizeof($data); $i++) {
+                $remainder += intval($data[$i]['remainder']);
+            }
+
+            return intval($remainder);
+        }
+        return NULL;
+    }
+
+
     /*************************************************************************\
      *                   Below Part are show investment page                  *
      *                           For extra functions                          *
@@ -558,7 +681,8 @@ class Customer
             $db->orderBy("total", "Desc");
             $db->groupBy("investmentName");
             $result = $db->getOne('Investment', "SUM(amountInvested) AS total, investmentName");
-            return strval($result['investmentName']);
+            if ($result)
+                return strval($result['investmentName']);
         }
         return NULL;
     }
@@ -725,6 +849,8 @@ class Customer
         }
         return NULL;
     }
+
+
 
     /*********************************************************************\
      *               Below Part are show transaction page                 *
@@ -986,25 +1112,21 @@ class Customer
      * @return JSON|NULL
      * s
      */
-    function getTypesAndAmount($month, $year, $isExpense = 0)
+    function getIncomeTypesAndAmount($month, $year)
     {
         $db = MysqliDb::getInstance();
         if (!empty($this->id)) {
             $id = $this->id;
             $db->join('transaction t', 'c.categoryID=t.categoryID', 'LEFT');
             $db->where('t.cusID', $id);
-            if (empty($isExpense)) {
-                $db->where('c.categoryType', 'income');
-            } else {
-                $db->where('c.categoryType', 'expenses');
-            }
-
+            $db->where('c.categoryType', 'income');
             if (!empty($month)) {
                 $db->where('MONTH(t.date)', $month);
                 $db->where('YEAR(t.date)', $year);
             } else {
                 $db->where('YEAR(t.date)', $year);
             }
+            
             $db->groupBy('c.categoryName');
             $db->orderBy('amount', 'DESC');
             $incomeTypesToValue = array();
@@ -1014,42 +1136,64 @@ class Customer
                 array_push($incomeTypesToValue, ['label' => $data['categoryName'], 'value' => $tempValue]);
             }
             $data = json_encode($incomeTypesToValue);
+            // Ploting chart
+            $chartJSON = '{
+                "chart": {
+                "caption": "Income By Category",
+                "plottooltext": "<b>$percentValue</b> of income are from $label",
+                "showlegend": "0",
+                "showpercentvalues": "1",
+                "legendNumRows": "3",
+                "legendNumColumns": "4",
+                "legendposition": "bottom",
+                "usedataplotcolorforlabels": "1",
+                "theme": "fusion",
+                palettecolors: "FE6E63,FE9850,FFD042,FEE801,BEE647,74D072,68E8DB,68E8DB"
+                },
+                "data": ' . $data . '
+            }';
 
-            if (empty($isExpense)) {
-                // Ploting chart
-                $chartJSON = '{
-                    "chart": {
-                    "caption": "Income By Category",
-                    "plottooltext": "<b>$percentValue</b> of income are from $label",
-                    "showlegend": "0",
-                    "showpercentvalues": "1",
-                    "legendNumRows": "3",
-                    "legendNumColumns": "4",
-                    "legendposition": "bottom",
-                    "usedataplotcolorforlabels": "1",
-                    "theme": "fusion",
-                    palettecolors: "FE6E63,FE9850,FFD042,FEE801,BEE647,74D072,68E8DB,68E8DB"
-                    },
-                    "data": ' . $data . '
-                }';
-            } else {
-                // Ploting chart
-                $chartJSON = '{
-                    "chart": {
-                    "caption": "Expenses By Category",
-                    "plottooltext": "<b>$percentValue</b> of expense are from $label",
-                    "showlegend": "0",
-                    "showpercentvalues": "1",
-                    "legendNumRows": "3",
-                    "legendNumColumns": "4",
-                    "legendposition": "bottom",
-                    "usedataplotcolorforlabels": "1",
-                    "theme": "fusion",
-                    palettecolors: "FE6E63,FE9850,FFD042,FEE801,BEE647,74D072,68E8DB,68E8DB"
-                    },
-                    "data": ' . $data . '
-                }';
+            return $chartJSON;
+        }
+
+        return NULL;
+    }
+
+    /** 
+     * Return JSON format of chart data 
+     * 
+     * @param Array $array
+     * 
+     * @return JSON|NULL
+     * s
+     */
+    function getExpensesTypesAndAmount($array)
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($array)) {
+            $incomeTypesToValue = array();
+            foreach ($array as $row => $data) {
+                $tempValue = (float) $data['amount'];
+                array_push($incomeTypesToValue, ['label' => $data['categoryName'], 'value' => $tempValue]);
             }
+            $data = json_encode($incomeTypesToValue);
+            
+            // Ploting chart
+            $chartJSON = '{
+                "chart": {
+                "caption": "Expenses By Category",
+                "plottooltext": "<b>$percentValue</b> of expense are from $label",
+                "showlegend": "0",
+                "showpercentvalues": "1",
+                "legendNumRows": "3",
+                "legendNumColumns": "4",
+                "legendposition": "bottom",
+                "usedataplotcolorforlabels": "1",
+                "theme": "fusion",
+                palettecolors: "FE6E63,FE9850,FFD042,FEE801,BEE647,74D072,68E8DB,68E8DB"
+                },
+                "data": ' . $data . '
+            }';
 
             return $chartJSON;
         }
@@ -1089,6 +1233,8 @@ class Customer
                 $db->where('c.categoryType', 'income');
             } else {
                 $db->where('c.categoryType', 'expenses');
+                $db->orWhere('c.categoryType', 'investment');
+                $db->orWhere('c.categoryType', 'liability');
             }
 
             $db->groupBy('c.categoryName');
@@ -1191,7 +1337,7 @@ class Customer
                     $db->where('t.cusID', $id);
                     $db->where('c.categoryName', $cate);
                     $db->where('t.date', $date, 'LIKE');
-                    $db->groupBy("t.date");
+                    // $db->groupBy("t.date");
                     $result = $db->get('category c', null, 'SUM(t.amount) AS amount');
                     if (!empty($result[0]['amount'])) {
                         array_push($categoryValueByMonth['value'], $result[0]['amount']);
@@ -1443,5 +1589,236 @@ class Customer
             return $result['categoryID'];
         }
         return NULL;
+    }
+
+    /*********************************************************************\
+     *               Below Part are show budget page                   *
+     *                       For extra functions                          *
+     *                                                                    *
+     *     *********    **      **   ******         ******    *********   *
+     *     **      **   **      **   **     **    ***         **          *
+     *     **      **   **      **   **      **   **          **          *
+     *     *********    **      **   **      **   **          *********   *
+     *     **      **   **      **   **      **   **    ***   **          *
+     *     **       **  **      **   **      **   **     **   **          *
+     *     **      **   **      **   **     **    ***    **   **          *
+     *     *********    **********   ******         *******   *********   *
+     *                                                                    *
+     *********************************************************************/
+
+    /** 
+     * Return Array of table row count for budget table only
+     * 
+     * @param int $month
+     * (12)
+     * 
+     * @param int $year
+     * (2020)
+     * 
+     * @return Array|NULL
+     * 
+     */
+    function getTableRowCount($month, $year)
+    {
+        $db = MysqliDb::getInstance();
+
+        if (!empty($this->id)) {
+            $id = $this->id;
+            $db->join('category c', 'c.categoryID=t.categoryID', 'LEFT');
+            $db->where('t.cusID', $id);
+            if (!empty($month)) {
+                $db->where('MONTH(t.date)', $month);
+                $db->where('YEAR(t.date)', $year);
+            } else {
+                $db->where('YEAR(t.date)', $year);
+            }
+            $result = $db->get('transaction t');
+            return $result;
+        }
+        return NULL;
+    }
+
+
+    /*********************************************************************\
+     *               Below Part are show dashboard page                   *
+     *                       For extra functions                          *
+     *                                                                    *
+     *     *********    **      **   ******         ******    *********   *
+     *     **      **   **      **   **     **    ***         **          *
+     *     **      **   **      **   **      **   **          **          *
+     *     *********    **      **   **      **   **          *********   *
+     *     **      **   **      **   **      **   **    ***   **          *
+     *     **       **  **      **   **      **   **     **   **          *
+     *     **      **   **      **   **     **    ***    **   **          *
+     *     *********    **********   ******         *******   *********   *
+     *                                                                    *
+     *********************************************************************/
+
+
+    /** 
+     * Return String format of month
+     * 
+     * 
+     * @return String |NULL
+     * 
+     */
+    function getCurrentMonthValue()
+    {
+        $d = strtotime($this->getCurDate());
+        $systemMonth = date('m', $d);
+        return $systemMonth;
+    }
+
+    /** 
+     * Return String format of year
+     * 
+     * 
+     * @return String |NULL
+     * 
+     */
+    function getCurrentYearValue()
+    {
+        $d = strtotime($this->getCurDate());
+        $systemYear = date('Y', $d);
+        return $systemYear;
+    }
+
+    /** 
+     * Return String format of query for month and date
+     * 
+     * 
+     * @return String |NULL
+     * 
+     */
+    function getCurrentDateQuery()
+    {
+        $d = strtotime($this->getCurDate());
+        $systemMonth = date("m", $d);
+        $systemYear = date("Y", $d);
+        $output = " AND MONTH(t.date) = " . $systemMonth . " AND YEAR(t.date) = " . $systemYear . " ";
+        return $output;
+    }
+
+    /** 
+     * Return String format of amount
+     * 
+     * 
+     * @return String |NULL
+     * 
+     */
+    function getTotalValueInMonth($month, $year, $isExpense = 0)
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $id = $this->id;
+            $db->join('transaction t', 'c.categoryID=t.categoryID', 'LEFT');
+            $db->where('t.cusID', $id);
+            if (empty($isExpense)) {
+                $db->where('c.categoryType', 'income');
+            } else {
+                $db->where('c.categoryType', 'expenses');
+            }
+            $db->where('MONTH(t.date)', $month);
+            $db->where('YEAR(t.date)', $year);
+            $result = $db->get('category c', null, 'c.categoryName, SUM(t.amount) AS amount');
+            if (!empty($result)) {
+                $value = (float) $result[0]['amount'];
+                return number_format($value, 2, '.', '');
+            }
+        }
+        return NULL;
+    }
+
+    /** 
+     * Return String format of net income
+     * 
+     * 
+     * @return String
+     * 
+     */
+    function getNetIncomeInMonth($month, $year)
+    {
+        $income = floatval($this->getTotalValueInMonth($month, $year, 0));
+        $expense = floatval($this->getTotalValueInMonth($month, $year, 1));
+
+        $net =  $income - $expense;
+        if ($net < 0) {
+            $output = "-RM" . number_format($net, 2, '.', '');
+        } else {
+            $output = "RM" . number_format($net, 2, '.', '');
+        }
+
+        return $output;
+    }
+
+    /** 
+     * Return the total invested amount if the id is set before
+     * @return String|NULL
+     * 
+     */
+    function getTotalInvestmentAmount()
+    {
+        $db = MysqliDb::getInstance();
+        if (!empty($this->id)) {
+            $id = $this->id;
+            $db->where('cusID', $id);
+            $result = $db->getOne('Investment', "SUM(amountInvested) AS SUM");
+            $value = (float) $result['SUM'];
+            $output = number_format($value, 2, '.', '');
+            return $output;
+        }
+        return NULL;
+    }
+
+    /** 
+     * Return the total debts amount
+     * @return String|NULL
+     * 
+     */
+    function getTotalDebtAmount()
+    {
+        if (!empty($this->id)) {
+            $id = $this->id;
+            $result = $this->getDataByQuery("SELECT
+            (l.totalAmountToPay - (l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $id . ")))), 0)))
+            as remainder, l.liabilityName,l.initialPaidAmount,
+             l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $id . ")))), 0) as paid
+            FROM liability l
+            LEFT JOIN transaction tr
+            ON l.liabilityName = tr.description
+            AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $id . ")))
+            WHERE
+            l.initialPaidAmount + IFNULL((SELECT SUM(amount) FROM transaction trac WHERE trac.description = l.liabilityName AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = trac.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $id . ")))), 0) < l.totalAmountToPay
+            GROUP BY l.liabilityName");
+
+            $total = 0;
+            foreach ($result as $data) {
+                $total += (float) $data['remainder'];
+            }
+            $output = number_format($total, 2, '.', '');
+            return $output;
+        }
+        return NULL;
+    }
+
+    /** 
+     * Return String format of net worth
+     * 
+     * 
+     * @return String
+     * 
+     */
+    function getNetWorth()
+    {
+        $investment = floatval($this->getTotalInvestmentAmount());
+        $debt = floatval($this->getTotalDebtAmount());
+        $net =  $investment - $debt;
+        if ($net < 0) {
+            $net *= -1;
+            $output = "-RM" . number_format($net, 2, '.', '');
+        } else {
+            $output = "RM" . number_format($net, 2, '.', '');
+        }
+        return $output;
     }
 }

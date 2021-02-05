@@ -109,11 +109,23 @@ function validateform(ele) {
 }
 
 function investCategoryExist(category) {
-  var x = $("#filter-transaction-category option");
+  var x = $("#new_investmentTypeList option");
   var i;
-  for (i = 1; i < x.length; i++) {
+  for (i = 0; i < x.length; i++) {
     if (category == x[i].text) {
       //turn the flag true when the cate matches
+      // console.log("found!");
+      return true;
+    }
+  }
+  return false;
+}
+
+function investNameExist(investName, id) {
+  var x = $("#" + id + " option");
+  var i;
+  for (i = 0; i < x.length; i++) {
+    if (investName == x[i].text) {
       return true;
     }
   }
@@ -223,6 +235,11 @@ function resetEdit() {
       $("#edit_investmentName").val(investName);
       $("#edit_investmentType").val(investType);
       $("#edit_ratePerAnnum").val(investRate);
+      $("#edit_investmentType").prop("readonly", true);
+      $("#edit_investmentType").css(
+        "background-color",
+        "rgba(59, 59, 59, 0.1)"
+      );
     }
   };
   xmlhttp.open("GET", "form_process.php?resetEditInvest=" + investID, true);
@@ -276,7 +293,7 @@ var donutOptions = {
     },
   },
   noData: {
-    text: "Loading...",
+    text: "No investment available",
   },
   responsive: [
     {
@@ -372,6 +389,9 @@ var donutOptions = {
       },
     },
   },
+  noData: {
+    text: "No investment available",
+  },
   responsive: [
     {
       breakpoint: 480,
@@ -416,18 +436,75 @@ $(document).on("click", ".edit-investment-anchor", function () {
   var investName = $(this).parent().parent().find(".investName").text();
   var investType = $(this).parent().parent().find(".investType").text();
   var investRate = $(this).parent().parent().find(".investRate").text();
+  var transactionID = $(this).parent().parent().find(".transactionID").val();
 
   $("#edit_investmentID").val(investID);
+  $("#edit_transactionID").val(transactionID);
   $("#edit_startDate").val(investDate);
   $("#edit_amountInvested").val(investAmount);
   $("#edit_investmentName").val(investName);
+  $("#edit_oriInvestmentName").val(investName);
   $("#edit_investmentType").val(investType);
+  $("#edit_investmentType").prop("readonly", true);
+  $("#edit_investmentType").css("background-color", "rgba(59, 59, 59, 0.1)");
   $("#edit_ratePerAnnum").val(investRate);
+});
+
+$(document).on("input", ".row-modal .form-investmentName", function () {
+  var investName = $(this).val();
+  var id = $(this).parent().find("datalist").attr("id");
+  if (investNameExist(investName, id)) {
+    //if the investment Name existed, lock the category Type
+    console.log("found");
+    var tableRow = $("#investmentTransactionTableBody")
+      .find(".investName:contains(" + investName + ")")
+      .first();
+
+    var investType = tableRow.parent().find(".investType").text();
+    $(this).parent().parent().find(".form-investmentType").val(investType);
+    $(this)
+      .parent()
+      .parent()
+      .find(".form-investmentType")
+      .prop("readonly", true);
+    $(this)
+      .parent()
+      .parent()
+      .find(".form-investmentType")
+      .css("background-color", "rgba(59, 59, 59, 0.1)");
+  } else {
+    $(this)
+      .parent()
+      .parent()
+      .find(".form-investmentType")
+      .prop("readonly", false);
+    $(this)
+      .parent()
+      .parent()
+      .find(".form-investmentType")
+      .css("background-color", "rgb(255,255,255)");
+  }
+
+  // var investID = $(this).parent().parent().find(".investmentID").val();
+  // var investDate = $(this).parent().parent().find(".investDate").text();
+  // var investAmount = $(this).parent().parent().find(".investAmount").text();
+  // var investName = $(this).parent().parent().find(".investName").text();
+  // var investType = $(this).parent().parent().find(".investType").text();
+  // var investRate = $(this).parent().parent().find(".investRate").text();
+  // $("#edit_investmentID").val(investID);
+  // $("#edit_startDate").val(investDate);
+  // $("#edit_amountInvested").val(investAmount);
+  // $("#edit_investmentName").val(investName);
+  // $("#edit_oriInvestmentName").val(investName);
+  // $("#edit_investmentType").val(investType);
+  // $("#edit_ratePerAnnum").val(investRate);
 });
 
 $(document).on("click", ".delete-investment-anchor", function () {
   var investID = $(this).parent().parent().find(".investmentID").val();
+  var transactionID = $(this).parent().parent().find(".transactionID").val();
   $("#delete_investmentID").val(investID);
+  $("#delete_transactionID").val(transactionID);
 });
 
 $(document).on("change", ".delete-investment-anchor", function () {

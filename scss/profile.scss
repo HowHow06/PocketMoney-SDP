@@ -1,0 +1,59 @@
+@import "navbar";
+@import "background";
+@import 'lib.scss';
+
+.background {
+    align-items: center;
+    justify-content: center;
+}
+
+.body {
+    @include cus-body;
+    > div {
+        padding: 0 15px;
+        > div {
+            .row {
+                h4 {
+                    padding: 15px 15px 0 15px;
+                }
+                div {
+                    padding-top: 15px;
+                }
+                a {
+                    float: right;
+                    color: white;
+                    background-color: #fc9a55;
+                    border-color: #fc9a55;
+                    // margin: 5px;
+                    // margin-top: 0;
+                }
+                a:hover {
+                    color: white;
+                    background-color: rgba($color: #fc9a55, $alpha: 0.65);
+                    border-color: rgba($color: #fc9a55, $alpha: 0.65);
+                }
+            }
+        }
+        form {
+            padding: 0 50px;
+            textarea {
+                height: 350px;
+            }
+        }
+    }
+}
+
+.modal-dialog {
+    > .modal-content {
+        > .modal-footer {
+            > .btn-primary {
+                background-color: #fc9a55 !important;
+                border-color: #fc9a55 !important;
+            }
+            > .btn-primary:hover {
+                background-color: #f88837 !important;
+                border-color: #fc9a55 !important;
+            }
+        }
+    }
+}

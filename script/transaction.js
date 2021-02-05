@@ -15,6 +15,7 @@ $(document).ready(function () {
     }
 
     $("body").niceScroll();
+    $("#chart-explain").niceScroll();
 });
 
 
@@ -77,7 +78,7 @@ function validateform(ele) {
         transactionType.parent().find(".error").css("display", "inline-block");
         //decrease some margin-bottom for the form group
         transactionType.parent().css("margin-bottom", "0.2rem");
-        return failValidation("Type must be income or expenses!");
+        return failValidation("Type must be income or expenses or investment or liability!");
         } else {
         transactionType.parent().find(".error").css("display", "none");
         //decrease some margin-bottom for the form group
@@ -120,7 +121,7 @@ function validTransactionType(name) {
     if (!isAlNum(name)) {
       return false;
     }
-    if (name != 'income' && name != 'expenses') {
+    if (name != 'income' && name != 'expenses' && name != 'investment' && name != 'liability') {
         return false;
     }
     return true;
@@ -364,6 +365,7 @@ function refreshchart(amount, month)
     monthJSON = JSON.parse(month);
     var lineOptions = {
         series: [{
+            name: 'amount',
             data: amountJSON
         }],
         chart: {
@@ -374,7 +376,7 @@ function refreshchart(amount, month)
                 color: '#000',
                 top: 18,
                 left: 7,
-                blur: 10,
+                blur: 5,
                 opacity: 0.2
             },
             toolbar: {
@@ -403,7 +405,7 @@ function refreshchart(amount, month)
         },
         yaxis: {
             min: function(min) {
-                return min - 100
+                return min - 10
             },
             max: function(max) {
                 return max + 100
@@ -457,6 +459,16 @@ $(document).on("change", "#edit_transactionType", function () {
         $("#edit_transactionCategory").remove();
         $x.attr('list','edit_transactionCategoryExpensesList').insertAfter('#edit_transactionCategoryLabel');
     }
+    else if (keyword == 'investment') {
+        $x = $("#edit_transactionCategory").clone();
+        $("#edit_transactionCategory").remove();
+        $x.attr('list','edit_transactionCategoryInvestmentList').insertAfter('#edit_transactionCategoryLabel');
+    }
+    else if (keyword == 'liability') {
+        $x = $("#edit_transactionCategory").clone();
+        $("#edit_transactionCategory").remove();
+        $x.attr('list','edit_transactionCategoryLiabilityList').insertAfter('#edit_transactionCategoryLabel');
+    }
 });
 
 $(document).on("change", "#new_transactionType", function () {
@@ -469,6 +481,16 @@ $(document).on("change", "#new_transactionType", function () {
         $x = $("#new_transactionCategory").clone();
         $("#new_transactionCategory").remove();
         $x.attr('list','new_transactionCategoryExpensesList').insertAfter('#new_transactionCategoryLabel');
+    }
+    else if (keyword == 'investment') {
+        $x = $("#new_transactionCategory").clone();
+        $("#new_transactionCategory").remove();
+        $x.attr('list','new_transactionCategoryInvestmentList').insertAfter('#new_transactionCategoryLabel');
+    }
+    else if (keyword == 'liability') {
+        $x = $("#new_transactionCategory").clone();
+        $("#new_transactionCategory").remove();
+        $x.attr('list','new_transactionCategoryLiabilityList').insertAfter('#new_transactionCategoryLabel');
     }
 });
 

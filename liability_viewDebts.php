@@ -211,6 +211,7 @@
                     as remainder FROM transaction tr, liability l
                     WHERE l.liabilityName = tr.description
                     AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")) )
+                    AND l.cusID = " . $customer->getId() . "
                     ORDER BY tr.date DESC";
                     $datarow = $customer->getDataByQuery($query);
 
@@ -239,7 +240,7 @@
 
 
 
-
+            <span class="float-left backbtn"><a href="liability.php?role=customer"><i class="fas fa-angle-left"></i></a></span>
             <h4 id="mark-all-liabilities">ALL DEBTS</h4>
             <hr>
 
@@ -249,7 +250,7 @@
                     <select class="filter-liability custom-select" name="filter-liability-category" id="filter-liability-category" class="custom-select">
                         <option value="ALL" selected>ALL</option>
                         <?php
-                        $data = $customer->getData('Liability', "DISTINCT liabilityType");
+                        $data = $customer->getData('Liability', "DISTINCT liabilityType", array("cusID" => $customer->getId()));
                         foreach ($data as $row => $value) {
                         ?>
                             <option value="<?php echo ($value['liabilityType']); ?>"><?php echo ($value['liabilityType']); ?></option>
@@ -303,7 +304,7 @@
                                     <div class="form-group row">
                                         <label class="col-5" for="">Category:</label>
                                         <input type="hidden" id="new-liability-newCate" class="form-liability-newCate" name="new-liability-newCate" value="0" />
-                                        <input id="new-liability-category" class="col-6 form-liabilityType" list="new-liability-categoryList" name="new-liability-category" required />
+                                        <input id="new-liability-category" class="col-6 form-liabilityType" list="new-liability-categoryList" name="new-liability-category" autocomplete="off" required />
                                         <datalist id="new-liability-categoryList">
                                             <?php
                                             $query = "SELECT * FROM category ct WHERE ct.categoryType = 'liability' AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . "))";
@@ -407,7 +408,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Category:</label>
-                                        <input id="edit-liability-category" class="col-6 form-liabilityType" list="edit-liability-categoryList" name="edit-liability-category" required />
+                                        <input id="edit-liability-category" class="col-6 form-liabilityType" list="edit-liability-categoryList" name="edit-liability-category" autocomplete="off" required />
                                         <input type="hidden" id="edit-liability-newCate" class="form-liability-newCate" name="edit-liability-newCate" value="0" />
                                         <datalist id="edit-liability-categoryList">
                                             <?php
@@ -529,7 +530,9 @@
                     LEFT JOIN transaction tr
                     ON l.liabilityName = tr.description
                     AND l.liabilityType = (SELECT categoryName FROM category ct WHERE ct.categoryID = tr.categoryID AND (ct.preDefine = 1 OR (ct.preDefine = 0 AND ct.cusID =" . $customer->getID() . ")) )
-                    GROUP BY l.liabilityName";
+                    WHERE l.cusID = " . $customer->getId() . "
+                    GROUP BY l.liabilityName
+                    ORDER BY l.startDate DESC";
                     $datarow = $customer->getDataByQuery($query);
                     if (!empty($datarow)) {
                         for ($i = 0; $i < sizeof($datarow); $i++) {

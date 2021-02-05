@@ -24,3 +24,45 @@ include('checkSessionCookie.php');
         </li>
     </ul>
 </nav>
+
+<!--Profile modal-->
+<div class="modal fade edit-modal" id="edit-row" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <section class="mb-5 text-center">
+                <h4>Profile</h4>
+                <hr>
+                <form action="#!">
+                    <div class="md-form md-outline">
+                    <label class="form-control-label" for="email">Email</label>
+                    <input type="text" id="email" name="email" class="form-control" placeholder="email" required>
+                    </div>
+
+                    <div class="md-form md-outline">
+                    <label class="form-control-label" for="username">Username</label>
+                    <input type="text" id="username" name="username" class="form-control form-control-alternative" placeholder="username" readonly>
+                    </div>
+                    <br>
+                    <h4>Set a new password</h4>
+                    <hr>
+                    <div class="md-form md-outline">
+                    <label class="form-control-label" for="newPass">New password</label>
+                    <input type="password" id="newPass" class="form-control">
+                    </div>
+
+                    <div class="md-form md-outline">
+                    <label class="form-control-label" for="newPassConfirm">Confirm password</label>
+                    <input type="password" id="newPassConfirm" class="form-control">
+                    </div>
+                    <br>
+                    <button type="submit" class="btn btn-primary mb-4">Change password</button>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>
+                
+                
+                
+            

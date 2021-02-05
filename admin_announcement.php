@@ -2,9 +2,9 @@
 <html lang="en">
 
 <head>
-    <?php include(".head.php"); ?>
+    <?php include(".head.php"); ?>  
     <link rel="stylesheet" href="./style/admin.css">
-      <link rel="stylesheet" href="./style/modalbox.css">
+    <link rel="stylesheet" href="./style/modalbox.css">
     <title>PockeyMoney | Dashboard</title>
 </head>
 <body>
@@ -28,9 +28,9 @@
 
     <?php include("AD_navbar.php"); ?>
     <div class="container-fluid background">
-      <div class="container-fluid">
-          <div class="container-fluid body announcement">
-              <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <div class="container-fluid body announcement">
+                <nav class="navbar navbar-expand-lg">
                     <a href="#" class="navbar-brand">ANNOUNCEMENT STATUS</a>
                   </nav>
                   <div class="modal fade edit-modal" id="delete-row" tabindex="-1" role="dialog" aria-labelledby="delete-title" aria-hidden="true">
@@ -51,15 +51,30 @@
                 </div>
 
 
-                  <table class="table announcement-table">
+                            <label for="date"><b>Post Date</b></label>
+                            <input type="date" placeholder="Announcement Date" id="edit_announcementDate" name="edit_announcementDate" required>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="hidden" id="edit_announcementID" name="edit_announcementID"></input>
+                                <button type="reset" class="btn btn-success" onclick="resetEdit()">Reset</button>
+                                <button type="submit" name="edit_submit" class="btn btn-primary">Save changes</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <table class="table announcement-table">
                     <thead class="thead-light">
-                      <tr>
-                        <th scope="col">Announcement ID</th>
-                        <th scope="col">Post Date</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Content</th>
-                        <th scope="col">ACTION</th>
-                      </tr>
+                        <tr>
+                            <th scope="col">Announcement ID</th>
+                            <th scope="col">Post Date</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Content</th>
+                            <th scope="col">ACTION</th>
+                        </tr>
                     </thead>
                     <tbody id ="announcementbody">
 
@@ -109,10 +124,15 @@
                       <script src="./script/announcement.js"></script>
                       <script src="./script/announcement_main.js"></script>
                 </div>
-              </div>
             </div>
-          </div>
-        </body>
-
-
+        </div>
+    </div>
+</body>
+<script>
+$(document).ready(function () {
+    $("body").niceScroll();
+    $(".transaction-table").niceScroll();
+});
+</script>
+<script src="./script/announcement.js"></script>
 </html>

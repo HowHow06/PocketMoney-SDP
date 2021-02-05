@@ -11,6 +11,38 @@ Financial Management System (Website)
 
 ## Work Progress
 
+### 2021-02-04
+> Moses's Part
+- Update ```profile.php``` and ```enquiry.php```
+- Add DDL for feedback and announcement.
+- Fixing naming error on budget entity.
+- Update transaction page to accept investment and liability data.
+
+### 2021-02-03
+> Howard's Part For Dashboard
+- Update ```dashboard.php```
+- The recent transaction table updated, shouldnt be retricted by date and month, since it is "most recent"
+- The snap shot formula is revised:
+    income == all income
+    expenses == all expenses + debt paid (money out as well)
+    balance == income - expenses
+
+    asset == balance + investment made
+    debt to pay == total debt amount - debt paid
+    networth == asset - debt to pay
+
+
+### 2021-01-21
+> Moses's Part
+- Create ```profile.php``` and ```enquiry.php```
+- Update ```dashboard.php```
+### 2021-01-21
+> Law's Part
+- Update ```budget.php``` and ```budget.js```
+> Moses's Part
+- Fixing bugs
+- Update ```budget.scss```
+
 ### 2021-01-20
 > Moses's Part
 - Create ```phpmailer``` file
