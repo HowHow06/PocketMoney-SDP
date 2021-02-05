@@ -165,6 +165,9 @@
                 <div class="border round">
                     <div class="col-12">
                         <h4>MANAGE BUDGET</h4>
+						<div class="col-6">
+							<a href="#" class="edit-transaction-anchor" data-toggle="modal" data-target="#edit-row">EDIT</a>
+               			</div>
                     </div>
                     <div class="row">
                         <table class="table table-bordered table-hover transaction-table" id="overallTransactionTable">
@@ -173,7 +176,7 @@
                                     <th scope="col">#</th>
                                     <th scope="col">CATEGORY</th>
                                     <th scope="col">PERCENTAGE</th>
-                                    <th scope="col">ACTION</th>
+                                    <?php /*?><th scope="col">ACTION</th><?php */?>
                                 </tr>
                             </thead>
                             <tbody id="overallTransactionTableBody">
@@ -199,11 +202,11 @@
                                             <th scope="row"><?php echo (($i + 1)); ?></th>
                                             <td class="budgetCategory"><?php echo ($datarow[$i]['category']); ?></td>
                                             <td class="budgetPercentage"><?php echo ($datarow[$i]['percentage']); ?></td>
-                                            <td class="action">
+                                            <?php /*?><td class="action">
                                                 <a href="#" class="edit-transaction-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
                                                 <span> | </span>
                                                 <a href="#" class="delete-transaction-anchor" data-toggle="modal" data-target="#delete-row">Delete</a>
-                                            </td>
+                                            </td><?php */?>
                                         </tr>
                                 <?php
                                     }
@@ -218,7 +221,7 @@
             </div>
 
             <!-- new-budget modal -->
-            <div class="modal fade new-modal" id="new-budget" tabindex="-1" role="dialog" aria-labelledby="new-title" aria-hidden="true">
+            <?php /*?><div class="modal fade new-modal" id="new-budget" tabindex="-1" role="dialog" aria-labelledby="new-title" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -265,7 +268,7 @@
                         </form>
                     </div>
                 </div>
-            </div>
+            </div><?php */?>
             <!-- edit-budget modal -->
             <div class="modal fade edit-modal" id="edit-row" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -309,6 +312,7 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
+								<button type="button" name="" class="">Add New</button>
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 <button type="reset" class="btn btn-success" onclick="resetEdit()">Reset</button>
                                 <button type="submit" name="edit_submit" class="btn btn-primary">Save changes</button>
@@ -318,7 +322,7 @@
                 </div>
             </div>
             <!-- delete-row modal -->
-            <div class="modal fade edit-modal" id="delete-row" tabindex="-1" role="dialog" aria-labelledby="delete-title" aria-hidden="true">
+            <?php /*?><div class="modal fade edit-modal" id="delete-row" tabindex="-1" role="dialog" aria-labelledby="delete-title" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
                     <div class="modal-content">
                         <div class="modal-body">
@@ -333,7 +337,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div><?php */?>
 
             <!-- dont touch anything from here -->
             <h4>ALL EXPENSES TRANSACTIONS</h4>
