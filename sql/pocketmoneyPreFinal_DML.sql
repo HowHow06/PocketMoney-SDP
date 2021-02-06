@@ -97,11 +97,11 @@ INSERT INTO `investment` (`cusID`, `investmentName`, `investmentType`, `startDat
 --
 
 INSERT INTO `liability` (`cusID`, `liabilityName`, `liabilityType`, `startDate`, `totalAmountToPay`, `initialPaidAmount`, `paymentDate`, `paymentFrequency`, `amountEachPayment`, `paymentReminder`, `autoRecord`) VALUES
-(1, 'VKA BlockA1', 'house loan', '2020-01-23', '550000.00', '10000.00', '2020-01-05', 'M', '1500.80', 1, 1),
+(1, 'VKA BlockA1', 'house loan', '2020-01-23', '80000.00', '10000.00', '2020-01-05', 'M', '1500.80', 1, 1),
 (1, 'CIMB', 'credit card', '2020-12-20', '200.00', '1.00', '2020-01-06', 'M', '200.00', 1, 0),
 (1, 'Maybank', 'credit card', '2020-12-20', '5000.00', '0.00', '2020-02-20', NULL, '2000.00', 1, 0),
-(1, 'MYVI 1M4U', 'car loan', '2020-12-20', '80000.00', '20000.00', '2020-03-02', 'M', '1000.00', 1, 0),
-(1, 'Jerry', 'personal loan', '2020-10-01', '1000.00', '0.00', NULL, NULL, NULL, 1, 0),
+(1, 'MYVI 1M4U', 'car loan', '2020-12-20', '50000.00', '20000.00', '2020-03-02', 'M', '1000.00', 1, 0),
+(1, 'Jerry', 'personal loan', '2020-10-01', '200.00', '0.00', NULL, NULL, NULL, 1, 0),
 (1, 'From Samuel', 'personal loan', '2020-07-01', '1000.00', '0.00', NULL, NULL, NULL, 1, 0),
 (1, 'Lambo', 'car loan', '2020-12-08', '10000.00', '2000.00', '2020-01-08', 'M', '200.00', 1, 0),
 ( 1, 'Toyota 555', 'car loan', '2021-01-06', '1000.00', '12.00', '2021-01-06', 'M', '21.00', 1, NULL);

@@ -259,7 +259,7 @@
                         <div class="col-6">
 
                             <button type="button" class="btn btn-secondary float-right edit-budget-btn" id="btn-edit" data-toggle="modal" data-target="#edit-row">Edit / Add New</button>
-                            <form action="" method="POST">
+                            <form action="" method="POST" onsubmit="return confirm('Are you are you want to delete?');">
                                 <button type="submit" class="btn btn-secondary float-right edit-budget-btn" id="btn-delete" name="delete_budget_submit">Delete Budget Plan</button>
                             </form>
                         </div>
