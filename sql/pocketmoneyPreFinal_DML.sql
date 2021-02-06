@@ -149,8 +149,16 @@ INSERT INTO `transaction` ( `cusID`, `categoryID`, `date`, `amount`, `descriptio
 ( 1, 17, '2020-12-05 00:00:00', '1300.00', 'AMD'),
 ( 1, 25, '2021-02-03 00:00:00', '1250.00', 'BTC'),
 ( 1, 25, '2021-02-03 00:00:00', '500.00', 'BTC');
-COMMIT;
 
+
+
+INSERT INTO `announcement` (`announcementID`, `adminID`, `announcement_date`, `title`, `content`) VALUES
+(1, 1, '2020-12-31', 'Annual Report & CG Report - 2019', 'The 2019 Annual Report and Form 20-F are now available as PDF download. A printed copy of our 2019 Annual Report can be ordered free of charge.'),
+(2, 1, '2021-01-14', 'Our promise to you', 'To us, security is about both protection and trust. The foundation of our offering is the commitment to sincerely do the right thing for your financial information, and that means keeping it secure and never taking advantage of it.'),
+(3, 1, '2021-02-02', 'Why use PocketMoney?', 'PocketMoney innovative tech is designed to help you lead a healthy financial life. It helps you securely organize finances, monitor transactions and track money. It empowers you with data to take better financial decisions for yourself & for your family.'),
+(4, 1, '2021-01-24', 'Scheduled Maintenance Announcement - PocketMoney', 'Thank you all for your continuous support to PocketMoney. We are planning for some maintenance activities in our Data Centers on 27 January 2021 (10 a.m.  - 10 p.m.) . Once the maintenance activities are completed, all our services will resume to normal.'),
+(5, 1, '2021-02-05', 'Emergency Maintenance Announcement - PocketMoney', 'Thank you all for your continuous support to PocketMoney. An emergency maintenance would start for some maintenance activities in our Service Centers on 5 February 2021 (1 a.m.  - 3 a.m.). Apologies for inconvenience caused.');
+COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
