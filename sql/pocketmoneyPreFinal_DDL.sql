@@ -39,21 +39,6 @@ CREATE TABLE IF NOT EXISTS `admin` (
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `advisor`
---
-
-DROP TABLE IF EXISTS `advisor`;
-CREATE TABLE IF NOT EXISTS `advisor` (
-  `advisorID` int(255) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`advisorID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `budget`
@@ -143,25 +128,42 @@ CREATE TABLE IF NOT EXISTS `liability` (
   PRIMARY KEY (`liabilityID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `notification`
+-- Table structure for table `announcement`
 --
 
-DROP TABLE IF EXISTS `notification`;
-CREATE TABLE IF NOT EXISTS `notification` (
-  `notificationID` int(255) NOT NULL AUTO_INCREMENT,
-  `senderID` int(255) DEFAULT NULL,
-  `receiver` decimal(10,2) DEFAULT NULL,
-  `date` datetime NOT NULL,
-  `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `notificationType` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `receiverCusID` int(255) DEFAULT NULL,
-  PRIMARY KEY (`notificationID`)
+DROP TABLE IF EXISTS `announcement`;
+CREATE TABLE IF NOT EXISTS `announcement` (
+  `announcementID` int(255) NOT NULL AUTO_INCREMENT,
+  `adminID` int(255) NOT NULL,
+  `announcement_date` datetime(6) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `content` varchar(255) NOT NULL,
+  PRIMARY KEY (`announcementID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
+
+--
+-- Table structure for table `feedback`
+--
+
+DROP TABLE IF EXISTS `feedback`;
+CREATE TABLE IF NOT EXISTS `feedback` (
+  `feedbackID` int(255) NOT NULL AUTO_INCREMENT,
+  `contact_name` varchar(255) NOT NULL,
+  `contact_phone` varchar(255) NOT NULL,
+  `contact_email` varchar(255) NOT NULL,
+  `content` varchar(255) NOT NULL,
+  `adminID` int(255) NOT NULL,
+  PRIMARY KEY (`feedbackID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
 
 --
 -- Table structure for table `transaction`
