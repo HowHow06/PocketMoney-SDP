@@ -108,13 +108,22 @@
                         $d = strtotime($customer->getCurDate());
                         $systemMonth = date("m", $d);
                         $systemYear = date("Y", $d);
-                        foreach ($data as $row) {
-                            $totalIncome = $customer->getTotalIncome();
-                            $totalAmount = floatval($row['percentage']) / 100.0 * $totalIncome * 1.0;
-                            if ($row['categoryName'] == "other") {
-                                $getCateTypeSubQuery = "SELECT categoryType FROM Category WHERE categoryID = tr.categoryID";
-                                $cateIdsSubQuery = "SELECT b.categoryID FROM budget b WHERE b.cusID = " . $customer->getId(); //get all categoryID in budget
-                                $query = "SELECT SUM(tr.amount) as usedAmount 
+                        //get the categoryID
+                        $cateidsSubQuery = "SELECT categoryID FROM category WHERE categoryType ='income'";
+                        $query = "SELECT SUM(amount) as totalIncome FROM Transaction 
+                        WHERE cusID = " . $customer->getId() . "
+                        AND categoryID IN (" . $cateidsSubQuery . ")
+                        AND MONTH(date) = " . $systemMonth . " AND YEAR(date) = " . $systemYear . " 
+                        ";
+                        $totalIncome = $customer->getDataByQuery($query)[0]['totalIncome'];
+                        if (!empty($totalIncome)) {
+                            foreach ($data as $row) {
+
+                                $totalAmount = floatval($row['percentage']) / 100.0 * $totalIncome * 1.0;
+                                if ($row['categoryName'] == "other") {
+                                    $getCateTypeSubQuery = "SELECT categoryType FROM Category WHERE categoryID = tr.categoryID";
+                                    $cateIdsSubQuery = "SELECT b.categoryID FROM budget b WHERE b.cusID = " . $customer->getId(); //get all categoryID in budget
+                                    $query = "SELECT SUM(tr.amount) as usedAmount 
                                 FROM Transaction tr 
                                 WHERE tr.cusID = 1 
                                 AND (" . $getCateTypeSubQuery . ") <> 'income'
@@ -122,45 +131,48 @@
                                 AND MONTH(tr.date) = " . $systemMonth . " AND YEAR(tr.date) = " . $systemYear . " 
                                 "; //select amount of those categories that are not in budget
 
-                                $amountResults = $customer->getDataByQuery($query);
-                            } else {
-                                $amountResults = $customer->getData("Transaction", "SUM(amount) as usedAmount", array('categoryID' => $row['categoryID'], 'cusID' => $customer->getId(), 'MONTH(date)' => $systemMonth, 'YEAR(date)' => $systemYear));
-                            }
-                            $amountUsed = $amountResults[0]['usedAmount']; //the amount used
-                            if (!$amountUsed)
-                                $amountUsed = 0; //if the record is not found in transaction table, the budget is not used at all
-                            $amountUsedPercentage = floatval($amountUsed) / $totalAmount * 100.0;
-                            $amountLeft = $totalAmount - $amountUsed;
+                                    $amountResults = $customer->getDataByQuery($query);
+                                } else {
+                                    $amountResults = $customer->getData("Transaction", "SUM(amount) as usedAmount", array('categoryID' => $row['categoryID'], 'cusID' => $customer->getId(), 'MONTH(date)' => $systemMonth, 'YEAR(date)' => $systemYear));
+                                }
+                                $amountUsed = $amountResults[0]['usedAmount']; //the amount used
+                                if (!$amountUsed)
+                                    $amountUsed = 0; //if the record is not found in transaction table, the budget is not used at all
+                                $amountUsedPercentage = floatval($amountUsed) / $totalAmount * 100.0;
+                                $amountLeft = $totalAmount - $amountUsed;
                     ?>
-                            <div class="budget-row">
-                                <div class="row">
-                                    <div class="col-3">
-                                        <div>
-                                            <sub><?php echo ($row['categoryName']); ?></sub>
-                                        </div>
-                                        <p>RM <?php echo (number_format($totalAmount * 1.0, 2, ".", "")); ?></p>
-                                    </div>
-                                    <div class="col-9">
-                                        <!-- bar -->
-                                        <div class="progress">
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo (number_format($amountUsedPercentage * 1.0, 2, ".", "")); ?>" aria-valuemin="0" aria-valuemax="100" id="progress-bar<?php echo ($count); ?>"></div>
-                                            <h6 class=""><?php echo (number_format($amountUsedPercentage * 1.0, 2, ".", "")); ?>%</h6>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <h6 class="spent">RM <?php echo (number_format($amountUsed, 2, ".", "")); ?></h6>
+                                <div class="budget-row">
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <div>
+                                                <sub><?php echo ($row['categoryName']); ?></sub>
                                             </div>
-                                            <div class="col-6">
-                                                <h6 class="target">RM <?php echo (number_format($amountLeft, 2, ".", "")); ?></h6>
-                                            </div>
+                                            <p>RM <?php echo (number_format($totalAmount * 1.0, 2, ".", "")); ?></p>
                                         </div>
+                                        <div class="col-9">
+                                            <!-- bar -->
+                                            <div class="progress">
+                                                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo (number_format($amountUsedPercentage * 1.0, 2, ".", "")); ?>" aria-valuemin="0" aria-valuemax="100" id="progress-bar<?php echo ($count); ?>"></div>
+                                                <h6 class=""><?php echo (number_format($amountUsedPercentage * 1.0, 2, ".", "")); ?>%</h6>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <h6 class="spent">RM <?php echo (number_format($amountUsed, 2, ".", "")); ?></h6>
+                                                </div>
+                                                <div class="col-6">
+                                                    <h6 class="target">RM <?php echo (number_format($amountLeft, 2, ".", "")); ?></h6>
+                                                </div>
+                                            </div>
 
+                                        </div>
                                     </div>
+                                    <hr>
                                 </div>
-                                <hr>
-                            </div>
                     <?php
-                            $count++;
+                                $count++;
+                            }
+                        } else {
+                            echo ('<p class="text-center" style="color: grey;">You have no income this month, Please insert your income in order to view budget status.</p>');
                         }
                     } else {
                         echo ('<p class="text-center" style="color: grey;">No data shown.</p>');
