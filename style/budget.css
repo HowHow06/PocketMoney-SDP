@@ -41,6 +41,7 @@
 
 .navbar > ul > li:hover, .navbar > ul .active {
   background-color: rgba(255, 255, 255, 0.6);
+  -webkit-transition: 0.2s ease-in;
   transition: 0.2s ease-in;
 }
 
@@ -62,6 +63,8 @@
 
 .background {
   min-height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   background-color: #f7e0b5;
   padding: 70px 100px;
@@ -100,8 +103,12 @@
 }
 
 .background {
-  align-items: center;
-  justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
 .row {
@@ -110,7 +117,8 @@
 }
 
 .body {
-  box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
+          box-shadow: 0 8px 34px 0 rgba(0, 0, 0, 0.2), 0 15px 19px 0 rgba(0, 0, 0, 0.3);
   padding: 0;
   background-color: white;
   border-radius: 12px;
@@ -200,10 +208,11 @@
 }
 
 .body > .budget-overview > div > .budget-row > .row > .col-9 > .progress > .progress-bar, .body > .budget-overview > div .budget-row-head > .row > .col-9 > .progress > .progress-bar {
-  width: 50%;
+  width: 0%;
   background-color: #fc9a55 !important;
   border-radius: 8px;
-  transition: 0.3s ease-in-out;
+  -webkit-transition: 1.25s ease-in-out;
+  transition: 1.25s ease-in-out;
 }
 
 .body > .budget-overview > div > .budget-row > .row > .col-9 > .progress > .excess-bar, .body > .budget-overview > div .budget-row-head > .row > .col-9 > .progress > .excess-bar {
@@ -281,8 +290,12 @@
 }
 
 .body > .filter {
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   padding: 50px 0;
 }
 

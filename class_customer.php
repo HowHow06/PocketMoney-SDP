@@ -587,7 +587,7 @@ class Customer
 
     /** 
      * Return the total income amount if the id is set before
-     * @return int|NULL
+     * @return float|NULL
      * 
      */
     function getTotalIncome()
@@ -603,14 +603,14 @@ class Customer
             $db->where('cusID', $id, '=');
             $db->where('categoryID', $cateIds, 'IN'); //put the subquery into where clause, using IN operator
             $result = $db->getOne('transaction', "SUM(amount) AS SUM");
-            return intval($result['SUM']);
+            return floatval($result['SUM']);
         }
         return NULL;
     }
 
     /** 
      * Return the total expense amount if the id is set before
-     * @return int|NULL
+     * @return float|NULL
      * 
      */
     function getTotalExpenses()
@@ -626,14 +626,14 @@ class Customer
             $db->where('cusID', $id, '=');
             $db->where('categoryID', $cateIds, 'IN');
             $result = $db->getOne('transaction', "SUM(amount) AS SUM");
-            return intval($result['SUM']);
+            return floatval($result['SUM']);
         }
         return NULL;
     }
 
     /** 
      * Return the total paid debt amount if the id is set before
-     * @return int|NULL
+     * @return float|NULL
      * 
      */
     function getTotalDebtPaid()
@@ -649,14 +649,14 @@ class Customer
             $db->where('cusID', $id, '=');
             $db->where('categoryID', $cateIds, 'IN');
             $result = $db->getOne('transaction', "SUM(amount) AS SUM");
-            return intval($result['SUM']);
+            return floatval($result['SUM']);
         }
         return NULL;
     }
 
     /** 
      * Return the total amount of debt to pay if the id is set before
-     * @return int|NULL
+     * @return float|NULL
      * 
      */
     function getTotalDebtToPay()
@@ -679,10 +679,10 @@ class Customer
             $data = $db->rawQuery($query);
             $remainder = 0;
             for ($i = 0; $i < sizeof($data); $i++) {
-                $remainder += intval($data[$i]['remainder']);
+                $remainder += floatval($data[$i]['remainder']);
             }
 
-            return intval($remainder);
+            return floatval($remainder);
         }
         return NULL;
     }
@@ -982,6 +982,8 @@ class Customer
             } elseif ($number == -2) {
                 $var = strtotime("first day of -1 year", strtotime($cd));
                 $this->date = date("Y-m-d", $var);
+            } elseif ($number == 10) {
+                $this->date = date("Y-m-d", strtotime($cd));
             }
         }
     }

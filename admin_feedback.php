@@ -51,9 +51,9 @@
                   <table class="table feedback-table">
                     <thead class="thead-light">
                       <tr>
-                        <th scope="col">Feedback ID</th>
-                        <th scope="col">Sent Date</th>
+                        <th scope="col">#</th>
                         <th scope="col">Sender Name</th>
+                        <th scope="col">Phone Number</th>
                         <th scope="col">Email Address</th>
                         <th scope="col">Content</th>
                         <th scope="col">ACTION</th>
@@ -73,9 +73,9 @@
                   
                     <tr>
                     <th scope = "row"><?php echo ($i +1 ); ?></th>
-                    <td class="feedback_date"><?php print_r($query[$i]['sent_date']); ?></td>
-                    <td class="feedback_customer"><?php echo ($query[$i]['customer_name']); ?></td>
-                    <td class="feedback_customer"><?php echo ($query[$i]['customer_email']); ?></td>
+                    <td class="feedback_date"><?php echo ($query[$i]['contact_name']); ?></td>
+                    <td class="feedback_customer"><?php echo ($query[$i]['contact_phone']); ?></td>
+                    <td class="feedback_customer"><?php echo ($query[$i]['contact_email']); ?></td>
                     <td class="feedback_content"><?php echo ($query[$i]['content']); ?></td>
                     <td class="action">
                                       <a href="#" class="edit-announcement-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>

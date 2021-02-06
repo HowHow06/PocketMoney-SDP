@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3308
--- Generation Time: Feb 03, 2021 at 06:27 AM
+-- Generation Time: Feb 06, 2021 at 04:44 PM
 -- Server version: 8.0.18
--- PHP Version: 7.4.0
+-- PHP Version: 7.3.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -39,6 +39,21 @@ CREATE TABLE IF NOT EXISTS `admin` (
 
 -- --------------------------------------------------------
 
+--
+-- Table structure for table `announcement`
+--
+
+DROP TABLE IF EXISTS `announcement`;
+CREATE TABLE IF NOT EXISTS `announcement` (
+  `announcementID` int(255) NOT NULL AUTO_INCREMENT,
+  `adminID` int(255) NOT NULL,
+  `announcement_date` date NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`announcementID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `budget`
@@ -87,6 +102,22 @@ CREATE TABLE IF NOT EXISTS `customer` (
 
 -- --------------------------------------------------------
 
+--
+-- Table structure for table `feedback`
+--
+
+DROP TABLE IF EXISTS `feedback`;
+CREATE TABLE IF NOT EXISTS `feedback` (
+  `feedbackID` int(255) NOT NULL AUTO_INCREMENT,
+  `contact_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `contact_phone` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `contact_email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `adminID` int(255) NOT NULL,
+  PRIMARY KEY (`feedbackID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `investment`
@@ -128,42 +159,7 @@ CREATE TABLE IF NOT EXISTS `liability` (
   PRIMARY KEY (`liabilityID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-
 -- --------------------------------------------------------
-
---
--- Table structure for table `announcement`
---
-
-DROP TABLE IF EXISTS `announcement`;
-CREATE TABLE IF NOT EXISTS `announcement` (
-  `announcementID` int(255) NOT NULL AUTO_INCREMENT,
-  `adminID` int(255) NOT NULL,
-  `announcement_date` date NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `content` varchar(255) NOT NULL,
-  PRIMARY KEY (`announcementID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `feedback`
---
-
-DROP TABLE IF EXISTS `feedback`;
-CREATE TABLE IF NOT EXISTS `feedback` (
-  `feedbackID` int(255) NOT NULL AUTO_INCREMENT,
-  `contact_name` varchar(255) NOT NULL,
-  `contact_phone` varchar(255) NOT NULL,
-  `contact_email` varchar(255) NOT NULL,
-  `content` varchar(255) NOT NULL,
-  `adminID` int(255) NOT NULL,
-  PRIMARY KEY (`feedbackID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
 
 --
 -- Table structure for table `transaction`
