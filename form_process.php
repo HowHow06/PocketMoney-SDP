@@ -24,37 +24,41 @@ if (isset($_GET['budgetEditData'])) {
                 break;
             }
         }
-        array_push($data, $rowOfOthers);
+        if (!empty($rowOfOthers))
+            array_push($data, $rowOfOthers);
         foreach ($data as $budgetRow) {
+            if ($budgetRow['categoryName'] == 'other') continue; //skip other
             $totalPercentage += $budgetRow['percentage'];
             echo (' <div class="budget-data">
                     <input type="hidden" class="edit-budgetID" value="' . $budgetRow['budgetID'] . '">
                     <div class="form-group row">
                        <label class="col-5" for="edit_budgetCategory">Category:</label>
                        <input value="' . $budgetRow['categoryName'] . '" class="col-6 form-budgetName" list="edit_budgetCategoryList" name="edit_budgetCategory[]" autocomplete="off" required />
-                       <label class="error" for="edit_budgetCategory">Please enter a valid category</label>
+                       
                        <i class="fas fa-trash col-1 align-self-center budget-delete-icon"></i>
+                       <label class="error" for="edit_budgetCategory">Please enter a valid category</label>
                    </div>
                    <div class="form-group row">
                        <label class="col-5" for="edit_budgetPercentage">Percentage:</label>
                        <input class="col-6 form-budgetPercentage" type="number" step=\'1.00\' name="edit_budgetPercentage[]" value="' . $budgetRow['percentage'] . '" required />
-                       <label class="error" for="edit_budgetPercentage">Total Percentage must not be larger than 100</label>
+                       <label class="error" for="edit_budgetPercentage">Please enter a valid percentage</label>
                    </div><hr>
                    </div>');
         }
-    } else {
+    } else { //if no budget data
         echo (' <div class="budget-data">
-                    <input type="hidden" class="edit-budgetID" ">
+                    <input type="hidden" class="edit-budgetID" >
                     <div class="form-group row">
                        <label class="col-5" for="edit_budgetCategory">Category:</label>
-                       <input class="col-6 form-budgetName" list="edit_budgetCategoryList" name="edit_budgetCategory" autocomplete="off" required />
-                       <label class="error" for="edit_budgetCategory">Please enter a valid category</label>
+                       <input class="col-6 form-budgetName" list="edit_budgetCategoryList" name="edit_budgetCategory[]" autocomplete="off" required />
+                       
                        <i class="fas fa-trash col-1 align-self-center budget-delete-icon"></i>
+                       <label class="error" for="edit_budgetCategory">Please enter a valid category</label>
                    </div>
                    <div class="form-group row">
                        <label class="col-5" for="edit_budgetPercentage">Percentage:</label>
-                       <input class="col-6 form-budgetPercentage" type="number" step=\'1.00\' name="edit_budgetPercentage" required />
-                       <label class="error" for="edit_budgetPercentage">Total Percentage must not be larger than 100</label>
+                       <input class="col-6 form-budgetPercentage" type="number" step=\'1.00\' name="edit_budgetPercentage[]" required />
+                       <label class="error" for="edit_budgetPercentage">Please enter a valid percentage</label>
                    </div><hr>
                    </div>');
     }
