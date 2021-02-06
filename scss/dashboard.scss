@@ -52,9 +52,10 @@
                         height: 25px;
                         border-radius: 8px !important;
                         > .progress-bar {
-                            width: 50%; 
+                            width: 0%; 
                             background-color: #fc9a55 !important;
                             border-radius: 8px;
+                            transition: 1.25s ease-in-out;
                         }
                         > .excess-bar {
                             // width: 100%; 
@@ -179,10 +180,10 @@
                                 height: 25px;
                                 border-radius: 8px !important;
                                 > .progress-bar {
-                                    width: 30%; 
+                                    width: 0%; 
                                     background-color: #fc9a55 !important;
                                     border-radius: 8px;
-                                    transition: 0.3s ease-in-out;
+                                    transition: 1.25s ease-in-out;
                                 }
                                 > h6 {
                                     position: absolute;

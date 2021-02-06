@@ -82,11 +82,6 @@ if (isset($_POST['edit_password'])) { //if the form is submitted
     </div>
 </div>
 <script>
-$(document).ready(function () {
-    $("body").niceScroll();
-    $(".transaction-table").niceScroll();
-});
-
 var form = document.getElementById("profile_form");
 document.getElementById("edit_submit").addEventListener("click", function () {
   form.submit();

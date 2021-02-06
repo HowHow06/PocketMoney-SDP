@@ -6,6 +6,9 @@ $(document).ready(function () {
     });
     input;
 
+    $('#new_transactionCategory').prop('disabled', true);
+    $('#new_transactionCategory').val('');
+
     var keyword = $("#current-previous-date").val();
     var numbers = /^[0-9-]+$/;
     if (String(keyword).match(numbers)) {
@@ -14,11 +17,26 @@ $(document).ready(function () {
         $("#filter-month-year").val('Monthly');
     }
 
+    wait();
+    
+
     $("body").niceScroll();
     $("#chart-explain").niceScroll();
 });
 
+async function wait() {
+    var numofrow = $('#sizeOfDatarow').val();
+    for (var i=0; i<numofrow; i++) {
+        // document.getElementById("category-row"+i).style.transition = "all 1s";
+        document.getElementById("category-row"+i).style.opacity = "1";
+        await sleep(300);
+    }
+}
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+  
 function validateform(ele) {
     var id = "#" + ele.id;
     var transactionDateTime = $(id).find(".form-transactionDateTime");
@@ -451,46 +469,62 @@ $(document).on("click", ".delete-transaction-anchor", function () {
 $(document).on("change", "#edit_transactionType", function () {
     var keyword = document.getElementById("edit_transactionType").value;
     if (keyword == 'income') {
+        $('#edit_transactionCategory').prop('disabled', false);
         $x = $("#edit_transactionCategory").clone();
         $("#edit_transactionCategory").remove();
         $x.attr('list','edit_transactionCategoryIncomeList').insertAfter('#edit_transactionCategoryLabel');
     } else if (keyword == 'expenses') {
+        $('#edit_transactionCategory').prop('disabled', false);
         $x = $("#edit_transactionCategory").clone();
         $("#edit_transactionCategory").remove();
         $x.attr('list','edit_transactionCategoryExpensesList').insertAfter('#edit_transactionCategoryLabel');
     }
     else if (keyword == 'investment') {
+        $('#edit_transactionCategory').prop('disabled', false);
         $x = $("#edit_transactionCategory").clone();
         $("#edit_transactionCategory").remove();
         $x.attr('list','edit_transactionCategoryInvestmentList').insertAfter('#edit_transactionCategoryLabel');
     }
     else if (keyword == 'liability') {
+        $('#edit_transactionCategory').prop('disabled', false);
         $x = $("#edit_transactionCategory").clone();
         $("#edit_transactionCategory").remove();
         $x.attr('list','edit_transactionCategoryLiabilityList').insertAfter('#edit_transactionCategoryLabel');
+    }
+    else if (keyword = 'Select transaction type:') {
+        $('#edit_transactionCategory').prop('disabled', true);
+        $('#edit_transactionCategory').val('');
     }
 });
 
 $(document).on("change", "#new_transactionType", function () {
     var keyword = document.getElementById("new_transactionType").value;
     if (keyword == 'income') {
+        $('#new_transactionCategory').prop('disabled', false);
         $x = $("#new_transactionCategory").clone();
         $("#new_transactionCategory").remove();
         $x.attr('list','new_transactionCategoryIncomeList').insertAfter('#new_transactionCategoryLabel');
     } else if (keyword == 'expenses') {
+        $('#new_transactionCategory').prop('disabled', false);
         $x = $("#new_transactionCategory").clone();
         $("#new_transactionCategory").remove();
         $x.attr('list','new_transactionCategoryExpensesList').insertAfter('#new_transactionCategoryLabel');
     }
     else if (keyword == 'investment') {
+        $('#new_transactionCategory').prop('disabled', false);
         $x = $("#new_transactionCategory").clone();
         $("#new_transactionCategory").remove();
         $x.attr('list','new_transactionCategoryInvestmentList').insertAfter('#new_transactionCategoryLabel');
     }
     else if (keyword == 'liability') {
+        $('#new_transactionCategory').prop('disabled', false);
         $x = $("#new_transactionCategory").clone();
         $("#new_transactionCategory").remove();
         $x.attr('list','new_transactionCategoryLiabilityList').insertAfter('#new_transactionCategoryLabel');
+    }
+    else if (keyword = 'Select transaction type:') {
+        $('#new_transactionCategory').prop('disabled', true);
+        $('#new_transactionCategory').val('');
     }
 });
 

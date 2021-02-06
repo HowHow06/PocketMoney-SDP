@@ -94,7 +94,7 @@
                 <div class="modal fade edit-modal" id="edit-row" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                         <div class="modal-content">
-                        <span class="close">&times;</span>
+                        <span class="close" data-dismiss="modal">&times;</span>
                         <form action="" method="POST" id="edit-announcement" onsubmit="return validateform(this);">
                             <div class="modal-body">
                             <label for="title"><b>Title</b></label>
@@ -121,7 +121,7 @@
                 <table class="table announcement-table">
                     <thead class="thead-light">
                         <tr>
-                            <th scope="col">Announcement ID</th>
+                            <th scope="col">#</th>
                             <th scope="col" style="min-width: 120px;">Post Date</th>
                             <th scope="col" style="min-width: 300px;">Title</th>
                             <th scope="col">Content</th>
@@ -158,33 +158,30 @@
                     </tbody>
                 </table>
                 <br><br>
-                <button type="button" id="myBtn" class="btn btn-outline-primary add-announcement">Add new announcement</button>
-                <div id="AnnouncementModal" class="modal" >
-                    <div class="modal-content">
-                    <form action="" method="POST" id="testing" onsubmit="return validateform(this);">
-                        <span class="close">&times;</span>
-                        <label for="title"><b>Title</b></label>
-                        <input type="text" placeholder="Title " id="new_title" name="new_title" required>
+                <button type="button" id="myBtn" class="btn btn-outline-primary add-announcement" data-toggle="modal" data-target="#AnnouncementModal">Add new announcement</button>
+                <div class="modal fade" id="AnnouncementModal" tabindex="-1" role="dialog" aria-labelledby="new-title" aria-hidden="true">
+                <!-- <div id="AnnouncementModal" class="modal"> -->
+                    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                        <div class="modal-content">
+                            <form action="" method="POST" id="testing" onsubmit="return validateform(this);">
+                                <span class="close" data-dismiss="modal">&times;</span>
+                                <label for="title"><b>Title</b></label>
+                                <input type="text" placeholder="Title " id="new_title" name="new_title" required>
 
-                        <label for="content"><b>Content</b></label>
-                        <input type="text" placeholder="Announcement Content" id="new_content" name="new_content" required>
+                                <label for="content"><b>Content</b></label>
+                                <input type="text" placeholder="Announcement Content" id="new_content" name="new_content" required>
 
-                        <label for="date"><b>Post Date</b></label>
-                        <input type="date" class="announcement_date" placeholder="Announcement Date" id="new_date" name="new_date" required> 
+                                <label for="date"><b>Post Date</b></label>
+                                <input type="date" class="announcement_date" placeholder="Announcement Date" id="new_date" name="new_date" required> 
 
-                        <button type="submit" name="new_submit" id="new_submit" class="btn btn-primary">Add new</button>
-                    </form>
+                                <button type="submit" name="new_submit" id="new_submit" class="btn btn-primary">Add new</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </body>
-<script>
-$(document).ready(function () {
-    $("body").niceScroll();
-    $(".transaction-table").niceScroll();
-});
-</script>
 <script src="./script/announcement.js"></script>
 </html>

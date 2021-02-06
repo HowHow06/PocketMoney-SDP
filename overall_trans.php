@@ -68,7 +68,15 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('overall_trans.php?role=customer');
+        $flag = $_POST['filter-page'];
+        if ($flag == '') {
+            $flag = 'Monthly';
+        } else {
+            $flag = 'Yearly';
+        }
+        $date = strtotime($_POST['current-page-date']);
+        $d = date("Y-m-d",$date);
+        $customer->goTo('overall_trans.php?role=customer&cpd='.$d.'&filter-month-year='.$flag);
     }
 
     //delete transaction
@@ -82,7 +90,15 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('overall_trans.php?role=customer');
+        $flag = $_POST['filter-page'];
+        if ($flag == '') {
+            $flag = 'Monthly';
+        } else {
+            $flag = 'Yearly';
+        }
+        $date = strtotime($_POST['current-page-date']);
+        $d = date("Y-m-d",$date);
+        $customer->goTo('overall_trans.php?role=customer&cpd='.$d.'&filter-month-year='.$flag);
     }
 
     //new transaction
@@ -129,7 +145,21 @@
         } else {
             $customer->showAlert($result['statusMsg']);
         }
-        $customer->goTo('overall_trans.php?role=customer');
+        $flag = $_POST['filter-page'];
+        if ($flag == '') {
+            $flag = 'Monthly';
+        } else {
+            $flag = 'Yearly';
+        }
+        $date = strtotime($_POST['current-page-date']);
+        $d = date("Y-m-d",$date);
+        $customer->goTo('overall_trans.php?role=customer&cpd='.$d.'&filter-month-year='.$flag);
+    }
+
+    if (isset($_GET['cpd'])) {
+        $date = strtotime($_GET['cpd']);
+        $d = date("Y-m-d",$date);
+        $customer->setCurDate(10,$d);
     }
 
     if (isset($_POST['filter-previous'])) {
@@ -276,9 +306,11 @@
                         <form action="" method="POST" id="testing" onsubmit="return validateform(this);">
                             <div class="modal-body">
                                 <div class="container">
+                                    <input type="hidden" id="filter-page" name="filter-page" value="<?php echo ($customer->getFlag()); ?>"></input>
+                                    <input type="hidden" id="current-page-date" name="current-page-date" value="<?php echo ($customer->getCurrentFilterTime(0,1,$customer->getFlag())); ?>"></input>
                                     <div class="form-group row">
                                         <label class="col-5" for="new_transactionDateTime">Date & Time:</label>
-                                        <input style="max-width: 57%" class="col-6 form-transactionDateTime" step="1" type="datetime-local" id="new_transactionDateTime" name="new_transactionDateTime" autocomplete="off" required />
+                                        <input style="min-width: 57%" class="col-6 form-transactionDateTime" step="1" type="datetime-local" id="new_transactionDateTime" name="new_transactionDateTime" autocomplete="off" required />
                                         <label class="error" for="new_transactionDateTime">Please enter a valid date and time</label>
                                     </div>
                                     <div class="form-group row">
@@ -288,13 +320,18 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Type:</label>
-                                        <input id="new_transactionType" class="col-6 form-transactionType" list="new_transactionTypeList" name="new_transactionType" autocomplete="off" required />
+                                        <!-- <input id="new_transactionType" class="col-6 form-transactionType" list="new_transactionTypeList" name="new_transactionType" autocomplete="off" required />
                                         <datalist id="new_transactionTypeList">
                                             <option id="typeIncome" value="income">income</option>
                                             <option id="typeExpense" value="expenses">expenses</option>
                                             <option id="typeInvestment" value="investment">investment</option>
                                             <option id="typeLiability" value="liability">liability</option>
-                                        </datalist>
+                                        </datalist> -->
+                                        <select id="new_transactionType" class="col-6 form-transactionType" name="new_transactionType" autocomplete="off" required>
+                                            <option id="typeIncome" value="">Select transaction type:</option>
+                                            <option id="typeIncome" value="income">income</option>
+                                            <option id="typeExpense" value="expenses">expenses</option>
+                                        </select>
                                         <label class="error" for="new_transactionType">Please enter a valid type</label>
                                     </div>
                                     <div class="form-group row">
@@ -411,10 +448,12 @@
                         <form action="" method="POST" id="edit-form" onsubmit="return validateform(this);">
                             <div class="modal-body">
                                 <div class="container">
+                                    <input type="hidden" id="filter-page" name="filter-page" value="<?php echo ($customer->getFlag()); ?>"></input>
+                                    <input type="hidden" id="current-page-date" name="current-page-date" value="<?php echo ($customer->getCurrentFilterTime(0,1,$customer->getFlag())); ?>"></input>
                                     <input type="hidden" id="edit_transactionID" name="edit_transactionID"></input>
                                     <div class="form-group row">
                                         <label class="col-5" for="edit_transactionDateTime">Date & Time:</label>
-                                        <input style="max-width: 57%" class="col-6 form-transactionDateTime" step="1" type="datetime-local" id="edit_transactionDateTime" name="edit_transactionDateTime" autocomplete="off" required />
+                                        <input style="min-width: 57%" class="col-6 form-transactionDateTime" step="1" type="datetime-local" id="edit_transactionDateTime" name="edit_transactionDateTime" autocomplete="off" required />
                                         <label class="error" for="edit_transactionDateTime">Please enter a valid date and time</label>
                                     </div>
                                     <div class="form-group row">
@@ -424,13 +463,20 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-5" for="">Type:</label>
-                                        <input id="edit_transactionType" class="col-6 form-transactionType" list="edit_transactionTypeList" name="edit_transactionType" autocomplete="off" required />
+                                        <!-- <input id="edit_transactionType" class="col-6 form-transactionType" list="edit_transactionTypeList" name="edit_transactionType" autocomplete="off" required />
                                         <datalist id="edit_transactionTypeList">
                                             <option id="typeIncome" value="income">income</option>
                                             <option id="typeExpense" value="expenses">expenses</option>
                                             <option id="typeInvestment" value="investment">investment</option>
                                             <option id="typeLiability" value="liability">liability</option>
-                                        </datalist>
+                                        </datalist> -->
+                                        <select id="edit_transactionType" class="col-6 form-transactionType" name="edit_transactionType" autocomplete="off" required>
+                                            <option id="typeIncome" value="">Select transaction type:</option>
+                                            <option id="typeIncome" value="income">income</option>
+                                            <option id="typeExpense" value="expenses">expenses</option>
+                                            <option id="typeInvestment" value="investment">investment</option>
+                                            <option id="typeLiability" value="liability">liability</option>
+                                        </select>
                                         <label class="error" for="edit_transactionType">Please enter a valid type</label>
                                     </div>
                                     <div class="form-group row">
@@ -545,6 +591,8 @@
                         </div>
                         <div class="modal-footer">
                             <form action="" method="POST">
+                                <input type="hidden" id="filter-page" name="filter-page" value="<?php echo ($customer->getFlag()); ?>"></input>
+                                <input type="hidden" id="current-page-date" name="current-page-date" value="<?php echo ($customer->getCurrentFilterTime(0,1,$customer->getFlag())); ?>"></input>
                                 <input type="hidden" id="delete_transactionID" name="delete_transactionID"></input>
                                 <button type="submit" class="btn btn-primary" name="delete_submit">Delete</button>
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>

@@ -206,36 +206,57 @@
                 $curMonth = $customer->getCurrentMonthValue();
                 $curYear = $customer->getCurrentYearValue();
 
-                $totalIncome = $customer->getTotalIncome();
-                $totalExpenses = $customer->getTotalExpenses();
-                $totalDebtPaid = $customer->getTotalDebtPaid();
+                $totalIncome = (float) $customer->getTotalIncome();
+                $totalExpenses = (float) $customer->getTotalExpenses();
+                $totalDebtPaid = (float) $customer->getTotalDebtPaid();
                 $totalExpensesAndDebtPaid = $totalExpenses + $totalDebtPaid;
-                $totalBalance = $totalIncome - $totalExpensesAndDebtPaid;
-                $totalInvestment = $customer->getTotalInvestmentAmount();
-                $totalAsset = $totalInvestment + $totalBalance;
-                $totalDebtToPay = $customer->getTotalDebtToPay();
-                $totalNetWorth = $totalAsset - $totalDebtToPay;
+                $totalBalance = $totalIncome - (float) $totalExpensesAndDebtPaid;
+                $totalInvestment = (float) $customer->getTotalInvestmentAmount();
+                $totalAsset = $totalInvestment + (float) $totalBalance;
+                $totalDebtToPay = (float) $customer->getTotalDebtToPay();
+                $totalNetWorth = $totalAsset - (float) $totalDebtToPay;
+
+                if ($totalBalance < 0) {
+                    $totalBalance *= -1;
+                    $totalBalance = number_format($totalBalance, 2, '.', '');
+                    $totalBalance = "-RM".$totalBalance;
+                } else {
+                    $totalBalance = number_format($totalBalance, 2, '.', '');
+                    $totalBalance = "RM".$totalBalance;
+                }
+
+                if ($totalNetWorth < 0) {
+                    $totalNetWorth *= -1;
+                    $totalNetWorth = number_format($totalNetWorth, 2, '.', '');
+                    $totalNetWorth = "-RM".$totalNetWorth;
+                } else {
+                    $totalNetWorth = number_format($totalNetWorth, 2, '.', '');
+                    $totalNetWorth = "RM".$totalNetWorth;
+                }
+
+                // $value = (float) $result[0]['amount'];
+                // return number_format($value, 2, '.', '');
                 ?>
                 <div class="container-fluid row">
                     <div>
                         <h5>Total Income</h5>
                         <!-- <p>RM<?php //echo ($customer->getTotalValueInMonth($curMonth, $curYear, 0)); 
                                     ?></p> -->
-                        <p>RM<?php echo ($totalIncome); ?></p>
+                        <p>RM<?php echo (number_format($totalIncome, 2, '.', '')); ?></p>
                     </div>
                     <h3>-</h3>
                     <div>
                         <h5>Total Expenses</h5>
                         <!-- <p>RM<?php //echo ($customer->getTotalValueInMonth($curMonth, $curYear, 1)); 
                                     ?></p> -->
-                        <p>RM<?php echo ($totalExpensesAndDebtPaid); ?></p>
+                        <p>RM<?php echo (number_format($totalExpensesAndDebtPaid, 2, '.', '')); ?></p>
                     </div>
                     <h3>=</h3>
                     <div>
                         <h5>Total Balance</h5>
                         <!-- <p><?php //echo ($customer->getNetIncomeInMonth($curMonth, $curYear)); 
                                 ?></p> -->
-                        <p>RM<?php echo ($totalBalance); ?></p>
+                        <p><?php echo ($totalBalance); ?></p>
                     </div>
                 </div>
                 <div class="container-fluid row">
@@ -243,7 +264,7 @@
                         <h5>Asset</h5>
                         <!-- <p>RM<?php //echo ($customer->getTotalInvestmentAmount()); 
                                     ?></p> -->
-                        <p>RM<?php echo ($totalAsset); ?></p>
+                        <p>RM<?php echo (number_format($totalAsset, 2, '.', '')); ?></p>
                     </div>
                     <h3>-</h3>
                     <div>
@@ -257,7 +278,7 @@
                         <h5>Net Worth</h5>
                         <!-- <p><?php //echo ($customer->getNetWorth()); 
                                 ?></p> -->
-                        <p>RM<?php echo ($totalNetWorth); ?></p>
+                        <p><?php echo ($totalNetWorth); ?></p>
                     </div>
                 </div>
             </div>

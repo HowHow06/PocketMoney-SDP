@@ -88,6 +88,8 @@
                 border-width: 4px !important;
                 // padding-top: 20px;
                 > div {
+                    opacity: 0;
+                    transition: 0.3s ease-in;
                     background-color: white;
                     cursor: default;
                     padding-top: 14px;
@@ -267,6 +269,9 @@
                             position: absolute;
                             bottom: 42px;
                             right: 40px;
+                        }
+                        > select, input {
+                            min-width: 52%;
                         }
                     }
                 }
