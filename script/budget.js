@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
   var query = document.getElementById("filter-query").value;
   var input = document.getElementById("search-transaction");
@@ -34,6 +33,64 @@ $(document).ready(function () {
 
   $("body").niceScroll();
 });
+
+//to validate the budget form
+function validateBudgetForm(ele) {
+  var id = "#" + ele.id;
+  var valid = true;
+  //for each div, check the name and percentage
+  $(id)
+    .find(".budget-data")
+    .each(function () {
+      var budgetName = $(this).find(".form-budgetName");
+      var budgetPecntage = $(this).find(".form-budgetPercentage");
+
+      if (!validTransactionName(budgetName.val())) {
+        budgetName.parent().find(".error").css("display", "inline-block");
+        //decrease some margin-bottom for the form group
+        budgetName.parent().css("margin-bottom", "0.2rem");
+        valid = false;
+      } else {
+        budgetName.parent().find(".error").css("display", "none");
+        //decrease some margin-bottom for the form group
+        budgetName.parent().css("margin-bottom", "1rem");
+      }
+
+      if (!validAmount(budgetPecntage.val())) {
+        budgetPecntage.parent().find(".error").css("display", "inline-block");
+        //decrease some margin-bottom for the form group
+        budgetPecntage.parent().css("margin-bottom", "0.2rem");
+        valid = false;
+      } else {
+        budgetPecntage.parent().find(".error").css("display", "none");
+        //decrease some margin-bottom for the form group
+        budgetPecntage.parent().css("margin-bottom", "1rem");
+      }
+    });
+
+  if (!valid) {
+    //if the fields are not valid
+    return false;
+  }
+
+  var totalPercentage = 0;
+  //get the total of percentage
+  $(id)
+    .find(".budget-data")
+    .each(function () {
+      totalPercentage += parseFloat(
+        $(this).find(".form-budgetPercentage").val()
+      );
+    });
+  console.log(totalPercentage);
+
+  //check if the total percentage exceed 100
+  if (totalPercentage > 100) {
+    return failValidation("Total Percentage must be smaller than 100");
+  }
+
+  return confirm("Are you sure you want to proceed?");
+}
 
 function validateform(ele) {
   var id = "#" + ele.id;
@@ -453,31 +510,14 @@ $(document).on("click", ".new-budgetItem-btn", function () {
     if ($(this).val() == "") flag = true;
   });
   if (!flag) {
-    divOfData = $("#edit-body-data");
-    content = divOfData.html();
-    content += displayNewBudgetItem();
-    divOfData.html(content);
+    divOfData = $("#edit-body-data"); //parent div
+
+    divOfOneData = divOfData.find(".budget-data").first().clone(); //get the first div
+    divOfOneData.find("input").val(""); //remove the input value
+    divOfData.append(divOfOneData); //append to the parent div
   }
 });
 
-function displayNewBudgetItem() {
-  newitem =
-    '<div class="budget-data">\
-  <input type="hidden" class="edit-budgetID" ">\
-  <div class="form-group row">\
-     <label class="col-5" for="edit_budgetCategory">Category:</label>\
-     <input class="col-6 form-budgetName" list="edit_budgetCategoryList" name="edit_budgetCategory" autocomplete="off" required />\
-     <label class="error" for="edit_budgetCategory">Please enter a valid category</label>\
-     <i class="fas fa-trash col-1 align-self-center budget-delete-icon"></i>\
- </div>\
- <div class="form-group row">\
-     <label class="col-5" for="edit_budgetPercentage">Percentage:</label>\
-     <input class="col-6 form-budgetPercentage" type="number" step=\'1.00\' name="edit_budgetPercentage" required />\
-     <label class="error" for="edit_budgetPercentage">Total Percentage must not be larger than 100</label>\
- </div><hr>\
- </div>';
-  return newitem;
-}
 $(document).on("click", ".edit-budget-btn", function () {
   var cusID = document.getElementById("cusID");
   var xmlhttp = new XMLHttpRequest();
@@ -620,9 +660,16 @@ $(document).ready(function () {
   for (var i = 0; i < parseFloat(numofbudget); i++) {
     var progressvalue = $("#progress-bar" + i).attr("aria-valuenow");
     if (parseFloat(progressvalue) > 100) {
-      $('#progress-bar'+i).addClass('excess-bar');
-      $('#progress-bar'+i).parent().find('h6').addClass('excess-value');
-      $('#progress-bar'+i).parent().parent().find('.spent').addClass('excess');
+      $("#progress-bar" + i).addClass("excess-bar");
+      $("#progress-bar" + i)
+        .parent()
+        .find("h6")
+        .addClass("excess-value");
+      $("#progress-bar" + i)
+        .parent()
+        .parent()
+        .find(".spent")
+        .addClass("excess");
     }
   }
 

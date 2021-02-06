@@ -17,27 +17,98 @@
     $customer->setFlag(0);
 
     //update the budget
-    if (isset($_POST['edit_submit'])) {
+    if (isset($_POST['edit_budget_submit'])) {
+        //delete all existing budget
         $params['tableName'] = 'Budget';
-        $params['idName'] = 'budgetID';
-        $params['id'] = $_POST['edit_budgetID'];
+        $params['idName'] = 'cusID';
+        $params['id'] = $customer->getId();
+        $result = $customer->customerDelete($params);
+        $totalPercantage = 0.0;
 
-        // Get categoryID based on categoryName
-        $datarow = $customer->getDataByQuery('SELECT categoryID FROM category
-                                                WHERE categoryName=\'' . $_POST['edit_budgetCategory'] . '\';
-                                                ');
+        $budgetCategoryArray = $_POST['edit_budgetCategory'];
+        $budgetPercentageArray = $_POST['edit_budgetPercentage'];
+        //loop throught the input
+        for ($i = 0; $i < sizeof($budgetCategoryArray); $i++) {
+            //check the category 
+            $query = "SELECT * FROM category WHERE categoryType <> 'income' AND categoryName ='" . $budgetCategoryArray[$i] . "' AND (cusID IS NULL OR cusID =" . $customer->getId() . ")";
+            $cateTest1 = $customer->getDataByQuery($query);
+            if (empty($cateTest1)) { //both empty meaning category is new 
+                //create new category in category table
 
-        $params['data'] = array(
-            'cusID' => $customer->getId(),
-            'percentage' => $_POST['edit_budgetPercentage'],
-            'categoryID' => $datarow[0]['categoryID']
-        );
-        $result = $customer->customerUpdate($params);
-        if ($result['status'] == 'ok') {
-            $customer->showAlert($result['statusMsg']);
-        } else {
-            $customer->showAlert($result['statusMsg']);
+                $params['tableName'] = 'category';
+                $params['data'] = array(
+                    'categoryName' =>  $budgetCategoryArray[$i],
+                    'categoryType' => 'budget',
+                    'preDefine' => 0,
+                    'cusID' => 1
+                );
+                $result = $customer->customerInsert($params);
+                $customer->showAlert("new category created: " . $budgetCategoryArray[$i]);
+            }
+
+            //get the categoryID
+            $query = "SELECT * FROM category WHERE categoryType <> 'income' AND categoryName ='" . $budgetCategoryArray[$i] . "' AND (cusID IS NULL OR cusID =" . $customer->getId() . ")";
+            $result = $customer->getDataByQuery($query);
+            $categoryID = $result[0]['categoryID'];
+            //new budget
+            $params['tableName'] = 'Budget';
+            $params['data'] = array(
+                'cusID' => $customer->getId(),
+                'categoryID' => $categoryID,
+                'percentage' =>  $budgetPercentageArray[$i]
+            );
+            $result = $customer->customerInsert($params);
+
+            $totalPercantage += $budgetPercentageArray[$i];
+
+            if ($result['status'] == 'ok') {
+            } else {
+                $customer->showAlert($result['statusMsg']);
+                break;
+            }
         }
+
+
+        if ($totalPercantage < 100) {
+            $remainPercentage = 100.0 - $totalPercantage;
+            //get the categoryID
+            $query = "SELECT * FROM category WHERE categoryType = 'budget' AND categoryName ='other'";
+            $result = $customer->getDataByQuery($query);
+            $categoryID = $result[0]['categoryID'];
+            //new budget
+            $params['tableName'] = 'Budget';
+            $params['data'] = array(
+                'cusID' => $customer->getId(),
+                'categoryID' => $categoryID,
+                'percentage' =>  $remainPercentage
+            );
+            $result = $customer->customerInsert($params);
+        }
+
+
+
+
+
+        // $params['tableName'] = 'Budget';
+        // $params['idName'] = 'budgetID';
+        // $params['id'] = $_POST['edit_budgetID'];
+
+        // // Get categoryID based on categoryName
+        // $datarow = $customer->getDataByQuery('SELECT categoryID FROM category
+        //                                         WHERE categoryName=\'' . $_POST['edit_budgetCategory'] . '\';
+        //                                         ');
+
+        // $params['data'] = array(
+        //     'cusID' => $customer->getId(),
+        //     'percentage' => $_POST['edit_budgetPercentage'],
+        //     'categoryID' => $datarow[0]['categoryID']
+        // );
+        // $result = $customer->customerUpdate($params);
+        // if ($result['status'] == 'ok') {
+        //     $customer->showAlert($result['statusMsg']);
+        // } else {
+        //     $customer->showAlert($result['statusMsg']);
+        // }
         $customer->goTo('budget.php?role=customer');
     }
 
@@ -101,9 +172,15 @@
                                 break;
                             }
                         }
-                        array_push($data, $rowOfOthers);
+                        if (!empty($rowOfOthers))
+                            array_push($data, $rowOfOthers);
                         $count = 0;
+                        $customer->setCurDate();
+                        $d = strtotime($customer->getCurDate());
+                        $systemMonth = date("m", $d);
+                        $systemYear = date("Y", $d);
                         foreach ($data as $row) {
+
                             $totalIncome = $customer->getTotalIncome();
                             $totalAmount = floatval($row['percentage']) / 100.0 * $totalIncome * 1.0;
                             if ($row['categoryName'] == "other") {
@@ -113,11 +190,13 @@
                                 FROM Transaction tr 
                                 WHERE tr.cusID = 1 
                                 AND (" . $getCateTypeSubQuery . ") <> 'income'
-                                AND tr.categoryID NOT IN (" . $cateIdsSubQuery . ")"; //select amount of those categories that are not in budget
+                                AND tr.categoryID NOT IN (" . $cateIdsSubQuery . ")
+                                AND MONTH(tr.date) = " . $systemMonth . " AND YEAR(tr.date) = " . $systemYear . " 
+                                "; //select amount of those categories that are not in budget
 
                                 $amountResults = $customer->getDataByQuery($query);
                             } else {
-                                $amountResults = $customer->getData("Transaction", "SUM(amount) as usedAmount", array('categoryID' => $row['categoryID'], 'cusID' => $customer->getId()));
+                                $amountResults = $customer->getData("Transaction", "SUM(amount) as usedAmount", array('categoryID' => $row['categoryID'], 'cusID' => $customer->getId(), 'MONTH(date)' => $systemMonth, 'YEAR(date)' => $systemYear));
                             }
                             $amountUsed = $amountResults[0]['usedAmount']; //the amount used
                             if (!$amountUsed)
@@ -125,33 +204,33 @@
                             $amountUsedPercentage = floatval($amountUsed) / $totalAmount * 100.0;
                             $amountLeft = $totalAmount - $amountUsed;
                     ?>
-                        <div class="budget-row">
-                            <div class="row">
-                                <div class="col-3">
-                                    <div>
-                                        <sub><?php echo ($row['categoryName']); ?></sub>
-                                    </div>
-                                    <p>RM <?php echo (number_format($totalAmount * 1.0, 2, ".", "")); ?></p>
-                                </div>
-                                <div class="col-9">
-                                    <!-- bar -->
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo (number_format($amountUsedPercentage * 1.0, 2, ".", "")); ?>" aria-valuemin="0" aria-valuemax="100" id="progress-bar<?php echo ($count); ?>"></div>
-                                        <h6 class=""><?php echo (number_format($amountUsedPercentage * 1.0, 2, ".", "")); ?>%</h6>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <h6 class="spent">RM <?php echo (number_format($amountUsed, 2, ".", "")); ?></h6>
+                            <div class="budget-row">
+                                <div class="row">
+                                    <div class="col-3">
+                                        <div>
+                                            <sub><?php echo ($row['categoryName']); ?></sub>
                                         </div>
-                                        <div class="col-6">
-                                            <h6 class="target">RM <?php echo (number_format($amountLeft, 2, ".", "")); ?></h6>
-                                        </div>
+                                        <p>RM <?php echo (number_format($totalAmount * 1.0, 2, ".", "")); ?></p>
                                     </div>
+                                    <div class="col-9">
+                                        <!-- bar -->
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo (number_format($amountUsedPercentage * 1.0, 2, ".", "")); ?>" aria-valuemin="0" aria-valuemax="100" id="progress-bar<?php echo ($count); ?>"></div>
+                                            <h6 class=""><?php echo (number_format($amountUsedPercentage * 1.0, 2, ".", "")); ?>%</h6>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <h6 class="spent">RM <?php echo (number_format($amountUsed, 2, ".", "")); ?></h6>
+                                            </div>
+                                            <div class="col-6">
+                                                <h6 class="target">RM <?php echo (number_format($amountLeft, 2, ".", "")); ?></h6>
+                                            </div>
+                                        </div>
 
+                                    </div>
                                 </div>
+                                <hr>
                             </div>
-                            <hr>
-                        </div>
                     <?php
                             $count++;
                         }
@@ -198,6 +277,16 @@
                                                                         ORDER BY categoryName DESC;
                                                                         ");
                                 if (!empty($datarow)) {
+                                    // for ($i = 0; $i < sizeof($datarow); $i++) {
+                                    //     if ($datarow[$i]['category'] == 'other') {
+                                    //         $rowOfOthers = $datarow[$i];
+                                    //         unset($datarow[$i]);
+                                    //         break;
+                                    //     }
+                                    // }
+                                    // if (!empty($rowOfOthers))
+                                    //     array_push($datarow, $rowOfOthers);
+
                                     for ($i = 0; $i < sizeof($datarow); $i++) {
                                         if (empty($datarow[$i]['name'])) {
                                             $description = $datarow[$i]['category'];
@@ -233,7 +322,7 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form action="" method="POST" id="edit-form" onsubmit="return false;">
+                        <form action="" method="POST" id="edit-form" onsubmit="return validateBudgetForm(this);">
                             <div class="modal-body">
                                 <div class="container" id="edit-body-data">
                                     <!-- ajax in php will handle this part -->
@@ -244,7 +333,7 @@
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 <button type="button" class="btn btn-success new-budgetItem-btn">Add Item</button>
                                 <button type="button" class="btn btn-success edit-budget-btn">Reset</button>
-                                <button type="submit" name="edit_submit" class="btn btn-primary">Save changes</button>
+                                <button type="submit" name="edit_budget_submit" class="btn btn-primary">Save changes</button>
                             </div>
                         </form>
                     </div>

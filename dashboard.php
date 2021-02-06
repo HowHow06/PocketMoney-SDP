@@ -89,7 +89,7 @@
                     <a href="#" class="navbar-brand">BUDGETS</a>
                 </nav>
                 <div class="container-fluid budget-overview">
-                <?php
+                    <?php
                     // $customer = new Customer();
                     $query = "SELECT * FROM budget b, category c WHERE b.categoryID = c.categoryID AND b.cusID = " . $customer->getId();
                     $data = $customer->getDataByQuery($query);
@@ -101,8 +101,13 @@
                                 break;
                             }
                         }
-                        array_push($data, $rowOfOthers);
+                        if (!empty($rowOfOthers))
+                            array_push($data, $rowOfOthers);
                         $count = 0;
+                        $customer->setCurDate();
+                        $d = strtotime($customer->getCurDate());
+                        $systemMonth = date("m", $d);
+                        $systemYear = date("Y", $d);
                         foreach ($data as $row) {
                             $totalIncome = $customer->getTotalIncome();
                             $totalAmount = floatval($row['percentage']) / 100.0 * $totalIncome * 1.0;
@@ -113,11 +118,13 @@
                                 FROM Transaction tr 
                                 WHERE tr.cusID = 1 
                                 AND (" . $getCateTypeSubQuery . ") <> 'income'
-                                AND tr.categoryID NOT IN (" . $cateIdsSubQuery . ")"; //select amount of those categories that are not in budget
+                                AND tr.categoryID NOT IN (" . $cateIdsSubQuery . ")
+                                AND MONTH(tr.date) = " . $systemMonth . " AND YEAR(tr.date) = " . $systemYear . " 
+                                "; //select amount of those categories that are not in budget
 
                                 $amountResults = $customer->getDataByQuery($query);
                             } else {
-                                $amountResults = $customer->getData("Transaction", "SUM(amount) as usedAmount", array('categoryID' => $row['categoryID'], 'cusID' => $customer->getId()));
+                                $amountResults = $customer->getData("Transaction", "SUM(amount) as usedAmount", array('categoryID' => $row['categoryID'], 'cusID' => $customer->getId(), 'MONTH(date)' => $systemMonth, 'YEAR(date)' => $systemYear));
                             }
                             $amountUsed = $amountResults[0]['usedAmount']; //the amount used
                             if (!$amountUsed)
@@ -125,33 +132,33 @@
                             $amountUsedPercentage = floatval($amountUsed) / $totalAmount * 100.0;
                             $amountLeft = $totalAmount - $amountUsed;
                     ?>
-                        <div class="budget-row">
-                            <div class="row">
-                                <div class="col-3">
-                                    <div>
-                                        <sub><?php echo ($row['categoryName']); ?></sub>
-                                    </div>
-                                    <p>RM <?php echo (number_format($totalAmount * 1.0, 2, ".", "")); ?></p>
-                                </div>
-                                <div class="col-9">
-                                    <!-- bar -->
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo (number_format($amountUsedPercentage * 1.0, 2, ".", "")); ?>" aria-valuemin="0" aria-valuemax="100" id="progress-bar<?php echo ($count); ?>"></div>
-                                        <h6 class=""><?php echo (number_format($amountUsedPercentage * 1.0, 2, ".", "")); ?>%</h6>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <h6 class="spent">RM <?php echo (number_format($amountUsed, 2, ".", "")); ?></h6>
+                            <div class="budget-row">
+                                <div class="row">
+                                    <div class="col-3">
+                                        <div>
+                                            <sub><?php echo ($row['categoryName']); ?></sub>
                                         </div>
-                                        <div class="col-6">
-                                            <h6 class="target">RM <?php echo (number_format($amountLeft, 2, ".", "")); ?></h6>
-                                        </div>
+                                        <p>RM <?php echo (number_format($totalAmount * 1.0, 2, ".", "")); ?></p>
                                     </div>
+                                    <div class="col-9">
+                                        <!-- bar -->
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo (number_format($amountUsedPercentage * 1.0, 2, ".", "")); ?>" aria-valuemin="0" aria-valuemax="100" id="progress-bar<?php echo ($count); ?>"></div>
+                                            <h6 class=""><?php echo (number_format($amountUsedPercentage * 1.0, 2, ".", "")); ?>%</h6>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <h6 class="spent">RM <?php echo (number_format($amountUsed, 2, ".", "")); ?></h6>
+                                            </div>
+                                            <div class="col-6">
+                                                <h6 class="target">RM <?php echo (number_format($amountLeft, 2, ".", "")); ?></h6>
+                                            </div>
+                                        </div>
 
+                                    </div>
                                 </div>
+                                <hr>
                             </div>
-                            <hr>
-                        </div>
                     <?php
                             $count++;
                         }
@@ -229,7 +236,8 @@
                     <h3>-</h3>
                     <div>
                         <h5>Debt To Pay</h5>
-                        <!-- <p>RM<?php // echo ($customer->getTotalDebtAmount()); ?></p> -->
+                        <!-- <p>RM<?php // echo ($customer->getTotalDebtAmount()); 
+                                    ?></p> -->
                         <p>RM<?php echo ($totalDebtToPay); ?></p>
                     </div>
                     <h3>=</h3>
@@ -321,37 +329,37 @@
                                 # code...
 
                         ?>
-                            <div class="liability-row">
-                                <div class="row">
-                                    <div class="col-3">
-                                        <div>
-                                            <sub>
-                                                <?php echo ($data['liabilityName']); ?> | <?php echo ($data['liabilityType']); ?>
-                                            </sub>
+                                <div class="liability-row">
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <div>
+                                                <sub>
+                                                    <?php echo ($data['liabilityName']); ?> | <?php echo ($data['liabilityType']); ?>
+                                                </sub>
+                                            </div>
+                                            <p>RM <?php echo ($data['total']); ?></p>
                                         </div>
-                                        <p>RM <?php echo ($data['total']); ?></p>
-                                    </div>
-                                    <div class="col-9">
-                                        <!-- bar -->
-                                        <div class="progress">
-                                            <?php $percent = round(($data['paidAmount'] / $data['total']) * 100.0, 1);
-                                            ?>
+                                        <div class="col-9">
+                                            <!-- bar -->
+                                            <div class="progress">
+                                                <?php $percent = round(($data['paidAmount'] / $data['total']) * 100.0, 1);
+                                                ?>
 
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo ($percent); ?>" aria-valuemin="0" aria-valuemax="100"></div>
-                                            <h6><?php echo ($percent); ?>%</h6>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <h6 class="paid">RM <?php echo (number_format($data['paidAmount'] * 1.0, 2)); ?></h6>
+                                                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo ($percent); ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                                                <h6><?php echo ($percent); ?>%</h6>
                                             </div>
-                                            <div class="col-6">
-                                                <h6 class="target">RM <?php echo (number_format($data['remainder'], 2)); ?></h6>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <h6 class="paid">RM <?php echo (number_format($data['paidAmount'] * 1.0, 2)); ?></h6>
+                                                </div>
+                                                <div class="col-6">
+                                                    <h6 class="target">RM <?php echo (number_format($data['remainder'], 2)); ?></h6>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <hr>
                                 </div>
-                                <hr>
-                            </div>
                         <?php
                             }
                         } else {
