@@ -113,16 +113,11 @@
     }
 
     //delete budget
-    if (isset($_POST['delete_submit'])) {
+    if (isset($_POST['delete_budget_submit'])) {
         $params['tableName'] = 'Budget';
-        $params['idName'] = 'budgetID';
-        $params['id'] = $_POST['delete_budgetID'];
+        $params['idName'] = 'cusID';
+        $params['id'] = $customer->getId();
         $result = $customer->customerDelete($params);
-        if ($result['status'] == 'ok') {
-            $customer->showAlert($result['statusMsg']);
-        } else {
-            $customer->showAlert($result['statusMsg']);
-        }
         $customer->goTo('budget.php?role=customer');
     }
 
@@ -262,7 +257,11 @@
                             <h4>MANAGE BUDGET</h4>
                         </div>
                         <div class="col-6">
+
                             <button type="button" class="btn btn-secondary float-right edit-budget-btn" id="btn-edit" data-toggle="modal" data-target="#edit-row">Edit / Add New</button>
+                            <form action="" method="POST">
+                                <button type="submit" class="btn btn-secondary float-right edit-budget-btn" id="btn-delete" name="delete_budget_submit">Delete Budget Plan</button>
+                            </form>
                         </div>
                     </div>
                     <div class="row">

@@ -46,6 +46,16 @@
         border-color: #fc9a55 !important;
     }
 
+    #btn-delete {
+        margin-right: 0.2rem;
+        background-color: #fc9a55 !important;
+        border-color: #fc9a55 !important;
+    }
+    #btn-delete:hover {
+        background-color: #f88837 !important;
+        border-color: #fc9a55 !important;
+    }
+
 
     @include cus-body;
     > .budget-overview {
