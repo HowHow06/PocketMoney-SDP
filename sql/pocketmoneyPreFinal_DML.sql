@@ -30,13 +30,6 @@ INSERT INTO `admin` (`username`, `password`, `email`) VALUES
 ('admin1', '$2y$10$sk3.6iF6nXtMEzV/ClwA4uYMJ7iTwe93H/zJ9qONEnNsyGtWcHYh.', 'howard_bb@hotmail.com');
 
 --
--- Dumping data for table `advisor`
---
-
-INSERT INTO `advisor` (`username`, `password`, `name`, `email`) VALUES
-('advisor1', '$2y$10$sk3.6iF6nXtMEzV/ClwA4uYMJ7iTwe93H/zJ9qONEnNsyGtWcHYh.', 'Dacin Wong', 'advisor1@mail.com');
-
---
 -- Dumping data for table `budget`
 --
 
