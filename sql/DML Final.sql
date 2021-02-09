@@ -121,7 +121,7 @@ INSERT INTO `investment` (`investmentID`, `cusID`, `investmentName`, `investment
 INSERT INTO `liability` (`liabilityID`, `cusID`, `liabilityName`, `liabilityType`, `startDate`, `totalAmountToPay`, `initialPaidAmount`, `paymentDate`, `paymentFrequency`, `amountEachPayment`, `paymentReminder`, `autoRecord`) VALUES
 (1, 1, 'VKA BlockA1', 'house loan', '2020-01-23', '80000.00', '10000.00', '2020-01-05', 'M', '1500.80', 1, 1),
 (2, 1, 'CIMB', 'credit card', '2020-12-20', '200.00', '1.00', '2020-01-06', 'M', '200.00', 1, 0),
-(3, 1, 'Maybank', 'credit card', '2020-12-20', '5000.00', '0.00', '2020-02-20', NULL, '2000.00', 1, 0),
+(3, 1, 'Maybank', 'credit card', '2020-12-20', '5000.00', '0.00', '2021-02-20', NULL, '2000.00', 1, 0),
 (4, 1, 'MYVI 1M4U', 'car loan', '2020-12-20', '50000.00', '20000.00', '2020-03-02', 'M', '1000.00', 1, 0),
 (5, 1, 'Jerry', 'personal loan', '2020-10-01', '200.00', '0.00', NULL, NULL, NULL, 1, 0),
 (6, 1, 'From Samuel', 'personal loan', '2020-07-01', '1000.00', '0.00', NULL, NULL, NULL, 1, 0),
