@@ -4,6 +4,7 @@
 <head>
     <?php include(".head.php"); ?>
     <link rel="stylesheet" href="./style/admin.css">
+    <link rel="stylesheet" href="./style/modalbox.css">
     <title>PockeyMoney | Dashboard</title>
 </head>
 <body>
@@ -53,7 +54,6 @@
                       <tr>
                         <th scope="col">#</th>
                         <th scope="col">Sender Name</th>
-                        <th scope="col">Phone Number</th>
                         <th scope="col">Email Address</th>
                         <th scope="col">Content</th>
                         <th scope="col">ACTION</th>
@@ -72,15 +72,13 @@
                     ?> 
                   
                     <tr>
+                    <input type="hidden" class="feedbackID" value='<?php echo ($query[$i]['feedbackID']); ?>'></input>
                     <th scope = "row"><?php echo ($i +1 ); ?></th>
-                    <td class="feedback_date"><?php echo ($query[$i]['contact_name']); ?></td>
-                    <td class="feedback_customer"><?php echo ($query[$i]['contact_phone']); ?></td>
-                    <td class="feedback_customer"><?php echo ($query[$i]['contact_email']); ?></td>
+                    <td class="feedback_customer"><?php echo ($query[$i]['contact_name']); ?></td>
+                    <td class="feedback_email"><?php echo ($query[$i])['contact_email']; ?></td>
                     <td class="feedback_content"><?php echo ($query[$i]['content']); ?></td>
                     <td class="action">
-                                      <a href="#" class="edit-announcement-anchor" data-toggle="modal" data-target="#edit-row">Edit</a>
-                                      <span> | </span>
-                                      <a href="#" class="delete-announcement-anchor" data-toggle="modal" data-target="#delete-row">Delete</a>
+                                      <a href="#" class="delete-feedback-anchor" data-toggle="modal" data-target="#delete-row">Delete</a>
                                   </td>
                     </tr> 
                     <?php }
