@@ -319,7 +319,6 @@
                 </div>
             </div>
 
-
             <!-- edit-budget modal -->
             <div class="modal fade edit-modal" id="edit-row" tabindex="-1" role="dialog" aria-labelledby="edit-title" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -338,6 +337,7 @@
 
                             </div>
                             <div class="modal-footer">
+								<button type="button" name="" class="">Add New</button>
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 <button type="button" class="btn btn-success new-budgetItem-btn">Add Item</button>
                                 <button type="button" class="btn btn-success edit-budget-btn">Reset</button>
@@ -348,7 +348,7 @@
                 </div>
             </div>
             <!-- delete-row modal -->
-            <div class="modal fade edit-modal" id="delete-row" tabindex="-1" role="dialog" aria-labelledby="delete-title" aria-hidden="true">
+            <?php /*?><div class="modal fade edit-modal" id="delete-row" tabindex="-1" role="dialog" aria-labelledby="delete-title" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
                     <div class="modal-content">
                         <div class="modal-body">
@@ -363,7 +363,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div><?php */?>
 
             <!-- dont touch anything from here -->
             <h4>ALL EXPENSES TRANSACTIONS</h4>
