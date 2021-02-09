@@ -54,7 +54,7 @@ if (isset($_POST['submitbtn'])) { //if the form is submitted
             ?>
             <form action="" method="post">
                 <div class="form-group">
-                    <input type="email" name="email" placeholder="Enter email address" required>
+                    <input type="email" name="email" placeholder="Enter email address" autocomplete="off" required>
                 </div>
                 <button type="submit" name="submitbtn" class="btn">Verify</button>
             </form>

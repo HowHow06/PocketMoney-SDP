@@ -10,7 +10,7 @@ Financial Management System (Website)
 - Howard Lim          TP055278
 
 ## Work Progress
-### 2021-02-05
+### 2021-02-09
 > Moses's Part
 - Fixing bugs
 - Create ```profile.php``` for customer to view announcement.
