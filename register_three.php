@@ -86,16 +86,16 @@ if (isset($_POST['submitbtn'])) { //if the sign up form is submitted
                     <input type="email" name="email" value="<?php echo ($_GET['email']); ?>" required readonly>
                 </div>
                 <div class="form-group">
-                    <input type="text" name="name" placeholder="Enter real name information" required>
+                    <input type="text" name="name" placeholder="Enter real name information" autocomplete="off" required>
                 </div>
                 <div class="form-group">
-                    <input type="text" name="username" placeholder="Enter username" required>
+                    <input type="text" name="username" placeholder="Enter username" autocomplete="off" required>
                 </div>
                 <div class="form-group">
-                    <input type="password" name="password" id="password" placeholder="Password" required>
+                    <input type="password" name="password" id="password" placeholder="Password" autocomplete="off" required>
                 </div>
                 <div class="form-group">
-                    <input type="password" name="passwordConf" id="passwordConf" placeholder="Re-enter password" required>
+                    <input type="password" name="passwordConf" id="passwordConf" placeholder="Re-enter password" autocomplete="off" required>
                 </div>
                 <div class="form-check">
                     <input type="checkbox" name="showPass" id="showPass" onchange="showpass()">
