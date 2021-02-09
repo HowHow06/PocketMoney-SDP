@@ -427,11 +427,10 @@
                     <?php
                     $datarow = $customer->getDataByQuery("SELECT t.transactionID, c.categoryName AS category, t.date, t.amount, t.description AS name, c.categoryType AS type
                                                             FROM transaction t, category c
-                                                            WHERE t.cusID = " . $customer->getId() . " 
+                                                            WHERE t.cusID = " . $customer->getId() . " AND c.categoryType = 'expenses'
                                                             AND t.categoryID = c.categoryID "
                         . $customer->getCurrentFilterTime(1, 2, $customer->getFlag()) .
-                        "
-															ORDER BY date DESC;
+															"ORDER BY date DESC;
                                                             ");
                     if (!empty($datarow)) {
                         for ($i = 0; $i < sizeof($datarow); $i++) {
