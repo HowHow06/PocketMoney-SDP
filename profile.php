@@ -12,23 +12,22 @@
         $activePage = "settings";
         include(".navbar.php");
 
-        if (isset($_POST['edit_password'])) { //if the form is submitted
-            $hashPassword = password_hash($_POST['new_pass'], PASSWORD_BCRYPT);
-                        $params['tableName'] = 'Customer';
-                        $params['idName'] = 'cusID';
-                        $params['id'] = $_POST['cusID'];
-                        $params['data'] = array(
-                            'password' => $hashPassword 
-                        );
-                        $result = $customer->customerUpdate($params);
-                        if ($result['status'] == 'ok') {
-                            $customer->showAlert($result['statusMsg']);
-                        } else {
-                            $customer->showAlert($result['statusMsg']);
-                        }
-                        $customer->goTo('profile.php?role=customer');
-                    }
-
+        // if (isset($_POST['edit_password'])) { //if the form is submitted
+        //     $hashPassword = password_hash($_POST['new_pass'], PASSWORD_BCRYPT);
+        //                 $params['tableName'] = 'Customer';
+        //                 $params['idName'] = 'cusID';
+        //                 $params['id'] = $_POST['cusID'];
+        //                 $params['data'] = array(
+        //                     'password' => $hashPassword 
+        //                 );
+        //                 $result = $customer->customerUpdate($params);
+        //                 if ($result['status'] == 'ok') {
+        //                     $customer->showAlert($result['statusMsg']);
+        //                 } else {
+        //                     $customer->showAlert($result['statusMsg']);
+        //                 }
+        //                 $customer->goTo('profile.php?role=customer');
+        //             }
 
         if (isset($_POST['cusID'])) { //if the form is submitted
             $params = array(
@@ -165,7 +164,8 @@
                                 </div>
                             </div>
                         </div>
-                     <hr>
+                        <hr>
+                    </form>
                 <div>
                     <div class="row">
                         <h4 class="col-6">PASSWORD SETTING</h4>
@@ -212,7 +212,7 @@
 <script>
 $(document).ready(function () {
     $("body").niceScroll();
-    $(".transaction-table").niceScroll();
+    // $(".transaction-table").niceScroll();
 });
 
 function showpass() {

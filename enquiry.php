@@ -33,7 +33,8 @@
                     $params['data'] = array(
                         'contact_name' => $_POST['username'],
                         'contact_email' => $_POST['email'],
-                        'content' => $_POST['content']
+                        'content' => $_POST['content'],
+                        'adminID' => 1,
                     );
                     $result = $customer->customerInsert($params);
                     if ($result['status'] == 'ok') {
