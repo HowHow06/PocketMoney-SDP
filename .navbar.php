@@ -43,7 +43,7 @@ switch ($activePage) {
 
 <nav class="navbar navbar-expand-lg navbar-light">
     <a href="#" class="navbar-brand"><img src="./img/logo_i.png" width="50px" height="50px"> POCKETMONEY</a>
-    <span>Due to different screen resolution amongst teammate, you might need to zoom out to 90% to view correctly</span>
+    <span>Due to different screen resolution amongst teammates, you might need to zoom out to 90% to view correctly. Demo data available from 2020-February 2021</span>
     <ul class="navbar-nav ml-auto">
         <li class="nav-item <?php echo $isActiveDashboard; ?>">
             <a href="dashboard.php?role=customer" class="nav-link">Dashboard</a>

@@ -113,11 +113,11 @@ if (isset($_POST['submitbtn'])) { //if the login form is submitted
             <form action="<?php echo ($form); ?>" method="post">
                 <div class="form-group">
                     <input type="text" name="email" placeholder="Enter email address or username" autocomplete="off" required>
-                    <span>For testing purpose, use "customer1" as username</span>
+                    <label>For testing purpose, use "customer1" as username</label>
                 </div>
                 <div class="form-group">
                     <input type="password" name="password" placeholder="Password" id="password" autocomplete="off" required>
-                    <span>For testing purpose, use "customer" as password</span>
+                    <label>For testing purpose, use "customer" as password</label>
                 </div>
                 <div class="form-check">
                     <input type="checkbox" name="showPass" id="showPass" onchange="showpass()">
