@@ -26,6 +26,24 @@ class Customer
         // $this->db          = new MysqliDb("db4free.net", "pocketmoney", "m&nsuperdry", "pocketmoney", "3306"); //temporary
         $this->db          = new MysqliDb("localhost", "root", "", "pocketmoney", "3308"); //temporary
         //$this->validation  = $validation;
+
+
+        //----------------This section is specially modified for heroku db-------------------
+        $cleardb_url = parse_url(getenv("CLEARDB_DATABASE_URL"));
+        $cleardb_server = $cleardb_url["host"];
+        $cleardb_username = $cleardb_url["user"];
+        $cleardb_password = $cleardb_url["pass"];
+        $cleardb_db = substr($cleardb_url["path"], 1);
+        $active_group = 'default';
+        $query_builder = TRUE;
+        // Connect to DB
+        $this->db          = new MysqliDb($cleardb_server, $cleardb_username, $cleardb_password, $cleardb_db);
+
+
+        //----------------This section is specially modified for heroku db-------------------
+
+
+
         self::$_instance = $this;
     }
 
@@ -287,7 +305,7 @@ class Customer
      * 'statusMsg'-> String: the status msg;
      *
      */
-    function customerValidateEmail($params,$flag=0)
+    function customerValidateEmail($params, $flag = 0)
     {
         $db = MysqliDb::getInstance();
 
@@ -299,7 +317,7 @@ class Customer
         $db->where('email', $email);
         $result = $db->getOne('Customer');
 
-        if (!empty($result) && $flag==0) { //if the $result return something meaning the email is existed
+        if (!empty($result) && $flag == 0) { //if the $result return something meaning the email is existed
             return array('status' => 'error', 'statusMsg' => 'Email Has Been Used');
         }
 
@@ -317,7 +335,7 @@ class Customer
      * 'statusMsg'-> String: the status msg;
      *
      */
-    function customerValidateUsername($params,$flag=0)
+    function customerValidateUsername($params, $flag = 0)
     {
         $db = MysqliDb::getInstance();
         $username = $params['username'];
@@ -328,7 +346,7 @@ class Customer
         $db->where('username', $username);
         $result = $db->getOne('Customer');
 
-        if (!empty($result) && $flag==0) { //if the $result return something meaning the username is existed
+        if (!empty($result) && $flag == 0) { //if the $result return something meaning the username is existed
             return array('status' => 'error', 'statusMsg' => 'Username Has Been Used');
         }
 
@@ -412,12 +430,12 @@ class Customer
             $confirm_password = $params['confirm'];
 
             $id = $this->id;
-            $db->where("cusID",$id);
-            $result = $db->get('Customer',null,'password');
+            $db->where("cusID", $id);
+            $result = $db->get('Customer', null, 'password');
 
             if (!empty($result)) {
                 $db_password = $result[0]['password'];
-                if (!password_verify($current_password,$db_password)) {
+                if (!password_verify($current_password, $db_password)) {
                     return array('status' => 'error', 'statusMsg' => 'Wrong Current Password');
                 }
                 if (!preg_match('/^[^ ]{5,}$/', $new_password)) {
@@ -1181,7 +1199,7 @@ class Customer
             } else {
                 $db->where('YEAR(t.date)', $year);
             }
-            
+
             $db->groupBy('c.categoryName');
             $db->orderBy('amount', 'DESC');
             $incomeTypesToValue = array();
@@ -1232,7 +1250,7 @@ class Customer
                 array_push($incomeTypesToValue, ['label' => $data['categoryName'], 'value' => $tempValue]);
             }
             $data = json_encode($incomeTypesToValue);
-            
+
             // Ploting chart
             $chartJSON = '{
                 "chart": {

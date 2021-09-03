@@ -3,6 +3,13 @@
 
 Financial Management System (Website)
 
+---
+## Important: This is a branch seperated from the original SDP-assignment, modification is done in my branch. 
+
+## The db is pointed to Heroku db.
+
+---
+
 ## Contributor:
 - Lim Zhi Hao         TP054890
 - Moses Lau Yi Hieng  TP054834
