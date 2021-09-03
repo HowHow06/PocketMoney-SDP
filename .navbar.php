@@ -43,6 +43,7 @@ switch ($activePage) {
 
 <nav class="navbar navbar-expand-lg navbar-light">
     <a href="#" class="navbar-brand"><img src="./img/logo_i.png" width="50px" height="50px"> POCKETMONEY</a>
+    <span>Due to different screen resolution amongst teammate, you might need to zoom out to 90% to view correctly</span>
     <ul class="navbar-nav ml-auto">
         <li class="nav-item <?php echo $isActiveDashboard; ?>">
             <a href="dashboard.php?role=customer" class="nav-link">Dashboard</a>
@@ -64,10 +65,12 @@ switch ($activePage) {
         <li class="nav-item <?php echo $isActiveLiabilities ?> ">
             <a href="liability.php?role=customer" class="nav-link">Debts</a>
         </li>
-        <!-- <li class="nav-item <?php //echo $isActiveFinancialGoals ?> ">
+        <!-- <li class="nav-item <?php //echo $isActiveFinancialGoals 
+                                    ?> ">
             <a href="#" class="nav-link">Financial Goals</a>
         </li> -->
-        <!-- <li class="nav-item <?php // echo $isActiveReports ?> ">
+        <!-- <li class="nav-item <?php // echo $isActiveReports 
+                                    ?> ">
             <a href="reports.php?role=customer" class="nav-link">Reports</a>
         </li> -->
         <li class="nav-item dropdown <?php echo $isActiveSetting ?>">
