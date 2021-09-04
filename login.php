@@ -100,6 +100,8 @@ if (isset($_POST['submitbtn'])) { //if the login form is submitted
             <h5>Sign into your account</h5>
             <br>
             <span>For testing purpose, use "customer1" as username and "customer"as password</span>
+            <br>
+            <span>or "admin1" and "admin" for admin account</span>
             <?php
             if (isset($error)) {
                 $errorMsg =
