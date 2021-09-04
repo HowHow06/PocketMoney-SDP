@@ -98,6 +98,8 @@ if (isset($_POST['submitbtn'])) { //if the login form is submitted
         <div class="right">
             <a href="#" class="logo"><img src="./img/logo.png" width="50px" height="50px"> POCKETMONEY</a>
             <h5>Sign into your account</h5>
+            <br>
+            <span>For testing purpose, use "customer1" as username and "customer"as password</span>
             <?php
             if (isset($error)) {
                 $errorMsg =
@@ -113,11 +115,11 @@ if (isset($_POST['submitbtn'])) { //if the login form is submitted
             <form action="<?php echo ($form); ?>" method="post">
                 <div class="form-group">
                     <input type="text" name="email" placeholder="Enter email address or username" autocomplete="off" required>
-                    <label>For testing purpose, use "customer1" as username</label>
+
                 </div>
                 <div class="form-group">
                     <input type="password" name="password" placeholder="Password" id="password" autocomplete="off" required>
-                    <label>For testing purpose, use "customer" as password</label>
+
                 </div>
                 <div class="form-check">
                     <input type="checkbox" name="showPass" id="showPass" onchange="showpass()">
